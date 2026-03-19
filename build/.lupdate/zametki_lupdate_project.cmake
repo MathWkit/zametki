@@ -1,0 +1,11 @@
+set(lupdate_project_file "/Users/renat/Projects/zametki/CMakeLists.txt")
+set(lupdate_translations "/Users/renat/Projects/zametki/zametki_ru_RU.ts")
+set(lupdate_include_paths "")
+set(lupdate_sources "")
+set(lupdate_subproject_count 1)
+
+set(lupdate_subproject1_source_dir "/Users/renat/Projects/zametki")
+set(lupdate_subproject1_include_paths "/Users/renat/Projects/zametki/build/zametki_autogen/include;/opt/homebrew/lib/QtCore.framework/Headers;/opt/homebrew/lib/QtCore.framework;/opt/homebrew/share/qt/mkspecs/macx-clang;/opt/homebrew/include;/opt/homebrew/lib/QtWidgets.framework/Headers;/opt/homebrew/lib/QtWidgets.framework;/opt/homebrew/lib/QtGui.framework/Headers;/opt/homebrew/lib/QtGui.framework")
+set(lupdate_subproject1_sources "/Users/renat/Projects/zametki/build/zametki_autogen/mocs_compilation.cpp;main.cpp;mainwindow.cpp;mainwindow.h;mainwindow.ui;/Users/renat/Projects/zametki/build/.qt/rcc/zametki_translations.qrc;/Users/renat/Projects/zametki/build/zametki_ru_RU.qm;/Users/renat/Projects/zametki/build/.qt/rcc/qrc_zametki_translations.cpp;/Users/renat/Projects/zametki/build/zametki_autogen/include/ui_mainwindow.h;/Users/renat/Projects/zametki/build/zametki_autogen/timestamp;/Users/renat/Projects/zametki/build/zametki_ru_RU.qm.rule;/Users/renat/Projects/zametki/build/.qt/rcc/qrc_zametki_translations.cpp.rule;/Users/renat/Projects/zametki/build/zametki_autogen/timestamp.rule")
+set(lupdate_subproject1_excluded "")
+set(lupdate_subproject1_autogen_dir "/Users/renat/Projects/zametki/build/zametki_autogen")

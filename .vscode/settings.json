@@ -1,0 +1,24 @@
+{
+    // Папка сборки CMake
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+
+    // Настройки конфигурации CMake
+    "cmake.configureSettings": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_PREFIX_PATH": "/opt/homebrew/Cellar/qt/6.10.2/lib/cmake",
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+        "CMAKE_C_COMPILER": "/usr/bin/clang"
+    },
+
+    // Qt расширение (для .ui, qmake, Designer)
+    "qt.qmake.path": "/opt/homebrew/Cellar/qt/6.10.2/bin/qmake",
+    "qt.qtPath": "/opt/homebrew/Cellar/qt/6.10.2",
+
+    // Чтобы IntelliSense видел настройки сборки
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+
+    "files.associations": {
+        "*.ui": "qtcreator"
+    },
+    "editor.defaultFormatter": null
+}
