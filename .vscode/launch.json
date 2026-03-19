@@ -1,17 +1,17 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Run zametki",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/zametki.app/Contents/MacOS/zametki",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": true,
-            "MIMode": "lldb"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug zametki",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/zametki.app/Contents/MacOS/zametki",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": true,
+      "MIMode": "lldb"
+    }
+  ]
 }

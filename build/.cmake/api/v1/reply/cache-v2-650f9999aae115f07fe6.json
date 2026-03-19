@@ -1842,6 +1842,18 @@
 			"value" : "ON"
 		},
 		{
+			"name" : "QT_FEATURE_batch_test_support",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Qt feature: batch_test_support (from target Qt6::Test)"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "OFF"
+		},
+		{
 			"name" : "QT_FEATURE_broken_threadlocal_dtors",
 			"properties" : 
 			[
@@ -3480,6 +3492,18 @@
 				{
 					"name" : "HELPSTRING",
 					"value" : "Qt feature: itemmodel (from target Qt6::Core)"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "ON"
+		},
+		{
+			"name" : "QT_FEATURE_itemmodeltester",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Qt feature: itemmodeltester (from target Qt6::Test)"
 				}
 			],
 			"type" : "INTERNAL",
@@ -5502,6 +5526,18 @@
 			"value" : "ON"
 		},
 		{
+			"name" : "QT_FEATURE_testlib_selfcover",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Qt feature: testlib_selfcover (from target Qt6::Test)"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "OFF"
+		},
+		{
 			"name" : "QT_FEATURE_textbrowser",
 			"properties" : 
 			[
@@ -5872,6 +5908,18 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "OFF"
+		},
+		{
+			"name" : "QT_FEATURE_valgrind",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Qt feature: valgrind (from target Qt6::Test)"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "ON"
 		},
 		{
 			"name" : "QT_FEATURE_validator",
@@ -6568,6 +6616,18 @@
 			],
 			"type" : "PATH",
 			"value" : "/opt/homebrew/lib/cmake/Qt6LinguistTools"
+		},
+		{
+			"name" : "Qt6Test_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for Qt6Test."
+				}
+			],
+			"type" : "PATH",
+			"value" : "/opt/homebrew/lib/cmake/Qt6Test"
 		},
 		{
 			"name" : "Qt6WidgetsTools_DIR",

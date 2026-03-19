@@ -328,6 +328,13 @@
 				},
 				{
 					"directoryIndex" : 0,
+					"id" : "Qt6::Test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Qt6__Test-Debug-6276fddb94715be7e4b8.json",
+					"name" : "Qt6::Test",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "Qt6::Widgets::@6890427a1f51a3e7e1df",
 					"jsonFile" : "target-Qt6__Widgets-Debug-9265859ebc7e791ca13c.json",
 					"name" : "Qt6::Widgets",
@@ -769,7 +776,8 @@
 						91,
 						92,
 						93,
-						94
+						94,
+						95
 					],
 					"build" : ".",
 					"hasInstallRule" : true,
@@ -788,7 +796,10 @@
 						3,
 						4,
 						5,
-						6
+						6,
+						7,
+						8,
+						9
 					]
 				}
 			],
@@ -892,7 +903,8 @@
 						91,
 						92,
 						93,
-						94
+						94,
+						95
 					],
 					"directoryIndexes" : 
 					[
@@ -907,7 +919,10 @@
 						3,
 						4,
 						5,
-						6
+						6,
+						7,
+						8,
+						9
 					]
 				}
 			],
@@ -930,14 +945,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "zametki::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-zametki-Debug-a087f4655aa77730d3fc.json",
+					"jsonFile" : "target-zametki-Debug-a165ba30388ac8782bab.json",
 					"name" : "zametki",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "zametki_autogen::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-zametki_autogen-Debug-105753da9baf3cf1f561.json",
+					"jsonFile" : "target-zametki_autogen-Debug-887106d92b8da3c4550b.json",
 					"name" : "zametki_autogen",
 					"projectIndex" : 0
 				},
@@ -960,6 +975,27 @@
 					"id" : "zametki_lupdate::@6890427a1f51a3e7e1df",
 					"jsonFile" : "target-zametki_lupdate-Debug-06675a2df824e312d44f.json",
 					"name" : "zametki_lupdate",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "zametki_tests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-zametki_tests-Debug-83416c8b1d76f43d2dd4.json",
+					"name" : "zametki_tests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "zametki_tests_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-zametki_tests_autogen-Debug-c3eb1ef472c944be688b.json",
+					"name" : "zametki_tests_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "zametki_tests_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-zametki_tests_autogen_timestamp_deps-Debug-04cb7bd7b0e4c8fafec9.json",
+					"name" : "zametki_tests_autogen_timestamp_deps",
 					"projectIndex" : 0
 				}
 			]

@@ -38,3 +38,17 @@ qt_generate_deploy_app_script(
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
+
+
+# Подключаем Qt Test
+find_package(Qt6 COMPONENTS Test REQUIRED)
+
+# Создаём тестовый исполняемый файл
+add_executable(zametki_tests
+    test_main.cpp
+    mainwindow.cpp   # включаем GUI-классы, если нужно тестировать их напрямую
+    mainwindow.h
+)
+
+# Линкуем Qt Test и необходимые модули Qt
+target_link_libraries(zametki_tests PRIVATE Qt6::Test Qt6::Core Qt6::Widgets)
