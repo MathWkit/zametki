@@ -20,6 +20,8 @@ qt_add_qml_module(appzametki
         assets/search.svg
         assets/new-note.svg
         assets/graph-view.svg
+        assets/my-knowledge-base.svg
+        assets/chose.svg
         assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
 )
 
