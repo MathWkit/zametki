@@ -53,7 +53,7 @@
     {
       "label": "Run Application",
       "type": "shell",
-      "command": "${workspaceFolder}/build/zametki.app/Contents/MacOS/zametki",
+      "command": "${workspaceFolder}/build/appzaminetiki.app/Contents/MacOS/appzaminetiki",
       "group": "none",
       "dependsOn": "Build Project",
       "presentation": {
@@ -88,7 +88,7 @@
     {
       "label": "Run Tests",
       "type": "shell",
-      "command": "${workspaceFolder}/build/zametki_tests",
+      "command": "echo 'No tests defined in CMakeLists.txt'",
       "group": "test",
       "dependsOn": "Build Project",
       "presentation": {

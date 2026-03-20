@@ -1,54 +1,41 @@
-cmake_minimum_required(VERSION 3.19)
-project(zametki LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.16)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets LinguistTools)
+project(zaminetiki VERSION 0.1 LANGUAGES CXX)
 
-qt_standard_project_setup()
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-qt_add_executable(zametki
-    WIN32 MACOSX_BUNDLE
+find_package(Qt6 REQUIRED COMPONENTS Quick)
+
+qt_standard_project_setup(REQUIRES 6.8)
+
+qt_add_executable(appzaminetiki
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
 )
 
-qt_add_translations(
-    TARGETS zametki
-    TS_FILES zametki_ru_RU.ts
+qt_add_qml_module(appzaminetiki
+    URI zaminetiki
+    QML_FILES
+        Main.qml
 )
 
-target_link_libraries(zametki
-    PRIVATE
-        Qt::Core
-        Qt::Widgets
+# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
+# If you are developing for iOS or macOS you should consider setting an
+# explicit, fixed bundle identifier manually though.
+set_target_properties(appzaminetiki PROPERTIES
+#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appzaminetiki
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+target_link_libraries(appzaminetiki
+    PRIVATE Qt6::Quick
 )
 
 include(GNUInstallDirs)
-
-install(TARGETS zametki
-    BUNDLE  DESTINATION .
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+install(TARGETS appzaminetiki
+    BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-qt_generate_deploy_app_script(
-    TARGET zametki
-    OUTPUT_SCRIPT deploy_script
-    NO_UNSUPPORTED_PLATFORM_ERROR
-)
-install(SCRIPT ${deploy_script})
-
-
-# Подключаем Qt Test
-find_package(Qt6 COMPONENTS Test REQUIRED)
-
-# Создаём тестовый исполняемый файл
-add_executable(zametki_tests
-    test_main.cpp
-    mainwindow.cpp   # включаем GUI-классы, если нужно тестировать их напрямую
-    mainwindow.h
-)
-
-# Линкуем Qt Test и необходимые модули Qt
-target_link_libraries(zametki_tests PRIVATE Qt6::Test Qt6::Core Qt6::Widgets)
