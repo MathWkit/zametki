@@ -53,7 +53,7 @@
     {
       "label": "Run Application",
       "type": "shell",
-      "command": "${workspaceFolder}/build/appzaminetiki.app/Contents/MacOS/appzaminetiki",
+      "command": "${workspaceFolder}/build/appzametki.app/Contents/MacOS/appzametki",
       "group": "none",
       "dependsOn": "Build Project",
       "presentation": {
