@@ -247,8 +247,6 @@ Window {
                 Text {
                     text: "Папки"
                     font.family: interFont.name
-                    anchors.verticalCenter: parent.verticalCenter
-
                     font.pixelSize: 11
                     font.weight: Font.DemiBold
                     color: "#6B7280"
