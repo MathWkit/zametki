@@ -6,6 +6,7 @@ Window {
     id: window
     width: 1920
     height: 480
+    minimumWidth: 500
     visible: true
     title: qsTr("Hello World")
 
@@ -20,7 +21,7 @@ Window {
         // Левая сайдбар
         Rectangle {
             id: aside
-            width: parent.width * 0.2
+            width: Math.max(parent.width * 0.2, 200)
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -36,9 +37,9 @@ Window {
                 anchors.top: parent.top
                 anchors.leftMargin: 16
                 anchors.rightMargin: 16
-                anchors.topMargin: 16
-                anchors.bottomMargin: 16
-                spacing: 16
+                anchors.topMargin: 8
+                anchors.bottomMargin: 8
+                spacing: 8
 
                 Item {
                     anchors.left: parent.left
@@ -236,6 +237,65 @@ Window {
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            Rectangle {
+                id: header
+                height: 56           // фиксированная высота шапки
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: "#F8F9FA"    // фон шапки, можно прозрачный
+                border.width: 1
+                border.color: Qt.rgba(0, 0, 0, 0.08)
+
+                // Левая часть: иконка + текст
+                Row {
+                    id: leftPart
+                    spacing: 6
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Image {
+                        source: "qrc:/path/to/icon-left.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    Text {
+                        text: "Поле для текста"
+                        font.pixelSize: 14
+                        verticalAlignment: Text.AlignVCenter
+                        color: "#0F1724"
+                    }
+                }
+
+                // Правая часть: 3 иконки
+                Row {
+                    id: rightPart
+                    spacing: 16
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.rightMargin: 24
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/share.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/favorite.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/more.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+                }
+            }
         }
     }
 }
