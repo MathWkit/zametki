@@ -91,7 +91,6 @@ Window {
                 }
             }
 
-            // Контейнер с кнопками
             Column {
                 id: container
                 anchors.left: parent.left
@@ -102,105 +101,135 @@ Window {
                 anchors.topMargin: 8
                 spacing: 4
 
-                Row {
-                    id: search
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    spacing: 10
-                    leftPadding: 12
-                    rightPadding: 12
-                    topPadding: 8
-                    bottomPadding: 8
-                    Layout.alignment: Qt.AlignLeft
+                // ─── Row 1: Поиск ───
+                Rectangle {
+                    id: searchRow
+                    height: 40
+                    width: parent.width
+                    color: "transparent"
+                    radius: 4
 
-                    Image {
-                        id: searchIcon
-                        source: "qrc:/qt/qml/zametki/assets/search.svg"
-                        width: 16
-                        height: 16
-                        fillMode: Image.PreserveAspectFit
-                        Layout.alignment: Qt.AlignVCenter
+                    Row {
+                        anchors.fill: parent
+                        spacing: 6
+                        leftPadding: 12
+                        rightPadding: 12
+
+                        Image {
+                            source: "qrc:/qt/qml/zametki/assets/search.svg"
+                            width: 16
+                            height: 16
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            text: "Поиск"
+                            font.family: interFont.name
+                            font.pixelSize: 14
+                            font.weight: Font.Medium
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                        }
                     }
 
-                    Text {
-                        text: "Поиск"
-                        verticalAlignment: Text.AlignVCenter
-                        font.family: interFont.name
-                        font.pixelSize: 14
-                        font.weight: Font.Medium
-                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                    }
-
-                    Item {
-                        Layout.fillWidth: true
-                    }
-                }
-
-                Row {
-                    id: newNote
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    spacing: 10
-                    leftPadding: 12
-                    rightPadding: 12
-                    topPadding: 8
-                    bottomPadding: 8
-                    Layout.alignment: Qt.AlignLeft
-
-                    Image {
-                        id: newNoteIcon
-                        source: "qrc:/qt/qml/zametki/assets/new-note.svg"
-                        width: 16
-                        height: 16
-                        fillMode: Image.PreserveAspectFit
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-
-                    Text {
-                        text: "Новая заметка"
-                        verticalAlignment: Text.AlignVCenter
-                        font.family: interFont.name
-                        font.pixelSize: 14
-                        font.weight: Font.Medium
-                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                    }
-
-                    Item {
-                        Layout.fillWidth: true
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: console.log("Нажатие на Поиск")
+                        onEntered: searchRow.color = "#f0f0f0"
+                        onExited: searchRow.color = "transparent"
                     }
                 }
 
-                Row {
-                    id: graphView
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    spacing: 10
-                    leftPadding: 12
-                    rightPadding: 12
-                    topPadding: 8
-                    bottomPadding: 8
-                    Layout.alignment: Qt.AlignLeft
+                // ─── Row 2: Новая заметка ───
+                Rectangle {
+                    id: newNoteRow
+                    height: 40
+                    width: parent.width
+                    color: "transparent"
+                    radius: 4
 
-                    Image {
-                        id: graphViewIcon
-                        source: "qrc:/qt/qml/zametki/assets/graph-view.svg"
-                        width: 16
-                        height: 16
-                        fillMode: Image.PreserveAspectFit
-                        Layout.alignment: Qt.AlignVCenter
+                    Row {
+                        anchors.fill: parent
+                        spacing: 6
+                        leftPadding: 12
+                        rightPadding: 12
+
+                        Image {
+                            source: "qrc:/qt/qml/zametki/assets/new-note.svg"
+                            width: 16
+                            height: 16
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            text: "Новая заметка"
+                            font.family: interFont.name
+                            font.pixelSize: 14
+                            font.weight: Font.Medium
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                        }
                     }
 
-                    Text {
-                        text: "Вид графа"
-                        verticalAlignment: Text.AlignVCenter
-                        font.family: interFont.name
-                        font.pixelSize: 14
-                        font.weight: Font.Medium
-                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: console.log("Нажатие на Новую заметку")
+                        onEntered: newNoteRow.color = "#f0f0f0"
+                        onExited: newNoteRow.color = "transparent"
+                    }
+                }
+
+                // ─── Row 3: Вид графа ───
+                Rectangle {
+                    id: graphRow
+                    height: 40
+                    width: parent.width
+                    color: "transparent"
+                    radius: 4
+
+                    Row {
+                        anchors.fill: parent
+                        spacing: 6
+                        leftPadding: 12
+                        rightPadding: 12
+
+                        Image {
+                            source: "qrc:/qt/qml/zametki/assets/graph-view.svg"
+                            width: 16
+                            height: 16
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            text: "Вид графа"
+                            font.family: interFont.name
+                            font.pixelSize: 14
+                            font.weight: Font.Medium
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                        }
                     }
 
-                    Item {
-                        Layout.fillWidth: true
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: console.log("Нажатие на Вид графа")
+                        onEntered: graphRow.color = "#f0f0f0"
+                        onExited: graphRow.color = "transparent"
                     }
                 }
             }
@@ -218,6 +247,8 @@ Window {
                 Text {
                     text: "Папки"
                     font.family: interFont.name
+                    anchors.verticalCenter: parent.verticalCenter
+
                     font.pixelSize: 11
                     font.weight: Font.DemiBold
                     color: "#6B7280"
@@ -249,21 +280,40 @@ Window {
                 // Левая часть: иконка + текст
                 Row {
                     id: leftPart
-                    spacing: 6
+                    spacing: 10
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: 24
 
-                    Image {
-                        source: "qrc:/path/to/icon-left.svg"
+                    MouseArea {
+                        id: hideSidebarArea
                         width: 16
                         height: 16
-                        fillMode: Image.PreserveAspectFit
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: console.log("Нажатие на Hide Sidebar")
+                        onEntered: hideSidebarImage.opacity = 0.6
+                        onExited: hideSidebarImage.opacity = 1.0
+
+                        Image {
+                            id: hideSidebarImage
+                            source: "qrc:/qt/qml/zametki/assets/hide-sidebar.png"
+                            width: 16
+                            height: 16
+                            fillMode: Image.PreserveAspectFit
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: 150
+                                }
+                            }
+                        }
                     }
 
                     Text {
                         text: "Поле для текста"
                         font.pixelSize: 14
-                        verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
+
                         color: "#0F1724"
                     }
                 }
@@ -276,23 +326,76 @@ Window {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.rightMargin: 24
 
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/share.svg"
+                    MouseArea {
+                        id: shareArea
                         width: 16
                         height: 16
-                        fillMode: Image.PreserveAspectFit
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: console.log("Нажата иконка Share")
+                        onEntered: shareImage.opacity = 0.6
+                        onExited: shareImage.opacity = 1.0
+
+                        Image {
+                            id: shareImage
+                            source: "qrc:/qt/qml/zametki/assets/share.svg"
+                            width: 16
+                            height: 16
+                            fillMode: Image.PreserveAspectFit
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: 150
+                                }
+                            }
+                        }
                     }
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/favorite.svg"
+
+                    MouseArea {
+                        id: favoriteArea
                         width: 16
                         height: 16
-                        fillMode: Image.PreserveAspectFit
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: console.log("Нажата иконка Favorite")
+                        onEntered: favoriteImage.opacity = 0.6
+                        onExited: favoriteImage.opacity = 1.0
+
+                        Image {
+                            id: favoriteImage
+                            source: "qrc:/qt/qml/zametki/assets/favorite.svg"
+                            width: 16
+                            height: 16
+                            fillMode: Image.PreserveAspectFit
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: 150
+                                }
+                            }
+                        }
                     }
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/more.svg"
+
+                    MouseArea {
+                        id: moreArea
                         width: 16
                         height: 16
-                        fillMode: Image.PreserveAspectFit
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: console.log("Нажата иконка More")
+                        onEntered: moreImage.opacity = 0.6
+                        onExited: moreImage.opacity = 1.0
+
+                        Image {
+                            id: moreImage
+                            source: "qrc:/qt/qml/zametki/assets/more.svg"
+                            width: 16
+                            height: 16
+                            fillMode: Image.PreserveAspectFit
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: 150
+                                }
+                            }
+                        }
                     }
                 }
             }

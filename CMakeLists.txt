@@ -25,6 +25,7 @@ qt_add_qml_module(appzametki
         assets/share.svg
         assets/favorite.svg
         assets/more.svg
+        assets/hide-sidebar.png
         assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
 )
 
