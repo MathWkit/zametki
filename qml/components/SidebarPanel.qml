@@ -8,8 +8,8 @@ Rectangle {
     id: root
 
     property string fontFamily: ""
-    property var folderTitles: [];
-    property var noteTitles: [];
+    property var folderTitles: []
+    property var noteTitles: []
     property string selectedItemKey: ""
 
     signal searchClicked
