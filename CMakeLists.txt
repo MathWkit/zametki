@@ -28,6 +28,9 @@ qt_add_qml_module(appzametki
         assets/favorite.svg
         assets/more.svg
         assets/hide-sidebar.svg
+        assets/note.svg
+        assets/closed-bracket.svg
+        assets/folder.svg
         assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
 )
 

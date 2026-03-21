@@ -7,7 +7,7 @@ import "qrc:/qt/qml/zametki/Handlers.mjs" as Handlers
 
 Window {
     id: window
-    property string selectedNoteTitle: ""
+    property string selectedItemKey: ""
 
     width: 750
     height: 480
@@ -248,6 +248,8 @@ Window {
                 anchors.leftMargin: 12
                 anchors.rightMargin: 12
                 anchors.topMargin: 8
+                anchors.bottomMargin: 8
+
                 spacing: 5
                 Text {
                     text: "Папки"
@@ -255,9 +257,66 @@ Window {
                     font.pixelSize: 11
                     font.weight: Font.DemiBold
                     color: "#6B7280"
-                    Layout.alignment: Qt.AlignLeft
                     anchors.left: parent.left
                     anchors.leftMargin: 12
+                }
+
+                Repeater {
+                    model: fileCreator.folderTitles
+
+                    delegate: Rectangle {
+                        id: folderItem
+                        required property string modelData
+
+                        width: parent ? parent.width : 0
+                        height: 26
+                        color: window.selectedItemKey === ("folder:" + folderItem.modelData) ? "#e8eefc" : (folderMouseArea.containsMouse ? "#f0f0f0" : "transparent")
+                        radius: 4
+
+                        Row {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 12
+                            spacing: 8
+
+                            Image {
+                                source: "qrc:/qt/qml/zametki/assets/closed-bracket.svg"
+                                width: 16
+                                height: 16
+                                fillMode: Image.PreserveAspectFit
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            Image {
+                                source: "qrc:/qt/qml/zametki/assets/folder.svg"
+                                width: 16
+                                height: 16
+                                fillMode: Image.PreserveAspectFit
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            Text {
+                                text: folderItem.modelData
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.family: interFont.name
+                                font.pixelSize: 13
+                                font.weight: Font.Normal
+                                color: "#0F1724"
+                                elide: Text.ElideRight
+                            }
+                        }
+
+                        MouseArea {
+                            id: folderMouseArea
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: true
+                            onClicked: {
+                                window.selectedItemKey = "folder:" + folderItem.modelData;
+                                Handlers.onFolderClicked(folderItem.modelData);
+                            }
+                        }
+                    }
                 }
 
                 Repeater {
@@ -269,22 +328,32 @@ Window {
 
                         width: parent ? parent.width : 0
                         height: 30
-                        color: window.selectedNoteTitle === noteItem.modelData
-                               ? "#e8eefc"
-                               : (noteMouseArea.containsMouse ? "#f0f0f0" : "transparent")
+                        color: window.selectedItemKey === ("note:" + noteItem.modelData) ? "#e8eefc" : (noteMouseArea.containsMouse ? "#f0f0f0" : "transparent")
                         radius: 4
 
-                        Text {
-                            text: noteItem.modelData
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.left: parent.left
+                        Row {
+                            anchors.fill: parent
                             anchors.leftMargin: 12
-                            font.family: interFont.name
-                            font.pixelSize: 13
-                            font.weight: Font.Normal
-                            color: "#0F1724"
-                            elide: Text.ElideRight
-                            width: parent.width - 24
+                            anchors.rightMargin: 12
+                            spacing: 8
+
+                            Image {
+                                source: "qrc:/qt/qml/zametki/assets/note.svg"
+                                width: 16
+                                height: 16
+                                fillMode: Image.PreserveAspectFit
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            Text {
+                                text: noteItem.modelData
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.family: interFont.name
+                                font.pixelSize: 13
+                                font.weight: Font.Normal
+                                color: "#0F1724"
+                                elide: Text.ElideRight
+                            }
                         }
 
                         MouseArea {
@@ -293,7 +362,7 @@ Window {
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: {
-                                window.selectedNoteTitle = noteItem.modelData;
+                                window.selectedItemKey = "note:" + noteItem.modelData;
                                 Handlers.onNoteClicked(noteItem.modelData);
                             }
                         }

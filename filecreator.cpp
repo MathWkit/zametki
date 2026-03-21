@@ -13,6 +13,7 @@ FileCreator::FileCreator(QObject *parent)
     : QObject(parent), m_saveDirectory(kDefaultSaveDirectory)
 {
     refreshNoteTitles();
+    refreshFolderTitles();
 }
 
 bool FileCreator::createDesktopMarkdown()
@@ -52,6 +53,17 @@ void FileCreator::refreshNoteTitles()
     }
 }
 
+void FileCreator::refreshFolderTitles()
+{
+    const QDir dir(m_saveDirectory);
+    const QStringList folders = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+    if (folders != m_folderTitles)
+    {
+        m_folderTitles = folders;
+        emit folderTitlesChanged();
+    }
+}
+
 QString FileCreator::saveDirectory() const
 {
     return m_saveDirectory;
@@ -66,9 +78,15 @@ void FileCreator::setSaveDirectory(const QString &path)
     m_saveDirectory = path;
     emit saveDirectoryChanged();
     refreshNoteTitles();
+    refreshFolderTitles();
 }
 
 QStringList FileCreator::noteTitles() const
 {
     return m_noteTitles;
+}
+
+QStringList FileCreator::folderTitles() const
+{
+    return m_folderTitles;
 }

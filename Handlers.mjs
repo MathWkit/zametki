@@ -35,3 +35,7 @@ export function onMoreClicked() {
 export function onNoteClicked(noteTitle) {
     console.log("Выбрана заметка:", noteTitle);
 }
+
+export function onFolderClicked(folderTitle) {
+    console.log("Выбрана папка:", folderTitle);
+}
