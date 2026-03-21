@@ -1,11 +1,17 @@
+#include <QCoreApplication>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+
+#include "filecreator.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+    FileCreator fileCreator;
+    engine.rootContext()->setContextProperty("fileCreator", &fileCreator);
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

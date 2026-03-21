@@ -10,12 +10,14 @@ qt_standard_project_setup(REQUIRES 6.8)
 
 qt_add_executable(appzametki
     main.cpp
+    filecreator.cpp
 )
 
 qt_add_qml_module(appzametki
     URI zametki
     QML_FILES
         Main.qml
+        Handlers.mjs
     RESOURCES
         assets/search.svg
         assets/new-note.svg

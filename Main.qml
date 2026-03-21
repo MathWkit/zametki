@@ -1,9 +1,14 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Window
 import QtQuick.Layouts
+import "qrc:/qt/qml/zametki/Handlers.mjs" as Handlers
 
 Window {
     id: window
+    property string selectedNoteTitle: ""
+
     width: 750
     height: 480
     minimumWidth: 500
@@ -139,7 +144,7 @@ Window {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-                        onClicked: console.log("Нажатие на Поиск")
+                        onClicked: Handlers.onSearchClicked()
                         onEntered: searchRow.color = "#f0f0f0"
                         onExited: searchRow.color = "transparent"
                     }
@@ -183,7 +188,7 @@ Window {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-                        onClicked: console.log("Нажатие на Новую заметку")
+                        onClicked: Handlers.onNewNoteClicked(fileCreator)
                         onEntered: newNoteRow.color = "#f0f0f0"
                         onExited: newNoteRow.color = "transparent"
                     }
@@ -227,7 +232,7 @@ Window {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-                        onClicked: console.log("Нажатие на Вид графа")
+                        onClicked: Handlers.onGraphClicked()
                         onEntered: graphRow.color = "#f0f0f0"
                         onExited: graphRow.color = "transparent"
                     }
@@ -251,10 +256,48 @@ Window {
                     font.weight: Font.DemiBold
                     color: "#6B7280"
                     Layout.alignment: Qt.AlignLeft
-                    leftPadding: 12
-                    rightPadding: 12
-                    topPadding: 12
-                    bottomPadding: 4
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12
+                }
+
+                Repeater {
+                    model: fileCreator.noteTitles
+
+                    delegate: Rectangle {
+                        id: noteItem
+                        required property string modelData
+
+                        width: parent ? parent.width : 0
+                        height: 30
+                        color: window.selectedNoteTitle === noteItem.modelData
+                               ? "#e8eefc"
+                               : (noteMouseArea.containsMouse ? "#f0f0f0" : "transparent")
+                        radius: 4
+
+                        Text {
+                            text: noteItem.modelData
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: 12
+                            font.family: interFont.name
+                            font.pixelSize: 13
+                            font.weight: Font.Normal
+                            color: "#0F1724"
+                            elide: Text.ElideRight
+                            width: parent.width - 24
+                        }
+
+                        MouseArea {
+                            id: noteMouseArea
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: true
+                            onClicked: {
+                                window.selectedNoteTitle = noteItem.modelData;
+                                Handlers.onNoteClicked(noteItem.modelData);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -289,7 +332,7 @@ Window {
                         height: 16
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-                        onClicked: console.log("Нажатие на Hide Sidebar")
+                        onClicked: Handlers.onHideSidebarClicked()
                         onEntered: hideSidebarImage.opacity = 0.6
                         onExited: hideSidebarImage.opacity = 1.0
 
@@ -330,7 +373,7 @@ Window {
                         height: 16
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-                        onClicked: console.log("Нажата иконка Share")
+                        onClicked: Handlers.onShareClicked()
                         onEntered: shareImage.opacity = 0.6
                         onExited: shareImage.opacity = 1.0
 
@@ -354,7 +397,7 @@ Window {
                         height: 16
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-                        onClicked: console.log("Нажата иконка Favorite")
+                        onClicked: Handlers.onFavoriteClicked()
                         onEntered: favoriteImage.opacity = 0.6
                         onExited: favoriteImage.opacity = 1.0
 
@@ -378,7 +421,7 @@ Window {
                         height: 16
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-                        onClicked: console.log("Нажата иконка More")
+                        onClicked: Handlers.onMoreClicked()
                         onEntered: moreImage.opacity = 0.6
                         onExited: moreImage.opacity = 1.0
 
