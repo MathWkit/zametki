@@ -6,7 +6,7 @@
 
 namespace
 {
-const QString kDefaultSaveDirectory = "/Users/renat/Desktop";
+    const QString kDefaultSaveDirectory = "/Users/renat/Desktop";
 }
 
 FileCreator::FileCreator(QObject *parent)

@@ -18,6 +18,9 @@ qt_add_qml_module(appzametki
     QML_FILES
         Main.qml
         Handlers.mjs
+        FolderNoteList.qml
+        SidebarPanel.qml
+        MainHeaderBar.qml
     RESOURCES
         assets/search.svg
         assets/new-note.svg
