@@ -295,7 +295,7 @@ Window {
 
                         Image {
                             id: hideSidebarImage
-                            source: "qrc:/qt/qml/zametki/assets/hide-sidebar.png"
+                            source: "qrc:/qt/qml/zametki/assets/hide-sidebar.svg"
                             width: 16
                             height: 16
                             fillMode: Image.PreserveAspectFit
