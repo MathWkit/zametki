@@ -18,6 +18,7 @@ qt_add_qml_module(appzametki
     QML_FILES
         Main.qml
         Handlers.mjs
+        Theme.js
         FolderNoteList.qml
         SidebarPanel.qml
         MainHeaderBar.qml

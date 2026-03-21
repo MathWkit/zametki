@@ -1,7 +1,7 @@
 #include <QCoreApplication>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
+#include <qqml.h>
 
 #include "filecreator.h"
 
@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     FileCreator fileCreator;
-    engine.rootContext()->setContextProperty("fileCreator", &fileCreator);
+    qmlRegisterSingletonInstance("zametki", 1, 0, "AppState", &fileCreator);
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

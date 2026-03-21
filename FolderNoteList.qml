@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick 6.8
+import "qrc:/qt/qml/zametki/Theme.js" as Palette
 
 Column {
     id: root
@@ -21,7 +22,7 @@ Column {
         font.family: root.fontFamily
         font.pixelSize: 11
         font.weight: Font.DemiBold
-        color: "#6B7280"
+        color: Palette.textSecondary
         anchors.left: parent.left
         anchors.leftMargin: 12
     }
@@ -35,8 +36,8 @@ Column {
 
             width: parent ? parent.width : 0
             height: 26
-            color: root.selectedItemKey === ("folder:" + folderItem.modelData) ? "#e8eefc" : (folderMouseArea.containsMouse ? "#f0f0f0" : "transparent")
-            radius: 4
+            color: root.selectedItemKey === ("folder:" + folderItem.modelData) ? Palette.selected : (folderMouseArea.containsMouse ? Palette.hover : "transparent")
+            radius: Palette.cornerRadius
 
             Row {
                 anchors.fill: parent
@@ -66,7 +67,7 @@ Column {
                     font.family: root.fontFamily
                     font.pixelSize: 13
                     font.weight: Font.Normal
-                    color: "#0F1724"
+                    color: Palette.textPrimary
                     elide: Text.ElideRight
                 }
             }
@@ -93,8 +94,8 @@ Column {
 
             width: parent ? parent.width : 0
             height: 30
-            color: root.selectedItemKey === ("note:" + noteItem.modelData) ? "#e8eefc" : (noteMouseArea.containsMouse ? "#f0f0f0" : "transparent")
-            radius: 4
+            color: root.selectedItemKey === ("note:" + noteItem.modelData) ? Palette.selected : (noteMouseArea.containsMouse ? Palette.hover : "transparent")
+            radius: Palette.cornerRadius
 
             Row {
                 anchors.fill: parent
@@ -116,7 +117,7 @@ Column {
                     font.family: root.fontFamily
                     font.pixelSize: 13
                     font.weight: Font.Normal
-                    color: "#0F1724"
+                    color: Palette.textPrimary
                     elide: Text.ElideRight
                 }
             }

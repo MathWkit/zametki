@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick 6.8
 import QtQuick.Layouts 6.8
+import "qrc:/qt/qml/zametki/Theme.js" as Palette
 
 Rectangle {
     id: root
@@ -20,7 +21,7 @@ Rectangle {
 
     color: "transparent"
     border.width: 1
-    border.color: Qt.rgba(0, 0, 0, 0.08)
+    border.color: Palette.border
 
     Column {
         id: horizontalBorder
@@ -56,7 +57,7 @@ Rectangle {
                     font.family: root.fontFamily
                     font.pixelSize: 14
                     font.weight: Font.DemiBold
-                    color: "#0F1724"
+                    color: Palette.textPrimary
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
@@ -77,7 +78,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             height: 1
-            color: Qt.rgba(0, 0, 0, 0.08)
+            color: Palette.border
         }
     }
 
@@ -96,7 +97,7 @@ Rectangle {
             height: 40
             width: parent.width
             color: "transparent"
-            radius: 4
+            radius: Palette.cornerRadius
 
             Row {
                 anchors.fill: parent
@@ -129,7 +130,7 @@ Rectangle {
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
                 onClicked: root.searchClicked()
-                onEntered: searchRow.color = "#f0f0f0"
+                onEntered: searchRow.color = Palette.hover
                 onExited: searchRow.color = "transparent"
             }
         }
@@ -139,7 +140,7 @@ Rectangle {
             height: 40
             width: parent.width
             color: "transparent"
-            radius: 4
+            radius: Palette.cornerRadius
 
             Row {
                 anchors.fill: parent
@@ -172,7 +173,7 @@ Rectangle {
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
                 onClicked: root.newNoteClicked()
-                onEntered: newNoteRow.color = "#f0f0f0"
+                onEntered: newNoteRow.color = Palette.hover
                 onExited: newNoteRow.color = "transparent"
             }
         }
@@ -182,7 +183,7 @@ Rectangle {
             height: 40
             width: parent.width
             color: "transparent"
-            radius: 4
+            radius: Palette.cornerRadius
 
             Row {
                 anchors.fill: parent
@@ -215,7 +216,7 @@ Rectangle {
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
                 onClicked: root.graphClicked()
-                onEntered: graphRow.color = "#f0f0f0"
+                onEntered: graphRow.color = Palette.hover
                 onExited: graphRow.color = "transparent"
             }
         }

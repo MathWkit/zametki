@@ -2,12 +2,13 @@ pragma ComponentBehavior: Bound
 
 import QtQuick 6.8
 import QtQuick.Window 6.8
+import "qrc:/qt/qml/zametki/Theme.js" as Palette
 import "qrc:/qt/qml/zametki/Handlers.mjs" as Handlers
 
 Window {
     id: window
     property string selectedItemKey: ""
-    readonly property real asideWidth: Math.max(width * 0.2, 200)
+    readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
 
     width: 750
     height: 480
@@ -31,13 +32,13 @@ Window {
             anchors.bottom: parent.bottom
             fontFamily: interFont.name
             selectedItemKey: window.selectedItemKey
-            folderTitles: fileCreator.folderTitles
-            noteTitles: fileCreator.noteTitles
+            folderTitles: AppState.folderTitles
+            noteTitles: AppState.noteTitles
             onSearchClicked: {
                 Handlers.onSearchClicked();
             }
             onNewNoteClicked: {
-                Handlers.onNewNoteClicked(fileCreator);
+                Handlers.onNewNoteClicked(AppState);
             }
             onGraphClicked: {
                 Handlers.onGraphClicked();

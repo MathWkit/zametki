@@ -1,4 +1,5 @@
 import QtQuick 6.8
+import "qrc:/qt/qml/zametki/Theme.js" as Palette
 
 Rectangle {
     id: root
@@ -11,9 +12,9 @@ Rectangle {
     signal moreClicked
 
     height: 56
-    color: "#F8F9FA"
+    color: Palette.headerBackground
     border.width: 1
-    border.color: Qt.rgba(0, 0, 0, 0.08)
+    border.color: Palette.border
 
     Row {
         spacing: 10
@@ -50,7 +51,7 @@ Rectangle {
             font.family: root.fontFamily
             font.pixelSize: 14
             anchors.verticalCenter: parent.verticalCenter
-            color: "#0F1724"
+            color: Palette.textPrimary
         }
     }
 
