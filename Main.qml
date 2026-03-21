@@ -1,12 +1,13 @@
 pragma ComponentBehavior: Bound
 
-import QtQuick
-import QtQuick.Window
+import QtQuick 6.8
+import QtQuick.Window 6.8
 import "qrc:/qt/qml/zametki/Handlers.mjs" as Handlers
 
 Window {
     id: window
     property string selectedItemKey: ""
+    readonly property real asideWidth: Math.max(width * 0.2, 200)
 
     width: 750
     height: 480
@@ -24,7 +25,7 @@ Window {
 
         SidebarPanel {
             id: aside
-            width: Math.max(parent.width * 0.2, 200)
+            width: window.asideWidth
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -32,16 +33,24 @@ Window {
             selectedItemKey: window.selectedItemKey
             folderTitles: fileCreator.folderTitles
             noteTitles: fileCreator.noteTitles
-            onSearchClicked: Handlers.onSearchClicked()
-            onNewNoteClicked: Handlers.onNewNoteClicked(fileCreator)
-            onGraphClicked: Handlers.onGraphClicked()
+            onSearchClicked: {
+                Handlers.onSearchClicked();
+            }
+            onNewNoteClicked: {
+                Handlers.onNewNoteClicked(fileCreator);
+            }
+            onGraphClicked: {
+                Handlers.onGraphClicked();
+            }
             onFolderClicked: function (folderTitle) {
                 Handlers.onFolderClicked(folderTitle);
             }
             onNoteClicked: function (noteTitle) {
                 Handlers.onNoteClicked(noteTitle);
             }
-            onItemSelected: itemKey => window.selectedItemKey = itemKey
+            onItemSelected: function (itemKey) {
+                window.selectedItemKey = itemKey;
+            }
         }
 
         Item {
@@ -55,10 +64,18 @@ Window {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 fontFamily: interFont.name
-                onHideSidebarClicked: Handlers.onHideSidebarClicked()
-                onShareClicked: Handlers.onShareClicked()
-                onFavoriteClicked: Handlers.onFavoriteClicked()
-                onMoreClicked: Handlers.onMoreClicked()
+                onHideSidebarClicked: {
+                    Handlers.onHideSidebarClicked();
+                }
+                onShareClicked: {
+                    Handlers.onShareClicked();
+                }
+                onFavoriteClicked: {
+                    Handlers.onFavoriteClicked();
+                }
+                onMoreClicked: {
+                    Handlers.onMoreClicked();
+                }
             }
         }
     }

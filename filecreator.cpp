@@ -12,8 +12,21 @@ namespace
 FileCreator::FileCreator(QObject *parent)
     : QObject(parent), m_saveDirectory(kDefaultSaveDirectory)
 {
+    connect(
+        &m_directoryWatcher,
+        &QFileSystemWatcher::directoryChanged,
+        this,
+        [this](const QString &)
+        {
+            refreshNoteTitles();
+            refreshFolderTitles();
+            // Re-add watcher path if filesystem event invalidated it.
+            updateDirectoryWatcher();
+        });
+
     refreshNoteTitles();
     refreshFolderTitles();
+    updateDirectoryWatcher();
 }
 
 bool FileCreator::createDesktopMarkdown()
@@ -79,6 +92,7 @@ void FileCreator::setSaveDirectory(const QString &path)
     emit saveDirectoryChanged();
     refreshNoteTitles();
     refreshFolderTitles();
+    updateDirectoryWatcher();
 }
 
 QStringList FileCreator::noteTitles() const
@@ -89,4 +103,19 @@ QStringList FileCreator::noteTitles() const
 QStringList FileCreator::folderTitles() const
 {
     return m_folderTitles;
+}
+
+void FileCreator::updateDirectoryWatcher()
+{
+    const QStringList watchedDirectories = m_directoryWatcher.directories();
+    if (!watchedDirectories.isEmpty())
+    {
+        m_directoryWatcher.removePaths(watchedDirectories);
+    }
+
+    const QDir dir(m_saveDirectory);
+    if (dir.exists())
+    {
+        m_directoryWatcher.addPath(dir.absolutePath());
+    }
 }

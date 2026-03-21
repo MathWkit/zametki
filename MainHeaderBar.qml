@@ -1,4 +1,4 @@
-import QtQuick
+import QtQuick 6.8
 
 Rectangle {
     id: root

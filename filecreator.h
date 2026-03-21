@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QFileSystemWatcher>
 #include <QString>
 #include <QStringList>
 
@@ -30,6 +31,9 @@ signals:
     void folderTitlesChanged();
 
 private:
+    void updateDirectoryWatcher();
+
+    QFileSystemWatcher m_directoryWatcher;
     QString m_saveDirectory;
     QStringList m_noteTitles;
     QStringList m_folderTitles;
