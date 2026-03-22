@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick 6.8
+import QtQuick.Layouts 6.8
 import "../scripts/Theme.js" as Palette
 
 Column {
@@ -123,10 +124,11 @@ Column {
 
             width: parent ? parent.width : 0
             height: isFolder ? 26 : 28
+            clip: true
             color: root.selectedItemKey === (isFolder ? ("folder:" + modelData.path) : ("folder-note:" + modelData.path)) ? Palette.selected : (itemMouseArea.containsMouse ? Palette.hover : "transparent")
             radius: Palette.cornerRadius
 
-            Row {
+            RowLayout {
                 anchors.fill: parent
                 anchors.leftMargin: 12 + treeItem.depth * 20
                 anchors.rightMargin: 12
@@ -136,8 +138,10 @@ Column {
                     source: treeItem.isFolder ? "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg" : ""
                     width: 16
                     height: 16
+                    Layout.preferredWidth: 16
+                    Layout.preferredHeight: 16
+                    Layout.alignment: Qt.AlignVCenter
                     fillMode: Image.PreserveAspectFit
-                    anchors.verticalCenter: parent.verticalCenter
                     rotation: treeItem.isFolder && root.expandedFolders[treeItem.modelData.path] ? 90 : 0
                     opacity: treeItem.isFolder ? 1 : 0
                 }
@@ -146,17 +150,21 @@ Column {
                     source: treeItem.isFolder ? (root.expandedFolders[treeItem.modelData.path] ? "qrc:/qt/qml/zametki/assets/icons/list/open-folder.svg" : "qrc:/qt/qml/zametki/assets/icons/list/folder.svg") : "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
                     width: 16
                     height: 16
+                    Layout.preferredWidth: 16
+                    Layout.preferredHeight: 16
+                    Layout.alignment: Qt.AlignVCenter
                     fillMode: Image.PreserveAspectFit
-                    anchors.verticalCenter: parent.verticalCenter
                 }
 
                 Text {
                     text: treeItem.modelData.name
-                    anchors.verticalCenter: parent.verticalCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
                     font.family: root.fontFamily
                     font.pixelSize: 13
                     font.weight: Font.Normal
                     color: Palette.textPrimary
+                    wrapMode: Text.NoWrap
                     elide: Text.ElideRight
                 }
             }
@@ -190,10 +198,11 @@ Column {
 
             width: parent ? parent.width : 0
             height: 30
+            clip: true
             color: root.selectedItemKey === ("note:" + noteItem.modelData) ? Palette.selected : (noteMouseArea.containsMouse ? Palette.hover : "transparent")
             radius: Palette.cornerRadius
 
-            Row {
+            RowLayout {
                 anchors.fill: parent
                 anchors.leftMargin: 12
                 anchors.rightMargin: 12
@@ -203,17 +212,21 @@ Column {
                     source: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
                     width: 16
                     height: 16
+                    Layout.preferredWidth: 16
+                    Layout.preferredHeight: 16
+                    Layout.alignment: Qt.AlignVCenter
                     fillMode: Image.PreserveAspectFit
-                    anchors.verticalCenter: parent.verticalCenter
                 }
 
                 Text {
                     text: noteItem.modelData
-                    anchors.verticalCenter: parent.verticalCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
                     font.family: root.fontFamily
                     font.pixelSize: 13
                     font.weight: Font.Normal
                     color: Palette.textPrimary
+                    wrapMode: Text.NoWrap
                     elide: Text.ElideRight
                 }
             }

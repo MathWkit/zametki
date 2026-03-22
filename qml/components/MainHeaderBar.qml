@@ -75,7 +75,7 @@ Rectangle {
 
                         text: {
                             if (isPlaceholder) {
-                                return "Поле для текста";
+                                return "";
                             }
 
                             if (isSeparator) {
