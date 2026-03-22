@@ -5,6 +5,7 @@ Rectangle {
     id: root
 
     property string fontFamily: ""
+    property bool sidebarVisible: true
 
     signal hideSidebarClicked
     signal shareClicked
@@ -34,7 +35,9 @@ Rectangle {
 
             Image {
                 id: hideSidebarImage
-                source: "qrc:/qt/qml/zametki/assets/icons/header/hide-sidebar.svg"
+                source: root.sidebarVisible
+                    ? "qrc:/qt/qml/zametki/assets/icons/header/hide-sidebar.svg"
+                    : "qrc:/qt/qml/zametki/assets/icons/header/show-sidebar.svg"
                 width: 16
                 height: 16
                 fillMode: Image.PreserveAspectFit

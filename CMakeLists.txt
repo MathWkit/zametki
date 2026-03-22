@@ -37,9 +37,11 @@ qt_add_qml_module(appzametki
         assets/icons/header/favorite.svg
         assets/icons/header/more.svg
         assets/icons/header/hide-sidebar.svg
+        assets/icons/header/show-sidebar.svg
         assets/icons/list/note.svg
         assets/icons/list/closed-bracket.svg
         assets/icons/list/folder.svg
+        assets/icons/list/open-folder.svg
         assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
 )
 

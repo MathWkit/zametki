@@ -8,6 +8,7 @@ import "scripts/Handlers.mjs" as Handlers
 Window {
     id: window
     property string selectedItemKey: ""
+    property bool sidebarVisible: true
     readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
 
     width: 750
@@ -26,7 +27,8 @@ Window {
 
         SidebarPanel {
             id: aside
-            width: window.asideWidth
+            width: window.sidebarVisible ? window.asideWidth : 0
+            visible: width > 0
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -65,7 +67,9 @@ Window {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 fontFamily: interFont.name
+                sidebarVisible: window.sidebarVisible
                 onHideSidebarClicked: {
+                    window.sidebarVisible = !window.sidebarVisible;
                     Handlers.onHideSidebarClicked();
                 }
                 onShareClicked: {

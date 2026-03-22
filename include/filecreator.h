@@ -2,8 +2,10 @@
 
 #include <QObject>
 #include <QFileSystemWatcher>
+#include <QTimer>
 #include <QString>
 #include <QStringList>
+#include <QVariantList>
 
 class FileCreator : public QObject
 {
@@ -19,6 +21,8 @@ public:
     Q_INVOKABLE QString lastError() const;
     Q_INVOKABLE void refreshNoteTitles();
     Q_INVOKABLE void refreshFolderTitles();
+    Q_INVOKABLE QStringList noteTitlesForFolder(const QString &folderTitle) const;
+    Q_INVOKABLE QVariantList entriesForFolder(const QString &folderPath) const;
 
     QString saveDirectory() const;
     void setSaveDirectory(const QString &path);
@@ -29,11 +33,13 @@ signals:
     void saveDirectoryChanged();
     void noteTitlesChanged();
     void folderTitlesChanged();
+    void directoryContentChanged();
 
 private:
     void updateDirectoryWatcher();
 
     QFileSystemWatcher m_directoryWatcher;
+    QTimer m_refreshDebounceTimer;
     QString m_saveDirectory;
     QStringList m_noteTitles;
     QStringList m_folderTitles;
