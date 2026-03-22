@@ -10,6 +10,33 @@ Window {
     property string selectedItemKey: ""
     property bool sidebarVisible: true
     readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
+    readonly property var selectedNotePathSegments: buildSelectedNotePathSegments(selectedItemKey)
+
+    function buildSelectedNotePathSegments(itemKey) {
+        if (!itemKey || (itemKey.indexOf("folder:") !== 0 && itemKey.indexOf("folder-note:") !== 0 && itemKey.indexOf("note:") !== 0)) {
+            return [];
+        }
+
+        let relativeNotePath = "";
+        if (itemKey.indexOf("folder:") === 0) {
+            relativeNotePath = itemKey.slice("folder:".length);
+        } else if (itemKey.indexOf("folder-note:") === 0) {
+            relativeNotePath = itemKey.slice("folder-note:".length);
+        } else {
+            relativeNotePath = itemKey.slice("note:".length);
+        }
+
+        if (!relativeNotePath) {
+            return [];
+        }
+
+        const pathParts = relativeNotePath.split("/").filter(part => part.length > 0);
+        if (pathParts.length === 0) {
+            return [];
+        }
+
+        return pathParts;
+    }
 
     width: 750
     height: 480
@@ -68,6 +95,7 @@ Window {
                 anchors.right: parent.right
                 fontFamily: interFont.name
                 sidebarVisible: window.sidebarVisible
+                notePathSegments: window.selectedNotePathSegments
                 onHideSidebarClicked: {
                     window.sidebarVisible = !window.sidebarVisible;
                     Handlers.onHideSidebarClicked();

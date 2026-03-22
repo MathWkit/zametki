@@ -143,11 +143,7 @@ Column {
                 }
 
                 Image {
-                    source: treeItem.isFolder
-                        ? (root.expandedFolders[treeItem.modelData.path]
-                           ? "qrc:/qt/qml/zametki/assets/icons/list/open-folder.svg"
-                           : "qrc:/qt/qml/zametki/assets/icons/list/folder.svg")
-                        : "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
+                    source: treeItem.isFolder ? (root.expandedFolders[treeItem.modelData.path] ? "qrc:/qt/qml/zametki/assets/icons/list/open-folder.svg" : "qrc:/qt/qml/zametki/assets/icons/list/folder.svg") : "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
                     width: 16
                     height: 16
                     fillMode: Image.PreserveAspectFit
