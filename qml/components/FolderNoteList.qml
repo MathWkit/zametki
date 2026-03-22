@@ -121,11 +121,12 @@ Column {
 
             readonly property bool isFolder: modelData.type === "folder"
             readonly property int depth: modelData.depth || 0
+            readonly property bool isSelected: root.selectedItemKey === (isFolder ? ("folder:" + modelData.path) : ("folder-note:" + modelData.path))
 
             width: parent ? parent.width : 0
             height: isFolder ? 26 : 28
             clip: true
-            color: root.selectedItemKey === (isFolder ? ("folder:" + modelData.path) : ("folder-note:" + modelData.path)) ? Palette.selected : (itemMouseArea.containsMouse ? Palette.hover : "transparent")
+            color: treeItem.isSelected ? "#E6F0FF" : (itemMouseArea.containsMouse ? Palette.hover : "transparent")
             radius: Palette.cornerRadius
 
             RowLayout {
@@ -135,7 +136,11 @@ Column {
                 spacing: 8
 
                 Image {
-                    source: treeItem.isFolder ? "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg" : ""
+                    source: treeItem.isFolder
+                        ? (treeItem.isSelected
+                           ? "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket-selected.svg"
+                           : "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg")
+                        : ""
                     width: 16
                     height: 16
                     Layout.preferredWidth: 16
@@ -147,7 +152,22 @@ Column {
                 }
 
                 Image {
-                    source: treeItem.isFolder ? (root.expandedFolders[treeItem.modelData.path] ? "qrc:/qt/qml/zametki/assets/icons/list/open-folder.svg" : "qrc:/qt/qml/zametki/assets/icons/list/folder.svg") : "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
+                    source: {
+                        if (treeItem.isFolder) {
+                            if (root.expandedFolders[treeItem.modelData.path]) {
+                                return treeItem.isSelected
+                                    ? "qrc:/qt/qml/zametki/assets/icons/list/open-folder-selected.svg"
+                                    : "qrc:/qt/qml/zametki/assets/icons/list/open-folder.svg";
+                            }
+                            return treeItem.isSelected
+                                ? "qrc:/qt/qml/zametki/assets/icons/list/folder-selected.svg"
+                                : "qrc:/qt/qml/zametki/assets/icons/list/folder.svg";
+                        }
+
+                        return treeItem.isSelected
+                            ? "qrc:/qt/qml/zametki/assets/icons/list/note-selected.svg"
+                            : "qrc:/qt/qml/zametki/assets/icons/list/note.svg";
+                    }
                     width: 16
                     height: 16
                     Layout.preferredWidth: 16
@@ -163,7 +183,7 @@ Column {
                     font.family: root.fontFamily
                     font.pixelSize: 13
                     font.weight: Font.Normal
-                    color: Palette.textPrimary
+                    color: treeItem.isSelected ? "#0B74DE" : Palette.textPrimary
                     wrapMode: Text.NoWrap
                     elide: Text.ElideRight
                 }
@@ -195,11 +215,12 @@ Column {
         delegate: Rectangle {
             id: noteItem
             required property string modelData
+            readonly property bool isSelected: root.selectedItemKey === ("note:" + noteItem.modelData)
 
             width: parent ? parent.width : 0
             height: 30
             clip: true
-            color: root.selectedItemKey === ("note:" + noteItem.modelData) ? Palette.selected : (noteMouseArea.containsMouse ? Palette.hover : "transparent")
+            color: noteItem.isSelected ? "#E6F0FF" : (noteMouseArea.containsMouse ? Palette.hover : "transparent")
             radius: Palette.cornerRadius
 
             RowLayout {
@@ -209,7 +230,9 @@ Column {
                 spacing: 8
 
                 Image {
-                    source: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
+                    source: noteItem.isSelected
+                        ? "qrc:/qt/qml/zametki/assets/icons/list/note-selected.svg"
+                        : "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
                     width: 16
                     height: 16
                     Layout.preferredWidth: 16
@@ -225,7 +248,7 @@ Column {
                     font.family: root.fontFamily
                     font.pixelSize: 13
                     font.weight: Font.Normal
-                    color: Palette.textPrimary
+                    color: noteItem.isSelected ? "#0B74DE" : Palette.textPrimary
                     wrapMode: Text.NoWrap
                     elide: Text.ElideRight
                 }

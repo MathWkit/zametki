@@ -2,7 +2,7 @@
 
 var textPrimary = "#0F1724";
 var textSecondary = "#6B7280";
-var headerBackground = "#F8F9FA";
+var headerBackground = "#FFFFFF";
 var border = Qt.rgba(0, 0, 0, 0.08);
 var hover = "#f0f0f0";
 var selected = "#e8eefc";
