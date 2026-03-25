@@ -47,6 +47,7 @@ qt_add_qml_module(appzametki
         assets/icons/list/open-folder.svg
         assets/icons/list/open-folder-selected.svg
         assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
+        QML_FILES qml/Search.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
