@@ -4,11 +4,14 @@
 #include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
+#include <QRegularExpression>
+#include <QSettings>
+#include <QUrl>
 #include <QVariantMap>
 
 namespace
 {
-    const QString kDefaultSaveDirectory = "/Users/renat/Desktop";
+    const QString kDatabaseDirectorySettingsKey = "storage/databaseDirectory";
 
     bool isValidRelativeFolderPath(const QString &folderPath)
     {
@@ -28,7 +31,7 @@ namespace
 }
 
 FileCreator::FileCreator(QObject *parent)
-    : QObject(parent), m_saveDirectory(kDefaultSaveDirectory)
+    : QObject(parent)
 {
     m_refreshDebounceTimer.setInterval(120);
     m_refreshDebounceTimer.setSingleShot(true);
@@ -58,14 +61,25 @@ FileCreator::FileCreator(QObject *parent)
             }
         });
 
-    refreshNoteTitles();
-    refreshFolderTitles();
-    updateDirectoryWatcher();
+    loadDatabaseDirectoryFromSettings();
 }
 
 bool FileCreator::createDesktopMarkdown()
 {
-    const QString filePath = m_saveDirectory + "/text.md";
+    if (!databaseConfigured())
+    {
+        m_lastError = QStringLiteral("Папка базы данных не настроена");
+        return false;
+    }
+
+    QDir dir(m_saveDirectory);
+    if (!dir.exists() && !dir.mkpath("."))
+    {
+        m_lastError = QStringLiteral("Не удалось создать папку базы данных");
+        return false;
+    }
+
+    const QString filePath = dir.filePath("text.md");
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
     {
@@ -76,6 +90,53 @@ bool FileCreator::createDesktopMarkdown()
     m_lastError.clear();
     refreshNoteTitles();
     emit directoryContentChanged();
+    return true;
+}
+
+bool FileCreator::createDatabase(const QString &databaseName, const QString &parentDirectoryPath)
+{
+    const QString trimmedDatabaseName = databaseName.trimmed();
+    if (!isValidDatabaseName(trimmedDatabaseName))
+    {
+        m_lastError = QStringLiteral("Некорректное название базы данных");
+        return false;
+    }
+
+    const QString normalizedParentDirectory = normalizeLocalPath(parentDirectoryPath);
+    if (normalizedParentDirectory.isEmpty())
+    {
+        m_lastError = QStringLiteral("Не выбрана папка для базы данных");
+        return false;
+    }
+
+    QDir parentDir(normalizedParentDirectory);
+    if (!parentDir.exists())
+    {
+        m_lastError = QStringLiteral("Выбранная папка не существует");
+        return false;
+    }
+
+    const QString databaseDirectoryPath = parentDir.absoluteFilePath(trimmedDatabaseName);
+    QFileInfo targetInfo(databaseDirectoryPath);
+    if (targetInfo.exists() && !targetInfo.isDir())
+    {
+        m_lastError = QStringLiteral("Файл с таким именем уже существует");
+        return false;
+    }
+
+    if (!targetInfo.exists())
+    {
+        if (!parentDir.mkpath(trimmedDatabaseName))
+        {
+            m_lastError = QStringLiteral("Не удалось создать папку базы данных");
+            return false;
+        }
+    }
+
+    const QString absoluteDatabasePath = QFileInfo(databaseDirectoryPath).absoluteFilePath();
+    setSaveDirectory(absoluteDatabasePath);
+    saveDatabaseDirectoryToSettings(absoluteDatabasePath);
+    m_lastError.clear();
     return true;
 }
 
@@ -119,16 +180,29 @@ QString FileCreator::saveDirectory() const
 
 void FileCreator::setSaveDirectory(const QString &path)
 {
-    if (path == m_saveDirectory)
+    const QString normalizedPath = normalizeLocalPath(path);
+    if (normalizedPath == m_saveDirectory)
     {
         return;
     }
-    m_saveDirectory = path;
+
+    const bool wasConfigured = databaseConfigured();
+    m_saveDirectory = normalizedPath;
+
     emit saveDirectoryChanged();
+    if (wasConfigured != databaseConfigured())
+    {
+        emit databaseConfiguredChanged();
+    }
     refreshNoteTitles();
     refreshFolderTitles();
     updateDirectoryWatcher();
     emit directoryContentChanged();
+}
+
+bool FileCreator::databaseConfigured() const
+{
+    return !m_saveDirectory.isEmpty();
 }
 
 QStringList FileCreator::noteTitles() const
@@ -231,4 +305,62 @@ void FileCreator::updateDirectoryWatcher()
 
         m_directoryWatcher.addPaths(pathsToWatch);
     }
+}
+
+QString FileCreator::normalizeLocalPath(const QString &pathOrUrl)
+{
+    if (pathOrUrl.isEmpty())
+    {
+        return {};
+    }
+
+    const QUrl url(pathOrUrl);
+    QString localPath;
+    if (url.isValid() && url.scheme() == "file")
+    {
+        localPath = url.toLocalFile();
+    }
+    else
+    {
+        localPath = pathOrUrl;
+    }
+
+    if (localPath.isEmpty())
+    {
+        return {};
+    }
+
+    return QDir::cleanPath(localPath);
+}
+
+bool FileCreator::isValidDatabaseName(const QString &databaseName)
+{
+    if (databaseName.isEmpty())
+    {
+        return false;
+    }
+
+    static const QRegularExpression invalidCharactersPattern(R"([<>:"/\\|?*])");
+    return !databaseName.contains(invalidCharactersPattern);
+}
+
+void FileCreator::saveDatabaseDirectoryToSettings(const QString &absolutePath)
+{
+    QSettings settings;
+    settings.setValue(kDatabaseDirectorySettingsKey, absolutePath);
+    settings.sync();
+}
+
+void FileCreator::loadDatabaseDirectoryFromSettings()
+{
+    QSettings settings;
+    const QString savedPath = normalizeLocalPath(settings.value(kDatabaseDirectorySettingsKey).toString());
+
+    if (!savedPath.isEmpty() && QFileInfo(savedPath).isDir())
+    {
+        setSaveDirectory(savedPath);
+        return;
+    }
+
+    setSaveDirectory(QString());
 }
