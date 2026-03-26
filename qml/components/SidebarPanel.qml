@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick 6.8
 import QtQuick.Layouts 6.8
+import QtQuick.Controls 6.8
 import "../scripts/Theme.js" as Palette
 
 Rectangle {
@@ -239,6 +240,22 @@ Rectangle {
         flickableDirection: Flickable.VerticalFlick
         contentWidth: width
         contentHeight: folderNoteList.implicitHeight
+
+        ScrollBar.vertical: ScrollBar {
+            policy: ScrollBar.AsNeeded
+            minimumSize: 0.1
+            width: 6
+            contentItem: Rectangle {
+                implicitWidth: 6
+                radius: 3
+                color: Palette.border
+            }
+            background: Rectangle {
+                implicitWidth: 6
+                radius: 3
+                color: "transparent"
+            }
+        }
 
         FolderNoteList {
             id: folderNoteList
