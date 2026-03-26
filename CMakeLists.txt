@@ -27,6 +27,7 @@ qt_add_qml_module(appzametki
         qml/components/FolderNoteList.qml
         qml/components/SidebarPanel.qml
         qml/components/MainHeaderBar.qml
+        qml/CreationBD.qml
     RESOURCES
         assets/icons/sidebar/search.svg
         assets/icons/sidebar/new-note.svg
