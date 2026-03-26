@@ -222,28 +222,42 @@ Rectangle {
         }
     }
 
-    FolderNoteList {
+    Flickable {
+        id: noteListScroller
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: container.bottom
+        anchors.bottom: parent.bottom
         anchors.leftMargin: 12
         anchors.rightMargin: 12
         anchors.topMargin: 8
         anchors.bottomMargin: 8
 
-        fontFamily: root.fontFamily
-        folderTitles: root.folderTitles
-        noteTitles: root.noteTitles
-        selectedItemKey: root.selectedItemKey
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+        flickableDirection: Flickable.VerticalFlick
+        contentWidth: width
+        contentHeight: folderNoteList.implicitHeight
 
-        onFolderClicked: function (folderTitle) {
-            root.folderClicked(folderTitle);
-        }
-        onNoteClicked: function (noteTitle) {
-            root.noteClicked(noteTitle);
-        }
-        onItemSelected: function (itemKey) {
-            root.itemSelected(itemKey);
+        FolderNoteList {
+            id: folderNoteList
+            width: noteListScroller.width
+
+            fontFamily: root.fontFamily
+            folderTitles: root.folderTitles
+            noteTitles: root.noteTitles
+            selectedItemKey: root.selectedItemKey
+
+            onFolderClicked: function (folderTitle) {
+                root.folderClicked(folderTitle);
+            }
+            onNoteClicked: function (noteTitle) {
+                root.noteClicked(noteTitle);
+            }
+            onItemSelected: function (itemKey) {
+                root.itemSelected(itemKey);
+            }
         }
     }
 }
