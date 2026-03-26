@@ -79,7 +79,16 @@ bool FileCreator::createDesktopMarkdown()
         return false;
     }
 
-    const QString filePath = dir.filePath("text.md");
+    const QString baseTitle = QStringLiteral("Новая заметка");
+    QString fileName = baseTitle + ".md";
+    int suffix = 0;
+    while (QFileInfo::exists(dir.filePath(fileName)))
+    {
+        ++suffix;
+        fileName = QStringLiteral("%1 (%2).md").arg(baseTitle).arg(suffix);
+    }
+
+    const QString filePath = dir.filePath(fileName);
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
     {
