@@ -8,11 +8,19 @@ Item {
     height: 1080
     clip: true
 
+     // ===== COLORS =====
+    property color colorBackground: "#ffffff"
+       property color colorSurface: "#f1f5f9"
+       property color colorTextPrimary: "#0f1724"
+       property color colorTextSecondary: "#667085"
+       property color colorAccent: "#0b74de"
+
+
     Rectangle {
         id: rectangle
         width: 540
         height: 561
-        color: "#ffffff"
+        color: colorBackground
         radius: 10
         anchors.centerIn: parent
 
@@ -31,20 +39,20 @@ Item {
 
                     Text {
                         text: "Share"
-                        color: "#667085"
+                        color: colorTextSecondary
                         font.family: "Inter"
                         font.styleName: "SemiBold"
                     }
                     Text {
                         text: "Share “”"
-                        color: "#0f1724"
+                        color: colorTextPrimary
                         font.pointSize: 18
                         font.family: "Inter"
                         font.styleName: "Bold"
                     }
                     Text {
                         text: "Invite people, manage access, and copy a link to this note."
-                        color: "#667085"
+                        color: colorTextSecondary
                         font.family: "Inter"
                         wrapMode: Text.WordWrap
                     }
@@ -54,7 +62,7 @@ Item {
 
                 }
                 Rectangle{
-                    color: "#f1f5f9"
+                    color: colorSurface
                     radius: 6
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                     Layout.preferredHeight: 36
@@ -79,7 +87,7 @@ Item {
 
             // ==================== 2. Add people or groups ====================
             Rectangle {
-                color: "#f1f5f9"
+                color: colorSurface
                 radius: 8
                 Layout.fillWidth: true
                 implicitHeight: addPeopleLayout.implicitHeight + 28
@@ -113,7 +121,7 @@ Item {
                                     horizontalAlignment: Text.AlignLeft
                                     verticalAlignment: Text.AlignTop
                                     Layout.fillWidth: true
-                                    color: "#667085"
+                                    color: colorTextSecondary
                                     font.family: "Inter"
                                 }
                             }
@@ -121,7 +129,7 @@ Item {
 
                         Rectangle {
                             radius: 6
-                            color: "#ffffff"
+                            color: colorBackground
                             implicitWidth: sendText.implicitWidth + 24
                             implicitHeight: 36
 
@@ -139,7 +147,7 @@ Item {
 
             // ==================== 3. People with access ====================
             Rectangle {
-                color: "#f1f5f9"
+                color: colorSurface
                 radius: 8
                 Layout.fillWidth: true
                 implicitHeight: peopleColumn.implicitHeight + 28
@@ -152,7 +160,7 @@ Item {
 
                     Text {
                         text: "People with access"
-                        color: "#667085"
+                        color: colorTextSecondary
                         font.family: "Inter"
                         font.styleName: "SemiBold"
                     }
@@ -187,7 +195,7 @@ Item {
                             }
                             Text {
                                 text: "alex@vault.app"
-                                color: "#667085"
+                                color: colorTextSecondary
                                 font.family: "Inter"
                             }
                         }
@@ -195,7 +203,7 @@ Item {
                         Item { Layout.fillWidth: true }
 
                         Rectangle {
-                            color: "#ffffff"
+                            color: colorBackground
                             radius: 6
                             implicitWidth: ownerRow1.implicitWidth + 24
                             implicitHeight: 32
@@ -247,7 +255,7 @@ Item {
                             }
                             Text {
                                 text: "alex@vault.app"
-                                color: "#667085"
+                                color: colorTextSecondary
                                 font.family: "Inter"
                             }
                         }
@@ -257,7 +265,7 @@ Item {
 
 
                         Rectangle {
-                            color: "#ffffff"
+                            color: colorBackground
                             radius: 6
                             implicitWidth: ownerRow2.implicitWidth + 24
                             implicitHeight: 32
@@ -284,7 +292,7 @@ Item {
 
             // ==================== 4. General access ====================
             Rectangle {
-                color: "#f1f5f9"
+                color: colorSurface
                 radius: 8
                 Layout.fillWidth: true
                 implicitHeight: generalColumn.implicitHeight + 28
@@ -297,7 +305,7 @@ Item {
 
                     Text {
                         text: "General access"
-                        color: "#667085"
+                        color: colorTextSecondary
                         font.family: "Inter"
                         font.styleName: "SemiBold"
                     }
@@ -322,7 +330,7 @@ Item {
                                 font.family: "Inter"
                             }
                             Text {
-                                color: "#667085"
+                                color: colorTextSecondary
                                 text: "Only people added above can open this note."
                                 font.family: "Inter"
                                 wrapMode: Text.WordWrap
@@ -332,7 +340,7 @@ Item {
                         Item { Layout.fillWidth: true }
 
                         Rectangle {
-                            color: "#ffffff"
+                            color: colorBackground
                             radius: 6
                             implicitWidth: viewerRow.implicitWidth + 24
                             implicitHeight: 32
@@ -364,7 +372,7 @@ Item {
 
                 // Copy link
                 Rectangle {
-                    color: "#F1F5F9"
+                    color: colorSurface
                     radius: 6
                     implicitWidth: copyRow.implicitWidth + 32
                     implicitHeight: copyRow.implicitHeight + 16
@@ -390,7 +398,7 @@ Item {
 
                 // Cancel
                 Rectangle {
-                    color: "#F1F5F9"
+                    color: colorSurface
                     radius: 6
                     implicitWidth: cancelText.implicitWidth + 32
                     implicitHeight: cancelText.implicitHeight + 16
@@ -406,7 +414,7 @@ Item {
 
                 // Done
                 Rectangle {
-                    color: "#0b74de"
+                    color: colorAccent
                     radius: 6
                     implicitWidth: doneText.implicitWidth + 32
                     implicitHeight: doneText.implicitHeight + 16
@@ -414,7 +422,7 @@ Item {
                     Text {
                         id: doneText
                         anchors.centerIn: parent
-                        color: "#ffffff"
+                        color: colorBackground
                         text: "Done"
                         font.family: "Inter"
                         font.styleName: "SemiBold"
