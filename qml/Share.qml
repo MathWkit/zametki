@@ -15,6 +15,31 @@ Item {
        property color colorTextSecondary: "#667085"
        property color colorAccent: "#0b74de"
 
+    signal sendClicked()
+    signal cancelClicked()
+    signal doneClicked()
+    signal copyClicked()
+    signal closeClicked()
+
+    onSendClicked: {
+            console.log("SEND LOGIC")
+        }
+
+        onCancelClicked: {
+            console.log("CANCEL LOGIC")
+        }
+
+        onDoneClicked: {
+            console.log("SAVE DATA")
+        }
+
+        onCopyClicked: {
+            console.log("COPY LINK")
+        }
+
+        onCloseClicked: {
+            console.log("CLOSE DIALOG")
+        }
 
     Rectangle {
         id: rectangle
@@ -67,13 +92,16 @@ Item {
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                     Layout.preferredHeight: 36
                     Layout.preferredWidth: 36
+                    TapHandler {
+                            onTapped: closeClicked()
+                        }
                     Image {
                         anchors.fill: parent
                         anchors.leftMargin: 8
                         anchors.rightMargin: 8
                         anchors.topMargin: 8
                         anchors.bottomMargin: 8
-                        source: "../assets/icons/share/clost-btn.svg"
+                        source: "../assets/icons/share/close-btn.svg"
                         Layout.alignment: Qt.AlignRight | Qt.AlignTop
                         Layout.fillWidth: false // ← замени на свою иконку
                         Layout.preferredWidth: 10
@@ -132,6 +160,10 @@ Item {
                             color: colorBackground
                             implicitWidth: sendText.implicitWidth + 24
                             implicitHeight: 36
+                            TapHandler {
+                                    onTapped: sendClicked()
+
+                                }
 
                             Text {
                                 id: sendText
@@ -376,6 +408,10 @@ Item {
                     radius: 6
                     implicitWidth: copyRow.implicitWidth + 32
                     implicitHeight: copyRow.implicitHeight + 16
+                    TapHandler {
+                           onTapped: copyClicked()
+
+                       }
 
                     RowLayout {
                         id: copyRow
@@ -403,6 +439,10 @@ Item {
                     implicitWidth: cancelText.implicitWidth + 32
                     implicitHeight: cancelText.implicitHeight + 16
 
+                    TapHandler {
+                           onTapped: cancelClicked()
+
+                       }
                     Text {
                         id: cancelText
                         anchors.centerIn: parent
@@ -418,6 +458,11 @@ Item {
                     radius: 6
                     implicitWidth: doneText.implicitWidth + 32
                     implicitHeight: doneText.implicitHeight + 16
+
+                    TapHandler {
+                            onTapped: doneClicked()
+
+                        }
 
                     Text {
                         id: doneText
