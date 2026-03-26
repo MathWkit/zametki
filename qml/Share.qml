@@ -8,38 +8,38 @@ Item {
     height: 1080
     clip: true
 
-     // ===== COLORS =====
+    // ===== COLORS =====
     property color colorBackground: "#ffffff"
-       property color colorSurface: "#f1f5f9"
-       property color colorTextPrimary: "#0f1724"
-       property color colorTextSecondary: "#667085"
-       property color colorAccent: "#0b74de"
+    property color colorSurface: "#f1f5f9"
+    property color colorTextPrimary: "#0f1724"
+    property color colorTextSecondary: "#667085"
+    property color colorAccent: "#0b74de"
 
-    signal sendClicked()
-    signal cancelClicked()
-    signal doneClicked()
-    signal copyClicked()
-    signal closeClicked()
+    signal sendClicked
+    signal cancelClicked
+    signal doneClicked
+    signal copyClicked
+    signal closeClicked
 
     onSendClicked: {
-            console.log("SEND LOGIC")
-        }
+        console.log("SEND LOGIC");
+    }
 
-        onCancelClicked: {
-            console.log("CANCEL LOGIC")
-        }
+    onCancelClicked: {
+        console.log("CANCEL LOGIC");
+    }
 
-        onDoneClicked: {
-            console.log("SAVE DATA")
-        }
+    onDoneClicked: {
+        console.log("SAVE DATA");
+    }
 
-        onCopyClicked: {
-            console.log("COPY LINK")
-        }
+    onCopyClicked: {
+        console.log("COPY LINK");
+    }
 
-        onCloseClicked: {
-            console.log("CLOSE DIALOG")
-        }
+    onCloseClicked: {
+        console.log("CLOSE DIALOG");
+    }
 
     Rectangle {
         id: rectangle
@@ -82,19 +82,18 @@ Item {
                         wrapMode: Text.WordWrap
                     }
                 }
-                Item{
+                Item {
                     Layout.fillWidth: true
-
                 }
-                Rectangle{
+                Rectangle {
                     color: colorSurface
                     radius: 6
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                     Layout.preferredHeight: 36
                     Layout.preferredWidth: 36
                     TapHandler {
-                            onTapped: closeClicked()
-                        }
+                        onTapped: closeClicked()
+                    }
                     Image {
                         anchors.fill: parent
                         anchors.leftMargin: 8
@@ -107,10 +106,7 @@ Item {
                         Layout.preferredWidth: 10
                         Layout.preferredHeight: 10
                     }
-
                 }
-
-
             }
 
             // ==================== 2. Add people or groups ====================
@@ -161,9 +157,8 @@ Item {
                             implicitWidth: sendText.implicitWidth + 24
                             implicitHeight: 36
                             TapHandler {
-                                    onTapped: sendClicked()
-
-                                }
+                                onTapped: sendClicked()
+                            }
 
                             Text {
                                 id: sendText
@@ -201,12 +196,12 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 12
-                        Rectangle{
+                        Rectangle {
                             radius: 100
                             Layout.preferredWidth: 36
                             Layout.preferredHeight: 36
                             Layout.alignment: Qt.AlignVCenter
-                            Text{
+                            Text {
                                 text: "AK"
                                 anchors.fill: parent
                                 horizontalAlignment: Text.AlignHCenter
@@ -215,8 +210,6 @@ Item {
                                 font.family: "Inter"
                             }
                         }
-
-
 
                         ColumnLayout {
                             Layout.fillWidth: true
@@ -232,7 +225,9 @@ Item {
                             }
                         }
 
-                        Item { Layout.fillWidth: true }
+                        Item {
+                            Layout.fillWidth: true
+                        }
 
                         Rectangle {
                             color: colorBackground
@@ -292,9 +287,9 @@ Item {
                             }
                         }
 
-
-                        Item { Layout.fillWidth: true }
-
+                        Item {
+                            Layout.fillWidth: true
+                        }
 
                         Rectangle {
                             color: colorBackground
@@ -369,7 +364,9 @@ Item {
                             }
                         }
 
-                        Item { Layout.fillWidth: true }
+                        Item {
+                            Layout.fillWidth: true
+                        }
 
                         Rectangle {
                             color: colorBackground
@@ -409,9 +406,8 @@ Item {
                     implicitWidth: copyRow.implicitWidth + 32
                     implicitHeight: copyRow.implicitHeight + 16
                     TapHandler {
-                           onTapped: copyClicked()
-
-                       }
+                        onTapped: copyClicked()
+                    }
 
                     RowLayout {
                         id: copyRow
@@ -430,7 +426,9 @@ Item {
                     }
                 }
 
-                Item { Layout.fillWidth: true }
+                Item {
+                    Layout.fillWidth: true
+                }
 
                 // Cancel
                 Rectangle {
@@ -440,9 +438,8 @@ Item {
                     implicitHeight: cancelText.implicitHeight + 16
 
                     TapHandler {
-                           onTapped: cancelClicked()
-
-                       }
+                        onTapped: cancelClicked()
+                    }
                     Text {
                         id: cancelText
                         anchors.centerIn: parent
@@ -460,9 +457,8 @@ Item {
                     implicitHeight: doneText.implicitHeight + 16
 
                     TapHandler {
-                            onTapped: doneClicked()
-
-                        }
+                        onTapped: doneClicked()
+                    }
 
                     Text {
                         id: doneText
