@@ -138,6 +138,7 @@ _deps
 
 ### CMake Patch ###
 CMakeUserPresets.json
+CMakePresets.json
 
 # External projects
 *-prefix/
@@ -258,6 +259,7 @@ CMakeLists.txt.user*
 
 # Local helper scripts
 tools/
+run.bat
 
 # Local History for Visual Studio Code
 .history/
