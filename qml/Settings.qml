@@ -5,6 +5,9 @@ import QtQuick.Layouts 1.15
 Item {
     width: 1920
     height: 1080
+    Rectangle{
+        color: "#fafbfc"
+        anchors.fill: parent
     Row{
         id: row
         anchors.fill: parent
@@ -21,9 +24,10 @@ Item {
             anchors.leftMargin: 16
             anchors.topMargin: 24
             anchors.bottomMargin: 24
+            spacing: 20
 
             Text {
-                text: "Settings"
+                text: "Настройки"
                 font.styleName: "SemiBold"
                 font.pointSize: 18
                 font.family: "Inter"
@@ -33,6 +37,8 @@ Item {
                 spacing: 4
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 Rectangle {
+                    color: "#e6f0ff"
+                    radius: 6
                     Layout.fillWidth: true
                     implicitHeight: accountLayout.implicitHeight + 24
                     implicitWidth: accountLayout.implicitWidth + 24
@@ -51,7 +57,7 @@ Item {
                         }
 
                         Text {
-                            color: "#0f1724"
+                            color: "#0b74de"
                             text: "Общие"
                             font.styleName: "Medium"
                             font.pointSize: 14
@@ -60,6 +66,7 @@ Item {
                     }
                 }
                 Rectangle {
+                    color: "#00ffffff"
                     Layout.fillWidth: true
                     implicitHeight: aplicationLayout.implicitHeight + 24
                     implicitWidth: aplicationLayout.implicitWidth + 24
@@ -87,6 +94,7 @@ Item {
                     }
                 }
                 Rectangle {
+                    color: "#00ffffff"
                     Layout.fillWidth: true
                     implicitHeight: dataLayout.implicitHeight + 24
                     implicitWidth: dataLayout.implicitWidth + 24
@@ -114,6 +122,7 @@ Item {
                     }
                 }
                 Rectangle {
+                    color: "#00ffffff"
                     Layout.fillWidth: true
                     implicitHeight: aboutLayout.implicitHeight + 24
                     implicitWidth: aboutLayout.implicitWidth + 24
@@ -142,6 +151,7 @@ Item {
                     }
                 }
                 Rectangle {
+                    color: "#00ffffff"
                     implicitWidth: aboutLayout1.implicitWidth + 24
                     implicitHeight: aboutLayout1.implicitHeight + 24
                     RowLayout {
@@ -168,6 +178,7 @@ Item {
                 }
 
                 Rectangle {
+                    color: "#00ffffff"
                     implicitWidth: aboutLayout2.implicitWidth + 24
                     implicitHeight: aboutLayout2.implicitHeight + 24
                     RowLayout {
@@ -194,6 +205,7 @@ Item {
                 }
 
                 Rectangle {
+                    color: "#00ffffff"
                     implicitWidth: aboutLayout3.implicitWidth + 24
                     implicitHeight: aboutLayout3.implicitHeight + 24
                     RowLayout {
@@ -220,6 +232,7 @@ Item {
                 }
 
                 Rectangle {
+                    color: "#00ffffff"
                     implicitWidth: aboutLayout4.implicitWidth + 24
                     implicitHeight: aboutLayout4.implicitHeight + 24
                     RowLayout {
@@ -246,6 +259,7 @@ Item {
                 }
 
                 Rectangle {
+                    color: "#00ffffff"
                     implicitWidth: aboutLayout5.implicitWidth + 24
                     implicitHeight: aboutLayout5.implicitHeight + 24
                     RowLayout {
@@ -312,7 +326,7 @@ Item {
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.leftMargin: 16
+            anchors.leftMargin: 10
             anchors.rightMargin: 0
             anchors.topMargin: 0
             anchors.bottomMargin: 0
@@ -323,6 +337,10 @@ Item {
                     id: columnLayout4
                     x: 0
                     y: 6
+                    Layout.rightMargin: 24
+                    Layout.leftMargin: 24
+                    Layout.bottomMargin: 0
+                    Layout.topMargin: 0
                     Text {
                         color: "#0f1724"
                         text: "Общие настройки"
@@ -369,6 +387,9 @@ Item {
                     id: aboutSettings
 
                     Rectangle {
+                        radius: 8
+                        border.color: "#14000000"
+                        border.width: 1
                         Layout.fillWidth: true
                         Layout.preferredHeight: columnLayout5.implicitHeight
                         Layout.preferredWidth: columnLayout5.implicitWidth
@@ -376,8 +397,14 @@ Item {
                         ColumnLayout {
                             id: columnLayout5
                             anchors.fill: parent
+                            anchors.topMargin: 0
+                            anchors.bottomMargin: 0
                             RowLayout {
                                 id: applicationLayout2
+                                Layout.topMargin: 16
+                                Layout.bottomMargin: 16
+                                Layout.rightMargin: 18
+                                Layout.leftMargin: 18
                                 ColumnLayout {
                                     id: columnLayout6
                                     x: 29
@@ -396,9 +423,19 @@ Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: false
                             }
+                            Rectangle{
+                                border.color: "#14000000"
+                                Layout.preferredHeight: 1
+                                Layout.fillWidth: true
+
+                            }
 
                             RowLayout {
                                 id: applicationLayout3
+                                Layout.leftMargin: 18
+                                Layout.rightMargin: 18
+                                Layout.bottomMargin: 16
+                                Layout.topMargin: 16
                                 ColumnLayout {
                                     id: columnLayout7
                                     x: 29
@@ -422,17 +459,22 @@ Item {
                                 Text {
                                     text: "Dark"
                                 }
-
-                                Image {
-                                    Layout.preferredWidth: 16
-                                    Layout.preferredHeight: 16
-                                }
                                 Layout.fillWidth: true
                                 Layout.fillHeight: false
                             }
 
+                            Rectangle {
+                                border.color: "#14000000"
+                                Layout.preferredHeight: 1
+                                Layout.fillWidth: true
+                            }
+
                             RowLayout {
                                 id: editorLayout2
+                                Layout.rightMargin: 18
+                                Layout.leftMargin: 18
+                                Layout.bottomMargin: 16
+                                Layout.topMargin: 16
                                 ColumnLayout {
                                     id: columnLayout8
                                     x: 29
@@ -459,6 +501,7 @@ Item {
                                 }
                                 Layout.fillWidth: true
                             }
+
                         }
                         Layout.preferredWidth: columnLayout5.implicitWidth
                         Layout.preferredHeight: columnLayout5.implicitHeight
@@ -746,54 +789,15 @@ Item {
                                     x: 29
                                     y: 4
                                     Text {
-                                        text: "Заметки"
+                                        text: "Поиск"
                                     }
 
                                     Text {
                                         color: "#667085"
-                                        text: "Папка хранения и резервные копии"
+                                        text: "Поведение полнотекстового и интеллектуального поиска"
                                         font.styleName: "Regular"
                                         font.family: "Inter"
                                     }
-                                }
-                                Layout.fillWidth: true
-                                Layout.fillHeight: false
-                            }
-
-                            RowLayout {
-                                id: applicationLayout14
-                                ColumnLayout {
-                                    id: columnLayout22
-                                    x: 29
-                                    y: 4
-                                    Text {
-                                        text: "Папка заметок"
-                                    }
-
-                                    Text {
-                                        color: "#667085"
-                                        text: "Локальное хранилище Markdown-файлов"
-                                        font.styleName: "Regular"
-                                        font.family: "Inter"
-                                    }
-                                }
-
-                                Rectangle {
-                                    Text {
-                                        id: pathText1
-                                        text: "tut"
-                                    }
-                                    Layout.preferredWidth: pathText1.implicitWidth
-                                    Layout.preferredHeight: pathText1.implicitHeight
-                                }
-
-                                Rectangle {
-                                    Text {
-                                        id: choseText1
-                                        text: "Выбрать"
-                                    }
-                                    Layout.preferredWidth: choseText1.implicitWidth
-                                    Layout.preferredHeight: choseText1.implicitHeight
                                 }
                                 Layout.fillWidth: true
                                 Layout.fillHeight: false
@@ -806,7 +810,7 @@ Item {
                                     x: 29
                                     y: 4
                                     Text {
-                                        text: "Включить автобэкап"
+                                        text: "Поиск по содержимому"
                                     }
                                 }
 
@@ -829,7 +833,7 @@ Item {
                                     x: 29
                                     y: 4
                                     Text {
-                                        text: "Количество копий"
+                                        text: "Fuzzy search"
                                     }
                                 }
 
@@ -837,14 +841,43 @@ Item {
                                     Layout.fillWidth: true
                                 }
 
-                                Rectangle {
+                                Image {
+                                    Layout.preferredWidth: 16
+                                    Layout.preferredHeight: 16
+                                }
+                                Layout.fillWidth: true
+                                Layout.fillHeight: false
+                            }
+
+                            RowLayout {
+                                id: applicationLayout14
+                                ColumnLayout {
+                                    id: columnLayout22
+                                    x: 29
+                                    y: 4
                                     Text {
-                                        id: backupCount1
-                                        text: "20"
-                                        topPadding: 10
+                                        text: "Индекс поиска"
                                     }
-                                    Layout.preferredWidth: backupCount1.implicitWidth
-                                    Layout.preferredHeight: backupCount1.implicitHeight
+
+                                    Text {
+                                        color: "#667085"
+                                        text: "Обновите индекс после массового импорта заметок"
+                                        font.styleName: "Regular"
+                                        font.family: "Inter"
+                                    }
+                                }
+                                Item{
+                                    Layout.fillWidth: true
+
+                                }
+
+                                Rectangle {
+                                    Layout.preferredHeight: reindexText.implicitHeight
+                                    Layout.preferredWidth: reindexText.implicitWidth
+                                    Text {
+                                        id: reindexText
+                                        text: "Перединдексировать"
+                                    }
                                 }
                                 Layout.fillWidth: true
                                 Layout.fillHeight: false
@@ -859,4 +892,5 @@ Item {
         }
 
     }
+}
 }
