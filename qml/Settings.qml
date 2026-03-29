@@ -17,7 +17,8 @@ Item {
             text: "settings"
         }
 
-    ColumnLayout {
+        ColumnLayout {
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
         Rectangle {
             implicitHeight: accountLayout.implicitHeight + 24
             implicitWidth: accountLayout.implicitWidth + 24
@@ -142,27 +143,38 @@ Item {
 
             }
 
+        ColumnLayout{
+            width: 363
+            Layout.preferredWidth: -1
+            Layout.fillWidth: true
             ColumnLayout{
-                ColumnLayout{
-                    id: accountSettings
+                id: accountSettings
+                Layout.fillWidth: true
                     Text{
                         text: "account"
                     }
                     Rectangle{
+                        Layout.fillWidth: true
                         Layout.preferredHeight: accountSettingsLayout.implicitHeight
                         Layout.preferredWidth: accountSettingsLayout.implicitWidth
 
                         RowLayout{
                             id: accountSettingsLayout
+                            anchors.fill: parent
                             Rectangle{
+                                Layout.fillWidth: false
                                 Layout.preferredHeight: 56
                                 Layout.preferredWidth: 56
                                 Text{
                                     text: "AK"
+                                    anchors.fill: parent
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
                                 }
 
                             }
                             ColumnLayout{
+                                Layout.fillWidth: false
                                 Text{
                                     text: "Alex Kim"
 
@@ -172,6 +184,12 @@ Item {
                                 }
 
                             }
+
+                            Item{
+                                Layout.fillWidth: true
+
+                            }
+
                             Rectangle{
                                 Layout.preferredHeight: manageText.implicitHeight
                                 Layout.preferredWidth: manageText.implicitWidth
@@ -191,37 +209,194 @@ Item {
                         text: "Application"
                     }
                     Rectangle{
-                        Layout.preferredHeight: applicationLayout.implicitHeight
-                        Layout.preferredWidth: applicationLayout.implicitWidth
-                        RowLayout{
-                            id: applicationLayout
-                            Image{
-                                Layout.preferredHeight: 24
-                                Layout.preferredWidth: 24
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: columnLayout.implicitHeight
+                        Layout.preferredWidth: columnLayout.implicitWidth
 
+                        ColumnLayout {
+                            id: columnLayout
+                            anchors.fill: parent
+                            RowLayout {
+                                id: applicationLayout
+                                Layout.fillHeight: false
+                                Layout.fillWidth: true
+                                Image {
+                                    Layout.preferredWidth: 24
+                                    Layout.preferredHeight: 24
+                                }
+
+                                Text {
+                                    text: "Appearance"
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+                                Text {
+                                    text: "Dark"
+                                }
+
+                                Image {
+                                    Layout.preferredWidth: 16
+                                    Layout.preferredHeight: 16
+                                }
                             }
-                            Text{
-                                text: "Appearance"
 
+                            RowLayout {
+                                id: editorLayout
+                                Layout.fillWidth: true
+                                Image {
+                                    Layout.preferredWidth: 24
+                                    Layout.preferredHeight: 24
+                                }
+
+                                Text {
+                                    text: "Editor"
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+                                Image {
+                                    Layout.preferredWidth: 16
+                                    Layout.preferredHeight: 16
+                                }
                             }
-                            Item{
 
+                            RowLayout {
+                                id: cloudLayout
+                                Image {
+                                    Layout.preferredWidth: 24
+                                    Layout.preferredHeight: 24
+                                }
+
+                                ColumnLayout {
+                                    id: columnLayout1
+                                    x: 29
+                                    y: 4
+                                    Text {
+                                        text: "Cloud Sync"
+                                    }
+
+                                    Text {
+                                        text: "Sync across devices"
+                                    }
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+
+
+                                Image {
+                                    Layout.preferredWidth: 16
+                                    Layout.preferredHeight: 16
+                                }
+
+                                Layout.fillWidth: true
                             }
-                            Text{
-                                text: "Dark"
-
-                            }
-                            Image{
-                                Layout.preferredHeight: 16
-                                Layout.preferredWidth: 16
-
-                            }
-
                         }
                     }
                 }
                 ColumnLayout{
                     id: dataSeetings
+                    Layout.fillWidth: true
+
+                    Text {
+                        text: "Application"
+                    }
+
+                    Rectangle {
+                        ColumnLayout {
+                            id: columnLayout2
+                            anchors.fill: parent
+                            RowLayout {
+                                id: applicationLayout1
+                                Image {
+                                    Layout.preferredWidth: 24
+                                    Layout.preferredHeight: 24
+                                }
+
+                                Text {
+                                    text: "Appearance"
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+                                Text {
+                                    text: "Dark"
+                                }
+
+                                Image {
+                                    Layout.preferredWidth: 16
+                                    Layout.preferredHeight: 16
+                                }
+                                Layout.fillWidth: true
+                                Layout.fillHeight: false
+                            }
+
+                            RowLayout {
+                                id: editorLayout1
+                                Image {
+                                    Layout.preferredWidth: 24
+                                    Layout.preferredHeight: 24
+                                }
+
+                                Text {
+                                    text: "Editor"
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+                                Image {
+                                    Layout.preferredWidth: 16
+                                    Layout.preferredHeight: 16
+                                }
+                                Layout.fillWidth: true
+                            }
+
+                            RowLayout {
+                                id: cloudLayout1
+                                Image {
+                                    Layout.preferredWidth: 24
+                                    Layout.preferredHeight: 24
+                                }
+
+                                ColumnLayout {
+                                    id: columnLayout3
+                                    x: 29
+                                    y: 4
+                                    Text {
+                                        text: "Cloud Sync"
+                                    }
+
+                                    Text {
+                                        text: "Sync across devices"
+                                    }
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+                                Image {
+                                    Layout.preferredWidth: 16
+                                    Layout.preferredHeight: 16
+                                }
+                                Layout.fillWidth: true
+                            }
+                        }
+                        Layout.preferredWidth: columnLayout2.implicitWidth
+                        Layout.preferredHeight: columnLayout2.implicitHeight
+                        Layout.fillWidth: true
+                    }
                 }
                 ColumnLayout{
                     id: aboutSettings
