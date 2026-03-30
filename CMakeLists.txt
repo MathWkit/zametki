@@ -7,7 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # ⚡ Здесь ключевое: правильные имена компонентов
 find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 QuickLayouts)
 
-qt_standard_project_setup(REQUIRES 6.8)
+# Set Qt policies
+qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0004 NEW)
+
+qt_standard_project_setup(REQUIRES 6.2)
 
 qt_add_executable(appzametki
     src/main.cpp
@@ -50,7 +54,17 @@ qt_add_qml_module(appzametki
         assets/icons/list/folder-selected.svg
         assets/icons/list/open-folder.svg
         assets/icons/list/open-folder-selected.svg
+        assets/icons/settings/account.svg
+        assets/icons/settings/application.svg
+        assets/icons/settings/search.svg
+        assets/icons/settings/graph.svg
+        assets/icons/settings/tasks.svg
+        assets/icons/settings/security.svg
+        assets/icons/settings/hot-keys.svg
+        assets/icons/settings/about.svg
+        assets/icons/settings/log-out.svg
         assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
+        QML_FILES qml/asd.qml
 )
 
 set_target_properties(appzametki PROPERTIES

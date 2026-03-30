@@ -1,0 +1,4 @@
+module zametki.components
+FolderNoteList 1.0 FolderNoteList.qml
+SidebarPanel 1.0 SidebarPanel.qml
+MainHeaderBar 1.0 MainHeaderBar.qml

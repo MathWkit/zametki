@@ -2,9 +2,10 @@ import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-Item {
+ApplicationWindow {
     width: 1920
     height: 1080
+    visible: true
     Rectangle {
         color: "#fafbfc"
         anchors.fill: parent
@@ -43,7 +44,7 @@ Item {
                         RowLayout {
                             id: accountLayout
                             anchors.fill: parent
-                            anchors.margins: 12   // ← вот это и есть padding
+                            anchors.margins: 12 // ← вот это и есть padding
 
                             spacing: 12
 
@@ -71,7 +72,7 @@ Item {
                         RowLayout {
                             id: aplicationLayout
                             anchors.fill: parent
-                            anchors.margins: 12   // ← вот это и есть padding
+                            anchors.margins: 12 // ← вот это и есть padding
 
                             spacing: 12
 
@@ -99,12 +100,12 @@ Item {
                         RowLayout {
                             id: dataLayout
                             anchors.fill: parent
-                            anchors.margins: 12   // ← вот это и есть padding
+                            anchors.margins: 12 // ← вот это и есть padding
 
                             spacing: 12
 
                             Image {
-                                source: "../build/Desktop-Debug/zametki/assets/icons/list/note.svg"
+                                source: "../zametki/assets/icons/list/note.svg"
                                 Layout.preferredHeight: 18
                                 Layout.preferredWidth: 18
                             }
@@ -127,7 +128,7 @@ Item {
                         RowLayout {
                             id: aboutLayout
                             anchors.fill: parent
-                            anchors.margins: 12   // ← вот это и есть padding
+                            anchors.margins: 12 // ← вот это и есть padding
 
                             spacing: 12
 
@@ -475,9 +476,6 @@ Item {
                                     Layout.fillWidth: true
                                 }
                             }
-                            Layout.preferredWidth: columnLayout5.implicitWidth
-                            Layout.preferredHeight: columnLayout5.implicitHeight
-                            Layout.fillWidth: true
                         }
                     }
 
@@ -609,9 +607,6 @@ Item {
                                     Layout.fillHeight: false
                                 }
                             }
-                            Layout.preferredWidth: columnLayout9.implicitWidth
-                            Layout.preferredHeight: columnLayout9.implicitHeight
-                            Layout.fillWidth: true
                         }
                     }
 
@@ -737,9 +732,6 @@ Item {
                                     Layout.fillHeight: false
                                 }
                             }
-                            Layout.preferredWidth: columnLayout15.implicitWidth
-                            Layout.preferredHeight: columnLayout15.implicitHeight
-                            Layout.fillWidth: true
                         }
                     }
 

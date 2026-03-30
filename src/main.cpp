@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
         []()
         { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
-    engine.loadFromModule("zametki", "Main");
+    engine.loadFromModule("zametki", "Settings");
 
     return app.exec();
 }
