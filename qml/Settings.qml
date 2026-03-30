@@ -105,7 +105,7 @@ ApplicationWindow {
                             spacing: 12
 
                             Image {
-                                source: "../zametki/assets/icons/list/note.svg"
+                                source: "../assets/icons/list/note.svg"
                                 Layout.preferredHeight: 18
                                 Layout.preferredWidth: 18
                             }
@@ -349,7 +349,6 @@ ApplicationWindow {
                 }
 
                 ColumnLayout {
-                    width: 363
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                     spacing: 48
                     Layout.rightMargin: 40
@@ -469,10 +468,10 @@ ApplicationWindow {
                                         Layout.fillWidth: true
                                     }
 
-                                    Image {
-                                        Layout.preferredWidth: 16
-                                        Layout.preferredHeight: 16
+                                    Switch {
+                                        id: mySwitch
                                     }
+
                                     Layout.fillWidth: true
                                 }
                             }
@@ -481,7 +480,10 @@ ApplicationWindow {
 
                     ColumnLayout {
                         id: aboutSettings1
+
                         Rectangle {
+                            radius: 8
+                            border.color: "#14000000"
                             Layout.fillWidth: true
                             Layout.preferredHeight: columnLayout9.implicitHeight
                             Layout.preferredWidth: columnLayout9.implicitWidth
@@ -489,8 +491,13 @@ ApplicationWindow {
                             ColumnLayout {
                                 id: columnLayout9
                                 anchors.fill: parent
+
                                 RowLayout {
                                     id: applicationLayout4
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.bottomMargin: 16
+                                    Layout.topMargin: 16
                                     ColumnLayout {
                                         id: columnLayout10
                                         x: 29
@@ -510,8 +517,18 @@ ApplicationWindow {
                                     Layout.fillHeight: false
                                 }
 
+                                Rectangle {
+                                    border.color: "#14000000"
+                                    Layout.preferredHeight: 1
+                                    Layout.fillWidth: true
+                                }
+
                                 RowLayout {
                                     id: applicationLayout5
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.bottomMargin: 16
+                                    Layout.topMargin: 16
                                     ColumnLayout {
                                         id: columnLayout11
                                         x: 29
@@ -524,19 +541,26 @@ ApplicationWindow {
                                     Item {
                                         Layout.fillWidth: true
                                     }
+                                    Switch {}
 
-                                    Image {
-                                        Layout.preferredWidth: 16
-                                        Layout.preferredHeight: 16
-                                    }
                                     Layout.fillWidth: true
                                     Layout.fillHeight: false
                                 }
 
+                                Rectangle {
+                                    border.color: "#14000000"
+                                    Layout.preferredHeight: 1
+                                    Layout.fillWidth: true
+                                }
+
                                 RowLayout {
-                                    id: applicationLayout6
+                                    id: applicationLayout8
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.bottomMargin: 16
+                                    Layout.topMargin: 16
                                     ColumnLayout {
-                                        id: columnLayout12
+                                        id: columnLayout14
                                         x: 29
                                         y: 4
                                         Text {
@@ -547,17 +571,24 @@ ApplicationWindow {
                                     Item {
                                         Layout.fillWidth: true
                                     }
+                                    Switch {}
 
-                                    Image {
-                                        Layout.preferredWidth: 16
-                                        Layout.preferredHeight: 16
-                                    }
                                     Layout.fillWidth: true
                                     Layout.fillHeight: false
                                 }
 
+                                Rectangle {
+                                    border.color: "#14000000"
+                                    Layout.preferredHeight: 1
+                                    Layout.fillWidth: true
+                                }
+
                                 RowLayout {
                                     id: applicationLayout7
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.bottomMargin: 16
+                                    Layout.topMargin: 16
                                     ColumnLayout {
                                         id: columnLayout13
                                         x: 29
@@ -584,25 +615,31 @@ ApplicationWindow {
                                     Layout.fillHeight: false
                                 }
 
+                                Rectangle {
+                                    border.color: "#14000000"
+                                    Layout.preferredHeight: 1
+                                    Layout.fillWidth: true
+                                }
+
                                 RowLayout {
-                                    id: applicationLayout8
+                                    id: applicationLayout6
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.bottomMargin: 16
+                                    Layout.topMargin: 16
                                     ColumnLayout {
-                                        id: columnLayout14
+                                        id: columnLayout12
                                         x: 29
                                         y: 4
                                         Text {
-                                            text: "Автосохранение"
+                                            text: "Автозакрытие скобок"
                                         }
                                     }
-
                                     Item {
                                         Layout.fillWidth: true
                                     }
+                                    Switch {}
 
-                                    Image {
-                                        Layout.preferredWidth: 16
-                                        Layout.preferredHeight: 16
-                                    }
                                     Layout.fillWidth: true
                                     Layout.fillHeight: false
                                 }

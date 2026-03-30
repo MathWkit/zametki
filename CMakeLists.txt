@@ -11,7 +11,7 @@ find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 QuickLayouts)
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
 
-qt_standard_project_setup(REQUIRES 6.2)
+qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appzametki
     src/main.cpp
