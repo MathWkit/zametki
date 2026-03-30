@@ -315,8 +315,6 @@ ApplicationWindow {
 
                         ColumnLayout {
                             id: columnLayout4
-                            x: 0
-                            y: 6
                             Layout.rightMargin: 24
                             Layout.leftMargin: 24
                             Layout.bottomMargin: 0
@@ -381,8 +379,7 @@ ApplicationWindow {
                                         Layout.leftMargin: 18
                                         ColumnLayout {
                                             id: columnLayout6
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Общие"
                                             }
@@ -411,8 +408,7 @@ ApplicationWindow {
                                         Layout.topMargin: 16
                                         ColumnLayout {
                                             id: columnLayout7
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Appearance"
                                             }
@@ -450,8 +446,7 @@ ApplicationWindow {
                                         Layout.topMargin: 16
                                         ColumnLayout {
                                             id: columnLayout8
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Открывать последнюю сессию"
                                             }
@@ -523,8 +518,7 @@ ApplicationWindow {
                                         Layout.topMargin: 16
                                         ColumnLayout {
                                             id: columnLayout10
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Редактор"
                                             }
@@ -554,8 +548,7 @@ ApplicationWindow {
                                         Layout.topMargin: 16
                                         ColumnLayout {
                                             id: columnLayout11
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Live Preview"
                                             }
@@ -607,8 +600,7 @@ ApplicationWindow {
                                         Layout.topMargin: 16
                                         ColumnLayout {
                                             id: columnLayout14
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Автосохранение"
                                             }
@@ -660,8 +652,7 @@ ApplicationWindow {
                                         Layout.topMargin: 16
                                         ColumnLayout {
                                             id: columnLayout13
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Интервал автосохранения (сек)"
                                             }
@@ -704,8 +695,7 @@ ApplicationWindow {
                                         Layout.topMargin: 16
                                         ColumnLayout {
                                             id: columnLayout12
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Автозакрытие скобок"
                                             }
@@ -765,8 +755,7 @@ ApplicationWindow {
                                         Layout.topMargin: 16
                                         ColumnLayout {
                                             id: columnLayout16
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Заметки"
                                             }
@@ -794,8 +783,7 @@ ApplicationWindow {
                                         Layout.margins: 16
                                         ColumnLayout {
                                             id: columnLayout17
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Папка заметок"
                                             }
@@ -854,8 +842,7 @@ ApplicationWindow {
                                         Layout.margins: 16
                                         ColumnLayout {
                                             id: columnLayout18
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Включить автобэкап"
                                             }
@@ -885,8 +872,6 @@ ApplicationWindow {
                                         Layout.margins: 16
                                         ColumnLayout {
                                             id: columnLayout19
-                                            x: 29
-                                            y: 4
                                             Text {
                                                 text: "Количество копий"
                                             }
@@ -934,8 +919,7 @@ ApplicationWindow {
                                         Layout.margins: 16
                                         ColumnLayout {
                                             id: columnLayout21
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Поиск"
                                             }
@@ -964,8 +948,7 @@ ApplicationWindow {
                                         Layout.margins: 16
                                         ColumnLayout {
                                             id: columnLayout23
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Поиск по содержимому"
                                             }
@@ -1018,8 +1001,7 @@ ApplicationWindow {
                                         Layout.margins: 16
                                         ColumnLayout {
                                             id: columnLayout24
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Fuzzy search"
                                             }
@@ -1070,8 +1052,7 @@ ApplicationWindow {
                                         Layout.margins: 16
                                         ColumnLayout {
                                             id: columnLayout22
-                                            x: 29
-                                            y: 4
+
                                             Text {
                                                 text: "Индекс поиска"
                                             }
