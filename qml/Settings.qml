@@ -320,7 +320,7 @@ ApplicationWindow {
                         Layout.rightMargin: 24
                         Layout.leftMargin: 24
                         Layout.bottomMargin: 0
-                        Layout.topMargin: 0
+                        Layout.topMargin: 24
                         Text {
                             color: "#0f1724"
                             text: "Общие настройки"
@@ -470,6 +470,29 @@ ApplicationWindow {
 
                                     Switch {
                                         id: mySwitch
+
+                                        indicator: Rectangle {
+                                            width: 45
+                                            height: 25
+                                            radius: height / 2
+
+                                            color: mySwitch.checked ? "#0B74DE" : "#ffffff"
+                                            border.color: mySwitch.checked ? "#ffffff" : Qt.rgba(
+                                                                                 0, 0, 0, 0.08)
+
+                                            Rectangle {
+                                                width: parent.height - 6
+                                                height: width
+                                                radius: width / 2
+
+                                                x: mySwitch.checked ? parent.width - width - 3 : 3
+
+                                                y: (parent.height - height) / 2
+
+                                                color: mySwitch.checked ? "#FFFFFF" : Qt.rgba(
+                                                                              0, 0, 0, 0.08)
+                                            }
+                                        }
                                     }
 
                                     Layout.fillWidth: true
@@ -541,7 +564,31 @@ ApplicationWindow {
                                     Item {
                                         Layout.fillWidth: true
                                     }
-                                    Switch {}
+                                    Switch {
+                                        id: previewSwitch
+
+                                        indicator: Rectangle {
+                                            width: 45
+                                            height: 25
+                                            radius: height / 2
+
+                                            color: previewSwitch.checked ? "#0B74DE" : "#ffffff"
+                                            border.color: previewSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+
+                                            Rectangle {
+                                                width: parent.height - 6
+                                                height: width
+                                                radius: width / 2
+
+                                                x: previewSwitch.checked ? parent.width - width - 3 : 3
+
+                                                y: (parent.height - height) / 2
+
+                                                color: previewSwitch.checked ? "#FFFFFF" : Qt.rgba(
+                                                                                   0, 0, 0, 0.08)
+                                            }
+                                        }
+                                    }
 
                                     Layout.fillWidth: true
                                     Layout.fillHeight: false
@@ -571,7 +618,31 @@ ApplicationWindow {
                                     Item {
                                         Layout.fillWidth: true
                                     }
-                                    Switch {}
+                                    Switch {
+                                        id: autoSaveSwitch
+
+                                        indicator: Rectangle {
+                                            width: 45
+                                            height: 25
+                                            radius: height / 2
+
+                                            color: autoSaveSwitch.checked ? "#0B74DE" : "#ffffff"
+                                            border.color: autoSaveSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+
+                                            Rectangle {
+                                                width: parent.height - 6
+                                                height: width
+                                                radius: width / 2
+
+                                                x: autoSaveSwitch.checked ? parent.width - width - 3 : 3
+
+                                                y: (parent.height - height) / 2
+
+                                                color: autoSaveSwitch.checked ? "#FFFFFF" : Qt.rgba(
+                                                                                    0, 0, 0, 0.08)
+                                            }
+                                        }
+                                    }
 
                                     Layout.fillWidth: true
                                     Layout.fillHeight: false
@@ -601,13 +672,19 @@ ApplicationWindow {
                                     Item {
                                         Layout.fillWidth: true
                                     }
+
                                     Rectangle {
-                                        Layout.preferredHeight: timeText.implicitHeight
-                                        Layout.preferredWidth: timeText.implicitWidth
+                                        radius: 6
+                                        border.color: "#14000000"
+                                        Layout.preferredHeight: timeText.implicitHeight + 24
+                                        Layout.preferredWidth: timeText.implicitWidth + 24
+
                                         Text {
                                             id: timeText
                                             text: "20"
-                                            topPadding: 10
+                                            anchors.fill: parent
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
                                         }
                                     }
 
@@ -638,7 +715,31 @@ ApplicationWindow {
                                     Item {
                                         Layout.fillWidth: true
                                     }
-                                    Switch {}
+                                    Switch {
+                                        id: bracketSwitch
+
+                                        indicator: Rectangle {
+                                            width: 45
+                                            height: 25
+                                            radius: height / 2
+
+                                            color: bracketSwitch.checked ? "#0B74DE" : "#ffffff"
+                                            border.color: bracketSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+
+                                            Rectangle {
+                                                width: parent.height - 6
+                                                height: width
+                                                radius: width / 2
+
+                                                x: bracketSwitch.checked ? parent.width - width - 3 : 3
+
+                                                y: (parent.height - height) / 2
+
+                                                color: bracketSwitch.checked ? "#FFFFFF" : Qt.rgba(
+                                                                                   0, 0, 0, 0.08)
+                                            }
+                                        }
+                                    }
 
                                     Layout.fillWidth: true
                                     Layout.fillHeight: false
@@ -650,6 +751,8 @@ ApplicationWindow {
                     ColumnLayout {
                         id: aboutSettings2
                         Rectangle {
+                            radius: 8
+                            border.color: "#14000000"
                             Layout.fillWidth: true
                             Layout.preferredHeight: columnLayout15.implicitHeight
                             Layout.preferredWidth: columnLayout15.implicitWidth
@@ -659,6 +762,10 @@ ApplicationWindow {
                                 anchors.fill: parent
                                 RowLayout {
                                     id: applicationLayout9
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.bottomMargin: 16
+                                    Layout.topMargin: 16
                                     ColumnLayout {
                                         id: columnLayout16
                                         x: 29
@@ -680,6 +787,9 @@ ApplicationWindow {
 
                                 RowLayout {
                                     id: applicationLayout10
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.margins: 16
                                     ColumnLayout {
                                         id: columnLayout17
                                         x: 29
@@ -695,22 +805,35 @@ ApplicationWindow {
                                             font.family: "Inter"
                                         }
                                     }
+                                    Item {
+                                        Layout.fillWidth: true
+                                    }
 
                                     Rectangle {
-                                        Layout.preferredHeight: pathText.implicitHeight
-                                        Layout.preferredWidth: pathText.implicitWidth
+                                        radius: 6
+                                        border.color: "#14000000"
+                                        Layout.preferredHeight: pathText.implicitHeight + 24
+                                        Layout.preferredWidth: pathText.implicitWidth + 24
                                         Text {
                                             id: pathText
                                             text: "tut"
+                                            anchors.fill: parent
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
                                         }
                                     }
 
                                     Rectangle {
-                                        Layout.preferredHeight: choseText.implicitHeight
-                                        Layout.preferredWidth: choseText.implicitWidth
+                                        color: "#f1f5f9"
+                                        radius: 6
+                                        Layout.preferredHeight: choseText.implicitHeight + 24
+                                        Layout.preferredWidth: choseText.implicitWidth + 24
                                         Text {
                                             id: choseText
                                             text: "Выбрать"
+                                            anchors.fill: parent
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
                                         }
                                     }
                                     Layout.fillWidth: true
@@ -719,6 +842,9 @@ ApplicationWindow {
 
                                 RowLayout {
                                     id: applicationLayout11
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.margins: 16
                                     ColumnLayout {
                                         id: columnLayout18
                                         x: 29
@@ -742,6 +868,9 @@ ApplicationWindow {
 
                                 RowLayout {
                                     id: applicationLayout12
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.margins: 16
                                     ColumnLayout {
                                         id: columnLayout19
                                         x: 29
@@ -775,13 +904,19 @@ ApplicationWindow {
                     ColumnLayout {
                         id: aboutSettings3
                         Rectangle {
+                            radius: 8
+                            border.color: "#14000000"
                             Layout.preferredHeight: columnLayout20.implicitHeight
                             Layout.preferredWidth: columnLayout20.implicitWidth
+
                             ColumnLayout {
                                 id: columnLayout20
                                 anchors.fill: parent
                                 RowLayout {
                                     id: applicationLayout13
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.margins: 16
                                     ColumnLayout {
                                         id: columnLayout21
                                         x: 29
@@ -801,8 +936,17 @@ ApplicationWindow {
                                     Layout.fillHeight: false
                                 }
 
+                                Rectangle {
+                                    border.color: "#14000000"
+                                    Layout.preferredHeight: 1
+                                    Layout.fillWidth: true
+                                }
+
                                 RowLayout {
                                     id: applicationLayout15
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.margins: 16
                                     ColumnLayout {
                                         id: columnLayout23
                                         x: 29
@@ -816,16 +960,47 @@ ApplicationWindow {
                                         Layout.fillWidth: true
                                     }
 
-                                    Image {
-                                        Layout.preferredWidth: 16
-                                        Layout.preferredHeight: 16
+                                    Switch {
+                                        id: searchByСontentSwitch
+
+                                        indicator: Rectangle {
+                                            width: 45
+                                            height: 25
+                                            radius: height / 2
+
+                                            color: searchByСontentSwitch.checked ? "#0B74DE" : "#ffffff"
+                                            border.color: searchByСontentSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+
+                                            Rectangle {
+                                                width: parent.height - 6
+                                                height: width
+                                                radius: width / 2
+
+                                                x: searchByСontentSwitch.checked ? parent.width - width - 3 : 3
+
+                                                y: (parent.height - height) / 2
+
+                                                color: searchByСontentSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                            }
+                                        }
                                     }
+
                                     Layout.fillWidth: true
                                     Layout.fillHeight: false
                                 }
 
+                                Rectangle {
+                                    radius: 6
+                                    border.color: "#14000000"
+                                    Layout.preferredHeight: 1
+                                    Layout.fillWidth: true
+                                }
+
                                 RowLayout {
                                     id: applicationLayout16
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.margins: 16
                                     ColumnLayout {
                                         id: columnLayout24
                                         x: 29
@@ -838,17 +1013,49 @@ ApplicationWindow {
                                     Item {
                                         Layout.fillWidth: true
                                     }
+                                    Switch {
+                                        id: fuzzySwitch
 
-                                    Image {
-                                        Layout.preferredWidth: 16
-                                        Layout.preferredHeight: 16
+                                        indicator: Rectangle {
+                                            width: 45
+                                            height: 25
+                                            radius: height / 2
+
+                                            color: fuzzySwitch.checked ? "#0B74DE" : "#ffffff"
+                                            border.color: fuzzySwitch.checked ? "#ffffff" : Qt.rgba(
+                                                                                    0, 0, 0, 0.08)
+
+                                            Rectangle {
+                                                width: parent.height - 6
+                                                height: width
+                                                radius: width / 2
+
+                                                x: fuzzySwitch.checked ? parent.width - width
+                                                                         - 3 : 3
+
+                                                y: (parent.height - height) / 2
+
+                                                color: fuzzySwitch.checked ? "#FFFFFF" : Qt.rgba(
+                                                                                 0, 0, 0, 0.08)
+                                            }
+                                        }
                                     }
+
                                     Layout.fillWidth: true
                                     Layout.fillHeight: false
                                 }
 
+                                Rectangle {
+                                    border.color: "#14000000"
+                                    Layout.preferredHeight: 1
+                                    Layout.fillWidth: true
+                                }
+
                                 RowLayout {
                                     id: applicationLayout14
+                                    Layout.rightMargin: 18
+                                    Layout.leftMargin: 18
+                                    Layout.margins: 16
                                     ColumnLayout {
                                         id: columnLayout22
                                         x: 29
@@ -869,17 +1076,22 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        Layout.preferredHeight: reindexText.implicitHeight
-                                        Layout.preferredWidth: reindexText.implicitWidth
+                                        color: "#f1f5f9"
+                                        Layout.preferredHeight: reindexText.implicitHeight + 24
+                                        Layout.preferredWidth: reindexText.implicitWidth + 24
                                         Text {
                                             id: reindexText
                                             text: "Перединдексировать"
+                                            anchors.fill: parent
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
                                         }
                                     }
                                     Layout.fillWidth: true
                                     Layout.fillHeight: false
                                 }
                             }
+
                             Layout.fillWidth: true
                         }
                     }
