@@ -897,13 +897,16 @@ ApplicationWindow {
                                         }
 
                                         Rectangle {
-                                            Layout.preferredHeight: backupCount.implicitHeight
-                                            Layout.preferredWidth: backupCount.implicitWidth
-
+                                            Layout.preferredHeight: timeText.implicitHeight + 24
+                                            Layout.preferredWidth: timeText.implicitWidth + 24
+                                            border.color: "#14000000"
+                                            radius: 6
                                             Text {
                                                 id: backupCount
                                                 text: "20"
-                                                topPadding: 10
+                                                anchors.fill: parent
+                                                horizontalAlignment: Text.AlignHCenter
+                                                verticalAlignment: Text.AlignVCenter
                                             }
                                         }
                                         Layout.fillWidth: true
@@ -1088,9 +1091,10 @@ ApplicationWindow {
                                             color: "#f1f5f9"
                                             Layout.preferredHeight: reindexText.implicitHeight + 24
                                             Layout.preferredWidth: reindexText.implicitWidth + 24
+                                            radius: 6
                                             Text {
                                                 id: reindexText
-                                                text: "Перединдексировать"
+                                                text: "Переиндексировать"
                                                 anchors.fill: parent
                                                 horizontalAlignment: Text.AlignHCenter
                                                 verticalAlignment: Text.AlignVCenter
