@@ -666,8 +666,8 @@ ApplicationWindow {
                                         id: applicationLayout7
                                         Layout.rightMargin: 18
                                         Layout.leftMargin: 18
-                                        Layout.bottomMargin: 16
-                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 10
+                                        Layout.topMargin: 10
                                         ColumnLayout {
                                             id: columnLayout13
 
@@ -680,18 +680,23 @@ ApplicationWindow {
                                             Layout.fillWidth: true
                                         }
 
-                                        Rectangle {
-                                            radius: 6
-                                            border.color: root.colorDivider
-                                            Layout.preferredHeight: timeText.implicitHeight + 24
-                                            Layout.preferredWidth: timeText.implicitWidth + 24
+                                        TextField {
+                                            id: timeText
+                                            text: "20"
+                                            color: root.colorTextPrimary
+                                            topPadding: 12
+                                            bottomPadding: 12
+                                            validator: IntValidator {
+                                                bottom: 1
+                                            }
+                                            horizontalAlignment: Text.AlignHCenter
+                                            Layout.preferredWidth: 80
 
-                                            Text {
-                                                id: timeText
-                                                text: "20"
-                                                anchors.fill: parent
-                                                horizontalAlignment: Text.AlignHCenter
-                                                verticalAlignment: Text.AlignVCenter
+                                            background: Rectangle {
+                                                radius: 6
+                                                color: root.colorWhite
+                                                border.color: root.colorDivider
+                                                border.width: 1
                                             }
                                         }
 
@@ -798,8 +803,8 @@ ApplicationWindow {
                                         id: applicationLayout10
                                         Layout.rightMargin: 18
                                         Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        Layout.topMargin: 10
+                                        Layout.bottomMargin: 10
                                         ColumnLayout {
                                             id: columnLayout17
 
@@ -818,17 +823,20 @@ ApplicationWindow {
                                             Layout.fillWidth: true
                                         }
 
-                                        Rectangle {
-                                            radius: 6
-                                            border.color: root.colorDivider
-                                            Layout.preferredHeight: pathText.implicitHeight + 24
-                                            Layout.preferredWidth: pathText.implicitWidth + 24
-                                            Text {
-                                                id: pathText
-                                                text: "tut"
-                                                anchors.fill: parent
-                                                horizontalAlignment: Text.AlignHCenter
-                                                verticalAlignment: Text.AlignVCenter
+                                        TextField {
+                                            id: pathText
+                                            text: "tut"
+                                            color: root.colorTextPrimary
+                                            topPadding: 12
+                                            bottomPadding: 12
+                                            horizontalAlignment: Text.AlignLeft
+                                            Layout.preferredWidth: 220
+
+                                            background: Rectangle {
+                                                radius: 6
+                                                color: root.colorWhite
+                                                border.color: root.colorDivider
+                                                border.width: 1
                                             }
                                         }
 
@@ -909,8 +917,8 @@ ApplicationWindow {
                                         id: applicationLayout12
                                         Layout.rightMargin: 18
                                         Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        Layout.topMargin: 10
+                                        Layout.bottomMargin: 10
                                         ColumnLayout {
                                             id: columnLayout19
                                             Text {
@@ -922,17 +930,23 @@ ApplicationWindow {
                                             Layout.fillWidth: true
                                         }
 
-                                        Rectangle {
-                                            Layout.preferredHeight: timeText.implicitHeight + 24
-                                            Layout.preferredWidth: timeText.implicitWidth + 24
-                                            border.color: root.colorDivider
-                                            radius: 6
-                                            Text {
-                                                id: backupCount
-                                                text: "20"
-                                                anchors.fill: parent
-                                                horizontalAlignment: Text.AlignHCenter
-                                                verticalAlignment: Text.AlignVCenter
+                                        TextField {
+                                            id: backupCount
+                                            text: "20"
+                                            color: root.colorTextPrimary
+                                            topPadding: 12
+                                            bottomPadding: 12
+                                            validator: IntValidator {
+                                                bottom: 1
+                                            }
+                                            horizontalAlignment: Text.AlignHCenter
+                                            Layout.preferredWidth: 80
+
+                                            background: Rectangle {
+                                                radius: 6
+                                                color: root.colorWhite
+                                                border.color: root.colorDivider
+                                                border.width: 1
                                             }
                                         }
                                         Layout.fillWidth: true
