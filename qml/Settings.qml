@@ -41,7 +41,7 @@ ApplicationWindow {
                     text: "Настройки"
                     font.styleName: "SemiBold"
                     font.pointSize: 18
-                    font.family: "Inter"
+                    font.family: root.uiFontFamily
                 }
 
                 ColumnLayout {
@@ -72,7 +72,7 @@ ApplicationWindow {
                                 text: "Общие"
                                 font.styleName: "Medium"
                                 font.pointSize: 14
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                     }
@@ -100,7 +100,7 @@ ApplicationWindow {
                                 text: "Редактор"
                                 font.styleName: "Medium"
                                 font.pointSize: 14
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                     }
@@ -128,7 +128,7 @@ ApplicationWindow {
                                 text: "Заметки"
                                 font.styleName: "Medium"
                                 font.pointSize: 14
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                     }
@@ -157,7 +157,7 @@ ApplicationWindow {
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
                                 font.pointSize: 14
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                     }
@@ -182,7 +182,7 @@ ApplicationWindow {
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
                                 font.pointSize: 14
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                         Layout.fillWidth: true
@@ -209,7 +209,7 @@ ApplicationWindow {
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
                                 font.pointSize: 14
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                         Layout.fillWidth: true
@@ -236,7 +236,7 @@ ApplicationWindow {
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
                                 font.pointSize: 14
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                         Layout.fillWidth: true
@@ -263,7 +263,7 @@ ApplicationWindow {
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
                                 font.pointSize: 14
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                         Layout.fillWidth: true
@@ -290,7 +290,7 @@ ApplicationWindow {
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
                                 font.pointSize: 14
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                         Layout.fillWidth: true
@@ -326,7 +326,7 @@ ApplicationWindow {
                                 text: "Общие настройки"
                                 font.styleName: "SemiBold"
                                 font.pointSize: 16
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
 
                             Text {
@@ -334,7 +334,7 @@ ApplicationWindow {
                                 text: "Настройте внешний вид, поведение редактора и локальное хранение данных"
                                 font.styleName: "Regular"
                                 font.pointSize: 13
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
 
@@ -390,7 +390,7 @@ ApplicationWindow {
                                                 color: root.colorTextSecondary
                                                 text: "Базовые параметры интерфейса и запуска приложения"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
@@ -431,7 +431,7 @@ ApplicationWindow {
                                             id: appearanceCombo
                                             contentItem: Text {
                                                 text: appearanceCombo.displayText
-                                                color: "black"
+                                                color: root.colorTextPrimary
                                                 verticalAlignment: Text.AlignVCenter
                                             }
 
@@ -475,7 +475,7 @@ ApplicationWindow {
                                                 color: root.colorTextSecondary
                                                 text: "Восстанавливать открытые заметки после запуска"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
 
@@ -545,7 +545,7 @@ ApplicationWindow {
                                                 color: root.colorTextSecondary
                                                 text: "Параметры редактирования Markdown и автосохранения"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
@@ -782,7 +782,7 @@ ApplicationWindow {
                                                 color: root.colorTextSecondary
                                                 text: "Папка хранения и резервные копии"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
@@ -811,7 +811,7 @@ ApplicationWindow {
                                                 color: root.colorTextSecondary
                                                 text: "Локальное хранилище Markdown-файлов"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Item {
@@ -970,7 +970,7 @@ ApplicationWindow {
                                                 color: root.colorTextSecondary
                                                 text: "Поведение полнотекстового и интеллектуального поиска"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
@@ -1002,26 +1002,26 @@ ApplicationWindow {
                                         }
 
                                         Switch {
-                                            id: searchByСontentSwitch
+                                            id: searchByContentSwitch
 
                                             indicator: Rectangle {
                                                 width: 45
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: searchByСontentSwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: searchByСontentSwitch.checked ? root.colorWhite : root.colorBorderSoft
+                                                color: searchByContentSwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: searchByContentSwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
                                                     height: width
                                                     radius: width / 2
 
-                                                    x: searchByСontentSwitch.checked ? parent.width - width - 3 : 3
+                                                    x: searchByContentSwitch.checked ? parent.width - width - 3 : 3
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: searchByСontentSwitch.checked ? root.colorWhite : root.colorBorderSoft
+                                                    color: searchByContentSwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -1107,7 +1107,7 @@ ApplicationWindow {
                                                 color: root.colorTextSecondary
                                                 text: "Обновите индекс после массового импорта заметок"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Item {
@@ -1164,7 +1164,7 @@ ApplicationWindow {
                                                 color: root.colorTextSecondary
                                                 text: "Защита локального хранилища и доступа к приложению"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
@@ -1307,7 +1307,7 @@ ApplicationWindow {
                                                 color: root.colorTextSecondary
                                                 text: "Информация о текущей версии приложения"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
@@ -1331,7 +1331,7 @@ ApplicationWindow {
                                             text: "0.0.1"
                                             color: root.colorTextSecondary
                                             font.styleName: "Regular"
-                                            font.family: "Inter"
+                                            font.family: root.uiFontFamily
                                         }
 
                                         Layout.fillWidth: true
@@ -1348,7 +1348,7 @@ ApplicationWindow {
                                             text: "Ренат"
                                             color: root.colorTextSecondary
                                             font.styleName: "Regular"
-                                            font.family: "Inter"
+                                            font.family: root.uiFontFamily
                                         }
 
                                         Layout.fillWidth: true
@@ -1365,7 +1365,7 @@ ApplicationWindow {
                                             text: "Local"
                                             color: root.colorTextSecondary
                                             font.styleName: "Regular"
-                                            font.family: "Inter"
+                                            font.family: root.uiFontFamily
                                         }
 
                                         Layout.fillWidth: true
