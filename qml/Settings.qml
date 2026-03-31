@@ -1267,6 +1267,9 @@ ApplicationWindow {
 
                                         Text {
                                             text: "0.0.1"
+                                            color: "#667085"
+                                            font.styleName: "Regular"
+                                            font.family: "Inter"
                                         }
 
                                         Layout.fillWidth: true
@@ -1281,6 +1284,9 @@ ApplicationWindow {
 
                                         Text {
                                             text: "Ренат"
+                                            color: "#667085"
+                                            font.styleName: "Regular"
+                                            font.family: "Inter"
                                         }
 
                                         Layout.fillWidth: true
@@ -1295,6 +1301,9 @@ ApplicationWindow {
 
                                         Text {
                                             text: "Local"
+                                            color: "#667085"
+                                            font.styleName: "Regular"
+                                            font.family: "Inter"
                                         }
 
                                         Layout.fillWidth: true
@@ -1305,6 +1314,8 @@ ApplicationWindow {
 
                                         radius: 6
                                         color: "#f1f5f9"
+                                        Layout.leftMargin: 12
+                                        Layout.bottomMargin: 12
                                         Layout.preferredHeight: openFolderBtn.implicitHeight + 24
                                         Layout.preferredWidth: openFolderBtn.implicitWidth + 24
                                         Text {
