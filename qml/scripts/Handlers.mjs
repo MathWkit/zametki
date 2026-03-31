@@ -4,7 +4,7 @@ export function onSearchClicked() {
 
 export function onNewNoteClicked(fileCreator) {
     if (fileCreator && fileCreator.createDesktopMarkdown()) {
-        console.log("Создан файл", fileCreator.saveDirectory + "/text.md");
+        console.log("Создана новая заметка");
     } else if (fileCreator) {
         console.log("Не удалось создать файл:", fileCreator.lastError());
     } else {

@@ -121,7 +121,7 @@ Column {
 
             readonly property bool isFolder: modelData.type === "folder"
             readonly property int depth: modelData.depth || 0
-            readonly property bool isSelected: root.selectedItemKey === (isFolder ? ("folder:" + modelData.path) : ("folder-note:" + modelData.path))
+            readonly property bool isSelected: !isFolder && root.selectedItemKey === ("folder-note:" + modelData.path)
 
             width: parent ? parent.width : 0
             height: isFolder ? 26 : 28
@@ -137,9 +137,7 @@ Column {
 
                 Image {
                     source: treeItem.isFolder
-                        ? (treeItem.isSelected
-                           ? "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket-selected.svg"
-                           : "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg")
+                        ? "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg"
                         : ""
                     width: 16
                     height: 16
@@ -155,13 +153,9 @@ Column {
                     source: {
                         if (treeItem.isFolder) {
                             if (root.expandedFolders[treeItem.modelData.path]) {
-                                return treeItem.isSelected
-                                    ? "qrc:/qt/qml/zametki/assets/icons/list/open-folder-selected.svg"
-                                    : "qrc:/qt/qml/zametki/assets/icons/list/open-folder.svg";
+                                return "qrc:/qt/qml/zametki/assets/icons/list/open-folder.svg";
                             }
-                            return treeItem.isSelected
-                                ? "qrc:/qt/qml/zametki/assets/icons/list/folder-selected.svg"
-                                : "qrc:/qt/qml/zametki/assets/icons/list/folder.svg";
+                            return "qrc:/qt/qml/zametki/assets/icons/list/folder.svg";
                         }
 
                         return treeItem.isSelected
@@ -197,7 +191,6 @@ Column {
                 onClicked: {
                     if (treeItem.isFolder) {
                         root.toggleFolder(treeItem.modelData.path);
-                        root.itemSelected("folder:" + treeItem.modelData.path);
                         root.folderClicked(treeItem.modelData.path);
                         return;
                     }
