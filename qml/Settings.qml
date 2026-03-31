@@ -3,11 +3,24 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 ApplicationWindow {
+    id: root
     width: 1920
     height: 1080
     visible: true
+
+    readonly property string uiFontFamily: "Inter"
+    readonly property color colorBackground: "#fafbfc"
+    readonly property color colorSidebarActive: "#e6f0ff"
+    readonly property color colorTextPrimary: "#0f1724"
+    readonly property color colorTextSecondary: "#667085"
+    readonly property color colorDivider: "#14000000"
+    readonly property color colorPrimary: "#0B74DE"
+    readonly property color colorWhite: "#ffffff"
+    readonly property color colorSurface: "#f1f5f9"
+    readonly property color colorBorderSoft: Qt.rgba(0, 0, 0, 0.08)
+
     Rectangle {
-        color: "#fafbfc"
+        color: root.colorBackground
         anchors.fill: parent
         Row {
             id: row
@@ -35,7 +48,7 @@ ApplicationWindow {
                     spacing: 4
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                     Rectangle {
-                        color: "#e6f0ff"
+                        color: root.colorSidebarActive
                         radius: 6
                         Layout.fillWidth: true
                         implicitHeight: accountLayout.implicitHeight + 24
@@ -55,7 +68,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#0b74de"
+                                color: root.colorPrimary
                                 text: "Общие"
                                 font.styleName: "Medium"
                                 font.pointSize: 14
@@ -64,13 +77,13 @@ ApplicationWindow {
                         }
                     }
                     Rectangle {
-                        color: "#00ffffff"
+                        color: "transparent"
                         Layout.fillWidth: true
-                        implicitHeight: aplicationLayout.implicitHeight + 24
-                        implicitWidth: aplicationLayout.implicitWidth + 24
+                        implicitHeight: applicationLayout.implicitHeight + 24
+                        implicitWidth: applicationLayout.implicitWidth + 24
 
                         RowLayout {
-                            id: aplicationLayout
+                            id: applicationLayout
                             anchors.fill: parent
                             anchors.margins: 12 // ← вот это и есть padding
 
@@ -83,7 +96,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: "Редактор"
                                 font.styleName: "Medium"
                                 font.pointSize: 14
@@ -92,7 +105,7 @@ ApplicationWindow {
                         }
                     }
                     Rectangle {
-                        color: "#00ffffff"
+                        color: "transparent"
                         Layout.fillWidth: true
                         implicitHeight: dataLayout.implicitHeight + 24
                         implicitWidth: dataLayout.implicitWidth + 24
@@ -111,7 +124,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: "Заметки"
                                 font.styleName: "Medium"
                                 font.pointSize: 14
@@ -120,7 +133,7 @@ ApplicationWindow {
                         }
                     }
                     Rectangle {
-                        color: "#00ffffff"
+                        color: "transparent"
                         Layout.fillWidth: true
                         implicitHeight: aboutLayout.implicitHeight + 24
                         implicitWidth: aboutLayout.implicitWidth + 24
@@ -139,7 +152,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: "Поиск"
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
@@ -149,7 +162,7 @@ ApplicationWindow {
                         }
                     }
                     Rectangle {
-                        color: "#00ffffff"
+                        color: "transparent"
                         implicitWidth: aboutLayout1.implicitWidth + 24
                         implicitHeight: aboutLayout1.implicitHeight + 24
                         RowLayout {
@@ -164,7 +177,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: "Граф"
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
@@ -176,7 +189,7 @@ ApplicationWindow {
                     }
 
                     Rectangle {
-                        color: "#00ffffff"
+                        color: "transparent"
                         implicitWidth: aboutLayout2.implicitWidth + 24
                         implicitHeight: aboutLayout2.implicitHeight + 24
                         RowLayout {
@@ -191,7 +204,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: "Задачи"
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
@@ -203,7 +216,7 @@ ApplicationWindow {
                     }
 
                     Rectangle {
-                        color: "#00ffffff"
+                        color: "transparent"
                         implicitWidth: aboutLayout3.implicitWidth + 24
                         implicitHeight: aboutLayout3.implicitHeight + 24
                         RowLayout {
@@ -218,7 +231,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: "Безопасность"
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
@@ -230,7 +243,7 @@ ApplicationWindow {
                     }
 
                     Rectangle {
-                        color: "#00ffffff"
+                        color: "transparent"
                         implicitWidth: aboutLayout4.implicitWidth + 24
                         implicitHeight: aboutLayout4.implicitHeight + 24
                         RowLayout {
@@ -245,7 +258,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: "Горячие клавиши"
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
@@ -257,7 +270,7 @@ ApplicationWindow {
                     }
 
                     Rectangle {
-                        color: "#00ffffff"
+                        color: "transparent"
                         implicitWidth: aboutLayout5.implicitWidth + 24
                         implicitHeight: aboutLayout5.implicitHeight + 24
                         RowLayout {
@@ -272,7 +285,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: "О программе"
                                 horizontalAlignment: Text.AlignLeft
                                 font.styleName: "Medium"
@@ -309,7 +322,7 @@ ApplicationWindow {
                             Layout.bottomMargin: 0
                             Layout.topMargin: 24
                             Text {
-                                color: "#0f1724"
+                                color: root.colorTextPrimary
                                 text: "Общие настройки"
                                 font.styleName: "SemiBold"
                                 font.pointSize: 16
@@ -317,7 +330,7 @@ ApplicationWindow {
                             }
 
                             Text {
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: "Настройте внешний вид, поведение редактора и локальное хранение данных"
                                 font.styleName: "Regular"
                                 font.pointSize: 13
@@ -349,7 +362,7 @@ ApplicationWindow {
 
                             Rectangle {
                                 radius: 8
-                                border.color: "#14000000"
+                                border.color: root.colorDivider
                                 border.width: 1
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: columnLayout5.implicitHeight
@@ -374,7 +387,7 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Базовые параметры интерфейса и запуска приложения"
                                                 font.styleName: "Regular"
                                                 font.family: "Inter"
@@ -384,7 +397,7 @@ ApplicationWindow {
                                         Layout.fillHeight: false
                                     }
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -403,10 +416,10 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Выберите оформление приложения"
                                                 font.styleName: "Regular"
-                                                font.family: "Inter"
+                                                font.family: root.uiFontFamily
                                             }
                                         }
 
@@ -415,18 +428,21 @@ ApplicationWindow {
                                         }
 
                                         ComboBox {
-                                            // Цвет текста выбранного элемента
+                                            id: appearanceCombo
                                             contentItem: Text {
-                                                text: parent.displayText  // или model[parent.currentIndex] если нужно
+                                                text: appearanceCombo.displayText
                                                 color: "black"
-                                                // можно также настроить выравнивание, шрифт и т.д.
+                                                verticalAlignment: Text.AlignVCenter
                                             }
 
-                                            // Цвет текста элементов в выпадающем списке
                                             delegate: ItemDelegate {
+                                                id: appearanceDelegate
+                                                required property string modelData
+
                                                 contentItem: Text {
-                                                    text: modelData
-                                                    color: "white"
+                                                    text: appearanceDelegate.modelData
+                                                    color: "black"
+                                                    verticalAlignment: Text.AlignVCenter
                                                 }
                                             }
 
@@ -437,7 +453,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -456,7 +472,7 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Восстанавливать открытые заметки после запуска"
                                                 font.styleName: "Regular"
                                                 font.family: "Inter"
@@ -475,8 +491,8 @@ ApplicationWindow {
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: mySwitch.checked ? "#0B74DE" : "#ffffff"
-                                                border.color: mySwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+                                                color: mySwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: mySwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
@@ -487,7 +503,7 @@ ApplicationWindow {
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: mySwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                    color: mySwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -503,7 +519,7 @@ ApplicationWindow {
 
                             Rectangle {
                                 radius: 8
-                                border.color: "#14000000"
+                                border.color: root.colorDivider
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: columnLayout9.implicitHeight
                                 Layout.preferredWidth: columnLayout9.implicitWidth
@@ -526,7 +542,7 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Параметры редактирования Markdown и автосохранения"
                                                 font.styleName: "Regular"
                                                 font.family: "Inter"
@@ -537,7 +553,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -567,8 +583,8 @@ ApplicationWindow {
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: previewSwitch.checked ? "#0B74DE" : "#ffffff"
-                                                border.color: previewSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+                                                color: previewSwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: previewSwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
@@ -579,7 +595,7 @@ ApplicationWindow {
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: previewSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                    color: previewSwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -589,7 +605,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -619,8 +635,8 @@ ApplicationWindow {
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: autoSaveSwitch.checked ? "#0B74DE" : "#ffffff"
-                                                border.color: autoSaveSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+                                                color: autoSaveSwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: autoSaveSwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
@@ -631,7 +647,7 @@ ApplicationWindow {
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: autoSaveSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                    color: autoSaveSwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -641,7 +657,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -666,7 +682,7 @@ ApplicationWindow {
 
                                         Rectangle {
                                             radius: 6
-                                            border.color: "#14000000"
+                                            border.color: root.colorDivider
                                             Layout.preferredHeight: timeText.implicitHeight + 24
                                             Layout.preferredWidth: timeText.implicitWidth + 24
 
@@ -684,7 +700,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -713,8 +729,8 @@ ApplicationWindow {
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: bracketSwitch.checked ? "#0B74DE" : "#ffffff"
-                                                border.color: bracketSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+                                                color: bracketSwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: bracketSwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
@@ -725,7 +741,7 @@ ApplicationWindow {
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: bracketSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                    color: bracketSwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -741,7 +757,7 @@ ApplicationWindow {
                             id: aboutSettings2
                             Rectangle {
                                 radius: 8
-                                border.color: "#14000000"
+                                border.color: root.colorDivider
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: columnLayout15.implicitHeight
                                 Layout.preferredWidth: columnLayout15.implicitWidth
@@ -763,7 +779,7 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Папка хранения и резервные копии"
                                                 font.styleName: "Regular"
                                                 font.family: "Inter"
@@ -773,7 +789,7 @@ ApplicationWindow {
                                         Layout.fillHeight: false
                                     }
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -792,7 +808,7 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Локальное хранилище Markdown-файлов"
                                                 font.styleName: "Regular"
                                                 font.family: "Inter"
@@ -804,7 +820,7 @@ ApplicationWindow {
 
                                         Rectangle {
                                             radius: 6
-                                            border.color: "#14000000"
+                                            border.color: root.colorDivider
                                             Layout.preferredHeight: pathText.implicitHeight + 24
                                             Layout.preferredWidth: pathText.implicitWidth + 24
                                             Text {
@@ -817,7 +833,7 @@ ApplicationWindow {
                                         }
 
                                         Rectangle {
-                                            color: "#f1f5f9"
+                                            color: root.colorSurface
                                             radius: 6
                                             Layout.preferredHeight: choseText.implicitHeight + 24
                                             Layout.preferredWidth: choseText.implicitWidth + 24
@@ -833,7 +849,7 @@ ApplicationWindow {
                                         Layout.fillHeight: false
                                     }
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -863,8 +879,8 @@ ApplicationWindow {
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: autoBackUpSwitch.checked ? "#0B74DE" : "#ffffff"
-                                                border.color: autoBackUpSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+                                                color: autoBackUpSwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: autoBackUpSwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
@@ -875,7 +891,7 @@ ApplicationWindow {
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: autoBackUpSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                    color: autoBackUpSwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -885,7 +901,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -909,7 +925,7 @@ ApplicationWindow {
                                         Rectangle {
                                             Layout.preferredHeight: timeText.implicitHeight + 24
                                             Layout.preferredWidth: timeText.implicitWidth + 24
-                                            border.color: "#14000000"
+                                            border.color: root.colorDivider
                                             radius: 6
                                             Text {
                                                 id: backupCount
@@ -930,7 +946,7 @@ ApplicationWindow {
                             id: aboutSettings3
                             Rectangle {
                                 radius: 8
-                                border.color: "#14000000"
+                                border.color: root.colorDivider
                                 Layout.preferredHeight: columnLayout20.implicitHeight
                                 Layout.preferredWidth: columnLayout20.implicitWidth
 
@@ -951,7 +967,7 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Поведение полнотекстового и интеллектуального поиска"
                                                 font.styleName: "Regular"
                                                 font.family: "Inter"
@@ -962,7 +978,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -993,8 +1009,8 @@ ApplicationWindow {
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: searchByСontentSwitch.checked ? "#0B74DE" : "#ffffff"
-                                                border.color: searchByСontentSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+                                                color: searchByСontentSwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: searchByСontentSwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
@@ -1005,7 +1021,7 @@ ApplicationWindow {
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: searchByСontentSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                    color: searchByСontentSwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -1016,7 +1032,7 @@ ApplicationWindow {
 
                                     Rectangle {
                                         radius: 6
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -1046,8 +1062,8 @@ ApplicationWindow {
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: fuzzySwitch.checked ? "#0B74DE" : "#ffffff"
-                                                border.color: fuzzySwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+                                                color: fuzzySwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: fuzzySwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
@@ -1058,7 +1074,7 @@ ApplicationWindow {
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: fuzzySwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                    color: fuzzySwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -1068,7 +1084,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -1088,7 +1104,7 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Обновите индекс после массового импорта заметок"
                                                 font.styleName: "Regular"
                                                 font.family: "Inter"
@@ -1099,7 +1115,7 @@ ApplicationWindow {
                                         }
 
                                         Rectangle {
-                                            color: "#f1f5f9"
+                                            color: root.colorSurface
                                             Layout.preferredHeight: reindexText.implicitHeight + 24
                                             Layout.preferredWidth: reindexText.implicitWidth + 24
                                             radius: 6
@@ -1124,7 +1140,7 @@ ApplicationWindow {
                             id: securitySettings
                             Rectangle {
                                 radius: 8
-                                border.color: "#14000000"
+                                border.color: root.colorDivider
                                 Layout.preferredHeight: secutiryLayout.implicitHeight
                                 Layout.preferredWidth: secutiryLayout.implicitWidth
 
@@ -1145,7 +1161,7 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Защита локального хранилища и доступа к приложению"
                                                 font.styleName: "Regular"
                                                 font.family: "Inter"
@@ -1156,7 +1172,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -1187,8 +1203,8 @@ ApplicationWindow {
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: passwordOnAppSwitch.checked ? "#0B74DE" : "#ffffff"
-                                                border.color: passwordOnAppSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+                                                color: passwordOnAppSwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: passwordOnAppSwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
@@ -1199,7 +1215,7 @@ ApplicationWindow {
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: passwordOnAppSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                    color: passwordOnAppSwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -1210,7 +1226,7 @@ ApplicationWindow {
 
                                     Rectangle {
                                         radius: 6
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -1239,8 +1255,8 @@ ApplicationWindow {
                                                 height: 25
                                                 radius: height / 2
 
-                                                color: autoLockSwitch.checked ? "#0B74DE" : "#ffffff"
-                                                border.color: autoLockSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+                                                color: autoLockSwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: autoLockSwitch.checked ? root.colorWhite : root.colorBorderSoft
 
                                                 Rectangle {
                                                     width: parent.height - 6
@@ -1251,7 +1267,7 @@ ApplicationWindow {
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: autoLockSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                    color: autoLockSwitch.checked ? root.colorWhite : root.colorBorderSoft
                                                 }
                                             }
                                         }
@@ -1269,7 +1285,7 @@ ApplicationWindow {
                             id: aboutInfo
                             Rectangle {
                                 radius: 8
-                                border.color: "#14000000"
+                                border.color: root.colorDivider
                                 Layout.preferredHeight: aboutColumnLayout.implicitHeight
                                 Layout.preferredWidth: aboutColumnLayout.implicitWidth
 
@@ -1288,7 +1304,7 @@ ApplicationWindow {
                                             }
 
                                             Text {
-                                                color: "#667085"
+                                                color: root.colorTextSecondary
                                                 text: "Информация о текущей версии приложения"
                                                 font.styleName: "Regular"
                                                 font.family: "Inter"
@@ -1299,7 +1315,7 @@ ApplicationWindow {
                                     }
 
                                     Rectangle {
-                                        border.color: "#14000000"
+                                        border.color: root.colorDivider
                                         Layout.preferredHeight: 1
                                         Layout.fillWidth: true
                                     }
@@ -1313,7 +1329,7 @@ ApplicationWindow {
 
                                         Text {
                                             text: "0.0.1"
-                                            color: "#667085"
+                                            color: root.colorTextSecondary
                                             font.styleName: "Regular"
                                             font.family: "Inter"
                                         }
@@ -1330,7 +1346,7 @@ ApplicationWindow {
 
                                         Text {
                                             text: "Ренат"
-                                            color: "#667085"
+                                            color: root.colorTextSecondary
                                             font.styleName: "Regular"
                                             font.family: "Inter"
                                         }
@@ -1347,7 +1363,7 @@ ApplicationWindow {
 
                                         Text {
                                             text: "Local"
-                                            color: "#667085"
+                                            color: root.colorTextSecondary
                                             font.styleName: "Regular"
                                             font.family: "Inter"
                                         }
@@ -1359,7 +1375,7 @@ ApplicationWindow {
                                     Rectangle {
 
                                         radius: 6
-                                        color: "#f1f5f9"
+                                        color: root.colorSurface
                                         Layout.leftMargin: 12
                                         Layout.bottomMargin: 12
                                         Layout.preferredHeight: openFolderBtn.implicitHeight + 24
