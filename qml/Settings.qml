@@ -1218,6 +1218,108 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                             }
                         }
+
+                        ColumnLayout {
+                            id: aboutInfo
+                            Rectangle {
+                                radius: 8
+                                border.color: "#14000000"
+                                Layout.preferredHeight: aboutColumnLayout.implicitHeight
+                                Layout.preferredWidth: aboutColumnLayout.implicitWidth
+
+                                ColumnLayout {
+                                    id: aboutColumnLayout
+                                    anchors.fill: parent
+                                    spacing: 10
+                                    RowLayout {
+                                        Layout.rightMargin: 18
+                                        Layout.leftMargin: 18
+                                        Layout.topMargin: 16
+                                        ColumnLayout {
+
+                                            Text {
+                                                text: "О программе"
+                                            }
+
+                                            Text {
+                                                color: "#667085"
+                                                text: "Информация о текущей версии приложения"
+                                                font.styleName: "Regular"
+                                                font.family: "Inter"
+                                            }
+                                        }
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+
+                                    Rectangle {
+                                        border.color: "#14000000"
+                                        Layout.preferredHeight: 1
+                                        Layout.fillWidth: true
+                                    }
+
+                                    RowLayout {
+                                        Layout.rightMargin: 18
+                                        Layout.leftMargin: 18
+                                        Text {
+                                            text: "Версия:"
+                                        }
+
+                                        Text {
+                                            text: "0.0.1"
+                                        }
+
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+                                    RowLayout {
+                                        Layout.rightMargin: 18
+                                        Layout.leftMargin: 18
+                                        Text {
+                                            text: "Автор: "
+                                        }
+
+                                        Text {
+                                            text: "Ренат"
+                                        }
+
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+                                    RowLayout {
+                                        Layout.rightMargin: 18
+                                        Layout.leftMargin: 18
+                                        Text {
+                                            text: "Хранилище: "
+                                        }
+
+                                        Text {
+                                            text: "Local"
+                                        }
+
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+
+                                    Rectangle {
+
+                                        radius: 6
+                                        color: "#f1f5f9"
+                                        Layout.preferredHeight: openFolderBtn.implicitHeight + 24
+                                        Layout.preferredWidth: openFolderBtn.implicitWidth + 24
+                                        Text {
+                                            id: openFolderBtn
+                                            text: "Открыть папку данных"
+                                            anchors.fill: parent
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
+                                        }
+                                    }
+                                }
+
+                                Layout.fillWidth: true
+                            }
+                        }
                     }
                 }
             }
