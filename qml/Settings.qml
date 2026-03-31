@@ -1137,6 +1137,139 @@ ApplicationWindow {
                         }
 
                         ColumnLayout {
+                            id: graphSettings
+                            Rectangle {
+                                radius: 8
+                                border.color: root.colorDivider
+                                Layout.fillWidth: true
+                                Layout.preferredHeight: graphLayout.implicitHeight
+                                Layout.preferredWidth: graphLayout.implicitWidth
+
+                                ColumnLayout {
+                                    id: graphLayout
+                                    anchors.fill: parent
+
+                                    RowLayout {
+                                        Layout.leftMargin: 18
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
+
+                                        ColumnLayout {
+                                            Text {
+                                                text: "Граф"
+                                            }
+
+                                            Text {
+                                                color: root.colorTextSecondary
+                                                text: "Настройки визуализации связей между заметками"
+                                                font.styleName: "Regular"
+                                                font.family: root.uiFontFamily
+                                            }
+                                        }
+
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+
+                                    Rectangle {
+                                        border.color: root.colorDivider
+                                        Layout.preferredHeight: 1
+                                        Layout.fillWidth: true
+                                    }
+
+                                    RowLayout {
+                                        Layout.leftMargin: 18
+                                        Layout.rightMargin: 18
+                                        Layout.topMargin: 10
+                                        Layout.bottomMargin: 10
+
+                                        ColumnLayout {
+                                            Text {
+                                                text: "Глубина связей"
+                                            }
+                                        }
+
+                                        Item {
+                                            Layout.fillWidth: true
+                                        }
+
+                                        TextField {
+                                            id: graphDepthField
+                                            text: "2"
+                                            color: root.colorTextPrimary
+                                            topPadding: 12
+                                            bottomPadding: 12
+                                            validator: IntValidator {
+                                                bottom: 1
+                                            }
+                                            horizontalAlignment: Text.AlignHCenter
+                                            Layout.preferredWidth: 80
+
+                                            background: Rectangle {
+                                                radius: 6
+                                                color: root.colorWhite
+                                                border.color: root.colorDivider
+                                                border.width: 1
+                                            }
+                                        }
+
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+
+                                    Rectangle {
+                                        border.color: root.colorDivider
+                                        Layout.preferredHeight: 1
+                                        Layout.fillWidth: true
+                                    }
+
+                                    RowLayout {
+                                        Layout.leftMargin: 18
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
+
+                                        ColumnLayout {
+                                            Text {
+                                                text: "Показывать только текущую заметку"
+                                            }
+                                        }
+
+                                        Item {
+                                            Layout.fillWidth: true
+                                        }
+
+                                        Switch {
+                                            id: showCurrentNoteOnlySwitch
+
+                                            indicator: Rectangle {
+                                                width: 45
+                                                height: 25
+                                                radius: height / 2
+
+                                                color: showCurrentNoteOnlySwitch.checked ? root.colorPrimary : root.colorWhite
+                                                border.color: showCurrentNoteOnlySwitch.checked ? root.colorWhite : root.colorBorderSoft
+
+                                                Rectangle {
+                                                    width: parent.height - 6
+                                                    height: width
+                                                    radius: width / 2
+
+                                                    x: showCurrentNoteOnlySwitch.checked ? parent.width - width - 3 : 3
+                                                    y: (parent.height - height) / 2
+
+                                                    color: showCurrentNoteOnlySwitch.checked ? root.colorWhite : root.colorBorderSoft
+                                                }
+                                            }
+                                        }
+
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+                                }
+                            }
+                        }
+
+                        ColumnLayout {
                             id: securitySettings
                             Rectangle {
                                 radius: 8
