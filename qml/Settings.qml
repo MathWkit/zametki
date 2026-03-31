@@ -406,8 +406,8 @@ ApplicationWindow {
                                         id: applicationLayout3
                                         Layout.leftMargin: 18
                                         Layout.rightMargin: 18
-                                        Layout.bottomMargin: 16
-                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 6
+                                        Layout.topMargin: 6
                                         ColumnLayout {
                                             id: columnLayout7
 
@@ -429,20 +429,71 @@ ApplicationWindow {
 
                                         ComboBox {
                                             id: appearanceCombo
+                                            topPadding: 12
+                                            bottomPadding: 12
+                                            Layout.preferredWidth: 160
+
                                             contentItem: Text {
                                                 text: appearanceCombo.displayText
                                                 color: root.colorTextPrimary
+                                                leftPadding: 12
+                                                rightPadding: 28
                                                 verticalAlignment: Text.AlignVCenter
+                                                font.family: root.uiFontFamily
+                                            }
+
+                                            indicator: Text {
+                                                text: "▼"
+                                                color: root.colorTextSecondary
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                anchors.right: parent.right
+                                                anchors.rightMargin: 10
+                                                font.pixelSize: 10
+                                            }
+
+                                            background: Rectangle {
+                                                radius: 6
+                                                color: root.colorWhite
+                                                border.color: root.colorDivider
+                                                border.width: 1
                                             }
 
                                             delegate: ItemDelegate {
                                                 id: appearanceDelegate
                                                 required property string modelData
 
+                                                width: ListView.view ? ListView.view.width : implicitWidth
+
+                                                background: Rectangle {
+                                                    color: appearanceDelegate.hovered ? "#f1f5f9" : "#ffffff"
+                                                }
+
                                                 contentItem: Text {
                                                     text: appearanceDelegate.modelData
-                                                    color: "black"
+                                                    color: "#0f1724"
                                                     verticalAlignment: Text.AlignVCenter
+                                                    leftPadding: 12
+                                                    font.family: "Inter"
+                                                }
+                                            }
+
+                                            popup: Popup {
+                                                y: appearanceCombo.height + 6
+                                                width: appearanceCombo.width
+                                                padding: 0
+
+                                                contentItem: ListView {
+                                                    clip: true
+                                                    implicitHeight: contentHeight
+                                                    model: appearanceCombo.popup.visible ? appearanceCombo.delegateModel : null
+                                                    currentIndex: appearanceCombo.highlightedIndex
+                                                }
+
+                                                background: Rectangle {
+                                                    radius: 6
+                                                    color: root.colorWhite
+                                                    border.color: root.colorDivider
+                                                    border.width: 1
                                                 }
                                             }
 
