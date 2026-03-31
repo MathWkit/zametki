@@ -364,7 +364,7 @@ ApplicationWindow {
                                         id: applicationLayout2
                                         Layout.topMargin: 16
                                         Layout.bottomMargin: 16
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         ColumnLayout {
                                             id: columnLayout6
@@ -444,7 +444,7 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: editorLayout2
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Layout.bottomMargin: 16
                                         Layout.topMargin: 16
@@ -514,7 +514,7 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: applicationLayout4
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Layout.bottomMargin: 16
                                         Layout.topMargin: 16
@@ -544,7 +544,7 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: applicationLayout5
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Layout.bottomMargin: 16
                                         Layout.topMargin: 16
@@ -596,7 +596,7 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: applicationLayout8
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Layout.bottomMargin: 16
                                         Layout.topMargin: 16
@@ -691,7 +691,7 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: applicationLayout6
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Layout.bottomMargin: 16
                                         Layout.topMargin: 16
@@ -751,7 +751,7 @@ ApplicationWindow {
                                     anchors.fill: parent
                                     RowLayout {
                                         id: applicationLayout9
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Layout.bottomMargin: 16
                                         Layout.topMargin: 16
@@ -782,7 +782,8 @@ ApplicationWindow {
                                         id: applicationLayout10
                                         Layout.rightMargin: 18
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             id: columnLayout17
 
@@ -839,9 +840,10 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: applicationLayout11
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             id: columnLayout18
 
@@ -853,11 +855,31 @@ ApplicationWindow {
                                         Item {
                                             Layout.fillWidth: true
                                         }
+                                        Switch {
+                                            id: autoBackUpSwitch
 
-                                        Image {
-                                            Layout.preferredWidth: 16
-                                            Layout.preferredHeight: 16
+                                            indicator: Rectangle {
+                                                width: 45
+                                                height: 25
+                                                radius: height / 2
+
+                                                color: autoBackUpSwitch.checked ? "#0B74DE" : "#ffffff"
+                                                border.color: autoBackUpSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+
+                                                Rectangle {
+                                                    width: parent.height - 6
+                                                    height: width
+                                                    radius: width / 2
+
+                                                    x: autoBackUpSwitch.checked ? parent.width - width - 3 : 3
+
+                                                    y: (parent.height - height) / 2
+
+                                                    color: autoBackUpSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                }
+                                            }
                                         }
+
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
@@ -871,7 +893,8 @@ ApplicationWindow {
                                         id: applicationLayout12
                                         Layout.rightMargin: 18
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             id: columnLayout19
                                             Text {
@@ -916,9 +939,10 @@ ApplicationWindow {
                                     anchors.fill: parent
                                     RowLayout {
                                         id: applicationLayout13
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             id: columnLayout21
 
@@ -945,9 +969,10 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: applicationLayout15
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             id: columnLayout23
 
@@ -998,9 +1023,10 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: applicationLayout16
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             id: columnLayout24
 
@@ -1050,8 +1076,10 @@ ApplicationWindow {
                                     RowLayout {
                                         id: applicationLayout14
                                         Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             id: columnLayout22
 
@@ -1105,9 +1133,10 @@ ApplicationWindow {
                                     anchors.fill: parent
                                     RowLayout {
                                         id: securityFirstLayout
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             id: securityInfo
 
@@ -1134,9 +1163,10 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: passwordOnApp
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             id: passwordText
 
@@ -1187,9 +1217,10 @@ ApplicationWindow {
 
                                     RowLayout {
                                         id: autoLock
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
-                                        Layout.margins: 16
+                                        Layout.topMargin: 16
+                                        Layout.bottomMargin: 16
                                         ColumnLayout {
                                             Text {
                                                 text: "Автоблокировка"
@@ -1247,7 +1278,7 @@ ApplicationWindow {
                                     anchors.fill: parent
                                     spacing: 10
                                     RowLayout {
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Layout.topMargin: 16
                                         ColumnLayout {
@@ -1274,7 +1305,7 @@ ApplicationWindow {
                                     }
 
                                     RowLayout {
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Text {
                                             text: "Версия:"
@@ -1291,7 +1322,7 @@ ApplicationWindow {
                                         Layout.fillHeight: false
                                     }
                                     RowLayout {
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Text {
                                             text: "Автор: "
@@ -1308,7 +1339,7 @@ ApplicationWindow {
                                         Layout.fillHeight: false
                                     }
                                     RowLayout {
-                                        Layout.rightMargin: 18
+
                                         Layout.leftMargin: 18
                                         Text {
                                             text: "Хранилище: "
