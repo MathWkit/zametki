@@ -414,8 +414,23 @@ ApplicationWindow {
                                             Layout.fillWidth: true
                                         }
 
-                                        Text {
-                                            text: "Dark"
+                                        ComboBox {
+                                            // Цвет текста выбранного элемента
+                                            contentItem: Text {
+                                                text: parent.displayText  // или model[parent.currentIndex] если нужно
+                                                color: "black"
+                                                // можно также настроить выравнивание, шрифт и т.д.
+                                            }
+
+                                            // Цвет текста элементов в выпадающем списке
+                                            delegate: ItemDelegate {
+                                                contentItem: Text {
+                                                    text: modelData
+                                                    color: "white"
+                                                }
+                                            }
+
+                                            model: ["White", "Dark", "Purple"]
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
