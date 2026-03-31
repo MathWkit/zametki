@@ -286,17 +286,6 @@ ApplicationWindow {
                     Item {
                         Layout.fillHeight: true
                     }
-
-                    RowLayout {
-                        Image {
-                            source: "../assets/icons/settings/log-out.svg"
-                            Layout.preferredWidth: 18
-                            Layout.preferredHeight: 18
-                        }
-                        Text {
-                            text: "Log out"
-                        }
-                    }
                 }
             }
 
@@ -479,13 +468,11 @@ ApplicationWindow {
                                                     height: width
                                                     radius: width / 2
 
-                                                    x: mySwitch.checked ? parent.width
-                                                                          - width - 3 : 3
+                                                    x: mySwitch.checked ? parent.width - width - 3 : 3
 
                                                     y: (parent.height - height) / 2
 
-                                                    color: mySwitch.checked ? "#FFFFFF" : Qt.rgba(
-                                                                                  0, 0, 0, 0.08)
+                                                    color: mySwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
                                                 }
                                             }
                                         }
@@ -1081,6 +1068,148 @@ ApplicationWindow {
                                                 verticalAlignment: Text.AlignVCenter
                                             }
                                         }
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+                                }
+
+                                Layout.fillWidth: true
+                            }
+                        }
+
+                        ColumnLayout {
+                            id: securitySettings
+                            Rectangle {
+                                radius: 8
+                                border.color: "#14000000"
+                                Layout.preferredHeight: secutiryLayout.implicitHeight
+                                Layout.preferredWidth: secutiryLayout.implicitWidth
+
+                                ColumnLayout {
+                                    id: secutiryLayout
+                                    anchors.fill: parent
+                                    RowLayout {
+                                        id: securityFirstLayout
+                                        Layout.rightMargin: 18
+                                        Layout.leftMargin: 18
+                                        Layout.margins: 16
+                                        ColumnLayout {
+                                            id: securityInfo
+
+                                            Text {
+                                                text: "Безопасность"
+                                            }
+
+                                            Text {
+                                                color: "#667085"
+                                                text: "Защита локального хранилища и доступа к приложению"
+                                                font.styleName: "Regular"
+                                                font.family: "Inter"
+                                            }
+                                        }
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+
+                                    Rectangle {
+                                        border.color: "#14000000"
+                                        Layout.preferredHeight: 1
+                                        Layout.fillWidth: true
+                                    }
+
+                                    RowLayout {
+                                        id: passwordOnApp
+                                        Layout.rightMargin: 18
+                                        Layout.leftMargin: 18
+                                        Layout.margins: 16
+                                        ColumnLayout {
+                                            id: passwordText
+
+                                            Text {
+                                                text: "Пароль на приложение"
+                                            }
+                                        }
+
+                                        Item {
+                                            Layout.fillWidth: true
+                                        }
+
+                                        Switch {
+                                            id: passwordOnAppSwitch
+
+                                            indicator: Rectangle {
+                                                width: 45
+                                                height: 25
+                                                radius: height / 2
+
+                                                color: passwordOnAppSwitch.checked ? "#0B74DE" : "#ffffff"
+                                                border.color: passwordOnAppSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+
+                                                Rectangle {
+                                                    width: parent.height - 6
+                                                    height: width
+                                                    radius: width / 2
+
+                                                    x: passwordOnAppSwitch.checked ? parent.width - width - 3 : 3
+
+                                                    y: (parent.height - height) / 2
+
+                                                    color: passwordOnAppSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                }
+                                            }
+                                        }
+
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: false
+                                    }
+
+                                    Rectangle {
+                                        radius: 6
+                                        border.color: "#14000000"
+                                        Layout.preferredHeight: 1
+                                        Layout.fillWidth: true
+                                    }
+
+                                    RowLayout {
+                                        id: autoLock
+                                        Layout.rightMargin: 18
+                                        Layout.leftMargin: 18
+                                        Layout.margins: 16
+                                        ColumnLayout {
+                                            Text {
+                                                text: "Автоблокировка"
+                                            }
+                                        }
+
+                                        Item {
+                                            Layout.fillWidth: true
+                                        }
+
+                                        Switch {
+                                            id: autoLockSwitch
+
+                                            indicator: Rectangle {
+                                                width: 45
+                                                height: 25
+                                                radius: height / 2
+
+                                                color: autoLockSwitch.checked ? "#0B74DE" : "#ffffff"
+                                                border.color: autoLockSwitch.checked ? "#ffffff" : Qt.rgba(0, 0, 0, 0.08)
+
+                                                Rectangle {
+                                                    width: parent.height - 6
+                                                    height: width
+                                                    radius: width / 2
+
+                                                    x: autoLockSwitch.checked ? parent.width - width - 3 : 3
+
+                                                    y: (parent.height - height) / 2
+
+                                                    color: autoLockSwitch.checked ? "#FFFFFF" : Qt.rgba(0, 0, 0, 0.08)
+                                                }
+                                            }
+                                        }
+
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
