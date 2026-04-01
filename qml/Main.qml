@@ -72,6 +72,9 @@ Window {
             onGraphClicked: {
                 Handlers.onGraphClicked();
             }
+            onSettingsClicked: {
+                Handlers.onSettingsClicked();
+            }
             onFolderClicked: function (folderTitle) {
                 Handlers.onFolderClicked(folderTitle);
             }

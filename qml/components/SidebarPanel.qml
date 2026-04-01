@@ -16,6 +16,7 @@ Rectangle {
     signal searchClicked
     signal newNoteClicked
     signal graphClicked
+    signal settingsClicked
     signal folderClicked(string folderTitle)
     signal noteClicked(string noteTitle)
     signal itemSelected(string itemKey)
@@ -24,256 +25,326 @@ Rectangle {
     border.width: 1
     border.color: Palette.border
 
-    Column {
-        id: horizontalBorder
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.leftMargin: 16
-        anchors.rightMargin: 16
-        anchors.topMargin: 8
-        anchors.bottomMargin: 8
-        spacing: 8
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 0
 
-        Item {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 40
-            Row {
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 6
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.leftMargin: 16
+            Layout.rightMargin: 16
+            Layout.topMargin: 8
+            color: "transparent"
+            implicitHeight: headerContent.implicitHeight + 16
 
-                Image {
-                    source: "qrc:/qt/qml/zametki/assets/icons/sidebar/my-knowledge-base.svg"
-                    width: 24
-                    height: 24
-                    fillMode: Image.PreserveAspectFit
-                    anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: headerContent
+                anchors.fill: parent
+                anchors.margins: 8
+                spacing: 8
+
+                Item {
+                    Layout.fillWidth: true
+                    implicitHeight: 24
+
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 6
+
+                        Image {
+                            source: "qrc:/qt/qml/zametki/assets/icons/sidebar/my-knowledge-base.svg"
+                            width: 24
+                            height: 24
+                            fillMode: Image.PreserveAspectFit
+                        }
+
+                        Text {
+                            text: "Моя база знаний"
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.family: root.fontFamily
+                            font.pixelSize: 14
+                            font.weight: Font.DemiBold
+                            color: Palette.textPrimary
+                            Layout.fillWidth: true
+                        }
+
+                        Image {
+                            source: "qrc:/qt/qml/zametki/assets/icons/sidebar/chosen.svg"
+                            width: 16
+                            height: 16
+                            fillMode: Image.PreserveAspectFit
+                        }
+                    }
                 }
-                Text {
-                    text: "Моя база знаний"
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignLeft
-                    font.family: root.fontFamily
-                    font.pixelSize: 14
-                    font.weight: Font.DemiBold
-                    color: Palette.textPrimary
-                    anchors.verticalCenter: parent.verticalCenter
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: 1
+                    color: Palette.border
+                }
+            }
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: true
+            Layout.leftMargin: 12
+            Layout.rightMargin: 12
+            Layout.topMargin: 8
+            spacing: 4
+
+            Rectangle {
+                id: searchRow
+                Layout.fillWidth: true
+                color: "transparent"
+                radius: Palette.cornerRadius
+                implicitHeight: searchContent.implicitHeight + 24
+
+                RowLayout {
+                    id: searchContent
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    spacing: 6
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/sidebar/search.svg"
+                        width: 16
+                        height: 16
+                    }
+
+                    Text {
+                        text: "Поиск"
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        font.weight: Font.Medium
+                        Layout.fillWidth: true
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: root.searchClicked()
+                    onEntered: searchRow.color = Palette.hover
+                    onExited: searchRow.color = "transparent"
                 }
             }
 
-            Image {
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/qt/qml/zametki/assets/icons/sidebar/chosen.svg"
-                width: 16
-                height: 16
-                fillMode: Image.PreserveAspectFit
+            Rectangle {
+                id: newNoteRow
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                color: "transparent"
+                radius: Palette.cornerRadius
+                implicitHeight: newNoteContent.implicitHeight + 24
+
+                RowLayout {
+                    id: newNoteContent
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    spacing: 6
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
+                        width: 16
+                        height: 16
+                    }
+
+                    Text {
+                        text: "Новая заметка"
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        font.weight: Font.Medium
+                        Layout.fillWidth: true
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: root.newNoteClicked()
+                    onEntered: newNoteRow.color = Palette.hover
+                    onExited: newNoteRow.color = "transparent"
+                }
+            }
+
+            Rectangle {
+                id: graphRow
+                Layout.fillWidth: true
+                color: "transparent"
+                radius: Palette.cornerRadius
+                implicitHeight: graphContent.implicitHeight + 24
+
+                RowLayout {
+                    id: graphContent
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    spacing: 6
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/sidebar/graph-view.svg"
+                        width: 16
+                        height: 16
+                    }
+
+                    Text {
+                        text: "Вид графа"
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        font.weight: Font.Medium
+                        Layout.fillWidth: true
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: root.graphClicked()
+                    onEntered: graphRow.color = Palette.hover
+                    onExited: graphRow.color = "transparent"
+                }
+            }
+        }
+
+        Flickable {
+            id: noteListScroller
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.leftMargin: 12
+            Layout.rightMargin: 12
+            Layout.topMargin: 8
+            Layout.bottomMargin: 8
+
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            flickableDirection: Flickable.VerticalFlick
+            contentWidth: width
+            contentHeight: folderNoteList.implicitHeight
+
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AsNeeded
+                minimumSize: 0.1
+                width: 6
+                contentItem: Rectangle {
+                    implicitWidth: 6
+                    radius: 3
+                    color: Palette.border
+                }
+                background: Rectangle {
+                    implicitWidth: 6
+                    radius: 3
+                    color: "transparent"
+                }
+            }
+
+            FolderNoteList {
+                id: folderNoteList
+                width: noteListScroller.width
+
+                fontFamily: root.fontFamily
+                folderTitles: root.folderTitles
+                noteTitles: root.noteTitles
+                selectedItemKey: root.selectedItemKey
+
+                onFolderClicked: function (folderTitle) {
+                    root.folderClicked(folderTitle);
+                }
+                onNoteClicked: function (noteTitle) {
+                    root.noteClicked(noteTitle);
+                }
+                onItemSelected: function (itemKey) {
+                    root.itemSelected(itemKey);
+                }
             }
         }
 
         Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 1
+            Layout.fillWidth: true
+            Layout.bottomMargin: 8
+            implicitHeight: 1
             color: Palette.border
         }
-    }
-
-    Column {
-        id: container
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: horizontalBorder.bottom
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
-        anchors.topMargin: 8
-        spacing: 4
 
         Rectangle {
-            id: searchRow
-            height: 40
-            width: parent.width
+            id: settingsRow
+            Layout.fillWidth: true
+            Layout.leftMargin: 12
+            Layout.rightMargin: 12
+            Layout.bottomMargin: 8
             color: "transparent"
             radius: Palette.cornerRadius
+            implicitHeight: settingsCard.implicitHeight
 
-            Row {
+            Rectangle {
+                id: settingsCard
                 anchors.fill: parent
-                spacing: 6
-                leftPadding: 12
-                rightPadding: 12
-
-                Image {
-                    source: "qrc:/qt/qml/zametki/assets/icons/sidebar/search.svg"
-                    width: 16
-                    height: 16
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Text {
-                    text: "Поиск"
-                    font.family: root.fontFamily
-                    font.pixelSize: 14
-                    font.weight: Font.Medium
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Item {
+                implicitHeight: settingsContent.implicitHeight + 24
+                radius: Palette.cornerRadius
+                color: Palette.headerBackground
+                border.width: 1
+                border.color: Palette.border
+                RowLayout {
+                    id: settingsContent
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    spacing: 6
                     Layout.fillWidth: true
-                }
-            }
+                    Rectangle {
+                        width: 32
+                        height: 32
+                        radius: 32
+                        color: Palette.hover
 
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: root.searchClicked()
-                onEntered: searchRow.color = Palette.hover
-                onExited: searchRow.color = "transparent"
-            }
-        }
+                        Text {
+                            text: "GL"
+                            anchors.centerIn: parent
+                            font.family: root.fontFamily
+                            font.pixelSize: 10
+                            font.weight: Font.Medium
+                            color: Palette.textPrimary
+                        }
+                    }
 
-        Rectangle {
-            id: newNoteRow
-            height: 40
-            width: parent.width
-            color: "transparent"
-            radius: Palette.cornerRadius
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 2
 
-            Row {
-                anchors.fill: parent
-                spacing: 6
-                leftPadding: 12
-                rightPadding: 12
+                        Text {
+                            text: "Golovach Lena"
+                            font.family: root.fontFamily
+                            font.pixelSize: 14
+                            font.weight: Font.Medium
+                        }
+                        Text {
+                            text: "golovach@titam.com"
+                            font.family: root.fontFamily
+                            font.pixelSize: 12
+                            font.weight: Font.Normal
+                            color: Palette.textSecondary
+                        }
+                    }
+                    Item {
+                        Layout.fillWidth: true
+                    }
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/sidebar/chosen.svg"
 
-                Image {
-                    source: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
-                    width: 16
-                    height: 16
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Text {
-                    text: "Новая заметка"
-                    font.family: root.fontFamily
-                    font.pixelSize: 14
-                    font.weight: Font.Medium
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Item {
-                    Layout.fillWidth: true
-                }
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: root.newNoteClicked()
-                onEntered: newNoteRow.color = Palette.hover
-                onExited: newNoteRow.color = "transparent"
-            }
-        }
-
-        Rectangle {
-            id: graphRow
-            height: 40
-            width: parent.width
-            color: "transparent"
-            radius: Palette.cornerRadius
-
-            Row {
-                anchors.fill: parent
-                spacing: 6
-                leftPadding: 12
-                rightPadding: 12
-
-                Image {
-                    source: "qrc:/qt/qml/zametki/assets/icons/sidebar/graph-view.svg"
-                    width: 16
-                    height: 16
-                    anchors.verticalCenter: parent.verticalCenter
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
                 }
 
-                Text {
-                    text: "Вид графа"
-                    font.family: root.fontFamily
-                    font.pixelSize: 14
-                    font.weight: Font.Medium
-                    anchors.verticalCenter: parent.verticalCenter
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: root.settingsClicked()
+                    onEntered: settingsCard.color = Palette.hover
+                    onExited: settingsCard.color = Palette.headerBackground
                 }
-
-                Item {
-                    Layout.fillWidth: true
-                }
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: root.graphClicked()
-                onEntered: graphRow.color = Palette.hover
-                onExited: graphRow.color = "transparent"
-            }
-        }
-    }
-
-    Flickable {
-        id: noteListScroller
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: container.bottom
-        anchors.bottom: parent.bottom
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
-        anchors.topMargin: 8
-        anchors.bottomMargin: 8
-
-        clip: true
-        boundsBehavior: Flickable.StopAtBounds
-        flickableDirection: Flickable.VerticalFlick
-        contentWidth: width
-        contentHeight: folderNoteList.implicitHeight
-
-        ScrollBar.vertical: ScrollBar {
-            policy: ScrollBar.AsNeeded
-            minimumSize: 0.1
-            width: 6
-            contentItem: Rectangle {
-                implicitWidth: 6
-                radius: 3
-                color: Palette.border
-            }
-            background: Rectangle {
-                implicitWidth: 6
-                radius: 3
-                color: "transparent"
-            }
-        }
-
-        FolderNoteList {
-            id: folderNoteList
-            width: noteListScroller.width
-
-            fontFamily: root.fontFamily
-            folderTitles: root.folderTitles
-            noteTitles: root.noteTitles
-            selectedItemKey: root.selectedItemKey
-
-            onFolderClicked: function (folderTitle) {
-                root.folderClicked(folderTitle);
-            }
-            onNoteClicked: function (noteTitle) {
-                root.noteClicked(noteTitle);
-            }
-            onItemSelected: function (itemKey) {
-                root.itemSelected(itemKey);
             }
         }
     }

@@ -16,6 +16,10 @@ export function onGraphClicked() {
     console.log("Нажатие на Вид графа");
 }
 
+export function onSettingsClicked() {
+    console.log("Нажатие на Настройки");
+}
+
 export function onHideSidebarClicked() {
     console.log("Нажатие на Hide Sidebar");
 }
