@@ -268,25 +268,25 @@ Rectangle {
         }
 
         Rectangle {
-            id: settingsRow
+            id: profileRow
             Layout.fillWidth: true
             Layout.leftMargin: 12
             Layout.rightMargin: 12
             Layout.bottomMargin: 8
             color: "transparent"
             radius: Palette.cornerRadius
-            implicitHeight: settingsCard.implicitHeight
+            implicitHeight: profileCard.implicitHeight
 
             Rectangle {
-                id: settingsCard
+                id: profileCard
                 anchors.fill: parent
-                implicitHeight: settingsContent.implicitHeight + 24
+                implicitHeight: profileContent.implicitHeight + 24
                 radius: Palette.cornerRadius
                 color: Palette.headerBackground
                 border.width: 1
                 border.color: Palette.border
                 RowLayout {
-                    id: settingsContent
+                    id: profileContent
                     anchors.fill: parent
                     anchors.margins: 12
                     spacing: 6
