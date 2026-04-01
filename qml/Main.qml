@@ -111,5 +111,17 @@ Window {
                 }
             }
         }
+
+        CreationBD {
+            id: creationBdOverlay
+            anchors.fill: parent
+            visible: !AppState.databaseConfigured
+            fontFamily: interFont.name
+            onCreateDatabaseRequested: function (databaseName, parentDirectoryPath) {
+                if (!AppState.createDatabase(databaseName, parentDirectoryPath)) {
+                    creationBdOverlay.errorText = AppState.lastError();
+                }
+            }
+        }
     }
 }

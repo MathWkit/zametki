@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick 6.8
 import QtQuick.Layouts 6.8
+import QtQuick.Controls 6.8
 import "../scripts/Theme.js" as Palette
 
 Rectangle {
@@ -222,28 +223,58 @@ Rectangle {
         }
     }
 
-    FolderNoteList {
+    Flickable {
+        id: noteListScroller
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: container.bottom
+        anchors.bottom: parent.bottom
         anchors.leftMargin: 12
         anchors.rightMargin: 12
         anchors.topMargin: 8
         anchors.bottomMargin: 8
 
-        fontFamily: root.fontFamily
-        folderTitles: root.folderTitles
-        noteTitles: root.noteTitles
-        selectedItemKey: root.selectedItemKey
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+        flickableDirection: Flickable.VerticalFlick
+        contentWidth: width
+        contentHeight: folderNoteList.implicitHeight
 
-        onFolderClicked: function (folderTitle) {
-            root.folderClicked(folderTitle);
+        ScrollBar.vertical: ScrollBar {
+            policy: ScrollBar.AsNeeded
+            minimumSize: 0.1
+            width: 6
+            contentItem: Rectangle {
+                implicitWidth: 6
+                radius: 3
+                color: Palette.border
+            }
+            background: Rectangle {
+                implicitWidth: 6
+                radius: 3
+                color: "transparent"
+            }
         }
-        onNoteClicked: function (noteTitle) {
-            root.noteClicked(noteTitle);
-        }
-        onItemSelected: function (itemKey) {
-            root.itemSelected(itemKey);
+
+        FolderNoteList {
+            id: folderNoteList
+            width: noteListScroller.width
+
+            fontFamily: root.fontFamily
+            folderTitles: root.folderTitles
+            noteTitles: root.noteTitles
+            selectedItemKey: root.selectedItemKey
+
+            onFolderClicked: function (folderTitle) {
+                root.folderClicked(folderTitle);
+            }
+            onNoteClicked: function (noteTitle) {
+                root.noteClicked(noteTitle);
+            }
+            onItemSelected: function (itemKey) {
+                root.itemSelected(itemKey);
+            }
         }
     }
 }
