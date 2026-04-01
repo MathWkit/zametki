@@ -76,7 +76,8 @@ qt_add_qml_module(appzametki
         assets/icons/settings/about.svg
         assets/icons/settings/log-out.svg
         assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
-        QML_FILES qml/asd.qml
+        QML_FILES qml/Search.qml
+        QML_FILES qml/Share.qml
 )
 
 set_target_properties(appzametki PROPERTIES

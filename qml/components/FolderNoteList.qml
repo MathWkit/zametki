@@ -158,9 +158,7 @@ Column {
                             return "qrc:/qt/qml/zametki/assets/icons/list/folder.svg";
                         }
 
-                        return treeItem.isSelected
-                            ? "qrc:/qt/qml/zametki/assets/icons/list/note-selected.svg"
-                            : "qrc:/qt/qml/zametki/assets/icons/list/note.svg";
+                        return treeItem.isSelected ? "qrc:/qt/qml/zametki/assets/icons/list/note-selected.svg" : "qrc:/qt/qml/zametki/assets/icons/list/note.svg";
                     }
                     width: 16
                     height: 16
@@ -223,9 +221,7 @@ Column {
                 spacing: 8
 
                 Image {
-                    source: noteItem.isSelected
-                        ? "qrc:/qt/qml/zametki/assets/icons/list/note-selected.svg"
-                        : "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
+                    source: noteItem.isSelected ? "qrc:/qt/qml/zametki/assets/icons/list/note-selected.svg" : "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
                     width: 16
                     height: 16
                     Layout.preferredWidth: 16
