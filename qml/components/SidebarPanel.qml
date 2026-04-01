@@ -17,6 +17,7 @@ Rectangle {
     signal newNoteClicked
     signal graphClicked
     signal settingsClicked
+    signal profileMenuItemClicked(string actionKey)
     signal folderClicked(string folderTitle)
     signal noteClicked(string noteTitle)
     signal itemSelected(string itemKey)
@@ -341,9 +342,291 @@ Rectangle {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     hoverEnabled: true
-                    onClicked: root.settingsClicked()
-                    onEntered: settingsCard.color = Palette.hover
-                    onExited: settingsCard.color = Palette.headerBackground
+                    onClicked: profileMenu.open()
+                    onEntered: profileCard.color = Palette.hover
+                    onExited: profileCard.color = Palette.headerBackground
+                }
+            }
+        }
+    }
+
+    Popup {
+        id: profileMenu
+        parent: root
+        modal: false
+        focus: true
+        padding: 0
+        width: profileRow.width
+        x: profileRow.x
+        y: Math.max(8, profileRow.y - implicitHeight - 8)
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        background: Rectangle {
+            radius: Palette.cornerRadius
+            color: Palette.headerBackground
+            border.width: 1
+            border.color: Palette.border
+        }
+
+        contentItem: ColumnLayout {
+            spacing: 0
+
+            Rectangle {
+                id: menuProfileRow
+                Layout.fillWidth: true
+                implicitHeight: 40
+                color: "transparent"
+
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.leftMargin: 12
+                    anchors.rightMargin: 12
+                    spacing: 8
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/profile/profile.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    Text {
+                        text: "Профиль"
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        color: Palette.textPrimary
+                        Layout.fillWidth: true
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onEntered: menuProfileRow.color = Palette.hover
+                    onExited: menuProfileRow.color = "transparent"
+                    onClicked: {
+                        root.profileMenuItemClicked("profile");
+                        profileMenu.close();
+                    }
+                }
+            }
+
+            Rectangle {
+                id: menuSettingsRow
+                Layout.fillWidth: true
+                implicitHeight: 40
+                color: "transparent"
+
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.leftMargin: 12
+                    anchors.rightMargin: 12
+                    spacing: 8
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/profile/settings.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    Text {
+                        text: "Настройки"
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        color: Palette.textPrimary
+                        Layout.fillWidth: true
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onEntered: menuSettingsRow.color = Palette.hover
+                    onExited: menuSettingsRow.color = "transparent"
+                    onClicked: {
+                        root.settingsClicked();
+                        root.profileMenuItemClicked("settings");
+                        profileMenu.close();
+                    }
+                }
+            }
+
+            Rectangle {
+                id: menuSyncRow
+                Layout.fillWidth: true
+                implicitHeight: 40
+                color: "transparent"
+
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.leftMargin: 12
+                    anchors.rightMargin: 12
+                    spacing: 8
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/profile/sync.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    Text {
+                        text: "Статус синхронизации"
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        color: Palette.textPrimary
+                        Layout.fillWidth: true
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onEntered: menuSyncRow.color = Palette.hover
+                    onExited: menuSyncRow.color = "transparent"
+                    onClicked: {
+                        root.profileMenuItemClicked("sync-status");
+                        profileMenu.close();
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                implicitHeight: 1
+                color: Palette.border
+            }
+
+            Rectangle {
+                id: menuHelpRow
+                Layout.fillWidth: true
+                implicitHeight: 40
+                color: "transparent"
+
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.leftMargin: 12
+                    anchors.rightMargin: 12
+                    spacing: 8
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/profile/help.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    Text {
+                        text: "Помощь и справка"
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        color: Palette.textPrimary
+                        Layout.fillWidth: true
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onEntered: menuHelpRow.color = Palette.hover
+                    onExited: menuHelpRow.color = "transparent"
+                    onClicked: {
+                        root.profileMenuItemClicked("help");
+                        profileMenu.close();
+                    }
+                }
+            }
+
+            Rectangle {
+                id: menuHotkeysRow
+                Layout.fillWidth: true
+                implicitHeight: 40
+                color: "transparent"
+
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.leftMargin: 12
+                    anchors.rightMargin: 12
+                    spacing: 8
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/profile/keyboard.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    Text {
+                        text: "Горячие клавиши"
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        color: Palette.textPrimary
+                        Layout.fillWidth: true
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onEntered: menuHotkeysRow.color = Palette.hover
+                    onExited: menuHotkeysRow.color = "transparent"
+                    onClicked: {
+                        root.profileMenuItemClicked("hotkeys");
+                        profileMenu.close();
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                implicitHeight: 1
+                color: Palette.border
+            }
+
+            Rectangle {
+                id: menuLogoutRow
+                Layout.fillWidth: true
+                implicitHeight: 40
+                color: "transparent"
+
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.leftMargin: 12
+                    anchors.rightMargin: 12
+                    spacing: 8
+
+                    Image {
+                        source: "qrc:/qt/qml/zametki/assets/icons/profile/logout.svg"
+                        width: 16
+                        height: 16
+                        fillMode: Image.PreserveAspectFit
+                    }
+
+                    Text {
+                        text: "Выход"
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        color: Palette.textPrimary
+                        Layout.fillWidth: true
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onEntered: menuLogoutRow.color = Palette.hover
+                    onExited: menuLogoutRow.color = "transparent"
+                    onClicked: {
+                        root.profileMenuItemClicked("logout");
+                        profileMenu.close();
+                    }
                 }
             }
         }
