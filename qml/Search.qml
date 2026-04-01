@@ -58,8 +58,6 @@ Item {
                 Layout.fillWidth: true
             }
 
-
-
             ColumnLayout {
                 id: columnLayout1
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
@@ -110,7 +108,6 @@ Item {
                                 topPadding: 0
                                 leftPadding: 0
                                 Layout.fillWidth: true
-
                             }
 
                             Text {
@@ -125,7 +122,6 @@ Item {
                                 layer.enabled: false
                                 font.family: "Inter"
                                 Layout.fillWidth: true
-
                             }
                             Layout.topMargin: 0
                             Layout.rightMargin: 0
@@ -162,7 +158,6 @@ Item {
                                 topPadding: 0
                                 leftPadding: 0
                                 Layout.fillWidth: true
-
                             }
 
                             Text {
@@ -177,7 +172,6 @@ Item {
                                 layer.enabled: false
                                 font.family: "Inter"
                                 Layout.fillWidth: true
-
                             }
                             Layout.topMargin: 0
                             Layout.rightMargin: 0
@@ -194,7 +188,6 @@ Item {
                         Layout.leftMargin: 12
                         Layout.bottomMargin: 12
                     }
-
                 }
                 ColumnLayout {
                     spacing: 4
@@ -233,7 +226,6 @@ Item {
                             topPadding: 0
                             leftPadding: 0
                             Layout.fillWidth: true
-
                         }
                         Layout.topMargin: 12
                         Layout.margins: 12
@@ -242,7 +234,6 @@ Item {
                         Layout.bottomMargin: 12
                     }
                     Layout.fillWidth: true
-
                 }
 
                 ColumnLayout {
@@ -263,7 +254,6 @@ Item {
                         Layout.leftMargin: 0
                         Layout.bottomMargin: 0
                         Layout.topMargin: 0
-
 
                         Layout.fillWidth: true
                         topPadding: 12
@@ -296,7 +286,6 @@ Item {
                             leftPadding: 0
                             topPadding: 0
                         }
-
                     }
 
                     RowLayout {
@@ -319,7 +308,6 @@ Item {
                             topPadding: 0
                             leftPadding: 0
                             Layout.fillWidth: true
-
                         }
                         Layout.topMargin: 12
                         Layout.margins: 12
@@ -335,7 +323,7 @@ Item {
                     Layout.fillHeight: true
 
                     Layout.fillWidth: true
-                    RowLayout{
+                    RowLayout {
                         anchors.right: parent.right
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
@@ -343,7 +331,7 @@ Item {
                         anchors.topMargin: 12
                         anchors.bottomMargin: 12
                         spacing: 16
-                        RowLayout{
+                        RowLayout {
                             spacing: 6
                             Image {
                                 id: image3
@@ -372,7 +360,6 @@ Item {
                                 font.styleName: "Medium"
                                 font.family: "Inter"
                             }
-
                         }
 
                         RowLayout {
@@ -419,14 +406,9 @@ Item {
                                 font.family: "Inter"
                             }
                         }
-
                     }
                 }
-
             }
-
-
-
         }
     }
 }
