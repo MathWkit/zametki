@@ -75,6 +75,12 @@ qt_add_qml_module(appzametki
         assets/icons/settings/hot-keys.svg
         assets/icons/settings/about.svg
         assets/icons/settings/log-out.svg
+        assets/icons/profile/profile.svg
+        assets/icons/profile/settings.svg
+        assets/icons/profile/sync.svg
+        assets/icons/profile/help.svg
+        assets/icons/profile/keyboard.svg
+        assets/icons/profile/logout.svg
         assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
         QML_FILES qml/Search.qml
         QML_FILES qml/Share.qml

@@ -2,11 +2,10 @@ import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-ApplicationWindow {
+Item {
     id: root
-    width: 1920
-    height: 1080
-    visible: true
+    anchors.fill: parent
+    signal closeRequested
 
     readonly property string uiFontFamily: "Inter"
     readonly property color colorBackground: "#fafbfc"
@@ -314,6 +313,7 @@ ApplicationWindow {
                     width: mainContentScroll.width
 
                     RowLayout {
+                        Layout.rightMargin: 24
 
                         ColumnLayout {
                             id: columnLayout4
@@ -342,9 +342,26 @@ ApplicationWindow {
                             Layout.fillWidth: true
                         }
 
-                        Image {
-                            Layout.preferredHeight: 32
-                            Layout.preferredWidth: 32
+                        Rectangle {
+                            color: root.colorSurface
+                            radius: 6
+                            Layout.preferredHeight: doneText.implicitHeight + 20
+                            Layout.preferredWidth: doneText.implicitWidth + 20
+                            MouseArea {
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: root.closeRequested()
+                            }
+                            Text {
+                                id: doneText
+                                text: "Done"
+                                anchors.centerIn: parent
+                                color: root.colorTextPrimary
+                                font.styleName: "Medium"
+                                font.pointSize: 14
+                                font.family: root.uiFontFamily
+                            }
                         }
                     }
 

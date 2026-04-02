@@ -9,6 +9,7 @@ Window {
     id: window
     property string selectedItemKey: ""
     property bool sidebarVisible: true
+    property bool settingsViewVisible: false
     readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
     readonly property var selectedNotePathSegments: buildSelectedNotePathSegments(selectedItemKey)
 
@@ -54,8 +55,8 @@ Window {
 
         SidebarPanel {
             id: aside
-            width: window.sidebarVisible ? window.asideWidth : 0
-            visible: width > 0
+            width: (!window.settingsViewVisible && window.sidebarVisible) ? window.asideWidth : 0
+            visible: !window.settingsViewVisible && width > 0
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -72,6 +73,32 @@ Window {
             onGraphClicked: {
                 Handlers.onGraphClicked();
             }
+            onProfileMenuItemClicked: function (actionKey) {
+                switch (actionKey) {
+                case "settings":
+                    Handlers.onSettingsClicked();
+                    window.settingsViewVisible = true;
+                    break;
+                case "profile":
+                    console.log("Нажатие на Профиль");
+                    break;
+                case "sync-status":
+                    console.log("Нажатие на Статус синхронизации");
+                    break;
+                case "help":
+                    console.log("Нажатие на Помощь и справку");
+                    break;
+                case "hotkeys":
+                    console.log("Нажатие на Горячие клавиши");
+                    break;
+                case "logout":
+                    console.log("Нажатие на Выход");
+                    break;
+                default:
+                    console.log("Неизвестное действие меню профиля:", actionKey);
+                    break;
+                }
+            }
             onFolderClicked: function (folderTitle) {
                 Handlers.onFolderClicked(folderTitle);
             }
@@ -85,10 +112,12 @@ Window {
 
         Item {
             id: main
+            visible: !window.settingsViewVisible
             anchors.left: aside.right
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+
             MainHeaderBar {
                 id: header
                 anchors.left: parent.left
@@ -109,6 +138,23 @@ Window {
                 onMoreClicked: {
                     Handlers.onMoreClicked();
                 }
+            }
+        }
+
+        Loader {
+            id: settingsPageLoader
+            anchors.fill: parent
+            active: window.settingsViewVisible
+            visible: window.settingsViewVisible
+            source: "Settings.qml"
+        }
+
+        Connections {
+            target: settingsPageLoader.item
+            ignoreUnknownSignals: true
+
+            function onCloseRequested() {
+                window.settingsViewVisible = false;
             }
         }
 
