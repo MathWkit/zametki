@@ -9,6 +9,7 @@ Window {
     id: window
     property string selectedItemKey: ""
     property bool sidebarVisible: true
+    property bool settingsViewVisible: false
     readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
     readonly property var selectedNotePathSegments: buildSelectedNotePathSegments(selectedItemKey)
 
@@ -54,8 +55,8 @@ Window {
 
         SidebarPanel {
             id: aside
-            width: window.sidebarVisible ? window.asideWidth : 0
-            visible: width > 0
+            width: (!window.settingsViewVisible && window.sidebarVisible) ? window.asideWidth : 0
+            visible: !window.settingsViewVisible && width > 0
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -76,6 +77,7 @@ Window {
                 switch (actionKey) {
                 case "settings":
                     Handlers.onSettingsClicked();
+                    window.settingsViewVisible = true;
                     break;
                 case "profile":
                     console.log("Нажатие на Профиль");
@@ -110,10 +112,12 @@ Window {
 
         Item {
             id: main
+            visible: !window.settingsViewVisible
             anchors.left: aside.right
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+
             MainHeaderBar {
                 id: header
                 anchors.left: parent.left
@@ -135,6 +139,15 @@ Window {
                     Handlers.onMoreClicked();
                 }
             }
+
+        }
+
+        Loader {
+            id: settingsPageLoader
+            anchors.fill: parent
+            active: window.settingsViewVisible
+            visible: window.settingsViewVisible
+            source: "Settings.qml"
         }
 
         CreationBD {

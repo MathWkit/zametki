@@ -2,11 +2,9 @@ import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-ApplicationWindow {
+Item {
     id: root
-    width: 1920
-    height: 1080
-    visible: true
+    anchors.fill: parent
 
     readonly property string uiFontFamily: "Inter"
     readonly property color colorBackground: "#fafbfc"
