@@ -1,16 +1,27 @@
 import QtQuick 6.8
 import QtQuick.Layouts
+import "scripts/Theme.js" as Palette
 
 Item {
-    id: item1
+    id: root
     clip: true
     layer.enabled: false
+
+    readonly property string uiFontFamily: "Inter"
+    readonly property color colorWhite: Palette.headerBackground
+    readonly property color colorTextPrimary: Palette.textPrimary
+    readonly property color colorTextSecondary: Palette.textSecondary
+    readonly property color colorDivider: Palette.border
+    readonly property color colorSurface: "#fafbfc"
+
     Rectangle {
         id: rectangle
         width: 540
         height: 430
-        color: "#ffffff"
-        radius: 10
+        color: root.colorWhite
+        radius: 8
+        border.width: 1
+        border.color: root.colorDivider
         anchors.centerIn: parent
         smooth: false
 
@@ -40,8 +51,8 @@ Item {
                     text: "Search for notes, folders, tags, or commands..."
                     font.pixelSize: 16
                     verticalAlignment: Text.AlignVCenter
-                    font.family: "Inter"
-                    color: "#667085"
+                    font.family: root.uiFontFamily
+                    color: root.colorTextSecondary
 
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignVCenter
@@ -53,7 +64,7 @@ Item {
             // 📂 Content
 
             Rectangle {
-                color: "#eeeeee"
+                color: root.colorDivider
                 height: 1
                 Layout.fillWidth: true
             }
@@ -75,13 +86,13 @@ Item {
                     // RECENT NOTES
                     Text {
                         text: "RECENT NOTES"
-                        color: "#667085"
+                        color: root.colorTextSecondary
                         font.pixelSize: 8
                         verticalAlignment: Text.AlignVCenter
 
                         bottomPadding: 12
                         topPadding: 12
-                        font.family: "Inter"
+                        font.family: root.uiFontFamily
 
                         Layout.fillWidth: true
                         padding: 8
@@ -104,6 +115,8 @@ Item {
                             Text {
                                 text: "Note 1"
                                 font.pixelSize: 10
+                                color: root.colorTextPrimary
+                                font.family: root.uiFontFamily
                                 verticalAlignment: Text.AlignVCenter
                                 topPadding: 0
                                 leftPadding: 0
@@ -112,7 +125,7 @@ Item {
 
                             Text {
                                 visible: true
-                                color: "#707988"
+                                color: root.colorTextSecondary
                                 text: "path / to / note"
                                 font.pixelSize: 8
                                 verticalAlignment: Text.AlignVCenter
@@ -120,7 +133,7 @@ Item {
                                 topPadding: 0
                                 leftPadding: 0
                                 layer.enabled: false
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                                 Layout.fillWidth: true
                             }
                             Layout.topMargin: 0
@@ -154,6 +167,8 @@ Item {
                             Text {
                                 text: "Note 1"
                                 font.pixelSize: 10
+                                color: root.colorTextPrimary
+                                font.family: root.uiFontFamily
                                 verticalAlignment: Text.AlignVCenter
                                 topPadding: 0
                                 leftPadding: 0
@@ -162,7 +177,7 @@ Item {
 
                             Text {
                                 visible: true
-                                color: "#707988"
+                                color: root.colorTextSecondary
                                 text: "path / to / note"
                                 font.pixelSize: 8
                                 verticalAlignment: Text.AlignVCenter
@@ -170,7 +185,7 @@ Item {
                                 topPadding: 0
                                 leftPadding: 0
                                 layer.enabled: false
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                                 Layout.fillWidth: true
                             }
                             Layout.topMargin: 0
@@ -192,7 +207,7 @@ Item {
                 ColumnLayout {
                     spacing: 4
                     Text {
-                        color: "#4a5468"
+                        color: root.colorTextSecondary
                         text: "FOLDERS"
                         font.pixelSize: 8
                         verticalAlignment: Text.AlignVCenter
@@ -222,6 +237,8 @@ Item {
                         Text {
                             text: "Note 1"
                             font.pixelSize: 10
+                            color: root.colorTextPrimary
+                            font.family: root.uiFontFamily
                             verticalAlignment: Text.AlignVCenter
                             topPadding: 0
                             leftPadding: 0
@@ -244,7 +261,7 @@ Item {
                     Text {
 
                         text: "COMMANDS"
-                        color: "#4a5468"
+                        color: root.colorTextSecondary
                         font.pixelSize: 8
                         verticalAlignment: Text.AlignVCenter
                         font.preferShaping: false
@@ -280,6 +297,8 @@ Item {
                         Text {
                             text: "Create New Note"
                             font.pixelSize: 10
+                            color: root.colorTextPrimary
+                            font.family: root.uiFontFamily
                             verticalAlignment: Text.AlignVCenter
 
                             Layout.fillWidth: true
@@ -304,6 +323,8 @@ Item {
                         Text {
                             text: "Open Graph View"
                             font.pixelSize: 10
+                            color: root.colorTextPrimary
+                            font.family: root.uiFontFamily
                             verticalAlignment: Text.AlignVCenter
                             topPadding: 0
                             leftPadding: 0
@@ -317,8 +338,8 @@ Item {
                 }
 
                 Rectangle {
-                    color: "#fafbfc"
-                    border.color: "#14000000"
+                    color: root.colorSurface
+                    border.color: root.colorDivider
                     border.width: 1
                     Layout.fillHeight: true
 
@@ -353,12 +374,12 @@ Item {
                             }
                             Text {
                                 id: text1
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: qsTr("Navigate")
                                 font.pixelSize: 12
                                 verticalAlignment: Text.AlignVCenter
                                 font.styleName: "Medium"
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
 
@@ -376,12 +397,12 @@ Item {
 
                             Text {
                                 id: text2
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: qsTr("Open")
                                 font.pixelSize: 12
                                 verticalAlignment: Text.AlignVCenter
                                 font.styleName: "Medium"
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
 
@@ -398,12 +419,12 @@ Item {
 
                             Text {
                                 id: text3
-                                color: "#667085"
+                                color: root.colorTextSecondary
                                 text: qsTr("Close")
                                 font.pixelSize: 12
                                 verticalAlignment: Text.AlignVCenter
                                 font.styleName: "Medium"
-                                font.family: "Inter"
+                                font.family: root.uiFontFamily
                             }
                         }
                     }
