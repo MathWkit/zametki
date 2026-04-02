@@ -10,6 +10,8 @@ Window {
     property string selectedItemKey: ""
     property bool sidebarVisible: true
     property bool settingsViewVisible: false
+    property bool searchViewVisible: false
+    property bool shareViewVisible: false
     readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
     readonly property var selectedNotePathSegments: buildSelectedNotePathSegments(selectedItemKey)
 
@@ -66,6 +68,8 @@ Window {
             noteTitles: AppState.noteTitles
             onSearchClicked: {
                 Handlers.onSearchClicked();
+                window.searchViewVisible = true;
+                window.shareViewVisible = false;
             }
             onNewNoteClicked: {
                 Handlers.onNewNoteClicked(AppState);
@@ -131,6 +135,8 @@ Window {
                 }
                 onShareClicked: {
                     Handlers.onShareClicked();
+                    window.shareViewVisible = true;
+                    window.searchViewVisible = false;
                 }
                 onFavoriteClicked: {
                     Handlers.onFavoriteClicked();
@@ -147,6 +153,55 @@ Window {
             active: window.settingsViewVisible
             visible: window.settingsViewVisible
             source: "Settings.qml"
+        }
+
+        Rectangle {
+            id: searchOverlay
+            anchors.fill: parent
+            visible: window.searchViewVisible && !window.settingsViewVisible
+            color: "#66000000"
+            z: 200
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: window.searchViewVisible = false
+            }
+
+            Loader {
+                id: searchLoader
+                anchors.fill: parent
+                active: searchOverlay.visible
+                source: "Search.qml"
+            }
+        }
+
+        Rectangle {
+            id: shareOverlay
+            anchors.fill: parent
+            visible: window.shareViewVisible && !window.settingsViewVisible
+            color: "#66000000"
+            z: 210
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: window.shareViewVisible = false
+            }
+
+            Loader {
+                id: shareLoader
+                anchors.fill: parent
+                active: shareOverlay.visible
+                source: "Share.qml"
+            }
+
+            Connections {
+                target: shareLoader.item
+                ignoreUnknownSignals: true
+
+                function onCloseClicked() {
+                    window.shareViewVisible = false;
+                }
+            }
         }
 
         Connections {
