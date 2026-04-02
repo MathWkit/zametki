@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.15
 Item {
     id: root
     anchors.fill: parent
+    signal closeRequested
 
     readonly property string uiFontFamily: "Inter"
     readonly property color colorBackground: "#fafbfc"
@@ -346,6 +347,12 @@ Item {
                             radius: 6
                             Layout.preferredHeight: doneText.implicitHeight + 20
                             Layout.preferredWidth: doneText.implicitWidth + 20
+                            MouseArea {
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: root.closeRequested()
+                            }
                             Text {
                                 id: doneText
                                 text: "Done"

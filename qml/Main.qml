@@ -149,6 +149,15 @@ Window {
             source: "Settings.qml"
         }
 
+        Connections {
+            target: settingsPageLoader.item
+            ignoreUnknownSignals: true
+
+            function onCloseRequested() {
+                window.settingsViewVisible = false;
+            }
+        }
+
         CreationBD {
             id: creationBdOverlay
             anchors.fill: parent
