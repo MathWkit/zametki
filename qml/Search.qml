@@ -29,7 +29,7 @@ Item {
                 spacing: 20
 
                 Image {
-                    source: "../build/zametki/assets/icons/sidebar/chose.svg"
+                    source: "qrc:/qt/qml/zametki/assets/icons/sidebar/chosen.svg"
                     fillMode: Image.PreserveAspectFit
                     Layout.preferredWidth: 16
                     Layout.preferredHeight: 16
@@ -91,7 +91,7 @@ Item {
                         clip: true
                         spacing: 12
                         Image {
-                            source: "../build/Desktop-Debug/zametki/assets/icons/list/note.svg"
+                            source: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
                             fillMode: Image.PreserveAspectFit
                             Layout.preferredWidth: 16
                             Layout.preferredHeight: 16
@@ -141,7 +141,7 @@ Item {
                     RowLayout {
                         spacing: 12
                         Image {
-                            source: "../build/Desktop-Debug/zametki/assets/icons/list/note.svg"
+                            source: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
                             fillMode: Image.PreserveAspectFit
                             Layout.preferredWidth: 16
                             Layout.preferredHeight: 16
@@ -212,7 +212,7 @@ Item {
                         spacing: 12
                         Image {
                             id: image1
-                            source: "../build/Desktop-Debug/zametki/assets/icons/list/folder.svg"
+                            source: "qrc:/qt/qml/zametki/assets/icons/list/folder.svg"
                             fillMode: Image.PreserveAspectFit
                             Layout.preferredWidth: 16
                             Layout.preferredHeight: 16
@@ -274,7 +274,7 @@ Item {
                             Layout.preferredWidth: 16
                             Layout.preferredHeight: 16
                             Layout.alignment: Qt.AlignVCenter
-                            source: "../build/Desktop-Debug/zametki/assets/icons/sidebar/new-note.svg"
+                            source: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
                         }
 
                         Text {
@@ -294,7 +294,7 @@ Item {
                         spacing: 12
                         Image {
                             id: image2
-                            source: "../build/Desktop-Debug/zametki/assets/icons/sidebar/graph-view.svg"
+                            source: "qrc:/qt/qml/zametki/assets/icons/sidebar/graph-view.svg"
                             fillMode: Image.PreserveAspectFit
                             Layout.preferredWidth: 16
                             Layout.preferredHeight: 16
@@ -337,7 +337,7 @@ Item {
                                 id: image3
                                 width: 100
                                 height: 100
-                                source: "qrc:/qtquickplugin/images/template_image.png"
+                                source: "qrc:/qt/qml/zametki/assets/icons/unused/open-bracket.svg"
                                 fillMode: Image.PreserveAspectFit
                                 Layout.preferredHeight: 16
                                 Layout.preferredWidth: 16
@@ -346,7 +346,7 @@ Item {
                                 id: image4
                                 width: 100
                                 height: 100
-                                source: "qrc:/qtquickplugin/images/template_image.png"
+                                source: "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg"
                                 fillMode: Image.PreserveAspectFit
                                 Layout.preferredHeight: 16
                                 Layout.preferredWidth: 16
@@ -368,7 +368,7 @@ Item {
                                 id: image6
                                 width: 100
                                 height: 100
-                                source: "qrc:/qtquickplugin/images/template_image.png"
+                                source: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
                                 fillMode: Image.PreserveAspectFit
                                 Layout.preferredWidth: 16
                                 Layout.preferredHeight: 16
@@ -390,7 +390,7 @@ Item {
                                 id: image7
                                 width: 100
                                 height: 100
-                                source: "qrc:/qtquickplugin/images/template_image.png"
+                                source: "qrc:/qt/qml/zametki/assets/icons/header/more.svg"
                                 fillMode: Image.PreserveAspectFit
                                 Layout.preferredWidth: 16
                                 Layout.preferredHeight: 16
