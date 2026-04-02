@@ -312,6 +312,7 @@ Item {
                     width: mainContentScroll.width
 
                     RowLayout {
+                        Layout.rightMargin: 24
 
                         ColumnLayout {
                             id: columnLayout4
@@ -340,9 +341,20 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        Image {
-                            Layout.preferredHeight: 32
-                            Layout.preferredWidth: 32
+                        Rectangle {
+                            color: root.colorSurface
+                            radius: 6
+                            Layout.preferredHeight: doneText.implicitHeight + 20
+                            Layout.preferredWidth: doneText.implicitWidth + 20
+                            Text {
+                                id: doneText
+                                text: "Done"
+                                anchors.centerIn: parent
+                                color: root.colorTextPrimary
+                                font.styleName: "Medium"
+                                font.pointSize: 14
+                                font.family: root.uiFontFamily
+                            }
                         }
                     }
 

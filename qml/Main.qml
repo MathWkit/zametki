@@ -139,7 +139,6 @@ Window {
                     Handlers.onMoreClicked();
                 }
             }
-
         }
 
         Loader {
