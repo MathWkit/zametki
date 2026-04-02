@@ -72,8 +72,30 @@ Window {
             onGraphClicked: {
                 Handlers.onGraphClicked();
             }
-            onSettingsClicked: {
-                Handlers.onSettingsClicked();
+            onProfileMenuItemClicked: function (actionKey) {
+                switch (actionKey) {
+                case "settings":
+                    Handlers.onSettingsClicked();
+                    break;
+                case "profile":
+                    console.log("Нажатие на Профиль");
+                    break;
+                case "sync-status":
+                    console.log("Нажатие на Статус синхронизации");
+                    break;
+                case "help":
+                    console.log("Нажатие на Помощь и справку");
+                    break;
+                case "hotkeys":
+                    console.log("Нажатие на Горячие клавиши");
+                    break;
+                case "logout":
+                    console.log("Нажатие на Выход");
+                    break;
+                default:
+                    console.log("Неизвестное действие меню профиля:", actionKey);
+                    break;
+                }
             }
             onFolderClicked: function (folderTitle) {
                 Handlers.onFolderClicked(folderTitle);
