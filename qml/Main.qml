@@ -161,10 +161,22 @@ Window {
             visible: window.searchViewVisible && !window.settingsViewVisible
             color: "#66000000"
             z: 200
+            readonly property real dialogWidth: 540
+            readonly property real dialogHeight: 430
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: window.searchViewVisible = false
+                onClicked: function (mouse) {
+                    const left = (searchOverlay.width - searchOverlay.dialogWidth) / 2;
+                    const top = (searchOverlay.height - searchOverlay.dialogHeight) / 2;
+                    const right = left + searchOverlay.dialogWidth;
+                    const bottom = top + searchOverlay.dialogHeight;
+                    const clickedOutsideDialog = mouse.x < left || mouse.x > right || mouse.y < top || mouse.y > bottom;
+
+                    if (clickedOutsideDialog) {
+                        window.searchViewVisible = false;
+                    }
+                }
             }
 
             Loader {
@@ -181,10 +193,22 @@ Window {
             visible: window.shareViewVisible && !window.settingsViewVisible
             color: "#66000000"
             z: 210
+            readonly property real dialogWidth: 540
+            readonly property real dialogHeight: 561
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: window.shareViewVisible = false
+                onClicked: function (mouse) {
+                    const left = (shareOverlay.width - shareOverlay.dialogWidth) / 2;
+                    const top = (shareOverlay.height - shareOverlay.dialogHeight) / 2;
+                    const right = left + shareOverlay.dialogWidth;
+                    const bottom = top + shareOverlay.dialogHeight;
+                    const clickedOutsideDialog = mouse.x < left || mouse.x > right || mouse.y < top || mouse.y > bottom;
+
+                    if (clickedOutsideDialog) {
+                        window.shareViewVisible = false;
+                    }
+                }
             }
 
             Loader {
