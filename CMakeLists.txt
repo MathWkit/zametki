@@ -41,6 +41,8 @@ qt_add_qml_module(appzametki
         qml/Main.qml
         qml/Search.qml
         qml/Settings.qml
+        qml/Share.qml
+        qml/Profile.qml
         qml/scripts/Handlers.mjs
         qml/scripts/Theme.js
         qml/components/FolderNoteList.qml
@@ -87,8 +89,6 @@ qt_add_qml_module(appzametki
         assets/icons/profile/keyboard.svg
         assets/icons/profile/logout.svg
         assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
-        QML_FILES qml/Search.qml
-        QML_FILES qml/Share.qml
 )
 
 set_target_properties(appzametki PROPERTIES

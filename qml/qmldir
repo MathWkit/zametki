@@ -3,3 +3,5 @@ Main 1.0 Main.qml
 Search 1.0 Search.qml
 Settings 1.0 Settings.qml
 SettingsWindow 1.0 SettingsWindow.qml
+Profile 1.0 Profile.qml
+Share 1.0 Share.qml

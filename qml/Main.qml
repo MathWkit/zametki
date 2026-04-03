@@ -12,6 +12,7 @@ Window {
     property bool settingsViewVisible: false
     property bool searchViewVisible: false
     property bool shareViewVisible: false
+    property bool profileViewVisible: false
     readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
     readonly property var selectedNotePathSegments: buildSelectedNotePathSegments(selectedItemKey)
 
@@ -87,7 +88,11 @@ Window {
                     window.settingsViewVisible = true;
                     break;
                 case "profile":
-                    console.log("Нажатие на Профиль");
+                    Handlers.onProfileClicked();
+                    window.searchViewVisible = false;
+                    window.shareViewVisible = false;
+                    window.settingsViewVisible = false;
+                    window.profileViewVisible = true;
                     break;
                 case "sync-status":
                     console.log("Нажатие на Статус синхронизации");
@@ -228,6 +233,52 @@ Window {
 
                 function onCloseClicked() {
                     window.shareViewVisible = false;
+                }
+            }
+        }
+
+        Rectangle {
+            id: profileOverlay
+            anchors.fill: parent
+            visible: window.profileViewVisible && !window.settingsViewVisible
+            color: "#66000000"
+            z: 220
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: function (mouse) {
+                    if (!profileLoader.item || !profileLoader.item.dialogItem) {
+                        return;
+                    }
+
+                    const dialog = profileLoader.item.dialogItem;
+                    const dialogPos = dialog.mapToItem(profileOverlay, 0, 0);
+                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
+
+                    if (clickedOutsideDialog) {
+                        window.profileViewVisible = false;
+                    }
+                }
+            }
+
+            Loader {
+                id: profileLoader
+                anchors.fill: parent
+                active: profileOverlay.visible
+                source: "Profile.qml"
+            }
+
+            Connections {
+                target: profileLoader.item
+                ignoreUnknownSignals: true
+
+                function onCloseClicked() {
+                    window.profileViewVisible = false;
+                }
+
+                function onLogoutClicked() {
+                    window.profileViewVisible = false;
+                    console.log("Logout clicked");
                 }
             }
         }
