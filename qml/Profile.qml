@@ -8,17 +8,12 @@ Item {
     anchors.fill: parent
     clip: false
 
-    // ===== STYLE PROPERTIES =====
-    readonly property string uiFontFamily: Palette.fontFamily
+    // ===== LAYOUT HELPERS =====
+    readonly property int avatarRadius: Palette.avatarBase / 2
+    readonly property int avatarSmallRadius: Palette.avatarSmall / 2
 
-    // ===== COLORS =====
-    property color colorBackground: Palette.backgroundWhite
-    property color colorSurface: Palette.surfaceColor
-    property color colorTextPrimary: Palette.textPrimary
-    property color colorTextSecondary: Palette.textSecondary
-    property color colorAccent: Palette.accentPrimary
-    property color colorBorder: Palette.borderSoft
-    property color colorDivider: Palette.dividerColor
+    // ===== ALIAS FOR CONVENIENCE =====
+    readonly property string fontFamily: Palette.fontFamily
 
     signal closeClicked
     signal logoutClicked
@@ -66,7 +61,7 @@ Item {
         id: mainRectangle
         width: Palette.dialogMaxWidth
         height: contentLayout.implicitHeight + Palette.spacingHuge
-        color: colorBackground
+        color: Palette.backgroundWhite
         radius: Palette.radiusXl
         anchors.centerIn: parent
 
@@ -84,9 +79,9 @@ Item {
 
                 Text {
                     text: "Профиль"
-                    color: colorTextPrimary
+                    color: Palette.textPrimary
                     font.pixelSize: Palette.fontSizeXl
-                    font.family: root.uiFontFamily
+                    font.family: root.fontFamily
                     font.styleName: "Bold"
                     Layout.fillWidth: true
                 }
@@ -105,9 +100,9 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: "✕"
-                        color: colorTextPrimary
+                        color: Palette.textPrimary
                         font.pixelSize: Palette.fontSizeLg
-                        font.family: root.uiFontFamily
+                        font.family: root.fontFamily
                     }
                 }
             }
@@ -116,7 +111,7 @@ Item {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
-                color: colorDivider
+                color: Palette.dividerColor
                 Layout.bottomMargin: Palette.spacingHuge
             }
 
@@ -128,8 +123,8 @@ Item {
 
                 Text {
                     text: "Текущий аккаунт"
-                    color: colorTextPrimary
-                    font.family: root.uiFontFamily
+                    color: Palette.textPrimary
+                    font.family: root.fontFamily
                     font.styleName: "SemiBold"
                     font.pixelSize: Palette.fontSizeMd
                 }
@@ -149,16 +144,16 @@ Item {
                         Rectangle {
                             Layout.preferredWidth: Palette.avatarBase
                             Layout.preferredHeight: Palette.avatarBase
-                            radius: Math.ceil(Palette.avatarBase / 2)
-                            color: colorAccent
+                            radius: root.avatarRadius
+                            color: Palette.accentPrimary
                             clip: true
 
                             Text {
                                 anchors.centerIn: parent
                                 text: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
-                                color: colorBackground
+                                color: Palette.backgroundWhite
                                 font.pixelSize: Palette.fontSizeXl
-                                font.family: root.uiFontFamily
+                                font.family: root.fontFamily
                                 font.styleName: "Bold"
                             }
                         }
@@ -170,8 +165,8 @@ Item {
 
                             Text {
                                 text: root.currentAccount.firstName + " " + root.currentAccount.lastName
-                                color: colorTextPrimary
-                                font.family: root.uiFontFamily
+                                color: Palette.textPrimary
+                                font.family: root.fontFamily
                                 font.styleName: "SemiBold"
                                 font.pixelSize: Palette.fontSizeMd
                                 Layout.fillWidth: true
@@ -180,8 +175,8 @@ Item {
 
                             Text {
                                 text: root.currentAccount.email
-                                color: colorTextSecondary
-                                font.family: root.uiFontFamily
+                                color: Palette.textSecondary
+                                font.family: root.fontFamily
                                 font.pixelSize: Palette.fontSizeSm
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
@@ -195,53 +190,42 @@ Item {
                     spacing: Palette.spacingXl
                     Layout.topMargin: Palette.spacingXl
 
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: Palette.buttonHeightBase
-                        color: colorBackground
-                        radius: Palette.radiusMd
-                        border.color: colorBorder
-                        border.width: 1
-
-                        TapHandler {
-                            onTapped: {
-                                console.log("Кнопка: Сменить Имя");
-                                root.changeNameClicked();
+                    Repeater {
+                        model: [
+                            {
+                                label: "Сменить Имя",
+                                signal: "changeNameClicked"
+                            },
+                            {
+                                label: "Сменить пароль",
+                                signal: "changePasswordClicked"
                             }
-                        }
+                        ]
 
-                        Text {
-                            anchors.centerIn: parent
-                            text: "Сменить Имя"
-                            color: colorTextPrimary
-                            font.family: root.uiFontFamily
-                            font.styleName: "SemiBold"
-                            font.pixelSize: Palette.fontSizeSm
-                        }
-                    }
+                        Rectangle {
+                            required property var modelData
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: Palette.buttonHeightBase
+                            color: Palette.backgroundWhite
+                            radius: Palette.radiusMd
+                            border.color: Palette.borderSoft
+                            border.width: 1
 
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: Palette.buttonHeightBase
-                        color: colorBackground
-                        radius: Palette.radiusMd
-                        border.color: colorBorder
-                        border.width: 1
-
-                        TapHandler {
-                            onTapped: {
-                                console.log("Кнопка: Сменить пароль");
-                                root.changePasswordClicked();
+                            TapHandler {
+                                onTapped: {
+                                    console.log("Кнопка: " + parent.modelData.label);
+                                    root[parent.modelData.signal]();
+                                }
                             }
-                        }
 
-                        Text {
-                            anchors.centerIn: parent
-                            text: "Сменить пароль"
-                            color: colorTextPrimary
-                            font.family: root.uiFontFamily
-                            font.styleName: "SemiBold"
-                            font.pixelSize: Palette.fontSizeSm
+                            Text {
+                                anchors.centerIn: parent
+                                text: parent.modelData.label
+                                color: Palette.textPrimary
+                                font.family: root.fontFamily
+                                font.styleName: "SemiBold"
+                                font.pixelSize: Palette.fontSizeSm
+                            }
                         }
                     }
                 }
@@ -259,16 +243,16 @@ Item {
 
                     Text {
                         text: "Аккаунты"
-                        color: colorTextPrimary
-                        font.family: root.uiFontFamily
+                        color: Palette.textPrimary
+                        font.family: root.fontFamily
                         font.styleName: "SemiBold"
                         font.pixelSize: Palette.fontSizeMd
                     }
 
                     Text {
                         text: "Switch between your local and work profiles"
-                        color: colorTextSecondary
-                        font.family: root.uiFontFamily
+                        color: Palette.textSecondary
+                        font.family: root.fontFamily
                         font.pixelSize: Palette.fontSizeSm
                         wrapMode: Text.WordWrap
                     }
@@ -281,7 +265,7 @@ Item {
                 Rectangle {
                     Layout.preferredWidth: 120
                     Layout.preferredHeight: Palette.buttonHeightBase
-                    color: colorAccent
+                    color: Palette.accentPrimary
                     radius: Palette.radiusMd
 
                     TapHandler {
@@ -294,8 +278,8 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: "Добавить"
-                        color: colorBackground
-                        font.family: root.uiFontFamily
+                        color: Palette.backgroundWhite
+                        font.family: root.fontFamily
                         font.styleName: "SemiBold"
                         font.pixelSize: Palette.fontSizeSm
                     }
@@ -324,7 +308,7 @@ Item {
                             Rectangle {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: Palette.avatarSmall + Palette.spacingLg + Palette.spacingLg
-                                color: modelData.isCurrent ? Palette.accentSidebar : colorSurface
+                                color: modelData.isCurrent ? Palette.accentSidebar : Palette.surfaceColor
                                 radius: Palette.radiusMd
 
                                 RowLayout {
@@ -336,16 +320,16 @@ Item {
                                     Rectangle {
                                         Layout.preferredWidth: Palette.avatarSmall
                                         Layout.preferredHeight: Palette.avatarSmall
-                                        radius: Math.ceil(Palette.avatarSmall / 2)
-                                        color: colorAccent
+                                        radius: root.avatarSmallRadius
+                                        color: Palette.accentPrimary
                                         clip: true
 
                                         Text {
                                             anchors.centerIn: parent
                                             text: getInitials(modelData.firstName, modelData.lastName)
-                                            color: colorBackground
+                                            color: Palette.backgroundWhite
                                             font.pixelSize: Palette.fontSizeSm
-                                            font.family: root.uiFontFamily
+                                            font.family: root.fontFamily
                                             font.styleName: "Bold"
                                         }
                                     }
@@ -356,16 +340,16 @@ Item {
 
                                         Text {
                                             text: modelData.firstName + " " + modelData.lastName
-                                            color: colorTextPrimary
-                                            font.family: root.uiFontFamily
+                                            color: Palette.textPrimary
+                                            font.family: root.fontFamily
                                             font.styleName: "SemiBold"
                                             font.pixelSize: Palette.fontSizeSm
                                         }
 
                                         Text {
                                             text: modelData.email
-                                            color: colorTextSecondary
-                                            font.family: root.uiFontFamily
+                                            color: Palette.textSecondary
+                                            font.family: root.fontFamily
                                             font.pixelSize: Palette.fontSizeXs
                                         }
                                     }
@@ -376,9 +360,9 @@ Item {
                                     Rectangle {
                                         Layout.preferredWidth: 85
                                         Layout.preferredHeight: Palette.buttonHeightBase
-                                        color: modelData.isCurrent ? colorAccent : colorBackground
+                                        color: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
                                         radius: 100
-                                        border.color: modelData.isCurrent ? colorAccent : colorBorder
+                                        border.color: modelData.isCurrent ? Palette.accentPrimary : Palette.borderSoft
                                         border.width: 1
 
                                         TapHandler {
@@ -393,8 +377,8 @@ Item {
                                         Text {
                                             anchors.centerIn: parent
                                             text: modelData.isCurrent ? "Текущий" : "Выбрать"
-                                            color: modelData.isCurrent ? colorBackground : colorTextPrimary
-                                            font.family: root.uiFontFamily
+                                            color: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
+                                            font.family: root.fontFamily
                                             font.styleName: "SemiBold"
                                             font.pixelSize: Palette.fontSizeXs
                                         }
@@ -410,7 +394,7 @@ Item {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
-                color: colorDivider
+                color: Palette.dividerColor
                 Layout.bottomMargin: Palette.spacingHuge
             }
 
@@ -421,8 +405,8 @@ Item {
 
                 Text {
                     text: "You can stay signed in to several accounts and switch instantly."
-                    color: colorTextSecondary
-                    font.family: root.uiFontFamily
+                    color: Palette.textSecondary
+                    font.family: root.fontFamily
                     font.pixelSize: Palette.fontSizeSm
                     wrapMode: Text.WordWrap
                     Layout.fillWidth: true
@@ -431,7 +415,7 @@ Item {
                 Rectangle {
                     Layout.preferredWidth: 100
                     Layout.preferredHeight: Palette.buttonHeightBase
-                    color: colorBackground
+                    color: Palette.backgroundWhite
                     radius: Palette.radiusMd
 
                     TapHandler {
@@ -445,7 +429,7 @@ Item {
                         anchors.centerIn: parent
                         text: "Log Out"
                         color: Palette.errorColor
-                        font.family: root.uiFontFamily
+                        font.family: root.fontFamily
                         font.styleName: "SemiBold"
                         font.pixelSize: Palette.fontSizeSm
                     }
