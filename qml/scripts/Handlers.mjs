@@ -43,3 +43,7 @@ export function onNoteClicked(noteTitle) {
 export function onFolderClicked(folderTitle) {
     console.log("Выбрана папка:", folderTitle);
 }
+
+export function onProfileClicked() {
+    console.log("Нажатие на Профиль");
+}
