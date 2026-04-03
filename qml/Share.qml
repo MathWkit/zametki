@@ -50,7 +50,10 @@ Item {
         color: "transparent"
         z: 999
         visible: rolePopup.visible
-        anchors.fill: parent
+        x: rectangle.x
+        y: rectangle.y
+        width: rectangle.width
+        height: rectangle.height
 
         TapHandler {
             onTapped: {

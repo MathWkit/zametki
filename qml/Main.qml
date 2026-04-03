@@ -172,11 +172,10 @@ Window {
                     if (!searchLoader.item || !searchLoader.item.dialogItem) {
                         return;
                     }
-                    
+
                     const dialog = searchLoader.item.dialogItem;
                     const dialogPos = dialog.mapToItem(searchOverlay, 0, 0);
-                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || 
-                                               mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
+                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
 
                     if (clickedOutsideDialog) {
                         window.searchViewVisible = false;
@@ -205,11 +204,10 @@ Window {
                     if (!shareLoader.item || !shareLoader.item.dialogItem) {
                         return;
                     }
-                    
+
                     const dialog = shareLoader.item.dialogItem;
                     const dialogPos = dialog.mapToItem(shareOverlay, 0, 0);
-                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || 
-                                               mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
+                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
 
                     if (clickedOutsideDialog) {
                         window.shareViewVisible = false;

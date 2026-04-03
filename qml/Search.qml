@@ -6,7 +6,6 @@ import "scripts/Theme.js" as Palette
 Item {
     id: root
     clip: true
-    layer.enabled: true
 
     readonly property Item dialogItem: dialog
     readonly property string uiFontFamily: "Inter"
@@ -111,7 +110,7 @@ Item {
                         Layout.rightMargin: 20
                         Layout.topMargin: 12
                         implicitHeight: 44
-                        color: mouseRecent1.containsMouse ? root.colorHover : "transparent"
+                        color: "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
@@ -152,8 +151,7 @@ Item {
                         MouseArea {
                             id: mouseRecent1
                             anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: false
                             acceptedButtons: Qt.NoButton
                         }
                     }
@@ -163,7 +161,7 @@ Item {
                         Layout.leftMargin: 20
                         Layout.rightMargin: 20
                         implicitHeight: 44
-                        color: mouseRecent2.containsMouse ? root.colorHover : "transparent"
+                        color: "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
@@ -204,8 +202,7 @@ Item {
                         MouseArea {
                             id: mouseRecent2
                             anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: false
                             acceptedButtons: Qt.NoButton
                         }
                     }
@@ -226,7 +223,7 @@ Item {
                         Layout.rightMargin: 20
                         Layout.topMargin: 12
                         implicitHeight: 36
-                        color: mouseFolder.containsMouse ? root.colorHover : "transparent"
+                        color: "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
@@ -254,8 +251,7 @@ Item {
                         MouseArea {
                             id: mouseFolder
                             anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: false
                             acceptedButtons: Qt.NoButton
                         }
                     }
@@ -276,7 +272,7 @@ Item {
                         Layout.rightMargin: 20
                         Layout.topMargin: 12
                         implicitHeight: 36
-                        color: mouseCmd1.containsMouse ? root.colorHover : "transparent"
+                        color: "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
@@ -303,8 +299,7 @@ Item {
                         MouseArea {
                             id: mouseCmd1
                             anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: false
                             acceptedButtons: Qt.NoButton
                         }
                     }
@@ -315,7 +310,7 @@ Item {
                         Layout.rightMargin: 20
                         Layout.topMargin: 12
                         implicitHeight: 36
-                        color: mouseCmd2.containsMouse ? root.colorHover : "transparent"
+                        color: "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
@@ -342,8 +337,7 @@ Item {
                         MouseArea {
                             id: mouseCmd2
                             anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: false
                             acceptedButtons: Qt.NoButton
                         }
                     }
