@@ -23,9 +23,9 @@ Item {
 
     // ===== STATE FOR ROLES =====
     property var peopleRoles: ({
-        "alex1": "Owner",
-        "alex2": "Owner"
-    })
+            "alex1": "Owner",
+            "alex2": "Owner"
+        })
 
     property bool isPopupClosing: false
 
@@ -75,7 +75,7 @@ Item {
         property string roleSelected: ""
 
         TapHandler {
-            onTapped: (eventPoint) => {
+            onTapped: eventPoint => {
                 // Prevent clicks on popup from closing it
                 eventPoint.accepted = true;
             }

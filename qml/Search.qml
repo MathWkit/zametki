@@ -26,6 +26,7 @@ Item {
         border.width: 1
         border.color: root.colorDivider
         anchors.centerIn: parent
+
         antialiasing: true
 
         ColumnLayout {
@@ -34,10 +35,10 @@ Item {
 
             Rectangle {
                 Layout.fillWidth: true
-                Layout.leftMargin: 12
-                Layout.rightMargin: 12
-                Layout.topMargin: 12
-                Layout.bottomMargin: 12
+                Layout.leftMargin: 20
+                Layout.rightMargin: 20
+                Layout.topMargin: 16
+                Layout.bottomMargin: 16
                 implicitHeight: 40
                 color: root.colorSurface
                 radius: root.rowRadius
@@ -46,8 +47,8 @@ Item {
 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
+                    anchors.leftMargin: 14
+                    anchors.rightMargin: 14
                     spacing: 10
 
                     Image {
@@ -66,7 +67,10 @@ Item {
                         placeholderTextColor: root.colorTextSecondary
                         font.pixelSize: 14
                         font.family: root.uiFontFamily
-                        background: Item {}
+                        background: Rectangle {
+                            color: "transparent"
+                            border.width: 0
+                        }
                     }
                 }
             }
@@ -96,23 +100,23 @@ Item {
                         font.pixelSize: 10
                         font.family: root.uiFontFamily
                         font.weight: Font.DemiBold
-                        Layout.leftMargin: 16
-                        Layout.topMargin: 12
+                        Layout.leftMargin: 24
+                        Layout.topMargin: 16
                     }
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.leftMargin: 12
-                        Layout.rightMargin: 12
-                        Layout.topMargin: 8
+                        Layout.leftMargin: 20
+                        Layout.rightMargin: 20
+                        Layout.topMargin: 12
                         implicitHeight: 44
                         color: mouseRecent1.containsMouse ? root.colorHover : "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.leftMargin: 10
-                            anchors.rightMargin: 10
+                            anchors.leftMargin: 14
+                            anchors.rightMargin: 14
                             spacing: 10
 
                             Image {
@@ -154,16 +158,16 @@ Item {
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.leftMargin: 12
-                        Layout.rightMargin: 12
+                        Layout.leftMargin: 20
+                        Layout.rightMargin: 20
                         implicitHeight: 44
                         color: mouseRecent2.containsMouse ? root.colorHover : "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.leftMargin: 10
-                            anchors.rightMargin: 10
+                            anchors.leftMargin: 14
+                            anchors.rightMargin: 14
                             spacing: 10
 
                             Image {
@@ -209,23 +213,23 @@ Item {
                         font.pixelSize: 10
                         font.family: root.uiFontFamily
                         font.weight: Font.DemiBold
-                        Layout.leftMargin: 16
-                        Layout.topMargin: 14
+                        Layout.leftMargin: 24
+                        Layout.topMargin: 18
                     }
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.leftMargin: 12
-                        Layout.rightMargin: 12
-                        Layout.topMargin: 8
+                        Layout.leftMargin: 20
+                        Layout.rightMargin: 20
+                        Layout.topMargin: 12
                         implicitHeight: 36
                         color: mouseFolder.containsMouse ? root.colorHover : "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.leftMargin: 10
-                            anchors.rightMargin: 10
+                            anchors.leftMargin: 14
+                            anchors.rightMargin: 14
                             spacing: 10
 
                             Image {
@@ -258,23 +262,23 @@ Item {
                         font.pixelSize: 10
                         font.family: root.uiFontFamily
                         font.weight: Font.DemiBold
-                        Layout.leftMargin: 16
-                        Layout.topMargin: 14
+                        Layout.leftMargin: 24
+                        Layout.topMargin: 18
                     }
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.leftMargin: 12
-                        Layout.rightMargin: 12
-                        Layout.topMargin: 8
+                        Layout.leftMargin: 20
+                        Layout.rightMargin: 20
+                        Layout.topMargin: 12
                         implicitHeight: 36
                         color: mouseCmd1.containsMouse ? root.colorHover : "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.leftMargin: 10
-                            anchors.rightMargin: 10
+                            anchors.leftMargin: 14
+                            anchors.rightMargin: 14
                             spacing: 10
 
                             Image {
@@ -302,16 +306,17 @@ Item {
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.leftMargin: 12
-                        Layout.rightMargin: 12
+                        Layout.leftMargin: 20
+                        Layout.rightMargin: 20
+                        Layout.topMargin: 12
                         implicitHeight: 36
                         color: mouseCmd2.containsMouse ? root.colorHover : "transparent"
                         radius: root.rowRadius
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.leftMargin: 10
-                            anchors.rightMargin: 10
+                            anchors.leftMargin: 14
+                            anchors.rightMargin: 14
                             spacing: 10
 
                             Image {
