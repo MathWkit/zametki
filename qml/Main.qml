@@ -7,7 +7,7 @@ import "scripts/Handlers.mjs" as Handlers
 
 Window {
     id: window
-    property bool authenticated: false
+    property bool authViewVisible: false
     property bool useDarkAuthTheme: false
     property string selectedItemKey: ""
     property bool sidebarVisible: true
@@ -282,6 +282,13 @@ Window {
                     window.profileViewVisible = false;
                     console.log("Logout clicked");
                 }
+
+                function onAddAccountClicked() {
+                    window.authViewVisible = true;
+                    if (authOverlay) {
+                        authOverlay.mode = 0;
+                    }
+                }
             }
         }
 
@@ -309,25 +316,25 @@ Window {
         AuthPage {
             id: authOverlay
             anchors.fill: parent
-            visible: !window.authenticated
+            visible: window.authViewVisible
             z: 9999
             fontFamily: interFont.name
             darkTheme: window.useDarkAuthTheme
             onLoginRequested: function (email, password) {
                 console.log("Login requested:", email, "password length:", password.length);
-                window.authenticated = true;
+                window.authViewVisible = false;
             }
             onRegisterRequested: function (name, email, password) {
                 console.log("Register requested:", name, email, "password length:", password.length);
-                window.authenticated = true;
+                window.authViewVisible = false;
             }
             onGoogleAuthRequested: {
                 console.log("Google auth requested");
-                window.authenticated = true;
+                window.authViewVisible = false;
             }
             onAppleAuthRequested: {
                 console.log("Apple auth requested");
-                window.authenticated = true;
+                window.authViewVisible = false;
             }
         }
     }

@@ -30,6 +30,11 @@ qt_add_executable(appzametki
     include/filecreator.h
 )
 
+set_source_files_properties(
+    qml/scripts/ThemeSingleton.qml
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE
+)
+
 target_include_directories(appzametki
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
@@ -46,7 +51,7 @@ qt_add_qml_module(appzametki
         qml/Profile.qml
         qml/scripts/Handlers.mjs
         qml/scripts/Theme.js
-        qml/scripts/Theme.qml
+        qml/scripts/ThemeSingleton.qml
         qml/scripts/DesignTokens.js
         qml/components/FolderNoteList.qml
         qml/components/SidebarPanel.qml

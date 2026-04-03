@@ -15,18 +15,18 @@ Item {
 
     signal loginRequested(string email, string password)
     signal registerRequested(string name, string email, string password)
-    signal googleAuthRequested()
-    signal appleAuthRequested()
+    signal googleAuthRequested
+    signal appleAuthRequested
 
-    readonly property color pageBackground: darkTheme ? "#070B12" : Palette.backgroundLight
-    readonly property color cardColor: darkTheme ? "#111827" : Palette.backgroundWhite
-    readonly property color cardBorderColor: darkTheme ? "#1F2937" : Palette.border
-    readonly property color headingColor: darkTheme ? "#E5E7EB" : Palette.textPrimary
-    readonly property color subtitleColor: darkTheme ? "#9CA3AF" : Palette.textSecondary
-    readonly property color tabContainerColor: darkTheme ? "#0B1220" : Palette.surfaceColor
-    readonly property color tabSelectedColor: darkTheme ? "#1E40AF" : Palette.accentPrimary
-    readonly property color tabHoverColor: darkTheme ? "#1F2937" : "#E2E8F0"
-    readonly property color tabTextColor: darkTheme ? "#E5E7EB" : Palette.textPrimary
+    readonly property color pageBackground: darkTheme ? Palette.authPageBackgroundDark : Palette.backgroundLight
+    readonly property color cardColor: darkTheme ? Palette.authCardBackgroundDark : Palette.backgroundWhite
+    readonly property color cardBorderColor: darkTheme ? Palette.authCardBorderDark : Palette.border
+    readonly property color headingColor: darkTheme ? Palette.authPrimaryTextDark : Palette.textPrimary
+    readonly property color subtitleColor: darkTheme ? Palette.authSecondaryTextDark : Palette.textSecondary
+    readonly property color tabContainerColor: darkTheme ? Palette.authTabContainerDark : Palette.surfaceColor
+    readonly property color tabSelectedColor: darkTheme ? Palette.authTabSelectedDark : Palette.accentPrimary
+    readonly property color tabHoverColor: darkTheme ? Palette.authTabHoverDark : Palette.selected
+    readonly property color tabTextColor: darkTheme ? Palette.authPrimaryTextDark : Palette.textPrimary
 
     Rectangle {
         anchors.fill: parent
@@ -35,26 +35,26 @@ Item {
 
     Rectangle {
         id: card
-        width: Math.min(Math.max(320, root.width * 0.42), 400)
-        implicitHeight: contentLayout.implicitHeight + 32
+        width: Math.min(Math.max(Palette.authCardMinWidth, root.width * 0.42), Palette.authCardMaxWidth)
+        implicitHeight: contentLayout.implicitHeight + (Palette.spacingXxl * 2)
         anchors.centerIn: parent
         color: root.cardColor
-        radius: 12
+        radius: Palette.authCardRadius
         border.width: 1
         border.color: root.cardBorderColor
 
         ColumnLayout {
             id: contentLayout
             anchors.fill: parent
-            anchors.margins: 16
-            spacing: 16
+            anchors.margins: Palette.spacingXxl
+            spacing: Palette.spacingXxl
 
             Text {
                 text: qsTr("Аккаунт")
                 Layout.fillWidth: true
                 color: root.headingColor
                 font.family: root.fontFamily
-                font.pixelSize: 22
+                font.pixelSize: Palette.authTitleSize
                 font.weight: Font.DemiBold
             }
 
@@ -63,18 +63,18 @@ Item {
                 Layout.fillWidth: true
                 color: root.subtitleColor
                 font.family: root.fontFamily
-                font.pixelSize: 12
+                font.pixelSize: Palette.fontSizeSm
             }
 
             TabBar {
                 id: modeTabs
                 Layout.fillWidth: true
                 currentIndex: root.mode
-                spacing: 4
+                spacing: Palette.spacingSm
 
                 background: Rectangle {
                     color: root.tabContainerColor
-                    radius: 10
+                    radius: Palette.radiusXl
                 }
 
                 onCurrentIndexChanged: root.mode = currentIndex
@@ -83,7 +83,7 @@ Item {
                     id: loginTab
                     text: qsTr("Вход")
                     font.family: root.fontFamily
-                    font.pixelSize: 13
+                    font.pixelSize: Palette.fontSizeBase
                     hoverEnabled: true
 
                     contentItem: Text {
@@ -91,11 +91,11 @@ Item {
                         font: loginTab.font
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: loginTab.checked ? "#FFFFFF" : root.tabTextColor
+                        color: loginTab.checked ? Palette.backgroundWhite : root.tabTextColor
                     }
 
                     background: Rectangle {
-                        radius: 8
+                        radius: Palette.radiusLg
                         color: loginTab.checked ? root.tabSelectedColor : (loginTab.hovered ? root.tabHoverColor : "transparent")
                     }
                 }
@@ -104,7 +104,7 @@ Item {
                     id: registerTab
                     text: qsTr("Регистрация")
                     font.family: root.fontFamily
-                    font.pixelSize: 13
+                    font.pixelSize: Palette.fontSizeBase
                     hoverEnabled: true
 
                     contentItem: Text {
@@ -112,11 +112,11 @@ Item {
                         font: registerTab.font
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: registerTab.checked ? "#FFFFFF" : root.tabTextColor
+                        color: registerTab.checked ? Palette.backgroundWhite : root.tabTextColor
                     }
 
                     background: Rectangle {
-                        radius: 8
+                        radius: Palette.radiusLg
                         color: registerTab.checked ? root.tabSelectedColor : (registerTab.hovered ? root.tabHoverColor : "transparent")
                     }
                 }

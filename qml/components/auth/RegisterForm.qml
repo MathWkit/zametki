@@ -15,28 +15,28 @@ Item {
     property bool showAppleAuth: Qt.platform.os === "osx"
 
     signal registerRequested(string name, string email, string password)
-    signal googleAuthRequested()
-    signal appleAuthRequested()
-    signal switchToLoginRequested()
+    signal googleAuthRequested
+    signal appleAuthRequested
+    signal switchToLoginRequested
 
     property string nameError: ""
     property string emailError: ""
     property string passwordError: ""
     property string confirmPasswordError: ""
 
-    readonly property color textColor: darkTheme ? "#E5E7EB" : Palette.textPrimary
-    readonly property color secondaryTextColor: darkTheme ? "#94A3B8" : Palette.textSecondary
-    readonly property color inputBackground: darkTheme ? "#0B1220" : Palette.backgroundWhite
-    readonly property color inputBorder: darkTheme ? "#334155" : "#D1D5DB"
-    readonly property color inputBorderHover: darkTheme ? "#475569" : "#9CA3AF"
-    readonly property color accentColor: darkTheme ? "#60A5FA" : Palette.accentPrimary
-    readonly property color accentHoverColor: darkTheme ? "#3B82F6" : "#0A67C7"
-    readonly property color accentPressedColor: darkTheme ? "#2563EB" : "#08539F"
+    readonly property color textColor: darkTheme ? Palette.authPrimaryTextDark : Palette.textPrimary
+    readonly property color secondaryTextColor: darkTheme ? Palette.authSecondaryTextDark : Palette.textSecondary
+    readonly property color inputBackground: darkTheme ? Palette.authTabContainerDark : Palette.backgroundWhite
+    readonly property color inputBorder: darkTheme ? Palette.authInputBorderDark : Palette.authInputBorderLight
+    readonly property color inputBorderHover: darkTheme ? Palette.authInputBorderHoverDark : Palette.authInputBorderHoverLight
+    readonly property color accentColor: darkTheme ? Palette.authAccentDark : Palette.accentPrimary
+    readonly property color accentHoverColor: darkTheme ? Palette.authAccentHoverDark : Palette.authAccentHoverLight
+    readonly property color accentPressedColor: darkTheme ? Palette.authAccentPressedDark : Palette.authAccentPressedLight
     readonly property color errorColor: Palette.errorColor
-    readonly property color linkColor: darkTheme ? "#93C5FD" : Palette.accentPrimary
-    readonly property color socialButtonColor: darkTheme ? "#0F172A" : Palette.backgroundWhite
-    readonly property color socialButtonBorderColor: darkTheme ? "#334155" : "#D1D5DB"
-    readonly property color socialButtonHoverColor: darkTheme ? "#111D34" : "#F8FAFC"
+    readonly property color linkColor: darkTheme ? Palette.authLinkDark : Palette.accentPrimary
+    readonly property color socialButtonColor: darkTheme ? Palette.authSocialButtonDark : Palette.backgroundWhite
+    readonly property color socialButtonBorderColor: darkTheme ? Palette.authInputBorderDark : Palette.authInputBorderLight
+    readonly property color socialButtonHoverColor: darkTheme ? Palette.authSocialButtonHoverDark : Palette.authSocialButtonHoverLight
 
     function validateAndSubmit() {
         const userName = nameField.text.trim();
@@ -74,14 +74,14 @@ Item {
         id: formLayout
         anchors.left: parent.left
         anchors.right: parent.right
-        spacing: 12
+        spacing: Palette.spacingXl
 
         Text {
             text: qsTr("Регистрация")
             Layout.fillWidth: true
             color: root.textColor
             font.family: root.fontFamily
-            font.pixelSize: 20
+            font.pixelSize: Palette.fontSizeXxl
             font.weight: Font.DemiBold
         }
 
@@ -90,7 +90,7 @@ Item {
             Layout.fillWidth: true
             color: root.secondaryTextColor
             font.family: root.fontFamily
-            font.pixelSize: 12
+            font.pixelSize: Palette.fontSizeSm
         }
 
         TextField {
@@ -101,12 +101,12 @@ Item {
             hoverEnabled: true
             color: root.textColor
             font.family: root.fontFamily
-            font.pixelSize: 14
+            font.pixelSize: Palette.fontSizeMd
             placeholderTextColor: root.secondaryTextColor
-            leftPadding: 12
-            rightPadding: 12
-            topPadding: 10
-            bottomPadding: 10
+            leftPadding: Palette.spacingXl
+            rightPadding: Palette.spacingXl
+            topPadding: Palette.authFieldVerticalPadding
+            bottomPadding: Palette.authFieldVerticalPadding
             onTextChanged: {
                 if (root.nameError.length > 0) {
                     root.nameError = "";
@@ -115,7 +115,7 @@ Item {
             onAccepted: emailField.forceActiveFocus()
 
             background: Rectangle {
-                radius: 8
+                radius: Palette.radiusLg
                 color: root.inputBackground
                 border.width: nameField.activeFocus ? 2 : 1
                 border.color: root.nameError.length > 0 ? root.errorColor : (nameField.activeFocus ? root.accentColor : (nameField.hovered ? root.inputBorderHover : root.inputBorder))
@@ -128,7 +128,7 @@ Item {
             color: root.errorColor
             Layout.fillWidth: true
             font.family: root.fontFamily
-            font.pixelSize: 12
+            font.pixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
         }
 
@@ -140,12 +140,12 @@ Item {
             hoverEnabled: true
             color: root.textColor
             font.family: root.fontFamily
-            font.pixelSize: 14
+            font.pixelSize: Palette.fontSizeMd
             placeholderTextColor: root.secondaryTextColor
-            leftPadding: 12
-            rightPadding: 12
-            topPadding: 10
-            bottomPadding: 10
+            leftPadding: Palette.spacingXl
+            rightPadding: Palette.spacingXl
+            topPadding: Palette.authFieldVerticalPadding
+            bottomPadding: Palette.authFieldVerticalPadding
             onTextChanged: {
                 if (root.emailError.length > 0) {
                     root.emailError = "";
@@ -154,7 +154,7 @@ Item {
             onAccepted: passwordField.forceActiveFocus()
 
             background: Rectangle {
-                radius: 8
+                radius: Palette.radiusLg
                 color: root.inputBackground
                 border.width: emailField.activeFocus ? 2 : 1
                 border.color: root.emailError.length > 0 ? root.errorColor : (emailField.activeFocus ? root.accentColor : (emailField.hovered ? root.inputBorderHover : root.inputBorder))
@@ -167,7 +167,7 @@ Item {
             color: root.errorColor
             Layout.fillWidth: true
             font.family: root.fontFamily
-            font.pixelSize: 12
+            font.pixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
         }
 
@@ -180,12 +180,12 @@ Item {
             hoverEnabled: true
             color: root.textColor
             font.family: root.fontFamily
-            font.pixelSize: 14
+            font.pixelSize: Palette.fontSizeMd
             placeholderTextColor: root.secondaryTextColor
-            leftPadding: 12
-            rightPadding: 12
-            topPadding: 10
-            bottomPadding: 10
+            leftPadding: Palette.spacingXl
+            rightPadding: Palette.spacingXl
+            topPadding: Palette.authFieldVerticalPadding
+            bottomPadding: Palette.authFieldVerticalPadding
             onTextChanged: {
                 if (root.passwordError.length > 0) {
                     root.passwordError = "";
@@ -197,7 +197,7 @@ Item {
             onAccepted: confirmPasswordField.forceActiveFocus()
 
             background: Rectangle {
-                radius: 8
+                radius: Palette.radiusLg
                 color: root.inputBackground
                 border.width: passwordField.activeFocus ? 2 : 1
                 border.color: root.passwordError.length > 0 ? root.errorColor : (passwordField.activeFocus ? root.accentColor : (passwordField.hovered ? root.inputBorderHover : root.inputBorder))
@@ -210,7 +210,7 @@ Item {
             color: root.errorColor
             Layout.fillWidth: true
             font.family: root.fontFamily
-            font.pixelSize: 12
+            font.pixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
         }
 
@@ -223,12 +223,12 @@ Item {
             hoverEnabled: true
             color: root.textColor
             font.family: root.fontFamily
-            font.pixelSize: 14
+            font.pixelSize: Palette.fontSizeMd
             placeholderTextColor: root.secondaryTextColor
-            leftPadding: 12
-            rightPadding: 12
-            topPadding: 10
-            bottomPadding: 10
+            leftPadding: Palette.spacingXl
+            rightPadding: Palette.spacingXl
+            topPadding: Palette.authFieldVerticalPadding
+            bottomPadding: Palette.authFieldVerticalPadding
             onTextChanged: {
                 if (root.confirmPasswordError.length > 0) {
                     root.confirmPasswordError = "";
@@ -237,7 +237,7 @@ Item {
             onAccepted: root.validateAndSubmit()
 
             background: Rectangle {
-                radius: 8
+                radius: Palette.radiusLg
                 color: root.inputBackground
                 border.width: confirmPasswordField.activeFocus ? 2 : 1
                 border.color: root.confirmPasswordError.length > 0 ? root.errorColor : (confirmPasswordField.activeFocus ? root.accentColor : (confirmPasswordField.hovered ? root.inputBorderHover : root.inputBorder))
@@ -250,45 +250,45 @@ Item {
             color: root.errorColor
             Layout.fillWidth: true
             font.family: root.fontFamily
-            font.pixelSize: 12
+            font.pixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
         }
 
         Button {
             id: createButton
             Layout.fillWidth: true
-            Layout.topMargin: 4
+            Layout.topMargin: Palette.spacingSm
             text: qsTr("Создать аккаунт")
             hoverEnabled: true
             font.family: root.fontFamily
-            font.pixelSize: 14
+            font.pixelSize: Palette.fontSizeMd
             onClicked: root.validateAndSubmit()
 
             contentItem: Text {
                 text: createButton.text
-                color: "#FFFFFF"
+                color: Palette.backgroundWhite
                 font.family: root.fontFamily
-                font.pixelSize: 14
+                font.pixelSize: Palette.fontSizeMd
                 font.weight: Font.DemiBold
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                implicitHeight: 40
-                radius: 8
+                implicitHeight: Palette.buttonHeightLarge
+                radius: Palette.radiusLg
                 color: createButton.down ? root.accentPressedColor : (createButton.hovered ? root.accentHoverColor : root.accentColor)
             }
         }
 
         Item {
             Layout.fillWidth: true
-            implicitHeight: 20
+            implicitHeight: Palette.spacingHuge
 
             Rectangle {
                 anchors.left: parent.left
                 anchors.right: dividerLabel.left
-                anchors.rightMargin: 8
+                anchors.rightMargin: Palette.spacingLg
                 anchors.verticalCenter: parent.verticalCenter
                 height: 1
                 color: root.inputBorder
@@ -300,12 +300,12 @@ Item {
                 text: qsTr("или")
                 color: root.secondaryTextColor
                 font.family: root.fontFamily
-                font.pixelSize: 12
+                font.pixelSize: Palette.fontSizeSm
             }
 
             Rectangle {
                 anchors.left: dividerLabel.right
-                anchors.leftMargin: 8
+                anchors.leftMargin: Palette.spacingLg
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 height: 1
@@ -320,22 +320,22 @@ Item {
             text: qsTr("Зарегистрироваться через Google")
             hoverEnabled: true
             font.family: root.fontFamily
-            font.pixelSize: 13
+            font.pixelSize: Palette.fontSizeBase
             onClicked: root.googleAuthRequested()
 
             contentItem: Text {
                 text: googleAuthButton.text
                 color: root.textColor
                 font.family: root.fontFamily
-                font.pixelSize: 13
+                font.pixelSize: Palette.fontSizeBase
                 font.weight: Font.DemiBold
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                implicitHeight: 38
-                radius: 8
+                implicitHeight: Palette.authSocialButtonHeight
+                radius: Palette.radiusLg
                 color: googleAuthButton.hovered ? root.socialButtonHoverColor : root.socialButtonColor
                 border.width: 1
                 border.color: root.socialButtonBorderColor
@@ -349,22 +349,22 @@ Item {
             text: qsTr("Зарегистрироваться через Apple ID")
             hoverEnabled: true
             font.family: root.fontFamily
-            font.pixelSize: 13
+            font.pixelSize: Palette.fontSizeBase
             onClicked: root.appleAuthRequested()
 
             contentItem: Text {
                 text: appleAuthButton.text
                 color: root.textColor
                 font.family: root.fontFamily
-                font.pixelSize: 13
+                font.pixelSize: Palette.fontSizeBase
                 font.weight: Font.DemiBold
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                implicitHeight: 38
-                radius: 8
+                implicitHeight: Palette.authSocialButtonHeight
+                radius: Palette.radiusLg
                 color: appleAuthButton.hovered ? root.socialButtonHoverColor : root.socialButtonColor
                 border.width: 1
                 border.color: root.socialButtonBorderColor
@@ -383,7 +383,7 @@ Item {
                 text: loginLinkButton.text
                 color: root.linkColor
                 font.family: root.fontFamily
-                font.pixelSize: 12
+                font.pixelSize: Palette.fontSizeSm
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 font.underline: loginLinkButton.hovered
