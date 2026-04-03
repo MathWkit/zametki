@@ -10,6 +10,8 @@ Window {
     property string selectedItemKey: ""
     property bool sidebarVisible: true
     property bool settingsViewVisible: false
+    property bool searchViewVisible: false
+    property bool shareViewVisible: false
     readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
     readonly property var selectedNotePathSegments: buildSelectedNotePathSegments(selectedItemKey)
 
@@ -66,6 +68,9 @@ Window {
             noteTitles: AppState.noteTitles
             onSearchClicked: {
                 Handlers.onSearchClicked();
+                window.settingsViewVisible = false;
+                window.searchViewVisible = true;
+                window.shareViewVisible = false;
             }
             onNewNoteClicked: {
                 Handlers.onNewNoteClicked(AppState);
@@ -77,6 +82,8 @@ Window {
                 switch (actionKey) {
                 case "settings":
                     Handlers.onSettingsClicked();
+                    window.searchViewVisible = false;
+                    window.shareViewVisible = false;
                     window.settingsViewVisible = true;
                     break;
                 case "profile":
@@ -131,6 +138,9 @@ Window {
                 }
                 onShareClicked: {
                     Handlers.onShareClicked();
+                    window.settingsViewVisible = false;
+                    window.shareViewVisible = true;
+                    window.searchViewVisible = false;
                 }
                 onFavoriteClicked: {
                     Handlers.onFavoriteClicked();
@@ -147,6 +157,79 @@ Window {
             active: window.settingsViewVisible
             visible: window.settingsViewVisible
             source: "Settings.qml"
+        }
+
+        Rectangle {
+            id: searchOverlay
+            anchors.fill: parent
+            visible: window.searchViewVisible && !window.settingsViewVisible
+            color: "#66000000"
+            z: 200
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: function (mouse) {
+                    if (!searchLoader.item || !searchLoader.item.dialogItem) {
+                        return;
+                    }
+
+                    const dialog = searchLoader.item.dialogItem;
+                    const dialogPos = dialog.mapToItem(searchOverlay, 0, 0);
+                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
+
+                    if (clickedOutsideDialog) {
+                        window.searchViewVisible = false;
+                    }
+                }
+            }
+
+            Loader {
+                id: searchLoader
+                anchors.fill: parent
+                active: searchOverlay.visible
+                source: "Search.qml"
+            }
+        }
+
+        Rectangle {
+            id: shareOverlay
+            anchors.fill: parent
+            visible: window.shareViewVisible && !window.settingsViewVisible
+            color: "#66000000"
+            z: 210
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: function (mouse) {
+                    if (!shareLoader.item || !shareLoader.item.dialogItem) {
+                        return;
+                    }
+
+                    const dialog = shareLoader.item.dialogItem;
+                    const dialogPos = dialog.mapToItem(shareOverlay, 0, 0);
+                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
+
+                    if (clickedOutsideDialog) {
+                        window.shareViewVisible = false;
+                    }
+                }
+            }
+
+            Loader {
+                id: shareLoader
+                anchors.fill: parent
+                active: shareOverlay.visible
+                source: "Share.qml"
+            }
+
+            Connections {
+                target: shareLoader.item
+                ignoreUnknownSignals: true
+
+                function onCloseClicked() {
+                    window.shareViewVisible = false;
+                }
+            }
         }
 
         Connections {

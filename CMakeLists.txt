@@ -66,6 +66,11 @@ qt_add_qml_module(appzametki
         assets/icons/list/folder-selected.svg
         assets/icons/list/open-folder.svg
         assets/icons/list/open-folder-selected.svg
+        assets/icons/share/close-btn.svg
+        assets/icons/share/copy.svg
+        assets/icons/share/link.svg
+        assets/icons/share/people.svg
+        assets/icons/unused/open-bracket.svg
         assets/icons/settings/account.svg
         assets/icons/settings/application.svg
         assets/icons/settings/search.svg

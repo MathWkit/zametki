@@ -4,9 +4,8 @@ import QtQuick.Layouts 1.15
 
 Item {
     id: item1
-    width: 1920
-    height: 1080
-    clip: true
+    anchors.fill: parent
+    clip: false
 
     // ===== COLORS =====
     property color colorBackground: "#ffffff"
@@ -20,6 +19,109 @@ Item {
     signal doneClicked
     signal copyClicked
     signal closeClicked
+
+    readonly property Item dialogItem: rectangle
+
+    // ===== STATE FOR ROLES =====
+    property var peopleRoles: ({
+            "alex1": "Owner",
+            "alex2": "Owner"
+        })
+
+    property bool isPopupClosing: false
+
+    function changeRole(personId, newRole) {
+        var updated = Object.assign({}, peopleRoles);
+        updated[personId] = newRole;
+        peopleRoles = updated;
+    }
+
+    Timer {
+        id: popupCloseTimer
+        interval: 200
+        onTriggered: {
+            isPopupClosing = false;
+        }
+    }
+
+    // ===== OVERLAY FOR POPUP =====
+    Rectangle {
+        id: popupOverlay
+        color: "transparent"
+        z: 999
+        visible: rolePopup.visible
+        x: rectangle.x
+        y: rectangle.y
+        width: rectangle.width
+        height: rectangle.height
+
+        TapHandler {
+            onTapped: {
+                rolePopup.visible = false;
+                isPopupClosing = true;
+                popupCloseTimer.start();
+            }
+        }
+    }
+
+    // ===== ROLE SELECTOR POPUP =====
+    Rectangle {
+        id: rolePopup
+        color: colorBackground
+        border.color: "#e0e0e0"
+        border.width: 1
+        radius: 8
+        z: 1000
+        width: 120
+        height: 128
+        visible: false
+        clip: true
+
+        property string personId: ""
+        property string roleSelected: ""
+
+        TapHandler {
+            onTapped: eventPoint => {
+                // Prevent clicks on popup from closing it
+                eventPoint.accepted = true;
+            }
+        }
+
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 8
+            spacing: 4
+
+            Repeater {
+                model: ["Owner", "Editor", "Viewer"]
+
+                Rectangle {
+                    id: roleButton
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 32
+                    color: rolePopup.roleSelected === modelData ? colorAccent : "transparent"
+                    radius: 4
+
+                    TapHandler {
+                        onTapped: {
+                            changeRole(rolePopup.personId, modelData);
+                            rolePopup.visible = false;
+                            isPopupClosing = true;
+                            popupCloseTimer.start();
+                        }
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: modelData
+                        color: rolePopup.roleSelected === modelData ? colorBackground : colorTextPrimary
+                        font.family: "Inter"
+                        font.styleName: "SemiBold"
+                    }
+                }
+            }
+        }
+    }
 
     onSendClicked: {
         console.log("SEND LOGIC");
@@ -235,12 +337,24 @@ Item {
                             implicitWidth: ownerRow1.implicitWidth + 24
                             implicitHeight: 32
 
+                            TapHandler {
+                                onTapped: {
+                                    if (!isPopupClosing) {
+                                        rolePopup.personId = "alex1";
+                                        rolePopup.roleSelected = peopleRoles["alex1"];
+                                        rolePopup.x = parent.mapToItem(item1, 0, 0).x;
+                                        rolePopup.y = parent.mapToItem(item1, 0, parent.height).y;
+                                        rolePopup.visible = true;
+                                    }
+                                }
+                            }
+
                             RowLayout {
                                 id: ownerRow1
                                 anchors.centerIn: parent
                                 spacing: 6
                                 Text {
-                                    text: "Owner"
+                                    text: peopleRoles["alex1"]
                                     font.family: "Inter"
                                     font.styleName: "SemiBold"
                                 }
@@ -297,12 +411,24 @@ Item {
                             implicitWidth: ownerRow2.implicitWidth + 24
                             implicitHeight: 32
 
+                            TapHandler {
+                                onTapped: {
+                                    if (!isPopupClosing) {
+                                        rolePopup.personId = "alex2";
+                                        rolePopup.roleSelected = peopleRoles["alex2"];
+                                        rolePopup.x = parent.mapToItem(item1, 0, 0).x;
+                                        rolePopup.y = parent.mapToItem(item1, 0, parent.height).y;
+                                        rolePopup.visible = true;
+                                    }
+                                }
+                            }
+
                             RowLayout {
                                 id: ownerRow2
                                 anchors.centerIn: parent
                                 spacing: 6
                                 Text {
-                                    text: "Owner"
+                                    text: peopleRoles["alex2"]
                                     font.family: "Inter"
                                     font.styleName: "SemiBold"
                                 }
@@ -374,12 +500,24 @@ Item {
                             implicitWidth: viewerRow.implicitWidth + 24
                             implicitHeight: 32
 
+                            TapHandler {
+                                onTapped: {
+                                    if (!isPopupClosing) {
+                                        rolePopup.personId = "general";
+                                        rolePopup.roleSelected = peopleRoles["general"] || "Viewer";
+                                        rolePopup.x = parent.mapToItem(item1, 0, 0).x;
+                                        rolePopup.y = parent.mapToItem(item1, 0, parent.height).y;
+                                        rolePopup.visible = true;
+                                    }
+                                }
+                            }
+
                             RowLayout {
                                 id: viewerRow
                                 anchors.centerIn: parent
                                 spacing: 6
                                 Text {
-                                    text: "Viewer"
+                                    text: peopleRoles["general"] || "Viewer"
                                     font.family: "Inter"
                                     font.styleName: "SemiBold"
                                 }
