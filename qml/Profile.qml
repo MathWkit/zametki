@@ -13,7 +13,7 @@ Item {
 
     // ===== COLORS =====
     property color colorBackground: "#ffffff"
-    property color colorSurface: "#f1f5f9"
+    property color colorSurface: "#F1F5F9"
     property color colorTextPrimary: Palette.textPrimary
     property color colorTextSecondary: Palette.textSecondary
     property color colorAccent: "#0b74de"
@@ -90,7 +90,6 @@ Item {
                 }
 
                 Rectangle {
-                    color: colorSurface
                     radius: 6
                     Layout.preferredHeight: 36
                     Layout.preferredWidth: 36
@@ -130,45 +129,58 @@ Item {
                     font.pointSize: 14
                 }
 
-                RowLayout {
+                Rectangle {
                     Layout.fillWidth: true
-                    spacing: 12
+                    Layout.preferredHeight: currentAccountContent.implicitHeight + 24
+                    radius: 6
 
-                    // Avatar or Initials
-                    Rectangle {
-                        Layout.preferredWidth: 64
-                        Layout.preferredHeight: 64
-                        radius: 32
-                        color: colorAccent
-                        clip: true
+                    RowLayout {
+                        id: currentAccountContent
+                        anchors.fill: parent
+                        anchors.margins: 12
+                        spacing: 12
 
-                        Text {
-                            anchors.centerIn: parent
-                            text: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
-                            color: colorBackground
-                            font.pointSize: 18
-                            font.family: root.uiFontFamily
-                            font.styleName: "Bold"
-                        }
-                    }
+                        // Avatar or Initials
+                        Rectangle {
+                            Layout.preferredWidth: 64
+                            Layout.preferredHeight: 64
+                            radius: 32
+                            color: colorAccent
+                            clip: true
 
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: 2
-
-                        Text {
-                            text: root.currentAccount.firstName + " " + root.currentAccount.lastName
-                            color: colorTextPrimary
-                            font.family: root.uiFontFamily
-                            font.styleName: "SemiBold"
-                            font.pointSize: 14
+                            Text {
+                                anchors.centerIn: parent
+                                text: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
+                                color: colorBackground
+                                font.pointSize: 18
+                                font.family: root.uiFontFamily
+                                font.styleName: "Bold"
+                            }
                         }
 
-                        Text {
-                            text: root.currentAccount.email
-                            color: colorTextSecondary
-                            font.family: root.uiFontFamily
-                            font.pointSize: 12
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignLeft
+                            spacing: 2
+
+                            Text {
+                                text: root.currentAccount.firstName + " " + root.currentAccount.lastName
+                                color: colorTextPrimary
+                                font.family: root.uiFontFamily
+                                font.styleName: "SemiBold"
+                                font.pointSize: 14
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignLeft
+                            }
+
+                            Text {
+                                text: root.currentAccount.email
+                                color: colorTextSecondary
+                                font.family: root.uiFontFamily
+                                font.pointSize: 12
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignLeft
+                            }
                         }
                     }
                 }
@@ -181,7 +193,7 @@ Item {
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 36
-                        color: colorSurface
+                        color: "#FFFFFF"
                         radius: 6
                         border.color: colorBorder
                         border.width: 1
@@ -199,7 +211,7 @@ Item {
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 36
-                        color: colorSurface
+                        color: "#FFFFFF"
                         radius: 6
                         border.color: colorBorder
                         border.width: 1
@@ -290,7 +302,7 @@ Item {
                             Rectangle {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 68
-                                color: colorSurface
+                                color: modelData.isCurrent ? "#E6F0FF" : colorSurface
                                 radius: 6
 
                                 RowLayout {
@@ -396,10 +408,8 @@ Item {
                 Rectangle {
                     Layout.preferredWidth: 100
                     Layout.preferredHeight: 36
-                    color: colorSurface
+                    color: "#FFFFFF"
                     radius: 6
-                    border.color: colorBorder
-                    border.width: 1
 
                     TapHandler {
                         onTapped: root.logoutClicked()
@@ -408,7 +418,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: "Log Out"
-                        color: colorTextPrimary
+                        color: "#DC2626"
                         font.family: root.uiFontFamily
                         font.styleName: "SemiBold"
                         font.pointSize: 12
