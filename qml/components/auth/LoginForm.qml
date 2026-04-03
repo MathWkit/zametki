@@ -11,8 +11,12 @@ Item {
 
     property bool darkTheme: false
     property string fontFamily: "Inter"
+    property bool showGoogleAuth: true
+    property bool showAppleAuth: Qt.platform.os === "osx"
 
     signal loginRequested(string email, string password)
+    signal googleAuthRequested()
+    signal appleAuthRequested()
     signal switchToRegisterRequested()
 
     property string emailError: ""
@@ -28,6 +32,9 @@ Item {
     readonly property color accentPressedColor: darkTheme ? "#2563EB" : "#08539F"
     readonly property color errorColor: Palette.errorColor
     readonly property color linkColor: darkTheme ? "#93C5FD" : Palette.accentPrimary
+    readonly property color socialButtonColor: darkTheme ? "#0F172A" : Palette.backgroundWhite
+    readonly property color socialButtonBorderColor: darkTheme ? "#334155" : "#D1D5DB"
+    readonly property color socialButtonHoverColor: darkTheme ? "#111D34" : "#F8FAFC"
 
     function validateAndSubmit() {
         const email = emailField.text.trim();
@@ -159,10 +166,13 @@ Item {
             font.family: root.fontFamily
             font.pixelSize: 12
             hoverEnabled: true
+            spacing: 8
+            implicitHeight: Math.max(indicator.implicitHeight, contentItem.implicitHeight)
 
             indicator: Rectangle {
                 implicitWidth: 18
                 implicitHeight: 18
+                y: (rememberCheckBox.height - height) / 2
                 radius: 5
                 color: rememberCheckBox.checked ? root.accentColor : root.inputBackground
                 border.width: 1
@@ -183,8 +193,8 @@ Item {
                 color: root.secondaryTextColor
                 font.family: root.fontFamily
                 font.pixelSize: 12
+                leftPadding: rememberCheckBox.indicator.width + rememberCheckBox.spacing
                 verticalAlignment: Text.AlignVCenter
-                leftPadding: 8
             }
         }
 
@@ -212,6 +222,96 @@ Item {
                 implicitHeight: 40
                 radius: 8
                 color: loginButton.down ? root.accentPressedColor : (loginButton.hovered ? root.accentHoverColor : root.accentColor)
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+            implicitHeight: 20
+
+            Rectangle {
+                anchors.left: parent.left
+                anchors.right: dividerLabel.left
+                anchors.rightMargin: 8
+                anchors.verticalCenter: parent.verticalCenter
+                height: 1
+                color: root.inputBorder
+            }
+
+            Text {
+                id: dividerLabel
+                anchors.centerIn: parent
+                text: qsTr("или")
+                color: root.secondaryTextColor
+                font.family: root.fontFamily
+                font.pixelSize: 12
+            }
+
+            Rectangle {
+                anchors.left: dividerLabel.right
+                anchors.leftMargin: 8
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                height: 1
+                color: root.inputBorder
+            }
+        }
+
+        Button {
+            id: googleAuthButton
+            visible: root.showGoogleAuth
+            Layout.fillWidth: true
+            text: qsTr("Продолжить с Google")
+            hoverEnabled: true
+            font.family: root.fontFamily
+            font.pixelSize: 13
+            onClicked: root.googleAuthRequested()
+
+            contentItem: Text {
+                text: googleAuthButton.text
+                color: root.textColor
+                font.family: root.fontFamily
+                font.pixelSize: 13
+                font.weight: Font.DemiBold
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                implicitHeight: 38
+                radius: 8
+                color: googleAuthButton.hovered ? root.socialButtonHoverColor : root.socialButtonColor
+                border.width: 1
+                border.color: root.socialButtonBorderColor
+            }
+        }
+
+        Button {
+            id: appleAuthButton
+            visible: root.showAppleAuth
+            Layout.fillWidth: true
+            text: qsTr("Продолжить с Apple ID")
+            hoverEnabled: true
+            font.family: root.fontFamily
+            font.pixelSize: 13
+            onClicked: root.appleAuthRequested()
+
+            contentItem: Text {
+                text: appleAuthButton.text
+                color: root.textColor
+                font.family: root.fontFamily
+                font.pixelSize: 13
+                font.weight: Font.DemiBold
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                implicitHeight: 38
+                radius: 8
+                color: appleAuthButton.hovered ? root.socialButtonHoverColor : root.socialButtonColor
+                border.width: 1
+                border.color: root.socialButtonBorderColor
             }
         }
 

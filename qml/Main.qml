@@ -321,6 +321,14 @@ Window {
                 console.log("Register requested:", name, email, "password length:", password.length);
                 window.authenticated = true;
             }
+            onGoogleAuthRequested: {
+                console.log("Google auth requested");
+                window.authenticated = true;
+            }
+            onAppleAuthRequested: {
+                console.log("Apple auth requested");
+                window.authenticated = true;
+            }
         }
     }
 }

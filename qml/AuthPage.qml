@@ -10,9 +10,13 @@ Item {
     property bool darkTheme: false
     property string fontFamily: "Inter"
     property int mode: 0
+    property bool googleAuthAvailable: true
+    property bool appleAuthAvailable: Qt.platform.os === "osx"
 
     signal loginRequested(string email, string password)
     signal registerRequested(string name, string email, string password)
+    signal googleAuthRequested()
+    signal appleAuthRequested()
 
     readonly property color pageBackground: darkTheme ? "#070B12" : Palette.backgroundLight
     readonly property color cardColor: darkTheme ? "#111827" : Palette.backgroundWhite
@@ -127,8 +131,16 @@ Item {
                     Layout.fillWidth: true
                     darkTheme: root.darkTheme
                     fontFamily: root.fontFamily
+                    showGoogleAuth: root.googleAuthAvailable
+                    showAppleAuth: root.appleAuthAvailable
                     onLoginRequested: function (email, password) {
                         root.loginRequested(email, password);
+                    }
+                    onGoogleAuthRequested: {
+                        root.googleAuthRequested();
+                    }
+                    onAppleAuthRequested: {
+                        root.appleAuthRequested();
                     }
                     onSwitchToRegisterRequested: {
                         root.mode = 1;
@@ -139,8 +151,16 @@ Item {
                     Layout.fillWidth: true
                     darkTheme: root.darkTheme
                     fontFamily: root.fontFamily
+                    showGoogleAuth: root.googleAuthAvailable
+                    showAppleAuth: root.appleAuthAvailable
                     onRegisterRequested: function (name, email, password) {
                         root.registerRequested(name, email, password);
+                    }
+                    onGoogleAuthRequested: {
+                        root.googleAuthRequested();
+                    }
+                    onAppleAuthRequested: {
+                        root.appleAuthRequested();
                     }
                     onSwitchToLoginRequested: {
                         root.mode = 0;
