@@ -8,7 +8,6 @@ import "scripts/Handlers.mjs" as Handlers
 Window {
     id: window
     property bool authViewVisible: false
-    property bool useDarkAuthTheme: false
     property string selectedItemKey: ""
     property bool sidebarVisible: true
     property bool settingsViewVisible: false
@@ -319,7 +318,6 @@ Window {
             visible: window.authViewVisible
             z: 9999
             fontFamily: interFont.name
-            darkTheme: window.useDarkAuthTheme
             onLoginRequested: function (email, password) {
                 console.log("Login requested:", email, "password length:", password.length);
                 window.authViewVisible = false;

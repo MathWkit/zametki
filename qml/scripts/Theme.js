@@ -43,27 +43,11 @@ var dividerColor = "#f3f4f6";
 var errorColor = "#B91C1C";
 
 // Auth screen specific colors
-var authPageBackgroundDark = "#070B12";
-var authCardBackgroundDark = "#111827";
-var authCardBorderDark = "#1F2937";
-var authPrimaryTextDark = "#E5E7EB";
-var authSecondaryTextDark = "#94A3B8";
-var authTabContainerDark = "#0B1220";
-var authTabSelectedDark = "#1E40AF";
-var authTabHoverDark = "#1F2937";
-var authAccentDark = "#60A5FA";
-var authAccentHoverDark = "#3B82F6";
-var authAccentPressedDark = "#2563EB";
-var authAccentHoverLight = "#0A67C7";
-var authAccentPressedLight = "#08539F";
-var authInputBorderLight = "#D1D5DB";
-var authInputBorderHoverLight = "#9CA3AF";
-var authInputBorderDark = "#334155";
-var authInputBorderHoverDark = "#475569";
-var authSocialButtonDark = "#0F172A";
-var authSocialButtonHoverDark = "#111D34";
-var authSocialButtonHoverLight = "#F8FAFC";
-var authLinkDark = "#93C5FD";
+var authAccentHover = "#0A67C7";
+var authAccentPressed = "#08539F";
+var authInputBorder = "#D1D5DB";
+var authInputBorderHover = "#9CA3AF";
+var authSocialButtonHover = "#F8FAFC";
 
 // ============================================================================
 // SPACING

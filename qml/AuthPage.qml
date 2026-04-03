@@ -7,7 +7,6 @@ Item {
     id: root
     anchors.fill: parent
 
-    property bool darkTheme: false
     property string fontFamily: "Inter"
     property int mode: 0
     property bool googleAuthAvailable: true
@@ -18,15 +17,15 @@ Item {
     signal googleAuthRequested
     signal appleAuthRequested
 
-    readonly property color pageBackground: darkTheme ? Palette.authPageBackgroundDark : Palette.backgroundLight
-    readonly property color cardColor: darkTheme ? Palette.authCardBackgroundDark : Palette.backgroundWhite
-    readonly property color cardBorderColor: darkTheme ? Palette.authCardBorderDark : Palette.border
-    readonly property color headingColor: darkTheme ? Palette.authPrimaryTextDark : Palette.textPrimary
-    readonly property color subtitleColor: darkTheme ? Palette.authSecondaryTextDark : Palette.textSecondary
-    readonly property color tabContainerColor: darkTheme ? Palette.authTabContainerDark : Palette.surfaceColor
-    readonly property color tabSelectedColor: darkTheme ? Palette.authTabSelectedDark : Palette.accentPrimary
-    readonly property color tabHoverColor: darkTheme ? Palette.authTabHoverDark : Palette.selected
-    readonly property color tabTextColor: darkTheme ? Palette.authPrimaryTextDark : Palette.textPrimary
+    readonly property color pageBackground: Palette.backgroundLight
+    readonly property color cardColor: Palette.backgroundWhite
+    readonly property color cardBorderColor: Palette.border
+    readonly property color headingColor: Palette.textPrimary
+    readonly property color subtitleColor: Palette.textSecondary
+    readonly property color tabContainerColor: Palette.surfaceColor
+    readonly property color tabSelectedColor: Palette.accentPrimary
+    readonly property color tabHoverColor: Palette.selected
+    readonly property color tabTextColor: Palette.textPrimary
 
     Rectangle {
         anchors.fill: parent
@@ -129,7 +128,6 @@ Item {
 
                 LoginForm {
                     Layout.fillWidth: true
-                    darkTheme: root.darkTheme
                     fontFamily: root.fontFamily
                     showGoogleAuth: root.googleAuthAvailable
                     showAppleAuth: root.appleAuthAvailable
@@ -149,7 +147,6 @@ Item {
 
                 RegisterForm {
                     Layout.fillWidth: true
-                    darkTheme: root.darkTheme
                     fontFamily: root.fontFamily
                     showGoogleAuth: root.googleAuthAvailable
                     showAppleAuth: root.appleAuthAvailable

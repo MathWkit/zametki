@@ -9,7 +9,6 @@ Item {
     implicitWidth: formLayout.implicitWidth
     implicitHeight: formLayout.implicitHeight
 
-    property bool darkTheme: false
     property string fontFamily: "Inter"
     property bool showGoogleAuth: true
     property bool showAppleAuth: Qt.platform.os === "osx"
@@ -24,19 +23,19 @@ Item {
     property string passwordError: ""
     property string confirmPasswordError: ""
 
-    readonly property color textColor: darkTheme ? Palette.authPrimaryTextDark : Palette.textPrimary
-    readonly property color secondaryTextColor: darkTheme ? Palette.authSecondaryTextDark : Palette.textSecondary
-    readonly property color inputBackground: darkTheme ? Palette.authTabContainerDark : Palette.backgroundWhite
-    readonly property color inputBorder: darkTheme ? Palette.authInputBorderDark : Palette.authInputBorderLight
-    readonly property color inputBorderHover: darkTheme ? Palette.authInputBorderHoverDark : Palette.authInputBorderHoverLight
-    readonly property color accentColor: darkTheme ? Palette.authAccentDark : Palette.accentPrimary
-    readonly property color accentHoverColor: darkTheme ? Palette.authAccentHoverDark : Palette.authAccentHoverLight
-    readonly property color accentPressedColor: darkTheme ? Palette.authAccentPressedDark : Palette.authAccentPressedLight
+    readonly property color textColor: Palette.textPrimary
+    readonly property color secondaryTextColor: Palette.textSecondary
+    readonly property color inputBackground: Palette.backgroundWhite
+    readonly property color inputBorder: Palette.authInputBorder
+    readonly property color inputBorderHover: Palette.authInputBorderHover
+    readonly property color accentColor: Palette.accentPrimary
+    readonly property color accentHoverColor: Palette.authAccentHover
+    readonly property color accentPressedColor: Palette.authAccentPressed
     readonly property color errorColor: Palette.errorColor
-    readonly property color linkColor: darkTheme ? Palette.authLinkDark : Palette.accentPrimary
-    readonly property color socialButtonColor: darkTheme ? Palette.authSocialButtonDark : Palette.backgroundWhite
-    readonly property color socialButtonBorderColor: darkTheme ? Palette.authInputBorderDark : Palette.authInputBorderLight
-    readonly property color socialButtonHoverColor: darkTheme ? Palette.authSocialButtonHoverDark : Palette.authSocialButtonHoverLight
+    readonly property color linkColor: Palette.accentPrimary
+    readonly property color socialButtonColor: Palette.backgroundWhite
+    readonly property color socialButtonBorderColor: Palette.authInputBorder
+    readonly property color socialButtonHoverColor: Palette.authSocialButtonHover
 
     function validateAndSubmit() {
         const userName = nameField.text.trim();
