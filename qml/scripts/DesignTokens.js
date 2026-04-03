@@ -24,12 +24,12 @@ const FontSize = {
     xxl: 20      // Основные заголовки
 };
 
-// Font Weights
+// Font Weights (numeric values for QML font.weight)
 const FontWeight = {
     regular: 400,
-    medium: Font.Medium,        // "Medium"
-    semibold: Font.DemiBold,    // "SemiBold"
-    bold: Font.Bold             // "Bold"
+    medium: 500,
+    semibold: 600,
+    bold: 700
 };
 
 // ============================================================================

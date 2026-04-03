@@ -11,9 +11,11 @@ Item {
     // ===== LAYOUT HELPERS =====
     readonly property int avatarRadius: Palette.avatarBase / 2
     readonly property int avatarSmallRadius: Palette.avatarSmall / 2
-
-    // ===== ALIAS FOR CONVENIENCE =====
-    readonly property string fontFamily: Palette.fontFamily
+    readonly property string fontFamily: "Inter"
+    // Max height for accounts list to allow scrolling when there are many accounts (~2 items visible)
+    readonly property int maxAccountsListHeight: (Palette.avatarSmall + Palette.spacingLg * 2) * 2 + Palette.spacingXl
+    // Max height for the entire dialog to fit on screen with padding
+    readonly property int maxDialogHeight: Math.min(600, root.height * 0.9)
 
     signal closeClicked
     signal logoutClicked
@@ -60,7 +62,7 @@ Item {
     Rectangle {
         id: mainRectangle
         width: Palette.dialogMaxWidth
-        height: contentLayout.implicitHeight + Palette.spacingHuge
+        height: Math.min(contentLayout.implicitHeight + Palette.spacingHuge, root.maxDialogHeight)
         color: Palette.backgroundWhite
         radius: Palette.radiusXl
         anchors.centerIn: parent
@@ -69,12 +71,11 @@ Item {
             id: contentLayout
             anchors.fill: parent
             anchors.margins: Palette.spacingMassive
-            spacing: 0
+            spacing: Palette.spacingHuge
 
             // ==================== 1. Header ====================
             RowLayout {
                 Layout.fillWidth: true
-                Layout.bottomMargin: Palette.spacingHuge
                 spacing: Palette.spacingXl
 
                 Text {
@@ -82,7 +83,7 @@ Item {
                     color: Palette.textPrimary
                     font.pixelSize: Palette.fontSizeXl
                     font.family: root.fontFamily
-                    font.styleName: "Bold"
+                    font.weight: 700
                     Layout.fillWidth: true
                 }
 
@@ -112,20 +113,18 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
                 color: Palette.dividerColor
-                Layout.bottomMargin: Palette.spacingHuge
             }
 
             // ==================== 3. Current Account ====================
             ColumnLayout {
                 Layout.fillWidth: true
-                Layout.bottomMargin: Palette.spacingMassive
                 spacing: Palette.spacingXl
 
                 Text {
                     text: "Текущий аккаунт"
                     color: Palette.textPrimary
                     font.family: root.fontFamily
-                    font.styleName: "SemiBold"
+                    font.weight: 600
                     font.pixelSize: Palette.fontSizeMd
                 }
 
@@ -154,7 +153,7 @@ Item {
                                 color: Palette.backgroundWhite
                                 font.pixelSize: Palette.fontSizeXl
                                 font.family: root.fontFamily
-                                font.styleName: "Bold"
+                                font.weight: 700
                             }
                         }
 
@@ -167,7 +166,7 @@ Item {
                                 text: root.currentAccount.firstName + " " + root.currentAccount.lastName
                                 color: Palette.textPrimary
                                 font.family: root.fontFamily
-                                font.styleName: "SemiBold"
+                                font.weight: 600
                                 font.pixelSize: Palette.fontSizeMd
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
@@ -214,7 +213,14 @@ Item {
                             TapHandler {
                                 onTapped: {
                                     console.log("Кнопка: " + parent.modelData.label);
-                                    root[parent.modelData.signal]();
+                                    switch (parent.modelData.signal) {
+                                    case "changeNameClicked":
+                                        root.changeNameClicked();
+                                        break;
+                                    case "changePasswordClicked":
+                                        root.changePasswordClicked();
+                                        break;
+                                    }
                                 }
                             }
 
@@ -223,7 +229,7 @@ Item {
                                 text: parent.modelData.label
                                 color: Palette.textPrimary
                                 font.family: root.fontFamily
-                                font.styleName: "SemiBold"
+                                font.weight: 600
                                 font.pixelSize: Palette.fontSizeSm
                             }
                         }
@@ -234,7 +240,6 @@ Item {
             // ==================== 4. Accounts Section ====================
             RowLayout {
                 Layout.fillWidth: true
-                Layout.bottomMargin: Palette.spacingXl
                 spacing: Palette.spacingXl
 
                 ColumnLayout {
@@ -245,7 +250,7 @@ Item {
                         text: "Аккаунты"
                         color: Palette.textPrimary
                         font.family: root.fontFamily
-                        font.styleName: "SemiBold"
+                        font.weight: 600
                         font.pixelSize: Palette.fontSizeMd
                     }
 
@@ -280,7 +285,7 @@ Item {
                         text: "Добавить"
                         color: Palette.backgroundWhite
                         font.family: root.fontFamily
-                        font.styleName: "SemiBold"
+                        font.weight: 600
                         font.pixelSize: Palette.fontSizeSm
                     }
                 }
@@ -289,8 +294,8 @@ Item {
             // ==================== 5. Accounts List ====================
             ScrollView {
                 Layout.fillWidth: true
-                Layout.preferredHeight: accountsList.implicitHeight
-                Layout.bottomMargin: Palette.spacingMassive
+                Layout.preferredHeight: Math.min(accountsList.implicitHeight, root.maxAccountsListHeight)
+                Layout.fillHeight: false
                 contentWidth: availableWidth
 
                 ColumnLayout {
@@ -330,7 +335,7 @@ Item {
                                             color: Palette.backgroundWhite
                                             font.pixelSize: Palette.fontSizeSm
                                             font.family: root.fontFamily
-                                            font.styleName: "Bold"
+                                            font.weight: 700
                                         }
                                     }
 
@@ -342,7 +347,7 @@ Item {
                                             text: modelData.firstName + " " + modelData.lastName
                                             color: Palette.textPrimary
                                             font.family: root.fontFamily
-                                            font.styleName: "SemiBold"
+                                            font.weight: 600
                                             font.pixelSize: Palette.fontSizeSm
                                         }
 
@@ -359,7 +364,7 @@ Item {
 
                                     Rectangle {
                                         Layout.preferredWidth: 85
-                                        Layout.preferredHeight: Palette.buttonHeightBase
+                                        Layout.preferredHeight: switchText.implicitHeight + 20
                                         color: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
                                         radius: 100
                                         border.color: modelData.isCurrent ? Palette.accentPrimary : Palette.borderSoft
@@ -375,11 +380,12 @@ Item {
                                         }
 
                                         Text {
+                                            id: switchText
                                             anchors.centerIn: parent
                                             text: modelData.isCurrent ? "Текущий" : "Выбрать"
                                             color: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
                                             font.family: root.fontFamily
-                                            font.styleName: "SemiBold"
+                                            font.weight: 600
                                             font.pixelSize: Palette.fontSizeXs
                                         }
                                     }
@@ -395,7 +401,6 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
                 color: Palette.dividerColor
-                Layout.bottomMargin: Palette.spacingHuge
             }
 
             // ==================== 7. Footer ====================
@@ -430,7 +435,7 @@ Item {
                         text: "Log Out"
                         color: Palette.errorColor
                         font.family: root.fontFamily
-                        font.styleName: "SemiBold"
+                        font.weight: 600
                         font.pixelSize: Palette.fontSizeSm
                     }
                 }

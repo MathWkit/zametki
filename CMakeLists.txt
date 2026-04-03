@@ -45,6 +45,8 @@ qt_add_qml_module(appzametki
         qml/Profile.qml
         qml/scripts/Handlers.mjs
         qml/scripts/Theme.js
+        qml/scripts/Theme.qml
+        qml/scripts/DesignTokens.js
         qml/components/FolderNoteList.qml
         qml/components/SidebarPanel.qml
         qml/components/MainHeaderBar.qml
