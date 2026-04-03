@@ -68,6 +68,7 @@ Window {
             noteTitles: AppState.noteTitles
             onSearchClicked: {
                 Handlers.onSearchClicked();
+                window.settingsViewVisible = false;
                 window.searchViewVisible = true;
                 window.shareViewVisible = false;
             }
@@ -81,6 +82,8 @@ Window {
                 switch (actionKey) {
                 case "settings":
                     Handlers.onSettingsClicked();
+                    window.searchViewVisible = false;
+                    window.shareViewVisible = false;
                     window.settingsViewVisible = true;
                     break;
                 case "profile":
@@ -135,6 +138,7 @@ Window {
                 }
                 onShareClicked: {
                     Handlers.onShareClicked();
+                    window.settingsViewVisible = false;
                     window.shareViewVisible = true;
                     window.searchViewVisible = false;
                 }
@@ -161,17 +165,18 @@ Window {
             visible: window.searchViewVisible && !window.settingsViewVisible
             color: "#66000000"
             z: 200
-            readonly property real dialogWidth: 540
-            readonly property real dialogHeight: 430
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: function (mouse) {
-                    const left = (searchOverlay.width - searchOverlay.dialogWidth) / 2;
-                    const top = (searchOverlay.height - searchOverlay.dialogHeight) / 2;
-                    const right = left + searchOverlay.dialogWidth;
-                    const bottom = top + searchOverlay.dialogHeight;
-                    const clickedOutsideDialog = mouse.x < left || mouse.x > right || mouse.y < top || mouse.y > bottom;
+                    if (!searchLoader.item || !searchLoader.item.dialogItem) {
+                        return;
+                    }
+                    
+                    const dialog = searchLoader.item.dialogItem;
+                    const dialogPos = dialog.mapToItem(searchOverlay, 0, 0);
+                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || 
+                                               mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
 
                     if (clickedOutsideDialog) {
                         window.searchViewVisible = false;
@@ -193,17 +198,18 @@ Window {
             visible: window.shareViewVisible && !window.settingsViewVisible
             color: "#66000000"
             z: 210
-            readonly property real dialogWidth: 540
-            readonly property real dialogHeight: 561
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: function (mouse) {
-                    const left = (shareOverlay.width - shareOverlay.dialogWidth) / 2;
-                    const top = (shareOverlay.height - shareOverlay.dialogHeight) / 2;
-                    const right = left + shareOverlay.dialogWidth;
-                    const bottom = top + shareOverlay.dialogHeight;
-                    const clickedOutsideDialog = mouse.x < left || mouse.x > right || mouse.y < top || mouse.y > bottom;
+                    if (!shareLoader.item || !shareLoader.item.dialogItem) {
+                        return;
+                    }
+                    
+                    const dialog = shareLoader.item.dialogItem;
+                    const dialogPos = dialog.mapToItem(shareOverlay, 0, 0);
+                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || 
+                                               mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
 
                     if (clickedOutsideDialog) {
                         window.shareViewVisible = false;

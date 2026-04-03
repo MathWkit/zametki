@@ -20,6 +20,8 @@ Item {
     signal copyClicked
     signal closeClicked
 
+    readonly property Item dialogItem: rectangle
+
     // ===== STATE FOR ROLES =====
     property var peopleRoles: ({
             "alex1": "Owner",

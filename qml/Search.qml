@@ -8,6 +8,7 @@ Item {
     clip: true
     layer.enabled: true
 
+    readonly property Item dialogItem: dialog
     readonly property string uiFontFamily: "Inter"
     readonly property color colorWhite: Palette.headerBackground
     readonly property color colorTextPrimary: Palette.textPrimary
