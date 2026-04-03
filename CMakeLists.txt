@@ -39,6 +39,7 @@ qt_add_qml_module(appzametki
     VERSION 1.0
     QML_FILES
         qml/Main.qml
+        qml/AuthPage.qml
         qml/Search.qml
         qml/Settings.qml
         qml/Share.qml
@@ -50,6 +51,8 @@ qt_add_qml_module(appzametki
         qml/components/FolderNoteList.qml
         qml/components/SidebarPanel.qml
         qml/components/MainHeaderBar.qml
+        qml/components/auth/LoginForm.qml
+        qml/components/auth/RegisterForm.qml
         qml/CreationBD.qml
     RESOURCES
         assets/icons/sidebar/search.svg

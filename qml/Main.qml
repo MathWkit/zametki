@@ -7,6 +7,8 @@ import "scripts/Handlers.mjs" as Handlers
 
 Window {
     id: window
+    property bool authenticated: false
+    property bool useDarkAuthTheme: false
     property string selectedItemKey: ""
     property bool sidebarVisible: true
     property bool settingsViewVisible: false
@@ -301,6 +303,23 @@ Window {
                 if (!AppState.createDatabase(databaseName, parentDirectoryPath)) {
                     creationBdOverlay.errorText = AppState.lastError();
                 }
+            }
+        }
+
+        AuthPage {
+            id: authOverlay
+            anchors.fill: parent
+            visible: !window.authenticated
+            z: 9999
+            fontFamily: interFont.name
+            darkTheme: window.useDarkAuthTheme
+            onLoginRequested: function (email, password) {
+                console.log("Login requested:", email, "password length:", password.length);
+                window.authenticated = true;
+            }
+            onRegisterRequested: function (name, email, password) {
+                console.log("Register requested:", name, email, "password length:", password.length);
+                window.authenticated = true;
             }
         }
     }
