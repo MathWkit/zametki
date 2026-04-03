@@ -24,6 +24,8 @@ Item {
     signal logoutClicked
     signal addAccountClicked
     signal switchAccountClicked(string accountId)
+    signal changeNameClicked
+    signal changePasswordClicked
 
     readonly property Item dialogItem: mainRectangle
 
@@ -94,7 +96,10 @@ Item {
                     Layout.preferredHeight: 36
                     Layout.preferredWidth: 36
                     TapHandler {
-                        onTapped: root.closeClicked()
+                        onTapped: {
+                            console.log("Кнопка: Закрыть");
+                            root.closeClicked();
+                        }
                     }
 
                     Text {
@@ -198,6 +203,13 @@ Item {
                         border.color: colorBorder
                         border.width: 1
 
+                        TapHandler {
+                            onTapped: {
+                                console.log("Кнопка: Сменить Имя");
+                                root.changeNameClicked();
+                            }
+                        }
+
                         Text {
                             anchors.centerIn: parent
                             text: "Сменить Имя"
@@ -215,6 +227,13 @@ Item {
                         radius: 6
                         border.color: colorBorder
                         border.width: 1
+
+                        TapHandler {
+                            onTapped: {
+                                console.log("Кнопка: Сменить пароль");
+                                root.changePasswordClicked();
+                            }
+                        }
 
                         Text {
                             anchors.centerIn: parent
@@ -266,7 +285,10 @@ Item {
                     radius: 6
 
                     TapHandler {
-                        onTapped: root.addAccountClicked()
+                        onTapped: {
+                            console.log("Кнопка: Добавить");
+                            root.addAccountClicked();
+                        }
                     }
 
                     Text {
@@ -361,6 +383,7 @@ Item {
 
                                         TapHandler {
                                             onTapped: {
+                                                console.log("Кнопка: " + (modelData.isCurrent ? "Текущий" : "Выбрать"));
                                                 if (!modelData.isCurrent) {
                                                     root.switchAccountClicked(modelData.id);
                                                 }
@@ -412,7 +435,10 @@ Item {
                     radius: 6
 
                     TapHandler {
-                        onTapped: root.logoutClicked()
+                        onTapped: {
+                            console.log("Кнопка: Log Out");
+                            root.logoutClicked();
+                        }
                     }
 
                     Text {
