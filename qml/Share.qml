@@ -4,8 +4,7 @@ import QtQuick.Layouts 1.15
 
 Item {
     id: item1
-    width: 1920
-    height: 1080
+    anchors.fill: parent
     clip: false
 
     // ===== COLORS =====
@@ -30,7 +29,9 @@ Item {
     property bool isPopupClosing: false
 
     function changeRole(personId, newRole) {
-        peopleRoles[personId] = newRole;
+        var updated = Object.assign({}, peopleRoles);
+        updated[personId] = newRole;
+        peopleRoles = updated;
     }
 
     Timer {
