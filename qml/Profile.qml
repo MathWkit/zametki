@@ -1,19 +1,23 @@
 import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "scripts/Theme.js" as Palette
 
 Item {
     id: root
     anchors.fill: parent
     clip: false
 
+    // ===== STYLE PROPERTIES =====
+    readonly property string uiFontFamily: "Inter"
+
     // ===== COLORS =====
     property color colorBackground: "#ffffff"
     property color colorSurface: "#f1f5f9"
-    property color colorTextPrimary: "#0f1724"
-    property color colorTextSecondary: "#667085"
+    property color colorTextPrimary: Palette.textPrimary
+    property color colorTextSecondary: Palette.textSecondary
     property color colorAccent: "#0b74de"
-    property color colorBorder: "#e5e7eb"
+    property color colorBorder: Palette.border
     property color colorDivider: "#f3f4f6"
 
     signal closeClicked
@@ -59,12 +63,13 @@ Item {
     Rectangle {
         id: mainRectangle
         width: 540
-        height: 700
+        height: contentLayout.implicitHeight + 48
         color: colorBackground
         radius: 10
         anchors.centerIn: parent
 
         ColumnLayout {
+            id: contentLayout
             anchors.fill: parent
             anchors.margins: 24
             spacing: 0
@@ -79,7 +84,7 @@ Item {
                     text: "Профиль"
                     color: colorTextPrimary
                     font.pointSize: 18
-                    font.family: "Inter"
+                    font.family: root.uiFontFamily
                     font.styleName: "Bold"
                     Layout.fillWidth: true
                 }
@@ -98,7 +103,7 @@ Item {
                         text: "✕"
                         color: colorTextPrimary
                         font.pointSize: 16
-                        font.family: "Inter"
+                        font.family: root.uiFontFamily
                     }
                 }
             }
@@ -115,19 +120,19 @@ Item {
             ColumnLayout {
                 Layout.fillWidth: true
                 Layout.bottomMargin: 24
-                spacing: 16
+                spacing: 12
 
                 Text {
                     text: "Текущий аккаунт"
-                    color: colorTextSecondary
-                    font.family: "Inter"
-                    font.styleName: "Medium"
-                    font.pointSize: 12
+                    color: colorTextPrimary
+                    font.family: root.uiFontFamily
+                    font.styleName: "SemiBold"
+                    font.pointSize: 14
                 }
 
                 RowLayout {
                     Layout.fillWidth: true
-                    spacing: 16
+                    spacing: 12
 
                     // Avatar or Initials
                     Rectangle {
@@ -141,20 +146,20 @@ Item {
                             anchors.centerIn: parent
                             text: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
                             color: colorBackground
-                            font.pointSize: 20
-                            font.family: "Inter"
+                            font.pointSize: 18
+                            font.family: root.uiFontFamily
                             font.styleName: "Bold"
                         }
                     }
 
                     ColumnLayout {
                         Layout.fillWidth: true
-                        spacing: 4
+                        spacing: 2
 
                         Text {
                             text: root.currentAccount.firstName + " " + root.currentAccount.lastName
                             color: colorTextPrimary
-                            font.family: "Inter"
+                            font.family: root.uiFontFamily
                             font.styleName: "SemiBold"
                             font.pointSize: 14
                         }
@@ -162,7 +167,49 @@ Item {
                         Text {
                             text: root.currentAccount.email
                             color: colorTextSecondary
-                            font.family: "Inter"
+                            font.family: root.uiFontFamily
+                            font.pointSize: 12
+                        }
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 12
+                    Layout.topMargin: 12
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 36
+                        color: colorSurface
+                        radius: 6
+                        border.color: colorBorder
+                        border.width: 1
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "Сменить Имя"
+                            color: colorTextPrimary
+                            font.family: root.uiFontFamily
+                            font.styleName: "SemiBold"
+                            font.pointSize: 12
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 36
+                        color: colorSurface
+                        radius: 6
+                        border.color: colorBorder
+                        border.width: 1
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "Сменить пароль"
+                            color: colorTextPrimary
+                            font.family: root.uiFontFamily
+                            font.styleName: "SemiBold"
                             font.pointSize: 12
                         }
                     }
@@ -182,7 +229,7 @@ Item {
                     Text {
                         text: "Аккаунты"
                         color: colorTextPrimary
-                        font.family: "Inter"
+                        font.family: root.uiFontFamily
                         font.styleName: "SemiBold"
                         font.pointSize: 14
                     }
@@ -190,10 +237,14 @@ Item {
                     Text {
                         text: "Switch between your local and work profiles"
                         color: colorTextSecondary
-                        font.family: "Inter"
+                        font.family: root.uiFontFamily
                         font.pointSize: 12
                         wrapMode: Text.WordWrap
                     }
+                }
+
+                Item {
+                    Layout.fillWidth: true
                 }
 
                 Rectangle {
@@ -210,8 +261,9 @@ Item {
                         anchors.centerIn: parent
                         text: "Добавить"
                         color: colorBackground
-                        font.family: "Inter"
+                        font.family: root.uiFontFamily
                         font.styleName: "SemiBold"
+                        font.pointSize: 12
                     }
                 }
             }
@@ -219,11 +271,12 @@ Item {
             // ==================== 5. Accounts List ====================
             ScrollView {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 200
+                Layout.preferredHeight: accountsList.implicitHeight
                 Layout.bottomMargin: 24
                 contentWidth: availableWidth
 
                 ColumnLayout {
+                    id: accountsList
                     width: parent.width
                     spacing: 12
 
@@ -234,71 +287,82 @@ Item {
                             Layout.fillWidth: true
                             spacing: 8
 
-                            RowLayout {
+                            Rectangle {
                                 Layout.fillWidth: true
-                                spacing: 12
+                                Layout.preferredHeight: 68
+                                color: colorSurface
+                                radius: 6
 
-                                // Account Avatar
-                                Rectangle {
-                                    Layout.preferredWidth: 44
-                                    Layout.preferredHeight: 44
-                                    radius: 22
-                                    color: colorAccent
-                                    clip: true
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 12
+                                    spacing: 12
 
-                                    Text {
-                                        anchors.centerIn: parent
-                                        text: getInitials(modelData.firstName, modelData.lastName)
-                                        color: colorBackground
-                                        font.pointSize: 14
-                                        font.family: "Inter"
-                                        font.styleName: "Bold"
-                                    }
-                                }
+                                    // Account Avatar
+                                    Rectangle {
+                                        Layout.preferredWidth: 44
+                                        Layout.preferredHeight: 44
+                                        radius: 22
+                                        color: colorAccent
+                                        clip: true
 
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: 2
-
-                                    Text {
-                                        text: modelData.firstName + " " + modelData.lastName
-                                        color: colorTextPrimary
-                                        font.family: "Inter"
-                                        font.styleName: "SemiBold"
-                                        font.pointSize: 12
-                                    }
-
-                                    Text {
-                                        text: modelData.email
-                                        color: colorTextSecondary
-                                        font.family: "Inter"
-                                        font.pointSize: 11
-                                    }
-                                }
-
-                                Rectangle {
-                                    Layout.preferredWidth: 80
-                                    Layout.preferredHeight: 32
-                                    color: modelData.isCurrent ? colorSurface : colorAccent
-                                    radius: 6
-                                    border.color: modelData.isCurrent ? colorBorder : colorAccent
-                                    border.width: 1
-
-                                    TapHandler {
-                                        onTapped: {
-                                            if (!modelData.isCurrent) {
-                                                root.switchAccountClicked(modelData.id);
-                                            }
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: getInitials(modelData.firstName, modelData.lastName)
+                                            color: colorBackground
+                                            font.pointSize: 12
+                                            font.family: root.uiFontFamily
+                                            font.styleName: "Bold"
                                         }
                                     }
 
-                                    Text {
-                                        anchors.centerIn: parent
-                                        text: modelData.isCurrent ? "текущий" : "выбрать"
-                                        color: modelData.isCurrent ? colorTextPrimary : colorBackground
-                                        font.family: "Inter"
-                                        font.styleName: "SemiBold"
-                                        font.pointSize: 11
+                                    ColumnLayout {
+                                        Layout.fillWidth: true
+                                        spacing: 2
+
+                                        Text {
+                                            text: modelData.firstName + " " + modelData.lastName
+                                            color: colorTextPrimary
+                                            font.family: root.uiFontFamily
+                                            font.styleName: "SemiBold"
+                                            font.pointSize: 12
+                                        }
+
+                                        Text {
+                                            text: modelData.email
+                                            color: colorTextSecondary
+                                            font.family: root.uiFontFamily
+                                            font.pointSize: 11
+                                        }
+                                    }
+                                    Item {
+                                        Layout.fillWidth: true
+                                    }
+
+                                    Rectangle {
+                                        Layout.preferredWidth: 85
+                                        Layout.preferredHeight: 36
+                                        color: modelData.isCurrent ? colorAccent : colorBackground
+                                        radius: 100
+                                        border.color: modelData.isCurrent ? colorAccent : colorBorder
+                                        border.width: 1
+
+                                        TapHandler {
+                                            onTapped: {
+                                                if (!modelData.isCurrent) {
+                                                    root.switchAccountClicked(modelData.id);
+                                                }
+                                            }
+                                        }
+
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: modelData.isCurrent ? "Текущий" : "Выбрать"
+                                            color: modelData.isCurrent ? colorBackground : colorTextPrimary
+                                            font.family: root.uiFontFamily
+                                            font.styleName: "SemiBold"
+                                            font.pointSize: 11
+                                        }
                                     }
                                 }
                             }
@@ -323,7 +387,7 @@ Item {
                 Text {
                     text: "You can stay signed in to several accounts and switch instantly."
                     color: colorTextSecondary
-                    font.family: "Inter"
+                    font.family: root.uiFontFamily
                     font.pointSize: 12
                     wrapMode: Text.WordWrap
                     Layout.fillWidth: true
@@ -345,8 +409,9 @@ Item {
                         anchors.centerIn: parent
                         text: "Log Out"
                         color: colorTextPrimary
-                        font.family: "Inter"
+                        font.family: root.uiFontFamily
                         font.styleName: "SemiBold"
+                        font.pointSize: 12
                     }
                 }
             }
