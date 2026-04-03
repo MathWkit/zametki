@@ -9,16 +9,16 @@ Item {
     clip: false
 
     // ===== STYLE PROPERTIES =====
-    readonly property string uiFontFamily: "Inter"
+    readonly property string uiFontFamily: Palette.fontFamily
 
     // ===== COLORS =====
-    property color colorBackground: "#ffffff"
-    property color colorSurface: "#F1F5F9"
+    property color colorBackground: Palette.backgroundWhite
+    property color colorSurface: Palette.surfaceColor
     property color colorTextPrimary: Palette.textPrimary
     property color colorTextSecondary: Palette.textSecondary
-    property color colorAccent: "#0b74de"
-    property color colorBorder: Palette.border
-    property color colorDivider: "#f3f4f6"
+    property color colorAccent: Palette.accentPrimary
+    property color colorBorder: Palette.borderSoft
+    property color colorDivider: Palette.dividerColor
 
     signal closeClicked
     signal logoutClicked
@@ -64,37 +64,37 @@ Item {
 
     Rectangle {
         id: mainRectangle
-        width: 540
-        height: contentLayout.implicitHeight + 48
+        width: Palette.dialogMaxWidth
+        height: contentLayout.implicitHeight + Palette.spacingHuge
         color: colorBackground
-        radius: 10
+        radius: Palette.radiusXl
         anchors.centerIn: parent
 
         ColumnLayout {
             id: contentLayout
             anchors.fill: parent
-            anchors.margins: 24
+            anchors.margins: Palette.spacingMassive
             spacing: 0
 
             // ==================== 1. Header ====================
             RowLayout {
                 Layout.fillWidth: true
-                Layout.bottomMargin: 20
-                spacing: 12
+                Layout.bottomMargin: Palette.spacingHuge
+                spacing: Palette.spacingXl
 
                 Text {
                     text: "Профиль"
                     color: colorTextPrimary
-                    font.pointSize: 18
+                    font.pixelSize: Palette.fontSizeXl
                     font.family: root.uiFontFamily
                     font.styleName: "Bold"
                     Layout.fillWidth: true
                 }
 
                 Rectangle {
-                    radius: 6
-                    Layout.preferredHeight: 36
-                    Layout.preferredWidth: 36
+                    radius: Palette.radiusMd
+                    Layout.preferredHeight: Palette.buttonHeightBase
+                    Layout.preferredWidth: Palette.buttonHeightBase
                     TapHandler {
                         onTapped: {
                             console.log("Кнопка: Закрыть");
@@ -106,7 +106,7 @@ Item {
                         anchors.centerIn: parent
                         text: "✕"
                         color: colorTextPrimary
-                        font.pointSize: 16
+                        font.pixelSize: Palette.fontSizeLg
                         font.family: root.uiFontFamily
                     }
                 }
@@ -117,39 +117,39 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
                 color: colorDivider
-                Layout.bottomMargin: 20
+                Layout.bottomMargin: Palette.spacingHuge
             }
 
             // ==================== 3. Current Account ====================
             ColumnLayout {
                 Layout.fillWidth: true
-                Layout.bottomMargin: 24
-                spacing: 12
+                Layout.bottomMargin: Palette.spacingMassive
+                spacing: Palette.spacingXl
 
                 Text {
                     text: "Текущий аккаунт"
                     color: colorTextPrimary
                     font.family: root.uiFontFamily
                     font.styleName: "SemiBold"
-                    font.pointSize: 14
+                    font.pixelSize: Palette.fontSizeMd
                 }
 
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: currentAccountContent.implicitHeight + 24
-                    radius: 6
+                    Layout.preferredHeight: currentAccountContent.implicitHeight + Palette.spacingLg
+                    radius: Palette.radiusMd
 
                     RowLayout {
                         id: currentAccountContent
                         anchors.fill: parent
-                        anchors.margins: 12
-                        spacing: 12
+                        anchors.margins: Palette.spacingLg
+                        spacing: Palette.spacingXl
 
                         // Avatar or Initials
                         Rectangle {
-                            Layout.preferredWidth: 64
-                            Layout.preferredHeight: 64
-                            radius: 32
+                            Layout.preferredWidth: Palette.avatarBase
+                            Layout.preferredHeight: Palette.avatarBase
+                            radius: Math.ceil(Palette.avatarBase / 2)
                             color: colorAccent
                             clip: true
 
@@ -157,7 +157,7 @@ Item {
                                 anchors.centerIn: parent
                                 text: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
                                 color: colorBackground
-                                font.pointSize: 18
+                                font.pixelSize: Palette.fontSizeXl
                                 font.family: root.uiFontFamily
                                 font.styleName: "Bold"
                             }
@@ -166,14 +166,14 @@ Item {
                         ColumnLayout {
                             Layout.fillWidth: true
                             Layout.alignment: Qt.AlignLeft
-                            spacing: 2
+                            spacing: Palette.spacingSm
 
                             Text {
                                 text: root.currentAccount.firstName + " " + root.currentAccount.lastName
                                 color: colorTextPrimary
                                 font.family: root.uiFontFamily
                                 font.styleName: "SemiBold"
-                                font.pointSize: 14
+                                font.pixelSize: Palette.fontSizeMd
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                             }
@@ -182,7 +182,7 @@ Item {
                                 text: root.currentAccount.email
                                 color: colorTextSecondary
                                 font.family: root.uiFontFamily
-                                font.pointSize: 12
+                                font.pixelSize: Palette.fontSizeSm
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                             }
@@ -192,14 +192,14 @@ Item {
 
                 RowLayout {
                     Layout.fillWidth: true
-                    spacing: 12
-                    Layout.topMargin: 12
+                    spacing: Palette.spacingXl
+                    Layout.topMargin: Palette.spacingXl
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 36
-                        color: "#FFFFFF"
-                        radius: 6
+                        Layout.preferredHeight: Palette.buttonHeightBase
+                        color: colorBackground
+                        radius: Palette.radiusMd
                         border.color: colorBorder
                         border.width: 1
 
@@ -216,15 +216,15 @@ Item {
                             color: colorTextPrimary
                             font.family: root.uiFontFamily
                             font.styleName: "SemiBold"
-                            font.pointSize: 12
+                            font.pixelSize: Palette.fontSizeSm
                         }
                     }
 
                     Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 36
-                        color: "#FFFFFF"
-                        radius: 6
+                        Layout.preferredHeight: Palette.buttonHeightBase
+                        color: colorBackground
+                        radius: Palette.radiusMd
                         border.color: colorBorder
                         border.width: 1
 
@@ -241,7 +241,7 @@ Item {
                             color: colorTextPrimary
                             font.family: root.uiFontFamily
                             font.styleName: "SemiBold"
-                            font.pointSize: 12
+                            font.pixelSize: Palette.fontSizeSm
                         }
                     }
                 }
@@ -250,26 +250,26 @@ Item {
             // ==================== 4. Accounts Section ====================
             RowLayout {
                 Layout.fillWidth: true
-                Layout.bottomMargin: 12
-                spacing: 12
+                Layout.bottomMargin: Palette.spacingXl
+                spacing: Palette.spacingXl
 
                 ColumnLayout {
                     Layout.fillWidth: true
-                    spacing: 4
+                    spacing: Palette.spacingSm
 
                     Text {
                         text: "Аккаунты"
                         color: colorTextPrimary
                         font.family: root.uiFontFamily
                         font.styleName: "SemiBold"
-                        font.pointSize: 14
+                        font.pixelSize: Palette.fontSizeMd
                     }
 
                     Text {
                         text: "Switch between your local and work profiles"
                         color: colorTextSecondary
                         font.family: root.uiFontFamily
-                        font.pointSize: 12
+                        font.pixelSize: Palette.fontSizeSm
                         wrapMode: Text.WordWrap
                     }
                 }
@@ -280,9 +280,9 @@ Item {
 
                 Rectangle {
                     Layout.preferredWidth: 120
-                    Layout.preferredHeight: 36
+                    Layout.preferredHeight: Palette.buttonHeightBase
                     color: colorAccent
-                    radius: 6
+                    radius: Palette.radiusMd
 
                     TapHandler {
                         onTapped: {
@@ -297,7 +297,7 @@ Item {
                         color: colorBackground
                         font.family: root.uiFontFamily
                         font.styleName: "SemiBold"
-                        font.pointSize: 12
+                        font.pixelSize: Palette.fontSizeSm
                     }
                 }
             }
@@ -306,37 +306,37 @@ Item {
             ScrollView {
                 Layout.fillWidth: true
                 Layout.preferredHeight: accountsList.implicitHeight
-                Layout.bottomMargin: 24
+                Layout.bottomMargin: Palette.spacingMassive
                 contentWidth: availableWidth
 
                 ColumnLayout {
                     id: accountsList
                     width: parent.width
-                    spacing: 12
+                    spacing: Palette.spacingXl
 
                     Repeater {
                         model: root.accounts
 
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 8
+                            spacing: Palette.spacingLg
 
                             Rectangle {
                                 Layout.fillWidth: true
-                                Layout.preferredHeight: 68
-                                color: modelData.isCurrent ? "#E6F0FF" : colorSurface
-                                radius: 6
+                                Layout.preferredHeight: Palette.avatarSmall + Palette.spacingLg + Palette.spacingLg
+                                color: modelData.isCurrent ? Palette.accentSidebar : colorSurface
+                                radius: Palette.radiusMd
 
                                 RowLayout {
                                     anchors.fill: parent
-                                    anchors.margins: 12
-                                    spacing: 12
+                                    anchors.margins: Palette.spacingLg
+                                    spacing: Palette.spacingXl
 
                                     // Account Avatar
                                     Rectangle {
-                                        Layout.preferredWidth: 44
-                                        Layout.preferredHeight: 44
-                                        radius: 22
+                                        Layout.preferredWidth: Palette.avatarSmall
+                                        Layout.preferredHeight: Palette.avatarSmall
+                                        radius: Math.ceil(Palette.avatarSmall / 2)
                                         color: colorAccent
                                         clip: true
 
@@ -344,7 +344,7 @@ Item {
                                             anchors.centerIn: parent
                                             text: getInitials(modelData.firstName, modelData.lastName)
                                             color: colorBackground
-                                            font.pointSize: 12
+                                            font.pixelSize: Palette.fontSizeSm
                                             font.family: root.uiFontFamily
                                             font.styleName: "Bold"
                                         }
@@ -352,21 +352,21 @@ Item {
 
                                     ColumnLayout {
                                         Layout.fillWidth: true
-                                        spacing: 2
+                                        spacing: Palette.spacingSm
 
                                         Text {
                                             text: modelData.firstName + " " + modelData.lastName
                                             color: colorTextPrimary
                                             font.family: root.uiFontFamily
                                             font.styleName: "SemiBold"
-                                            font.pointSize: 12
+                                            font.pixelSize: Palette.fontSizeSm
                                         }
 
                                         Text {
                                             text: modelData.email
                                             color: colorTextSecondary
                                             font.family: root.uiFontFamily
-                                            font.pointSize: 11
+                                            font.pixelSize: Palette.fontSizeXs
                                         }
                                     }
                                     Item {
@@ -375,7 +375,7 @@ Item {
 
                                     Rectangle {
                                         Layout.preferredWidth: 85
-                                        Layout.preferredHeight: 36
+                                        Layout.preferredHeight: Palette.buttonHeightBase
                                         color: modelData.isCurrent ? colorAccent : colorBackground
                                         radius: 100
                                         border.color: modelData.isCurrent ? colorAccent : colorBorder
@@ -396,7 +396,7 @@ Item {
                                             color: modelData.isCurrent ? colorBackground : colorTextPrimary
                                             font.family: root.uiFontFamily
                                             font.styleName: "SemiBold"
-                                            font.pointSize: 11
+                                            font.pixelSize: Palette.fontSizeXs
                                         }
                                     }
                                 }
@@ -411,28 +411,28 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
                 color: colorDivider
-                Layout.bottomMargin: 20
+                Layout.bottomMargin: Palette.spacingHuge
             }
 
             // ==================== 7. Footer ====================
             RowLayout {
                 Layout.fillWidth: true
-                spacing: 12
+                spacing: Palette.spacingXl
 
                 Text {
                     text: "You can stay signed in to several accounts and switch instantly."
                     color: colorTextSecondary
                     font.family: root.uiFontFamily
-                    font.pointSize: 12
+                    font.pixelSize: Palette.fontSizeSm
                     wrapMode: Text.WordWrap
                     Layout.fillWidth: true
                 }
 
                 Rectangle {
                     Layout.preferredWidth: 100
-                    Layout.preferredHeight: 36
-                    color: "#FFFFFF"
-                    radius: 6
+                    Layout.preferredHeight: Palette.buttonHeightBase
+                    color: colorBackground
+                    radius: Palette.radiusMd
 
                     TapHandler {
                         onTapped: {
@@ -444,10 +444,10 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: "Log Out"
-                        color: "#DC2626"
+                        color: Palette.errorColor
                         font.family: root.uiFontFamily
                         font.styleName: "SemiBold"
-                        font.pointSize: 12
+                        font.pixelSize: Palette.fontSizeSm
                     }
                 }
             }
