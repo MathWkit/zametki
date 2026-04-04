@@ -42,6 +42,13 @@ var selected = "#e8eefc";
 var dividerColor = "#f3f4f6";
 var errorColor = "#B91C1C";
 
+// Auth screen specific colors
+var authAccentHover = "#0A67C7";
+var authAccentPressed = "#08539F";
+var authInputBorder = "#D1D5DB";
+var authInputBorderHover = "#9CA3AF";
+var authSocialButtonHover = "#F8FAFC";
+
 // ============================================================================
 // SPACING
 // ============================================================================
@@ -79,6 +86,14 @@ var iconMedium = 18;
 var iconLarge = 24;
 
 var headerHeight = 56;
+
+// Auth component sizes
+var authCardRadius = 12;
+var authTitleSize = 22;
+var authSocialButtonHeight = 38;
+var authFieldVerticalPadding = 10;
+var authCardMinWidth = 320;
+var authCardMaxWidth = 400;
 
 // ============================================================================
 // LAYOUT

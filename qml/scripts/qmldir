@@ -1,5 +1,5 @@
 module zametki.scripts
 Handlers 1.0 Handlers.mjs
-Theme 1.0 Theme.js
+ThemeTokens 1.0 Theme.js
 DesignTokens 1.0 DesignTokens.js
-singleton ThemeSingleton 1.0 Theme.qml
+singleton ThemeSingleton 1.0 ThemeSingleton.qml

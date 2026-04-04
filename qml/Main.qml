@@ -7,6 +7,7 @@ import "scripts/Handlers.mjs" as Handlers
 
 Window {
     id: window
+    property bool authViewVisible: false
     property string selectedItemKey: ""
     property bool sidebarVisible: true
     property bool settingsViewVisible: false
@@ -280,6 +281,14 @@ Window {
                     window.profileViewVisible = false;
                     console.log("Logout clicked");
                 }
+
+                function onAddAccountClicked() {
+                    window.profileViewVisible = false;
+                    window.authViewVisible = true;
+                    if (authOverlay) {
+                        authOverlay.mode = 0;
+                    }
+                }
             }
         }
 
@@ -301,6 +310,30 @@ Window {
                 if (!AppState.createDatabase(databaseName, parentDirectoryPath)) {
                     creationBdOverlay.errorText = AppState.lastError();
                 }
+            }
+        }
+
+        AuthPage {
+            id: authOverlay
+            anchors.fill: parent
+            visible: window.authViewVisible
+            z: 9999
+            fontFamily: interFont.name
+            onLoginRequested: function (email, password) {
+                console.log("Login requested:", email, "password length:", password.length);
+                window.authViewVisible = false;
+            }
+            onRegisterRequested: function (name, email, password) {
+                console.log("Register requested:", name, email, "password length:", password.length);
+                window.authViewVisible = false;
+            }
+            onGoogleAuthRequested: {
+                console.log("Google auth requested");
+                window.authViewVisible = false;
+            }
+            onAppleAuthRequested: {
+                console.log("Apple auth requested");
+                window.authViewVisible = false;
             }
         }
     }
