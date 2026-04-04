@@ -283,6 +283,7 @@ Window {
                 }
 
                 function onAddAccountClicked() {
+                    window.profileViewVisible = false;
                     window.authViewVisible = true;
                     if (authOverlay) {
                         authOverlay.mode = 0;

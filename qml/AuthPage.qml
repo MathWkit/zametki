@@ -11,11 +11,13 @@ Item {
     property int mode: 0
     property bool googleAuthAvailable: true
     property bool appleAuthAvailable: Qt.platform.os === "osx"
+    property bool closeOnOutsideClick: false
 
     signal loginRequested(string email, string password)
     signal registerRequested(string name, string email, string password)
     signal googleAuthRequested
     signal appleAuthRequested
+    signal closeRequested
 
     readonly property color pageBackground: Palette.backgroundLight
     readonly property color cardColor: Palette.backgroundWhite
@@ -30,6 +32,15 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: root.pageBackground
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {
+            if (root.closeOnOutsideClick) {
+                root.closeRequested();
+            }
+        }
     }
 
     Rectangle {
