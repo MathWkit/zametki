@@ -1,5 +1,6 @@
 import QtQuick 6.8
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 6.8
 import QtQuick.Layouts 1.15
 
 Item {
@@ -18,13 +19,20 @@ Item {
     readonly property color colorSurface: "#f1f5f9"
     readonly property color colorBorderSoft: Qt.rgba(0, 0, 0, 0.08)
 
+    function dataDirectoryUrl() {
+        if (!AppState.saveDirectory || AppState.saveDirectory.length === 0) {
+            return "";
+        }
+
+        return "file://" + encodeURI(AppState.saveDirectory);
+    }
+
     Rectangle {
         color: root.colorBackground
         anchors.fill: parent
-        Row {
+        Item {
             id: row
             anchors.fill: parent
-            spacing: 0
 
             ColumnLayout {
                 id: sidebar
@@ -342,26 +350,17 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        Rectangle {
-                            color: root.colorSurface
-                            radius: 6
-                            Layout.preferredHeight: doneText.implicitHeight + 20
-                            Layout.preferredWidth: doneText.implicitWidth + 20
-                            MouseArea {
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: root.closeRequested()
-                            }
-                            Text {
-                                id: doneText
-                                text: "Done"
-                                anchors.centerIn: parent
-                                color: root.colorTextPrimary
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
+                        AppButton {
+                            text: "Done"
+                            textColor: root.colorTextPrimary
+                            backgroundColor: root.colorSurface
+                            fontStyleName: "Medium"
+                            fontPointSize: 14
+                            fontFamily: root.uiFontFamily
+                            horizontalPadding: 10
+                            verticalPadding: 10
+                            clickable: true
+                            onClicked: root.closeRequested()
                         }
                     }
 
@@ -809,12 +808,14 @@ Item {
 
                                         TextField {
                                             id: pathText
-                                            text: "tut"
+                                            text: AppState.saveDirectory && AppState.saveDirectory.length > 0 ? AppState.saveDirectory : "Папка не выбрана"
                                             color: root.colorTextPrimary
                                             topPadding: 12
                                             bottomPadding: 12
                                             horizontalAlignment: Text.AlignLeft
                                             Layout.preferredWidth: 220
+                                            readOnly: true
+                                            selectByMouse: true
 
                                             background: Rectangle {
                                                 radius: 6
@@ -824,18 +825,13 @@ Item {
                                             }
                                         }
 
-                                        Rectangle {
-                                            color: root.colorSurface
-                                            radius: 6
-                                            Layout.preferredHeight: choseText.implicitHeight + 24
-                                            Layout.preferredWidth: choseText.implicitWidth + 24
-                                            Text {
-                                                id: choseText
-                                                text: "Выбрать"
-                                                anchors.fill: parent
-                                                horizontalAlignment: Text.AlignHCenter
-                                                verticalAlignment: Text.AlignVCenter
-                                            }
+                                        AppButton {
+                                            text: "Выбрать"
+                                            textColor: root.colorTextPrimary
+                                            backgroundColor: root.colorSurface
+                                            fontFamily: root.uiFontFamily
+                                            clickable: true
+                                            onClicked: notesFolderDialog.open()
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
@@ -1049,17 +1045,15 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        Rectangle {
-                                            color: root.colorSurface
-                                            Layout.preferredHeight: reindexText.implicitHeight + 24
-                                            Layout.preferredWidth: reindexText.implicitWidth + 24
-                                            radius: 6
-                                            Text {
-                                                id: reindexText
-                                                text: "Переиндексировать"
-                                                anchors.fill: parent
-                                                horizontalAlignment: Text.AlignHCenter
-                                                verticalAlignment: Text.AlignVCenter
+                                        AppButton {
+                                            text: "Переиндексировать"
+                                            textColor: root.colorTextPrimary
+                                            backgroundColor: root.colorSurface
+                                            fontFamily: root.uiFontFamily
+                                            clickable: true
+                                            onClicked: {
+                                                AppState.refreshNoteTitles();
+                                                AppState.refreshFolderTitles();
                                             }
                                         }
                                         Layout.fillWidth: true
@@ -1378,20 +1372,18 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-
-                                        radius: 6
-                                        color: root.colorSurface
+                                    AppButton {
+                                        text: "Открыть папку данных"
+                                        textColor: root.colorTextPrimary
+                                        backgroundColor: root.colorSurface
+                                        fontFamily: root.uiFontFamily
                                         Layout.leftMargin: 12
                                         Layout.bottomMargin: 12
-                                        Layout.preferredHeight: openFolderBtn.implicitHeight + 24
-                                        Layout.preferredWidth: openFolderBtn.implicitWidth + 24
-                                        Text {
-                                            id: openFolderBtn
-                                            text: "Открыть папку данных"
-                                            anchors.fill: parent
-                                            horizontalAlignment: Text.AlignHCenter
-                                            verticalAlignment: Text.AlignVCenter
+                                        clickable: AppState.saveDirectory && AppState.saveDirectory.length > 0
+                                        onClicked: {
+                                            if (!Qt.openUrlExternally(root.dataDirectoryUrl())) {
+                                                console.warn("Не удалось открыть папку данных:", AppState.saveDirectory);
+                                            }
                                         }
                                     }
                                 }
@@ -1401,6 +1393,14 @@ Item {
                         }
                     }
                 }
+            }
+        }
+
+        FolderDialog {
+            id: notesFolderDialog
+            title: "Выберите папку для заметок"
+            onAccepted: {
+                AppState.saveDirectory = String(selectedFolder);
             }
         }
     }

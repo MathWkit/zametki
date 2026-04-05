@@ -3,3 +3,4 @@ FolderNoteList 1.0 FolderNoteList.qml
 SidebarPanel 1.0 SidebarPanel.qml
 MainHeaderBar 1.0 MainHeaderBar.qml
 AppSwitch 1.0 AppSwitch.qml
+AppButton 1.0 AppButton.qml

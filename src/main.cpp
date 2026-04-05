@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QGuiApplication>
+#include <QQuickStyle>
 #include <QQmlApplicationEngine>
 #include <qqml.h>
 
@@ -7,6 +8,7 @@
 
 int main(int argc, char *argv[])
 {
+    QQuickStyle::setStyle(QStringLiteral("Basic"));
     QGuiApplication app(argc, argv);
     QCoreApplication::setOrganizationName("zametki");
     QCoreApplication::setApplicationName("zametki");
