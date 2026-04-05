@@ -551,29 +551,8 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        Switch {
+                                        AppSwitch {
                                             id: mySwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: mySwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: mySwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: mySwitch.checked ? parent.width - width - 3 : 3
-
-                                                    y: (parent.height - height) / 2
-
-                                                    color: mySwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
@@ -643,29 +622,8 @@ Item {
                                         Item {
                                             Layout.fillWidth: true
                                         }
-                                        Switch {
+                                        AppSwitch {
                                             id: previewSwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: previewSwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: previewSwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: previewSwitch.checked ? parent.width - width - 3 : 3
-
-                                                    y: (parent.height - height) / 2
-
-                                                    color: previewSwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
@@ -695,29 +653,8 @@ Item {
                                         Item {
                                             Layout.fillWidth: true
                                         }
-                                        Switch {
+                                        AppSwitch {
                                             id: autoSaveSwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: autoSaveSwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: autoSaveSwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: autoSaveSwitch.checked ? parent.width - width - 3 : 3
-
-                                                    y: (parent.height - height) / 2
-
-                                                    color: autoSaveSwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
@@ -794,29 +731,8 @@ Item {
                                         Item {
                                             Layout.fillWidth: true
                                         }
-                                        Switch {
+                                        AppSwitch {
                                             id: bracketSwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: bracketSwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: bracketSwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: bracketSwitch.checked ? parent.width - width - 3 : 3
-
-                                                    y: (parent.height - height) / 2
-
-                                                    color: bracketSwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
@@ -947,29 +863,8 @@ Item {
                                         Item {
                                             Layout.fillWidth: true
                                         }
-                                        Switch {
+                                        AppSwitch {
                                             id: autoBackUpSwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: autoBackUpSwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: autoBackUpSwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: autoBackUpSwitch.checked ? parent.width - width - 3 : 3
-
-                                                    y: (parent.height - height) / 2
-
-                                                    color: autoBackUpSwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
@@ -1083,29 +978,8 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        Switch {
+                                        AppSwitch {
                                             id: searchByContentSwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: searchByContentSwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: searchByContentSwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: searchByContentSwitch.checked ? parent.width - width - 3 : 3
-
-                                                    y: (parent.height - height) / 2
-
-                                                    color: searchByContentSwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
@@ -1136,29 +1010,8 @@ Item {
                                         Item {
                                             Layout.fillWidth: true
                                         }
-                                        Switch {
+                                        AppSwitch {
                                             id: fuzzySwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: fuzzySwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: fuzzySwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: fuzzySwitch.checked ? parent.width - width - 3 : 3
-
-                                                    y: (parent.height - height) / 2
-
-                                                    color: fuzzySwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
@@ -1320,28 +1173,8 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        Switch {
+                                        AppSwitch {
                                             id: showCurrentNoteOnlySwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: showCurrentNoteOnlySwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: showCurrentNoteOnlySwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: showCurrentNoteOnlySwitch.checked ? parent.width - width - 3 : 3
-                                                    y: (parent.height - height) / 2
-
-                                                    color: showCurrentNoteOnlySwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
@@ -1410,29 +1243,8 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        Switch {
+                                        AppSwitch {
                                             id: passwordOnAppSwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: passwordOnAppSwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: passwordOnAppSwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: passwordOnAppSwitch.checked ? parent.width - width - 3 : 3
-
-                                                    y: (parent.height - height) / 2
-
-                                                    color: passwordOnAppSwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
@@ -1462,29 +1274,8 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        Switch {
+                                        AppSwitch {
                                             id: autoLockSwitch
-
-                                            indicator: Rectangle {
-                                                width: 45
-                                                height: 25
-                                                radius: height / 2
-
-                                                color: autoLockSwitch.checked ? root.colorPrimary : root.colorWhite
-                                                border.color: autoLockSwitch.checked ? root.colorWhite : root.colorBorderSoft
-
-                                                Rectangle {
-                                                    width: parent.height - 6
-                                                    height: width
-                                                    radius: width / 2
-
-                                                    x: autoLockSwitch.checked ? parent.width - width - 3 : 3
-
-                                                    y: (parent.height - height) / 2
-
-                                                    color: autoLockSwitch.checked ? root.colorWhite : root.colorBorderSoft
-                                                }
-                                            }
                                         }
 
                                         Layout.fillWidth: true
