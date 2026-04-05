@@ -169,7 +169,6 @@ Item {
                             fontFamily: root.uiFontFamily
                             horizontalPadding: 10
                             verticalPadding: 10
-                            clickable: true
                             onClicked: root.closeRequested()
                         }
                     }
@@ -519,7 +518,6 @@ Item {
                                             textColor: root.colorTextPrimary
                                             backgroundColor: root.colorSurface
                                             fontFamily: root.uiFontFamily
-                                            clickable: true
                                             onClicked: notesFolderDialog.open()
                                         }
                                         Layout.fillWidth: true
@@ -705,7 +703,6 @@ Item {
                                             textColor: root.colorTextPrimary
                                             backgroundColor: root.colorSurface
                                             fontFamily: root.uiFontFamily
-                                            clickable: true
                                             onClicked: {
                                                 AppState.refreshNoteTitles();
                                                 AppState.refreshFolderTitles();

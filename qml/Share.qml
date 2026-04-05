@@ -167,14 +167,6 @@ Item {
                             text: "Send"
                             textColor: colorTextPrimary
                             backgroundColor: colorBackground
-                            hoverBackgroundColor: colorBackground
-                            pressedBackgroundColor: colorBackground
-                            fontStyleName: "SemiBold"
-                            fontPointSize: 14
-                            horizontalPadding: 12
-                            verticalPadding: 9
-                            Layout.preferredHeight: 36
-                            clickable: true
                             onClicked: sendClicked()
                         }
                     }
@@ -423,10 +415,6 @@ Item {
                     text: "Cancel"
                     textColor: colorTextPrimary
                     backgroundColor: colorSurface
-                    fontStyleName: "SemiBold"
-                    horizontalPadding: 16
-                    verticalPadding: 8
-                    clickable: true
                     onClicked: cancelClicked()
                 }
 
@@ -434,14 +422,7 @@ Item {
                 SettingsActionButton {
                     text: "Done"
                     textColor: colorBackground
-                    disabledTextColor: colorBackground
                     backgroundColor: colorAccent
-                    hoverBackgroundColor: colorAccent
-                    pressedBackgroundColor: colorAccent
-                    fontStyleName: "SemiBold"
-                    horizontalPadding: 16
-                    verticalPadding: 8
-                    clickable: true
                     onClicked: doneClicked()
                 }
             }
