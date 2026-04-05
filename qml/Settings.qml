@@ -2,22 +2,23 @@ import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 6.8
 import QtQuick.Layouts 1.15
+import "scripts/Theme.js" as Palette
 
 Item {
     id: root
     anchors.fill: parent
     signal closeRequested
 
-    readonly property string uiFontFamily: "Inter"
-    readonly property color colorBackground: "#fafbfc"
-    readonly property color colorSidebarActive: "#e6f0ff"
-    readonly property color colorTextPrimary: "#0f1724"
-    readonly property color colorTextSecondary: "#667085"
-    readonly property color colorDivider: "#14000000"
-    readonly property color colorPrimary: "#0B74DE"
-    readonly property color colorWhite: "#ffffff"
-    readonly property color colorSurface: "#f1f5f9"
-    readonly property color colorBorderSoft: Qt.rgba(0, 0, 0, 0.08)
+    readonly property string uiFontFamily: Palette.fontFamily
+    readonly property color colorBackground: Palette.backgroundLight
+    readonly property color colorSidebarActive: Palette.accentSidebar
+    readonly property color colorTextPrimary: Palette.textPrimary
+    readonly property color colorTextSecondary: Palette.textSecondary
+    readonly property color colorDivider: Palette.border
+    readonly property color colorPrimary: Palette.accentPrimary
+    readonly property color colorWhite: Palette.backgroundWhite
+    readonly property color colorSurface: Palette.surfaceColor
+    readonly property color colorBorderSoft: Palette.borderSoft
 
 
     function dataDirectoryUrl() {
@@ -26,6 +27,80 @@ Item {
         }
 
         return "file://" + encodeURI(AppState.saveDirectory);
+    }
+
+    component SettingsPageTitleText: Text {
+        font.styleName: "SemiBold"
+        font.pointSize: 18
+        font.family: root.uiFontFamily
+        color: root.colorTextPrimary
+    }
+
+    component SettingsSidebarLabelText: Text {
+        font.styleName: "Medium"
+        font.pointSize: 14
+        font.family: root.uiFontFamily
+        color: root.colorTextSecondary
+    }
+
+    component SettingsSectionTitleText: Text {
+        font.styleName: "SemiBold"
+        font.pointSize: 16
+        font.family: root.uiFontFamily
+        color: root.colorTextPrimary
+    }
+
+    component SettingsDescriptionText: Text {
+        font.styleName: "Regular"
+        font.pointSize: 13
+        font.family: root.uiFontFamily
+        color: root.colorTextSecondary
+    }
+
+    component SettingsSectionCard: Rectangle {
+        radius: 8
+        color: root.colorWhite
+        border.color: root.colorDivider
+        border.width: 1
+        Layout.fillWidth: true
+    }
+
+    component SettingsDivider: Rectangle {
+        border.color: root.colorDivider
+        Layout.preferredHeight: 1
+        Layout.fillWidth: true
+    }
+
+    component SettingsNavItem: Rectangle {
+        id: navItem
+
+        required property string iconSource
+        required property string titleText
+        property bool active: false
+
+        color: navItem.active ? root.colorSidebarActive : "transparent"
+        radius: 6
+        Layout.fillWidth: true
+        implicitHeight: navLayout.implicitHeight + 24
+        implicitWidth: navLayout.implicitWidth + 24
+
+        RowLayout {
+            id: navLayout
+            anchors.fill: parent
+            anchors.margins: 12
+            spacing: 12
+
+            Image {
+                source: navItem.iconSource
+                Layout.preferredHeight: 18
+                Layout.preferredWidth: 18
+            }
+
+            SettingsSidebarLabelText {
+                text: navItem.titleText
+                color: navItem.active ? root.colorPrimary : root.colorTextSecondary
+            }
+        }
     }
 
     Rectangle {
@@ -45,263 +120,68 @@ Item {
                 anchors.bottomMargin: 24
                 spacing: 20
 
-                Text {
+                SettingsPageTitleText {
                     text: "Настройки"
-                    font.styleName: "SemiBold"
-                    font.pointSize: 18
-                    font.family: root.uiFontFamily
                 }
 
                 ColumnLayout {
                     spacing: 4
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                    Rectangle {
-                        color: root.colorSidebarActive
-                        radius: 6
-                        Layout.fillWidth: true
-                        implicitHeight: accountLayout.implicitHeight + 24
-                        implicitWidth: accountLayout.implicitWidth + 24
-
-                        RowLayout {
-                            id: accountLayout
-                            anchors.fill: parent
-                            anchors.margins: 12 // ← вот это и есть padding
-
-                            spacing: 12
-
-                            Image {
-                                source: "../assets/icons/settings/account.svg"
-                                Layout.preferredHeight: 18
-                                Layout.preferredWidth: 18
+                    Repeater {
+                        model: [
+                            {
+                                iconSource: "../assets/icons/settings/account.svg",
+                                titleText: "Общие",
+                                active: true
+                            },
+                            {
+                                iconSource: "../assets/icons/settings/application.svg",
+                                titleText: "Редактор",
+                                active: false
+                            },
+                            {
+                                iconSource: "../assets/icons/list/note.svg",
+                                titleText: "Заметки",
+                                active: false
+                            },
+                            {
+                                iconSource: "../assets/icons/settings/search.svg",
+                                titleText: "Поиск",
+                                active: false
+                            },
+                            {
+                                iconSource: "../assets/icons/settings/graph.svg",
+                                titleText: "Граф",
+                                active: false
+                            },
+                            {
+                                iconSource: "../assets/icons/settings/tasks.svg",
+                                titleText: "Задачи",
+                                active: false
+                            },
+                            {
+                                iconSource: "../assets/icons/settings/security.svg",
+                                titleText: "Безопасность",
+                                active: false
+                            },
+                            {
+                                iconSource: "../assets/icons/settings/hot-keys.svg",
+                                titleText: "Горячие клавиши",
+                                active: false
+                            },
+                            {
+                                iconSource: "../assets/icons/settings/about.svg",
+                                titleText: "О программе",
+                                active: false
                             }
+                        ]
 
-                            Text {
-                                color: root.colorPrimary
-                                text: "Общие"
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
+                        delegate: SettingsNavItem {
+                            required property var modelData
+                            iconSource: modelData.iconSource
+                            titleText: modelData.titleText
+                            active: modelData.active
                         }
-                    }
-                    Rectangle {
-                        color: "transparent"
-                        Layout.fillWidth: true
-                        implicitHeight: applicationLayout.implicitHeight + 24
-                        implicitWidth: applicationLayout.implicitWidth + 24
-
-                        RowLayout {
-                            id: applicationLayout
-                            anchors.fill: parent
-                            anchors.margins: 12 // ← вот это и есть padding
-
-                            spacing: 12
-
-                            Image {
-                                source: "../assets/icons/settings/application.svg"
-                                Layout.preferredHeight: 18
-                                Layout.preferredWidth: 18
-                            }
-
-                            Text {
-                                color: root.colorTextSecondary
-                                text: "Редактор"
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
-                        }
-                    }
-                    Rectangle {
-                        color: "transparent"
-                        Layout.fillWidth: true
-                        implicitHeight: dataLayout.implicitHeight + 24
-                        implicitWidth: dataLayout.implicitWidth + 24
-
-                        RowLayout {
-                            id: dataLayout
-                            anchors.fill: parent
-                            anchors.margins: 12 // ← вот это и есть padding
-
-                            spacing: 12
-
-                            Image {
-                                source: "../assets/icons/list/note.svg"
-                                Layout.preferredHeight: 18
-                                Layout.preferredWidth: 18
-                            }
-
-                            Text {
-                                color: root.colorTextSecondary
-                                text: "Заметки"
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
-                        }
-                    }
-                    Rectangle {
-                        color: "transparent"
-                        Layout.fillWidth: true
-                        implicitHeight: aboutLayout.implicitHeight + 24
-                        implicitWidth: aboutLayout.implicitWidth + 24
-
-                        RowLayout {
-                            id: aboutLayout
-                            anchors.fill: parent
-                            anchors.margins: 12 // ← вот это и есть padding
-
-                            spacing: 12
-
-                            Image {
-                                source: "../assets/icons/settings/search.svg"
-                                Layout.preferredHeight: 18
-                                Layout.preferredWidth: 18
-                            }
-
-                            Text {
-                                color: root.colorTextSecondary
-                                text: "Поиск"
-                                horizontalAlignment: Text.AlignLeft
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
-                        }
-                    }
-                    Rectangle {
-                        color: "transparent"
-                        implicitWidth: aboutLayout1.implicitWidth + 24
-                        implicitHeight: aboutLayout1.implicitHeight + 24
-                        RowLayout {
-                            id: aboutLayout1
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
-                            Image {
-                                source: "../assets/icons/settings/graph.svg"
-                                Layout.preferredWidth: 18
-                                Layout.preferredHeight: 18
-                            }
-
-                            Text {
-                                color: root.colorTextSecondary
-                                text: "Граф"
-                                horizontalAlignment: Text.AlignLeft
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
-                        }
-                        Layout.fillWidth: true
-                    }
-
-                    Rectangle {
-                        color: "transparent"
-                        implicitWidth: aboutLayout2.implicitWidth + 24
-                        implicitHeight: aboutLayout2.implicitHeight + 24
-                        RowLayout {
-                            id: aboutLayout2
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
-                            Image {
-                                source: "../assets/icons/settings/tasks.svg"
-                                Layout.preferredWidth: 18
-                                Layout.preferredHeight: 18
-                            }
-
-                            Text {
-                                color: root.colorTextSecondary
-                                text: "Задачи"
-                                horizontalAlignment: Text.AlignLeft
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
-                        }
-                        Layout.fillWidth: true
-                    }
-
-                    Rectangle {
-                        color: "transparent"
-                        implicitWidth: aboutLayout3.implicitWidth + 24
-                        implicitHeight: aboutLayout3.implicitHeight + 24
-                        RowLayout {
-                            id: aboutLayout3
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
-                            Image {
-                                source: "../assets/icons/settings/security.svg"
-                                Layout.preferredWidth: 18
-                                Layout.preferredHeight: 18
-                            }
-
-                            Text {
-                                color: root.colorTextSecondary
-                                text: "Безопасность"
-                                horizontalAlignment: Text.AlignLeft
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
-                        }
-                        Layout.fillWidth: true
-                    }
-
-                    Rectangle {
-                        color: "transparent"
-                        implicitWidth: aboutLayout4.implicitWidth + 24
-                        implicitHeight: aboutLayout4.implicitHeight + 24
-                        RowLayout {
-                            id: aboutLayout4
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
-                            Image {
-                                source: "../assets/icons/settings/hot-keys.svg"
-                                Layout.preferredWidth: 18
-                                Layout.preferredHeight: 18
-                            }
-
-                            Text {
-                                color: root.colorTextSecondary
-                                text: "Горячие клавиши"
-                                horizontalAlignment: Text.AlignLeft
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
-                        }
-                        Layout.fillWidth: true
-                    }
-
-                    Rectangle {
-                        color: "transparent"
-                        implicitWidth: aboutLayout5.implicitWidth + 24
-                        implicitHeight: aboutLayout5.implicitHeight + 24
-                        RowLayout {
-                            id: aboutLayout5
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
-                            Image {
-                                source: "../assets/icons/settings/about.svg"
-                                Layout.preferredWidth: 18
-                                Layout.preferredHeight: 18
-                            }
-
-                            Text {
-                                color: root.colorTextSecondary
-                                text: "О программе"
-                                horizontalAlignment: Text.AlignLeft
-                                font.styleName: "Medium"
-                                font.pointSize: 14
-                                font.family: root.uiFontFamily
-                            }
-                        }
-                        Layout.fillWidth: true
                     }
 
                     Item {
@@ -330,20 +210,14 @@ Item {
                             Layout.leftMargin: 24
                             Layout.bottomMargin: 0
                             Layout.topMargin: 24
-                            Text {
+                            SettingsSectionTitleText {
                                 color: root.colorTextPrimary
                                 text: "Общие настройки"
-                                font.styleName: "SemiBold"
-                                font.pointSize: 16
-                                font.family: root.uiFontFamily
                             }
 
-                            Text {
+                            SettingsDescriptionText {
                                 color: root.colorTextSecondary
                                 text: "Настройте внешний вид, поведение редактора и локальное хранение данных"
-                                font.styleName: "Regular"
-                                font.pointSize: 13
-                                font.family: root.uiFontFamily
                             }
                         }
 
@@ -377,11 +251,7 @@ Item {
                         ColumnLayout {
                             id: aboutSettings
 
-                            Rectangle {
-                                radius: 8
-                                border.color: root.colorDivider
-                                border.width: 1
-                                Layout.fillWidth: true
+                            SettingsSectionCard {
                                 Layout.preferredHeight: columnLayout5.implicitHeight
                                 Layout.preferredWidth: columnLayout5.implicitWidth
 
@@ -403,20 +273,15 @@ Item {
                                                 text: "Общие"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Базовые параметры интерфейса и запуска приложения"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -432,11 +297,9 @@ Item {
                                                 text: "Appearance"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Выберите оформление приложения"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
 
@@ -520,10 +383,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -539,11 +399,9 @@ Item {
                                                 text: "Открывать последнюю сессию"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Восстанавливать открытые заметки после запуска"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
 
@@ -564,10 +422,7 @@ Item {
                         ColumnLayout {
                             id: aboutSettings1
 
-                            Rectangle {
-                                radius: 8
-                                border.color: root.colorDivider
-                                Layout.fillWidth: true
+                            SettingsSectionCard {
                                 Layout.preferredHeight: columnLayout9.implicitHeight
                                 Layout.preferredWidth: columnLayout9.implicitWidth
 
@@ -588,21 +443,16 @@ Item {
                                                 text: "Редактор"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Параметры редактирования Markdown и автосохранения"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -630,10 +480,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -661,10 +508,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -709,10 +553,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -744,10 +585,7 @@ Item {
 
                         ColumnLayout {
                             id: aboutSettings2
-                            Rectangle {
-                                radius: 8
-                                border.color: root.colorDivider
-                                Layout.fillWidth: true
+                            SettingsSectionCard {
                                 Layout.preferredHeight: columnLayout15.implicitHeight
                                 Layout.preferredWidth: columnLayout15.implicitWidth
 
@@ -767,20 +605,15 @@ Item {
                                                 text: "Заметки"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Папка хранения и резервные копии"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -796,11 +629,9 @@ Item {
                                                 text: "Папка заметок"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Локальное хранилище Markdown-файлов"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Item {
@@ -837,10 +668,7 @@ Item {
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -868,10 +696,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
                                     RowLayout {
                                         id: applicationLayout12
@@ -918,9 +743,7 @@ Item {
 
                         ColumnLayout {
                             id: aboutSettings3
-                            Rectangle {
-                                radius: 8
-                                border.color: root.colorDivider
+                            SettingsSectionCard {
                                 Layout.preferredHeight: columnLayout20.implicitHeight
                                 Layout.preferredWidth: columnLayout20.implicitWidth
 
@@ -940,21 +763,16 @@ Item {
                                                 text: "Поиск"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Поведение полнотекстового и интеллектуального поиска"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -983,11 +801,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        radius: 6
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -1015,10 +829,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -1035,11 +846,9 @@ Item {
                                                 text: "Индекс поиска"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Обновите индекс после массового импорта заметок"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Item {
@@ -1068,10 +877,7 @@ Item {
 
                         ColumnLayout {
                             id: graphSettings
-                            Rectangle {
-                                radius: 8
-                                border.color: root.colorDivider
-                                Layout.fillWidth: true
+                            SettingsSectionCard {
                                 Layout.preferredHeight: graphLayout.implicitHeight
                                 Layout.preferredWidth: graphLayout.implicitWidth
 
@@ -1089,11 +895,9 @@ Item {
                                                 text: "Граф"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Настройки визуализации связей между заметками"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
 
@@ -1101,10 +905,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -1147,10 +948,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -1181,9 +979,7 @@ Item {
 
                         ColumnLayout {
                             id: securitySettings
-                            Rectangle {
-                                radius: 8
-                                border.color: root.colorDivider
+                            SettingsSectionCard {
                                 Layout.preferredHeight: secutiryLayout.implicitHeight
                                 Layout.preferredWidth: secutiryLayout.implicitWidth
 
@@ -1203,21 +999,16 @@ Item {
                                                 text: "Безопасность"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Защита локального хранилища и доступа к приложению"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -1246,11 +1037,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        radius: 6
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -1284,9 +1071,7 @@ Item {
 
                         ColumnLayout {
                             id: aboutInfo
-                            Rectangle {
-                                radius: 8
-                                border.color: root.colorDivider
+                            SettingsSectionCard {
                                 Layout.preferredHeight: aboutColumnLayout.implicitHeight
                                 Layout.preferredWidth: aboutColumnLayout.implicitWidth
 
@@ -1304,21 +1089,16 @@ Item {
                                                 text: "О программе"
                                             }
 
-                                            Text {
+                                            SettingsDescriptionText {
                                                 color: root.colorTextSecondary
                                                 text: "Информация о текущей версии приложения"
-                                                font.styleName: "Regular"
-                                                font.family: root.uiFontFamily
                                             }
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
 
-                                    Rectangle {
-                                        border.color: root.colorDivider
-                                        Layout.preferredHeight: 1
-                                        Layout.fillWidth: true
+                                    SettingsDivider {
                                     }
 
                                     RowLayout {
@@ -1328,11 +1108,9 @@ Item {
                                             text: "Версия:"
                                         }
 
-                                        Text {
+                                        SettingsDescriptionText {
                                             text: "0.0.1"
                                             color: root.colorTextSecondary
-                                            font.styleName: "Regular"
-                                            font.family: root.uiFontFamily
                                         }
 
                                         Layout.fillWidth: true
@@ -1345,11 +1123,9 @@ Item {
                                             text: "Автор: "
                                         }
 
-                                        Text {
+                                        SettingsDescriptionText {
                                             text: "Ренат"
                                             color: root.colorTextSecondary
-                                            font.styleName: "Regular"
-                                            font.family: root.uiFontFamily
                                         }
 
                                         Layout.fillWidth: true
@@ -1362,11 +1138,9 @@ Item {
                                             text: "Хранилище: "
                                         }
 
-                                        Text {
+                                        SettingsDescriptionText {
                                             text: "Local"
                                             color: root.colorTextSecondary
-                                            font.styleName: "Regular"
-                                            font.family: root.uiFontFamily
                                         }
 
                                         Layout.fillWidth: true
