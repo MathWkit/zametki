@@ -313,13 +313,13 @@ Rectangle {
                         spacing: 2
 
                         Text {
-                            text: "Golovach Lena"
+                            text: "Loh Cvetochniy"
                             font.family: root.fontFamily
                             font.pixelSize: 14
                             font.weight: Font.Medium
                         }
                         Text {
-                            text: "golovach@titam.com"
+                            text: "lohcvet@titam.com"
                             font.family: root.fontFamily
                             font.pixelSize: 12
                             font.weight: Font.Normal
