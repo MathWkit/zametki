@@ -8,33 +8,33 @@ Rectangle {
     required property string titleText
     property bool active: false
 
-        property string uiFontFamily: "Inter"
-            property color activeBackgroundColor: "#e6f0ff"
-                property color activeTextColor: "#0B74DE"
-                    property color textColor: "#667085"
+    property string uiFontFamily: "Inter"
+    property color activeBackgroundColor: "#e6f0ff"
+    property color activeTextColor: "#0B74DE"
+    property color textColor: "#667085"
 
-                        color: active ? activeBackgroundColor : "transparent"
-                        radius: 6
-                        Layout.fillWidth: true
-                        implicitHeight: navLayout.implicitHeight + 24
-                        implicitWidth: navLayout.implicitWidth + 24
+    color: active ? activeBackgroundColor : "transparent"
+    radius: 6
+    Layout.fillWidth: true
+    implicitHeight: navLayout.implicitHeight + 24
+    implicitWidth: navLayout.implicitWidth + 24
 
-                        RowLayout {
-                            id: navLayout
-                            anchors.fill: parent
-                            anchors.margins: 12
-                            spacing: 12
+    RowLayout {
+        id: navLayout
+        anchors.fill: parent
+        anchors.margins: 12
+        spacing: 12
 
-                            Image {
-                                source: control.iconSource
-                                Layout.preferredHeight: 18
-                                Layout.preferredWidth: 18
-                            }
+        Image {
+            source: control.iconSource
+            Layout.preferredHeight: 18
+            Layout.preferredWidth: 18
+        }
 
-                            SettingsSidebarLabelText {
-                                text: control.titleText
-                                uiFontFamily: control.uiFontFamily
-                                textColor: control.active ? control.activeTextColor : control.textColor
-                            }
-                        }
-                    }
+        SettingsSidebarLabelText {
+            text: control.titleText
+            uiFontFamily: control.uiFontFamily
+            textColor: control.active ? control.activeTextColor : control.textColor
+        }
+    }
+}

@@ -69,6 +69,7 @@ qt_add_qml_module(appzametki
         qml/components/settings/SettingsControlRow.qml
         qml/components/settings/SettingsActionButton.qml
         qml/components/settings/SettingsKeyValueRow.qml
+        qml/components/settings/SettingsDropdown.qml
         qml/components/auth/LoginForm.qml
         qml/components/auth/RegisterForm.qml
         qml/CreationBD.qml

@@ -1,6 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "components/settings"
 
 Item {
     id: item1
@@ -27,100 +28,12 @@ Item {
             "alex1": "Owner",
             "alex2": "Owner"
         })
-
-    property bool isPopupClosing: false
+    property var roleOptions: ["Owner", "Editor", "Viewer"]
 
     function changeRole(personId, newRole) {
         var updated = Object.assign({}, peopleRoles);
         updated[personId] = newRole;
         peopleRoles = updated;
-    }
-
-    Timer {
-        id: popupCloseTimer
-        interval: 200
-        onTriggered: {
-            isPopupClosing = false;
-        }
-    }
-
-    // ===== OVERLAY FOR POPUP =====
-    Rectangle {
-        id: popupOverlay
-        color: "transparent"
-        z: 999
-        visible: rolePopup.visible
-        x: rectangle.x
-        y: rectangle.y
-        width: rectangle.width
-        height: rectangle.height
-
-        TapHandler {
-            onTapped: {
-                rolePopup.visible = false;
-                isPopupClosing = true;
-                popupCloseTimer.start();
-            }
-        }
-    }
-
-    // ===== ROLE SELECTOR POPUP =====
-    Rectangle {
-        id: rolePopup
-        color: colorBackground
-        border.color: "#e0e0e0"
-        border.width: 1
-        radius: 8
-        z: 1000
-        width: 120
-        height: 128
-        visible: false
-        clip: true
-
-        property string personId: ""
-        property string roleSelected: ""
-
-        TapHandler {
-            onTapped: eventPoint => {
-                // Prevent clicks on popup from closing it
-                eventPoint.accepted = true;
-            }
-        }
-
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 8
-            spacing: 4
-
-            Repeater {
-                model: ["Owner", "Editor", "Viewer"]
-
-                Rectangle {
-                    id: roleButton
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 32
-                    color: rolePopup.roleSelected === modelData ? colorAccent : "transparent"
-                    radius: 4
-
-                    TapHandler {
-                        onTapped: {
-                            changeRole(rolePopup.personId, modelData);
-                            rolePopup.visible = false;
-                            isPopupClosing = true;
-                            popupCloseTimer.start();
-                        }
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: modelData
-                        color: rolePopup.roleSelected === modelData ? colorBackground : colorTextPrimary
-                        font.family: "Inter"
-                        font.styleName: "SemiBold"
-                    }
-                }
-            }
-        }
     }
 
     onSendClicked: {
@@ -164,23 +77,19 @@ Item {
                     spacing: 4
                     Layout.fillWidth: true
 
-                    Text {
+                    SettingsSidebarLabelText {
                         text: "Share"
-                        color: colorTextSecondary
-                        font.family: "Inter"
+                        textColor: colorTextSecondary
                         font.styleName: "SemiBold"
                     }
-                    Text {
+                    SettingsPageTitleText {
                         text: "Share “”"
-                        color: colorTextPrimary
-                        font.pointSize: 18
-                        font.family: "Inter"
+                        textColor: colorTextPrimary
                         font.styleName: "Bold"
                     }
-                    Text {
+                    SettingsDescriptionText {
                         text: "Invite people, manage access, and copy a link to this note."
-                        color: colorTextSecondary
-                        font.family: "Inter"
+                        textColor: colorTextSecondary
                         wrapMode: Text.WordWrap
                     }
                 }
@@ -202,9 +111,9 @@ Item {
                         anchors.rightMargin: 8
                         anchors.topMargin: 8
                         anchors.bottomMargin: 8
-                        source: "../assets/icons/share/close-btn.svg"
+                        source: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
                         Layout.alignment: Qt.AlignRight | Qt.AlignTop
-                        Layout.fillWidth: false // ← замени на свою иконку
+                        Layout.fillWidth: false
                         Layout.preferredWidth: 10
                         Layout.preferredHeight: 10
                     }
@@ -212,9 +121,10 @@ Item {
             }
 
             // ==================== 2. Add people or groups ====================
-            Rectangle {
-                color: colorSurface
-                radius: 8
+            SettingsSectionCard {
+                cardColor: colorSurface
+                borderLineColor: "transparent"
+                cornerRadius: 8
                 Layout.fillWidth: true
                 implicitHeight: addPeopleLayout.implicitHeight + 28
 
@@ -237,47 +147,45 @@ Item {
                                 anchors.fill: parent
                                 spacing: 8
                                 Image {
-                                    source: "../assets/icons/share/people.svg"
+                                    source: "qrc:/qt/qml/zametki/assets/icons/share/people.svg"
                                     Layout.leftMargin: 12
                                     Layout.preferredWidth: 16
                                     Layout.preferredHeight: 16
                                 }
-                                Text {
+                                SettingsSidebarLabelText {
                                     text: "Add people or groups"
                                     horizontalAlignment: Text.AlignLeft
                                     verticalAlignment: Text.AlignTop
                                     Layout.fillWidth: true
-                                    color: colorTextSecondary
-                                    font.family: "Inter"
+                                    textColor: colorTextSecondary
+                                    font.styleName: "Regular"
                                 }
                             }
                         }
 
-                        Rectangle {
-                            radius: 6
-                            color: colorBackground
-                            implicitWidth: sendText.implicitWidth + 24
-                            implicitHeight: 36
-                            TapHandler {
-                                onTapped: sendClicked()
-                            }
-
-                            Text {
-                                id: sendText
-                                anchors.centerIn: parent
-                                text: "Send"
-                                font.family: "Inter"
-                                font.styleName: "SemiBold"
-                            }
+                        SettingsActionButton {
+                            text: "Send"
+                            textColor: colorTextPrimary
+                            backgroundColor: colorBackground
+                            hoverBackgroundColor: colorBackground
+                            pressedBackgroundColor: colorBackground
+                            fontStyleName: "SemiBold"
+                            fontPointSize: 14
+                            horizontalPadding: 12
+                            verticalPadding: 9
+                            Layout.preferredHeight: 36
+                            clickable: true
+                            onClicked: sendClicked()
                         }
                     }
                 }
             }
 
             // ==================== 3. People with access ====================
-            Rectangle {
-                color: colorSurface
-                radius: 8
+            SettingsSectionCard {
+                cardColor: colorSurface
+                borderLineColor: "transparent"
+                cornerRadius: 8
                 Layout.fillWidth: true
                 implicitHeight: peopleColumn.implicitHeight + 28
 
@@ -287,10 +195,9 @@ Item {
                     anchors.margins: 14
                     spacing: 16
 
-                    Text {
+                    SettingsSidebarLabelText {
                         text: "People with access"
-                        color: colorTextSecondary
-                        font.family: "Inter"
+                        textColor: colorTextSecondary
                         font.styleName: "SemiBold"
                     }
 
@@ -316,14 +223,13 @@ Item {
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 2
-                            Text {
+                            SettingsDescriptionText {
                                 text: "Alex Kim"
-                                font.family: "Inter"
+                                textColor: colorTextPrimary
                             }
-                            Text {
+                            SettingsDescriptionText {
                                 text: "alex@vault.app"
-                                color: colorTextSecondary
-                                font.family: "Inter"
+                                textColor: colorTextSecondary
                             }
                         }
 
@@ -331,39 +237,21 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        Rectangle {
-                            color: colorBackground
-                            radius: 6
-                            implicitWidth: ownerRow1.implicitWidth + 24
-                            implicitHeight: 32
+                        SettingsDropdown {
+                            Layout.preferredHeight: 32
+                            topPadding: 7
+                            bottomPadding: 7
 
-                            TapHandler {
-                                onTapped: {
-                                    if (!isPopupClosing) {
-                                        rolePopup.personId = "alex1";
-                                        rolePopup.roleSelected = peopleRoles["alex1"];
-                                        rolePopup.x = parent.mapToItem(item1, 0, 0).x;
-                                        rolePopup.y = parent.mapToItem(item1, 0, parent.height).y;
-                                        rolePopup.visible = true;
-                                    }
-                                }
-                            }
+                            dropdownTextColor: colorTextPrimary
+                            dropdownSecondaryTextColor: colorTextSecondary
+                            dropdownBackgroundColor: colorBackground
+                            dropdownBorderColor: "transparent"
+                            dropdownBorderWidth: 0
 
-                            RowLayout {
-                                id: ownerRow1
-                                anchors.centerIn: parent
-                                spacing: 6
-                                Text {
-                                    text: peopleRoles["alex1"]
-                                    font.family: "Inter"
-                                    font.styleName: "SemiBold"
-                                }
-                                Image {
-                                    source: "../assets/icons/unused/open-bracket.svg"
-                                    Layout.preferredWidth: 12
-                                    Layout.preferredHeight: 12
-                                }
-                            }
+                            model: roleOptions
+                            currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex1"] || "Viewer"))
+
+                            onActivated: changeRole("alex1", currentText)
                         }
                     }
 
@@ -390,14 +278,13 @@ Item {
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 2
-                            Text {
+                            SettingsDescriptionText {
                                 text: "Alex Kim"
-                                font.family: "Inter"
+                                textColor: colorTextPrimary
                             }
-                            Text {
+                            SettingsDescriptionText {
                                 text: "alex@vault.app"
-                                color: colorTextSecondary
-                                font.family: "Inter"
+                                textColor: colorTextSecondary
                             }
                         }
 
@@ -405,48 +292,31 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        Rectangle {
-                            color: colorBackground
-                            radius: 6
-                            implicitWidth: ownerRow2.implicitWidth + 24
-                            implicitHeight: 32
+                        SettingsDropdown {
+                            Layout.preferredHeight: 32
+                            topPadding: 7
+                            bottomPadding: 7
 
-                            TapHandler {
-                                onTapped: {
-                                    if (!isPopupClosing) {
-                                        rolePopup.personId = "alex2";
-                                        rolePopup.roleSelected = peopleRoles["alex2"];
-                                        rolePopup.x = parent.mapToItem(item1, 0, 0).x;
-                                        rolePopup.y = parent.mapToItem(item1, 0, parent.height).y;
-                                        rolePopup.visible = true;
-                                    }
-                                }
-                            }
+                            dropdownTextColor: colorTextPrimary
+                            dropdownSecondaryTextColor: colorTextSecondary
+                            dropdownBackgroundColor: colorBackground
+                            dropdownBorderColor: "transparent"
+                            dropdownBorderWidth: 0
 
-                            RowLayout {
-                                id: ownerRow2
-                                anchors.centerIn: parent
-                                spacing: 6
-                                Text {
-                                    text: peopleRoles["alex2"]
-                                    font.family: "Inter"
-                                    font.styleName: "SemiBold"
-                                }
-                                Image {
-                                    source: "../assets/icons/unused/open-bracket.svg"
-                                    Layout.preferredWidth: 12
-                                    Layout.preferredHeight: 12
-                                }
-                            }
+                            model: roleOptions
+                            currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex2"] || "Viewer"))
+
+                            onActivated: changeRole("alex2", currentText)
                         }
                     }
                 }
             }
 
             // ==================== 4. General access ====================
-            Rectangle {
-                color: colorSurface
-                radius: 8
+            SettingsSectionCard {
+                cardColor: colorSurface
+                borderLineColor: "transparent"
+                cornerRadius: 8
                 Layout.fillWidth: true
                 implicitHeight: generalColumn.implicitHeight + 28
 
@@ -456,10 +326,9 @@ Item {
                     anchors.margins: 14
                     spacing: 12
 
-                    Text {
+                    SettingsSidebarLabelText {
                         text: "General access"
-                        color: colorTextSecondary
-                        font.family: "Inter"
+                        textColor: colorTextSecondary
                         font.styleName: "SemiBold"
                     }
 
@@ -468,7 +337,7 @@ Item {
                         Layout.fillWidth: true
 
                         Image {
-                            source: "../assets/icons/share/link.svg"
+                            source: "qrc:/qt/qml/zametki/assets/icons/share/link.svg"
                             Layout.preferredWidth: 36
                             Layout.preferredHeight: 36
                             Layout.alignment: Qt.AlignVCenter
@@ -478,14 +347,13 @@ Item {
                             spacing: 2
                             Layout.fillWidth: true
 
-                            Text {
+                            SettingsDescriptionText {
                                 text: "Restricted"
-                                font.family: "Inter"
+                                textColor: colorTextPrimary
                             }
-                            Text {
-                                color: colorTextSecondary
+                            SettingsDescriptionText {
                                 text: "Only people added above can open this note."
-                                font.family: "Inter"
+                                textColor: colorTextSecondary
                                 wrapMode: Text.WordWrap
                             }
                         }
@@ -494,39 +362,21 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        Rectangle {
-                            color: colorBackground
-                            radius: 6
-                            implicitWidth: viewerRow.implicitWidth + 24
-                            implicitHeight: 32
+                        SettingsDropdown {
+                            Layout.preferredHeight: 32
+                            topPadding: 7
+                            bottomPadding: 7
 
-                            TapHandler {
-                                onTapped: {
-                                    if (!isPopupClosing) {
-                                        rolePopup.personId = "general";
-                                        rolePopup.roleSelected = peopleRoles["general"] || "Viewer";
-                                        rolePopup.x = parent.mapToItem(item1, 0, 0).x;
-                                        rolePopup.y = parent.mapToItem(item1, 0, parent.height).y;
-                                        rolePopup.visible = true;
-                                    }
-                                }
-                            }
+                            dropdownTextColor: colorTextPrimary
+                            dropdownSecondaryTextColor: colorTextSecondary
+                            dropdownBackgroundColor: colorBackground
+                            dropdownBorderColor: "transparent"
+                            dropdownBorderWidth: 0
 
-                            RowLayout {
-                                id: viewerRow
-                                anchors.centerIn: parent
-                                spacing: 6
-                                Text {
-                                    text: peopleRoles["general"] || "Viewer"
-                                    font.family: "Inter"
-                                    font.styleName: "SemiBold"
-                                }
-                                Image {
-                                    source: "../assets/icons/unused/open-bracket.svg"
-                                    Layout.preferredWidth: 12
-                                    Layout.preferredHeight: 12
-                                }
-                            }
+                            model: roleOptions
+                            currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["general"] || "Viewer"))
+
+                            onActivated: changeRole("general", currentText)
                         }
                     }
                 }
@@ -552,14 +402,14 @@ Item {
                         anchors.centerIn: parent
                         spacing: 8
                         Image {
-                            source: "../assets/icons/share/copy.svg"
+                            source: "qrc:/qt/qml/zametki/assets/icons/share/copy.svg"
                             Layout.preferredWidth: 14
                             Layout.preferredHeight: 14
                         }
-                        Text {
+                        SettingsSidebarLabelText {
                             text: "Copy link"
-                            font.family: "Inter"
                             font.styleName: "SemiBold"
+                            textColor: colorTextPrimary
                         }
                     }
                 }
@@ -569,43 +419,30 @@ Item {
                 }
 
                 // Cancel
-                Rectangle {
-                    color: colorSurface
-                    radius: 6
-                    implicitWidth: cancelText.implicitWidth + 32
-                    implicitHeight: cancelText.implicitHeight + 16
-
-                    TapHandler {
-                        onTapped: cancelClicked()
-                    }
-                    Text {
-                        id: cancelText
-                        anchors.centerIn: parent
-                        text: "Cancel"
-                        font.family: "Inter"
-                        font.styleName: "SemiBold"
-                    }
+                SettingsActionButton {
+                    text: "Cancel"
+                    textColor: colorTextPrimary
+                    backgroundColor: colorSurface
+                    fontStyleName: "SemiBold"
+                    horizontalPadding: 16
+                    verticalPadding: 8
+                    clickable: true
+                    onClicked: cancelClicked()
                 }
 
                 // Done
-                Rectangle {
-                    color: colorAccent
-                    radius: 6
-                    implicitWidth: doneText.implicitWidth + 32
-                    implicitHeight: doneText.implicitHeight + 16
-
-                    TapHandler {
-                        onTapped: doneClicked()
-                    }
-
-                    Text {
-                        id: doneText
-                        anchors.centerIn: parent
-                        color: colorBackground
-                        text: "Done"
-                        font.family: "Inter"
-                        font.styleName: "SemiBold"
-                    }
+                SettingsActionButton {
+                    text: "Done"
+                    textColor: colorBackground
+                    disabledTextColor: colorBackground
+                    backgroundColor: colorAccent
+                    hoverBackgroundColor: colorAccent
+                    pressedBackgroundColor: colorAccent
+                    fontStyleName: "SemiBold"
+                    horizontalPadding: 16
+                    verticalPadding: 8
+                    clickable: true
+                    onClicked: doneClicked()
                 }
             }
         }
