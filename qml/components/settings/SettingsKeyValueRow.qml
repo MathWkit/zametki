@@ -8,26 +8,27 @@ RowLayout {
     required property string valueText
 
     property string uiFontFamily: "Inter"
-        property color keyColor: "#0F1724"
-            property color valueColor: "#667085"
-                property int leftMargin: 18
+    property color keyColor: "#0F1724"
+    property color valueColor: "#6B7280"
+    property int leftMargin: 18
 
-                    Layout.leftMargin: leftMargin
-                    Layout.fillWidth: true
-                    Layout.fillHeight: false
+    Layout.leftMargin: leftMargin
+    Layout.fillWidth: true
+    Layout.fillHeight: false
 
-                    Text {
-                        text: control.keyText
-                        color: control.keyColor
-                    }
+    Text {
+        text: control.keyText
+        color: control.keyColor
+        font.family: control.uiFontFamily
+    }
 
-                    SettingsDescriptionText {
-                        text: control.valueText
-                        uiFontFamily: control.uiFontFamily
-                        textColor: control.valueColor
-                    }
+    SettingsDescriptionText {
+        text: control.valueText
+        uiFontFamily: control.uiFontFamily
+        textColor: control.valueColor
+    }
 
-                    Item {
-                        Layout.fillWidth: true
-                    }
-                }
+    Item {
+        Layout.fillWidth: true
+    }
+}

@@ -9,9 +9,9 @@ Rectangle {
     property bool active: false
 
     property string uiFontFamily: "Inter"
-    property color activeBackgroundColor: "#e6f0ff"
+    property color activeBackgroundColor: "#E6F0FF"
     property color activeTextColor: "#0B74DE"
-    property color textColor: "#667085"
+    property color textColor: "#6B7280"
 
     color: active ? activeBackgroundColor : "transparent"
     radius: 6

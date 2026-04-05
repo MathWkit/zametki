@@ -6,7 +6,6 @@ ComboBox {
 
     property string uiFontFamily: "Inter"
     property color dropdownTextColor: "#0F1724"
-    property color dropdownSecondaryTextColor: "#667085"
     property color dropdownBackgroundColor: "#FFFFFF"
     property color dropdownBorderColor: "#14000000"
     property int dropdownBorderWidth: 1
@@ -16,8 +15,8 @@ ComboBox {
     property int leftTextPadding: 12
     property int rightTextPadding: 28
 
-    topPadding: 8
-    bottomPadding: 8
+    topPadding: 12
+    bottomPadding: 12
 
     contentItem: Text {
         text: control.displayText

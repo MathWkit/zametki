@@ -2,10 +2,10 @@ import QtQuick 6.8
 
 Text {
     property string uiFontFamily: "Inter"
-        property color textColor: "#667085"
+    property color textColor: "#6B7280"
 
-            font.styleName: "Medium"
-            font.pointSize: 14
-            font.family: uiFontFamily
-            color: textColor
-        }
+    font.styleName: "Medium"
+    font.pointSize: 14
+    font.family: uiFontFamily
+    color: textColor
+}

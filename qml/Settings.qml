@@ -10,16 +10,7 @@ Item {
     anchors.fill: parent
     signal closeRequested
 
-    readonly property string uiFontFamily: Palette.fontFamily
     readonly property color colorBackground: Palette.backgroundLight
-    readonly property color colorSidebarActive: Palette.accentSidebar
-    readonly property color colorTextPrimary: Palette.textPrimary
-    readonly property color colorTextSecondary: Palette.textSecondary
-    readonly property color colorDivider: Palette.border
-    readonly property color colorPrimary: Palette.accentPrimary
-    readonly property color colorWhite: Palette.backgroundWhite
-    readonly property color colorSurface: Palette.surfaceColor
-    readonly property color colorBorderSoft: Palette.borderSoft
 
     function dataDirectoryUrl() {
         if (!AppState.saveDirectory || AppState.saveDirectory.length === 0) {
@@ -49,8 +40,6 @@ Item {
 
                 SettingsPageTitleText {
                     text: "Настройки"
-                    uiFontFamily: root.uiFontFamily
-                    textColor: root.colorTextPrimary
                 }
 
                 ColumnLayout {
@@ -112,10 +101,6 @@ Item {
                             iconSource: modelData.iconSource
                             titleText: modelData.titleText
                             active: modelData.active
-                            uiFontFamily: root.uiFontFamily
-                            activeBackgroundColor: root.colorSidebarActive
-                            activeTextColor: root.colorPrimary
-                            textColor: root.colorTextSecondary
                         }
                     }
 
@@ -146,12 +131,10 @@ Item {
                             Layout.bottomMargin: 0
                             Layout.topMargin: 24
                             SettingsSectionTitleText {
-                                color: root.colorTextPrimary
                                 text: "Общие настройки"
                             }
 
                             SettingsDescriptionText {
-                                color: root.colorTextSecondary
                                 text: "Настройте внешний вид, поведение редактора и локальное хранение данных"
                             }
                         }
@@ -160,15 +143,8 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        SettingsActionButton {
+                        SettingsActionButtonCompact {
                             text: "Done"
-                            textColor: root.colorTextPrimary
-                            backgroundColor: root.colorSurface
-                            fontStyleName: "Medium"
-                            fontPointSize: 14
-                            fontFamily: root.uiFontFamily
-                            horizontalPadding: 10
-                            verticalPadding: 10
                             onClicked: root.closeRequested()
                         }
                     }
@@ -208,7 +184,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Базовые параметры интерфейса и запуска приложения"
                                             }
                                         }
@@ -231,7 +206,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Выберите оформление приложения"
                                             }
                                         }
@@ -243,15 +217,6 @@ Item {
                                         SettingsDropdown {
                                             id: appearanceCombo
                                             Layout.preferredWidth: 160
-
-                                            uiFontFamily: root.uiFontFamily
-                                            dropdownTextColor: root.colorTextPrimary
-                                            dropdownSecondaryTextColor: root.colorTextSecondary
-                                            dropdownBackgroundColor: root.colorWhite
-                                            dropdownBorderColor: root.colorDivider
-                                            dropdownBorderWidth: 1
-                                            optionHoverColor: root.colorSurface
-                                            optionTextColor: root.colorTextPrimary
 
                                             model: ["Light", "Dark", "Purple"]
                                         }
@@ -275,7 +240,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Восстанавливать открытые заметки после запуска"
                                             }
                                         }
@@ -319,7 +283,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Параметры редактирования Markdown и автосохранения"
                                             }
                                         }
@@ -404,9 +367,6 @@ Item {
                                         SettingsInputField {
                                             id: timeText
                                             text: "20"
-                                            fieldTextColor: root.colorTextPrimary
-                                            fieldBackgroundColor: root.colorWhite
-                                            fieldBorderColor: root.colorDivider
                                             validator: IntValidator {
                                                 bottom: 1
                                             }
@@ -470,7 +430,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Папка хранения и резервные копии"
                                             }
                                         }
@@ -493,7 +452,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Локальное хранилище Markdown-файлов"
                                             }
                                         }
@@ -504,9 +462,6 @@ Item {
                                         SettingsInputField {
                                             id: pathText
                                             text: AppState.saveDirectory && AppState.saveDirectory.length > 0 ? AppState.saveDirectory : "Папка не выбрана"
-                                            fieldTextColor: root.colorTextPrimary
-                                            fieldBackgroundColor: root.colorWhite
-                                            fieldBorderColor: root.colorDivider
                                             horizontalAlignment: Text.AlignLeft
                                             Layout.preferredWidth: 220
                                             readOnly: true
@@ -515,9 +470,6 @@ Item {
 
                                         SettingsActionButton {
                                             text: "Выбрать"
-                                            textColor: root.colorTextPrimary
-                                            backgroundColor: root.colorSurface
-                                            fontFamily: root.uiFontFamily
                                             onClicked: notesFolderDialog.open()
                                         }
                                         Layout.fillWidth: true
@@ -571,9 +523,6 @@ Item {
                                         SettingsInputField {
                                             id: backupCount
                                             text: "20"
-                                            fieldTextColor: root.colorTextPrimary
-                                            fieldBackgroundColor: root.colorWhite
-                                            fieldBorderColor: root.colorDivider
                                             validator: IntValidator {
                                                 bottom: 1
                                             }
@@ -610,7 +559,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Поведение полнотекстового и интеллектуального поиска"
                                             }
                                         }
@@ -690,7 +638,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Обновите индекс после массового импорта заметок"
                                             }
                                         }
@@ -700,9 +647,6 @@ Item {
 
                                         SettingsActionButton {
                                             text: "Переиндексировать"
-                                            textColor: root.colorTextPrimary
-                                            backgroundColor: root.colorSurface
-                                            fontFamily: root.uiFontFamily
                                             onClicked: {
                                                 AppState.refreshNoteTitles();
                                                 AppState.refreshFolderTitles();
@@ -738,7 +682,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Настройки визуализации связей между заметками"
                                             }
                                         }
@@ -768,9 +711,6 @@ Item {
                                         SettingsInputField {
                                             id: graphDepthField
                                             text: "2"
-                                            fieldTextColor: root.colorTextPrimary
-                                            fieldBackgroundColor: root.colorWhite
-                                            fieldBorderColor: root.colorDivider
                                             validator: IntValidator {
                                                 bottom: 1
                                             }
@@ -833,7 +773,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Защита локального хранилища и доступа к приложению"
                                             }
                                         }
@@ -921,7 +860,6 @@ Item {
                                             }
 
                                             SettingsDescriptionText {
-                                                color: root.colorTextSecondary
                                                 text: "Информация о текущей версии приложения"
                                             }
                                         }
@@ -934,32 +872,20 @@ Item {
                                     SettingsKeyValueRow {
                                         keyText: "Версия:"
                                         valueText: "0.0.1"
-                                        uiFontFamily: root.uiFontFamily
-                                        keyColor: root.colorTextPrimary
-                                        valueColor: root.colorTextSecondary
                                     }
 
                                     SettingsKeyValueRow {
                                         keyText: "Автор: "
                                         valueText: "Ренат"
-                                        uiFontFamily: root.uiFontFamily
-                                        keyColor: root.colorTextPrimary
-                                        valueColor: root.colorTextSecondary
                                     }
 
                                     SettingsKeyValueRow {
                                         keyText: "Хранилище: "
                                         valueText: "Local"
-                                        uiFontFamily: root.uiFontFamily
-                                        keyColor: root.colorTextPrimary
-                                        valueColor: root.colorTextSecondary
                                     }
 
                                     SettingsActionButton {
                                         text: "Открыть папку данных"
-                                        textColor: root.colorTextPrimary
-                                        backgroundColor: root.colorSurface
-                                        fontFamily: root.uiFontFamily
                                         Layout.leftMargin: 12
                                         Layout.bottomMargin: 12
                                         clickable: AppState.saveDirectory && AppState.saveDirectory.length > 0

@@ -12,7 +12,6 @@ Item {
     property color colorBackground: "#ffffff"
     property color colorSurface: "#f1f5f9"
     property color colorTextPrimary: "#0f1724"
-    property color colorTextSecondary: "#667085"
     property color colorAccent: "#0b74de"
 
     signal sendClicked
@@ -79,17 +78,12 @@ Item {
 
                     SettingsSidebarLabelText {
                         text: "Share"
-                        textColor: colorTextSecondary
-                        font.styleName: "SemiBold"
                     }
                     SettingsPageTitleText {
                         text: "Share “”"
-                        textColor: colorTextPrimary
-                        font.styleName: "Bold"
                     }
                     SettingsDescriptionText {
                         text: "Invite people, manage access, and copy a link to this note."
-                        textColor: colorTextSecondary
                         wrapMode: Text.WordWrap
                     }
                 }
@@ -122,9 +116,6 @@ Item {
 
             // ==================== 2. Add people or groups ====================
             SettingsSectionCard {
-                cardColor: colorSurface
-                borderLineColor: "transparent"
-                cornerRadius: 8
                 Layout.fillWidth: true
                 implicitHeight: addPeopleLayout.implicitHeight + 28
 
@@ -157,8 +148,6 @@ Item {
                                     horizontalAlignment: Text.AlignLeft
                                     verticalAlignment: Text.AlignTop
                                     Layout.fillWidth: true
-                                    textColor: colorTextSecondary
-                                    font.styleName: "Regular"
                                 }
                             }
                         }
@@ -175,9 +164,6 @@ Item {
 
             // ==================== 3. People with access ====================
             SettingsSectionCard {
-                cardColor: colorSurface
-                borderLineColor: "transparent"
-                cornerRadius: 8
                 Layout.fillWidth: true
                 implicitHeight: peopleColumn.implicitHeight + 28
 
@@ -189,8 +175,6 @@ Item {
 
                     SettingsSidebarLabelText {
                         text: "People with access"
-                        textColor: colorTextSecondary
-                        font.styleName: "SemiBold"
                     }
 
                     // ── Первая строка (Alex) ──
@@ -215,13 +199,11 @@ Item {
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 2
-                            SettingsDescriptionText {
+                            SettingsBodyPrimaryText {
                                 text: "Alex Kim"
-                                textColor: colorTextPrimary
                             }
                             SettingsDescriptionText {
                                 text: "alex@vault.app"
-                                textColor: colorTextSecondary
                             }
                         }
 
@@ -230,16 +212,6 @@ Item {
                         }
 
                         SettingsDropdown {
-                            Layout.preferredHeight: 32
-                            topPadding: 7
-                            bottomPadding: 7
-
-                            dropdownTextColor: colorTextPrimary
-                            dropdownSecondaryTextColor: colorTextSecondary
-                            dropdownBackgroundColor: colorBackground
-                            dropdownBorderColor: "transparent"
-                            dropdownBorderWidth: 0
-
                             model: roleOptions
                             currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex1"] || "Viewer"))
 
@@ -270,13 +242,11 @@ Item {
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 2
-                            SettingsDescriptionText {
+                            SettingsBodyPrimaryText {
                                 text: "Alex Kim"
-                                textColor: colorTextPrimary
                             }
                             SettingsDescriptionText {
                                 text: "alex@vault.app"
-                                textColor: colorTextSecondary
                             }
                         }
 
@@ -285,16 +255,6 @@ Item {
                         }
 
                         SettingsDropdown {
-                            Layout.preferredHeight: 32
-                            topPadding: 7
-                            bottomPadding: 7
-
-                            dropdownTextColor: colorTextPrimary
-                            dropdownSecondaryTextColor: colorTextSecondary
-                            dropdownBackgroundColor: colorBackground
-                            dropdownBorderColor: "transparent"
-                            dropdownBorderWidth: 0
-
                             model: roleOptions
                             currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex2"] || "Viewer"))
 
@@ -306,9 +266,6 @@ Item {
 
             // ==================== 4. General access ====================
             SettingsSectionCard {
-                cardColor: colorSurface
-                borderLineColor: "transparent"
-                cornerRadius: 8
                 Layout.fillWidth: true
                 implicitHeight: generalColumn.implicitHeight + 28
 
@@ -320,8 +277,6 @@ Item {
 
                     SettingsSidebarLabelText {
                         text: "General access"
-                        textColor: colorTextSecondary
-                        font.styleName: "SemiBold"
                     }
 
                     RowLayout {
@@ -339,13 +294,11 @@ Item {
                             spacing: 2
                             Layout.fillWidth: true
 
-                            SettingsDescriptionText {
+                            SettingsBodyPrimaryText {
                                 text: "Restricted"
-                                textColor: colorTextPrimary
                             }
                             SettingsDescriptionText {
                                 text: "Only people added above can open this note."
-                                textColor: colorTextSecondary
                                 wrapMode: Text.WordWrap
                             }
                         }
@@ -355,16 +308,6 @@ Item {
                         }
 
                         SettingsDropdown {
-                            Layout.preferredHeight: 32
-                            topPadding: 7
-                            bottomPadding: 7
-
-                            dropdownTextColor: colorTextPrimary
-                            dropdownSecondaryTextColor: colorTextSecondary
-                            dropdownBackgroundColor: colorBackground
-                            dropdownBorderColor: "transparent"
-                            dropdownBorderWidth: 0
-
                             model: roleOptions
                             currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["general"] || "Viewer"))
 
@@ -400,8 +343,6 @@ Item {
                         }
                         SettingsSidebarLabelText {
                             text: "Copy link"
-                            font.styleName: "SemiBold"
-                            textColor: colorTextPrimary
                         }
                     }
                 }
