@@ -19,6 +19,7 @@ Item {
     readonly property color colorSurface: "#f1f5f9"
     readonly property color colorBorderSoft: Qt.rgba(0, 0, 0, 0.08)
 
+
     function dataDirectoryUrl() {
         if (!AppState.saveDirectory || AppState.saveDirectory.length === 0) {
             return "";
