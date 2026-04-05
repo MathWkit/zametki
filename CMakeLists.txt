@@ -58,6 +58,13 @@ qt_add_qml_module(appzametki
         qml/components/MainHeaderBar.qml
         qml/components/AppSwitch.qml
         qml/components/AppButton.qml
+        qml/components/settings/SettingsPageTitleText.qml
+        qml/components/settings/SettingsSidebarLabelText.qml
+        qml/components/settings/SettingsSectionTitleText.qml
+        qml/components/settings/SettingsDescriptionText.qml
+        qml/components/settings/SettingsSectionCard.qml
+        qml/components/settings/SettingsDivider.qml
+        qml/components/settings/SettingsNavItem.qml
         qml/components/auth/LoginForm.qml
         qml/components/auth/RegisterForm.qml
         qml/CreationBD.qml
