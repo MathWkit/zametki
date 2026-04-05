@@ -57,9 +57,17 @@ Rectangle {
 				spacing: 8
 				width: parent.width
 
-				Button {
+				AppButton {
+					id: chooseFolderButton
 					text: "Выбрать папку"
-					font.family: root.fontFamily
+					fontFamily: root.fontFamily
+					fontPointSize: Palette.fontSizeBase
+					textColor: Palette.textPrimary
+					backgroundColor: Palette.surfaceColor
+					hoverBackgroundColor: Palette.hover
+					pressedBackgroundColor: Palette.selected
+					radius: Palette.radiusMd
+					clickable: true
 					onClicked: folderDialog.open()
 				}
 
@@ -83,9 +91,20 @@ Rectangle {
 				wrapMode: Text.WordWrap
 			}
 
-			Button {
+			AppButton {
+				id: createButton
 				text: "Создать"
-				font.family: root.fontFamily
+				fontFamily: root.fontFamily
+				fontPointSize: Palette.fontSizeMd
+				fontWeight: Font.DemiBold
+				textColor: Palette.backgroundWhite
+				backgroundColor: Palette.accentPrimary
+				hoverBackgroundColor: Palette.authAccentHover
+				pressedBackgroundColor: Palette.authAccentPressed
+				disabledBackgroundColor: Palette.authInputBorder
+				radius: Palette.radiusLg
+				implicitHeight: Palette.buttonHeightBase
+				clickable: enabled
 				enabled: databaseNameField.text.trim().length > 0 && root.selectedDirectoryPath.length > 0
 				onClicked: {
 					root.errorText = "";

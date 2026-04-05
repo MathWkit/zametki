@@ -197,31 +197,22 @@ Item {
             }
         }
 
-        Button {
+        AppButton {
             id: loginButton
             Layout.fillWidth: true
             Layout.topMargin: Palette.spacingSm
             text: qsTr("Войти")
-            hoverEnabled: true
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeMd
+            fontFamily: root.fontFamily
+            fontPointSize: Palette.fontSizeMd
+            fontWeight: Font.DemiBold
+            textColor: Palette.backgroundWhite
+            backgroundColor: root.accentColor
+            hoverBackgroundColor: root.accentHoverColor
+            pressedBackgroundColor: root.accentPressedColor
+            radius: Palette.radiusLg
+            implicitHeight: Palette.buttonHeightLarge
+            clickable: true
             onClicked: root.validateAndSubmit()
-
-            contentItem: Text {
-                text: loginButton.text
-                color: Palette.backgroundWhite
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeMd
-                font.weight: Font.DemiBold
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            background: Rectangle {
-                implicitHeight: Palette.buttonHeightLarge
-                radius: Palette.radiusLg
-                color: loginButton.down ? root.accentPressedColor : (loginButton.hovered ? root.accentHoverColor : root.accentColor)
-            }
         }
 
         Item {
@@ -256,85 +247,65 @@ Item {
             }
         }
 
-        Button {
+        AppButton {
             id: googleAuthButton
             visible: root.showGoogleAuth
             Layout.fillWidth: true
             text: qsTr("Продолжить с Google")
-            hoverEnabled: true
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeBase
+            fontFamily: root.fontFamily
+            fontPointSize: Palette.fontSizeBase
+            fontWeight: Font.DemiBold
+            textColor: root.textColor
+            backgroundColor: root.socialButtonColor
+            hoverBackgroundColor: root.socialButtonHoverColor
+            pressedBackgroundColor: root.socialButtonHoverColor
+            borderWidth: 1
+            borderColor: root.socialButtonBorderColor
+            hoverBorderColor: root.socialButtonBorderColor
+            pressedBorderColor: root.socialButtonBorderColor
+            radius: Palette.radiusLg
+            implicitHeight: Palette.authSocialButtonHeight
+            clickable: true
             onClicked: root.googleAuthRequested()
-
-            contentItem: Text {
-                text: googleAuthButton.text
-                color: root.textColor
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeBase
-                font.weight: Font.DemiBold
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            background: Rectangle {
-                implicitHeight: Palette.authSocialButtonHeight
-                radius: Palette.radiusLg
-                color: googleAuthButton.hovered ? root.socialButtonHoverColor : root.socialButtonColor
-                border.width: 1
-                border.color: root.socialButtonBorderColor
-            }
         }
 
-        Button {
+        AppButton {
             id: appleAuthButton
             visible: root.showAppleAuth
             Layout.fillWidth: true
             text: qsTr("Продолжить с Apple ID")
-            hoverEnabled: true
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeBase
+            fontFamily: root.fontFamily
+            fontPointSize: Palette.fontSizeBase
+            fontWeight: Font.DemiBold
+            textColor: root.textColor
+            backgroundColor: root.socialButtonColor
+            hoverBackgroundColor: root.socialButtonHoverColor
+            pressedBackgroundColor: root.socialButtonHoverColor
+            borderWidth: 1
+            borderColor: root.socialButtonBorderColor
+            hoverBorderColor: root.socialButtonBorderColor
+            pressedBorderColor: root.socialButtonBorderColor
+            radius: Palette.radiusLg
+            implicitHeight: Palette.authSocialButtonHeight
+            clickable: true
             onClicked: root.appleAuthRequested()
-
-            contentItem: Text {
-                text: appleAuthButton.text
-                color: root.textColor
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeBase
-                font.weight: Font.DemiBold
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            background: Rectangle {
-                implicitHeight: Palette.authSocialButtonHeight
-                radius: Palette.radiusLg
-                color: appleAuthButton.hovered ? root.socialButtonHoverColor : root.socialButtonColor
-                border.width: 1
-                border.color: root.socialButtonBorderColor
-            }
         }
 
-        Button {
+        AppButton {
             id: registerLinkButton
             Layout.alignment: Qt.AlignHCenter
             text: qsTr("Нет аккаунта? Зарегистрироваться")
-            hoverEnabled: true
-            flat: true
+            fontFamily: root.fontFamily
+            fontPointSize: Palette.fontSizeSm
+            textColor: root.linkColor
+            backgroundColor: "transparent"
+            hoverBackgroundColor: "transparent"
+            pressedBackgroundColor: "transparent"
+            horizontalPadding: 0
+            verticalPadding: 0
+            underlineOnHover: true
+            clickable: true
             onClicked: root.switchToRegisterRequested()
-
-            contentItem: Text {
-                text: registerLinkButton.text
-                color: root.linkColor
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeSm
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font.underline: registerLinkButton.hovered
-            }
-
-            background: Rectangle {
-                color: "transparent"
-            }
         }
     }
 }
