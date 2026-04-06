@@ -154,8 +154,6 @@ Item {
 
                         SettingsActionButton {
                             text: "Send"
-                            textColor: colorTextPrimary
-                            backgroundColor: colorBackground
                             onClicked: sendClicked()
                         }
                     }
