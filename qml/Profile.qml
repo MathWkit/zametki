@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
+import "components/settings"
 
 Item {
     id: root
@@ -78,41 +79,26 @@ Item {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
 
-                Text {
+                SettingsPageTitleText {
                     text: "Профиль"
-                    color: Palette.textPrimary
-                    font.pixelSize: Palette.fontSizeXl
-                    font.family: root.fontFamily
-                    font.weight: 700
                     Layout.fillWidth: true
                 }
 
-                Rectangle {
-                    radius: Palette.radiusMd
+                SettingsActionButtonCompact {
+                    text: "✕"
+                    backgroundColor: Palette.surfaceColor
                     Layout.preferredHeight: Palette.buttonHeightBase
                     Layout.preferredWidth: Palette.buttonHeightBase
-                    TapHandler {
-                        onTapped: {
-                            console.log("Кнопка: Закрыть");
-                            root.closeClicked();
-                        }
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "✕"
-                        color: Palette.textPrimary
-                        font.pixelSize: Palette.fontSizeLg
-                        font.family: root.fontFamily
+                    onClicked: {
+                        console.log("Кнопка: Закрыть");
+                        root.closeClicked();
                     }
                 }
             }
 
             // ==================== 2. Divider ====================
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: Palette.dividerColor
+            SettingsDivider {
+                dividerColor: Palette.dividerColor
             }
 
             // ==================== 3. Current Account ====================
@@ -120,18 +106,13 @@ Item {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
 
-                Text {
+                SettingsSectionTitleText {
                     text: "Текущий аккаунт"
-                    color: Palette.textPrimary
-                    font.family: root.fontFamily
-                    font.weight: 600
-                    font.pixelSize: Palette.fontSizeMd
                 }
 
-                Rectangle {
+                SettingsSectionCard {
                     Layout.fillWidth: true
                     Layout.preferredHeight: currentAccountContent.implicitHeight + Palette.spacingLg
-                    radius: Palette.radiusMd
 
                     RowLayout {
                         id: currentAccountContent
@@ -162,21 +143,16 @@ Item {
                             Layout.alignment: Qt.AlignLeft
                             spacing: Palette.spacingSm
 
-                            Text {
+                            SettingsBodyPrimaryText {
                                 text: root.currentAccount.firstName + " " + root.currentAccount.lastName
-                                color: Palette.textPrimary
-                                font.family: root.fontFamily
-                                font.weight: 600
-                                font.pixelSize: Palette.fontSizeMd
+                                font.pointSize: Palette.fontSizeMd
+                                font.styleName: "SemiBold"
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                             }
 
-                            Text {
+                            SettingsDescriptionText {
                                 text: root.currentAccount.email
-                                color: Palette.textSecondary
-                                font.family: root.fontFamily
-                                font.pixelSize: Palette.fontSizeSm
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                             }
@@ -201,36 +177,25 @@ Item {
                             }
                         ]
 
-                        Rectangle {
+                        SettingsActionButton {
                             required property var modelData
+                            text: modelData.label
                             Layout.fillWidth: true
                             Layout.preferredHeight: Palette.buttonHeightBase
-                            color: Palette.backgroundWhite
-                            radius: Palette.radiusMd
-                            border.color: Palette.borderSoft
-                            border.width: 1
-
-                            TapHandler {
-                                onTapped: {
-                                    console.log("Кнопка: " + parent.modelData.label);
-                                    switch (parent.modelData.signal) {
-                                    case "changeNameClicked":
-                                        root.changeNameClicked();
-                                        break;
-                                    case "changePasswordClicked":
-                                        root.changePasswordClicked();
-                                        break;
-                                    }
+                            backgroundColor: Palette.backgroundWhite
+                            borderColor: Palette.borderSoft
+                            borderWidth: 1
+                            fontPointSize: Palette.fontSizeSm
+                            onClicked: {
+                                console.log("Кнопка: " + modelData.label);
+                                switch (modelData.signal) {
+                                case "changeNameClicked":
+                                    root.changeNameClicked();
+                                    break;
+                                case "changePasswordClicked":
+                                    root.changePasswordClicked();
+                                    break;
                                 }
-                            }
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: parent.modelData.label
-                                color: Palette.textPrimary
-                                font.family: root.fontFamily
-                                font.weight: 600
-                                font.pixelSize: Palette.fontSizeSm
                             }
                         }
                     }
@@ -246,19 +211,12 @@ Item {
                     Layout.fillWidth: true
                     spacing: Palette.spacingSm
 
-                    Text {
+                    SettingsSectionTitleText {
                         text: "Аккаунты"
-                        color: Palette.textPrimary
-                        font.family: root.fontFamily
-                        font.weight: 600
-                        font.pixelSize: Palette.fontSizeMd
                     }
 
-                    Text {
+                    SettingsDescriptionText {
                         text: "Switch between your local and work profiles"
-                        color: Palette.textSecondary
-                        font.family: root.fontFamily
-                        font.pixelSize: Palette.fontSizeSm
                         wrapMode: Text.WordWrap
                     }
                 }
@@ -267,26 +225,15 @@ Item {
                     Layout.fillWidth: true
                 }
 
-                Rectangle {
+                SettingsActionButton {
+                    text: "Добавить"
                     Layout.preferredWidth: 120
                     Layout.preferredHeight: Palette.buttonHeightBase
-                    color: Palette.accentPrimary
-                    radius: Palette.radiusMd
-
-                    TapHandler {
-                        onTapped: {
-                            console.log("Кнопка: Добавить");
-                            root.addAccountClicked();
-                        }
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Добавить"
-                        color: Palette.backgroundWhite
-                        font.family: root.fontFamily
-                        font.weight: 600
-                        font.pixelSize: Palette.fontSizeSm
+                    textColor: Palette.backgroundWhite
+                    backgroundColor: Palette.accentPrimary
+                    onClicked: {
+                        console.log("Кнопка: Добавить");
+                        root.addAccountClicked();
                     }
                 }
             }
@@ -310,11 +257,11 @@ Item {
                             Layout.fillWidth: true
                             spacing: Palette.spacingLg
 
-                            Rectangle {
+                            SettingsSectionCard {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: Palette.avatarSmall + Palette.spacingLg + Palette.spacingLg
-                                color: modelData.isCurrent ? Palette.accentSidebar : Palette.surfaceColor
-                                radius: Palette.radiusMd
+                                cardColor: modelData.isCurrent ? Palette.accentSidebar : Palette.surfaceColor
+                                borderLineColor: "transparent"
 
                                 RowLayout {
                                     anchors.fill: parent
@@ -343,50 +290,30 @@ Item {
                                         Layout.fillWidth: true
                                         spacing: Palette.spacingSm
 
-                                        Text {
+                                        SettingsBodyPrimaryText {
                                             text: modelData.firstName + " " + modelData.lastName
-                                            color: Palette.textPrimary
-                                            font.family: root.fontFamily
-                                            font.weight: 600
-                                            font.pixelSize: Palette.fontSizeSm
                                         }
 
-                                        Text {
+                                        SettingsDescriptionText {
                                             text: modelData.email
-                                            color: Palette.textSecondary
-                                            font.family: root.fontFamily
-                                            font.pixelSize: Palette.fontSizeXs
                                         }
                                     }
                                     Item {
                                         Layout.fillWidth: true
                                     }
 
-                                    Rectangle {
-                                        Layout.preferredWidth: 85
-                                        Layout.preferredHeight: switchText.implicitHeight + 20
-                                        color: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
-                                        radius: 100
-                                        border.color: modelData.isCurrent ? Palette.accentPrimary : Palette.borderSoft
-                                        border.width: 1
-
-                                        TapHandler {
-                                            onTapped: {
-                                                console.log("Кнопка: " + (modelData.isCurrent ? "Текущий" : "Выбрать"));
-                                                if (!modelData.isCurrent) {
-                                                    root.switchAccountClicked(modelData.id);
-                                                }
+                                    SettingsActionButton {
+                                        text: modelData.isCurrent ? "Текущий" : "Выбрать"
+                                        textColor: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
+                                        backgroundColor: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
+                                        borderColor: modelData.isCurrent ? Palette.accentPrimary : Palette.borderSoft
+                                        borderWidth: 1
+                                        clickable: !modelData.isCurrent
+                                        onClicked: {
+                                            console.log("Кнопка: " + (modelData.isCurrent ? "Текущий" : "Выбрать"));
+                                            if (!modelData.isCurrent) {
+                                                root.switchAccountClicked(modelData.id);
                                             }
-                                        }
-
-                                        Text {
-                                            id: switchText
-                                            anchors.centerIn: parent
-                                            text: modelData.isCurrent ? "Текущий" : "Выбрать"
-                                            color: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
-                                            font.family: root.fontFamily
-                                            font.weight: 600
-                                            font.pixelSize: Palette.fontSizeXs
                                         }
                                     }
                                 }
@@ -397,46 +324,25 @@ Item {
             }
 
             // ==================== 6. Divider ====================
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: Palette.dividerColor
-            }
+            SettingsDivider {}
 
             // ==================== 7. Footer ====================
             RowLayout {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
 
-                Text {
+                SettingsDescriptionText {
                     text: "You can stay signed in to several accounts and switch instantly."
-                    color: Palette.textSecondary
-                    font.family: root.fontFamily
-                    font.pixelSize: Palette.fontSizeSm
                     wrapMode: Text.WordWrap
-                    Layout.fillWidth: true
                 }
 
-                Rectangle {
-                    Layout.preferredWidth: 100
-                    Layout.preferredHeight: Palette.buttonHeightBase
-                    color: Palette.backgroundWhite
-                    radius: Palette.radiusMd
-
-                    TapHandler {
-                        onTapped: {
-                            console.log("Кнопка: Log Out");
-                            root.logoutClicked();
-                        }
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Log Out"
-                        color: Palette.errorColor
-                        font.family: root.fontFamily
-                        font.weight: 600
-                        font.pixelSize: Palette.fontSizeSm
+                SettingsActionButton {
+                    text: "Log Out"
+                    textColor: Palette.errorColor
+                    backgroundColor: Palette.backgroundWhite
+                    onClicked: {
+                        console.log("Кнопка: Log Out");
+                        root.logoutClicked();
                     }
                 }
             }
