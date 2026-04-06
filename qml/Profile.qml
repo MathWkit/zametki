@@ -97,9 +97,7 @@ Item {
             }
 
             // ==================== 2. Divider ====================
-            SettingsDivider {
-                dividerColor: Palette.dividerColor
-            }
+            SettingsDivider {}
 
             // ==================== 3. Current Account ====================
             ColumnLayout {
