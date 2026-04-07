@@ -26,7 +26,7 @@ Rectangle {
         anchors.rightMargin: Palette.spacingMassive
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: Palette.spacingMassive
-        height: 24
+        height: Palette.iconLarge
         clip: true
 
         Row {

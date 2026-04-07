@@ -28,8 +28,8 @@ AppSectionCard {
         Image {
             source: control.iconSource
             fillMode: Image.PreserveAspectFit
-            Layout.preferredWidth: 16
-            Layout.preferredHeight: 16
+            Layout.preferredWidth: Palette.iconSmall
+            Layout.preferredHeight: Palette.iconSmall
             Layout.alignment: Qt.AlignVCenter
         }
 

@@ -10,6 +10,8 @@ Item {
     clip: true
 
     readonly property Item dialogItem: dialog
+    readonly property int dialogMargin: Palette.space2
+    readonly property int dialogMinHeight: Palette.controlHeightBase + Palette.searchHintBarHeight + Palette.space4
 
     property var recentNotes: [
         {
@@ -59,8 +61,8 @@ Item {
 
     Rectangle {
         id: dialog
-        width: Palette.dialogMaxWidth
-        height: Palette.searchDialogHeight
+        width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.searchDialogMinWidth, root.width - (root.dialogMargin * 2)))
+        height: Math.min(Palette.searchDialogHeight, Math.max(root.dialogMinHeight, root.height - (root.dialogMargin * 2)))
         color: Palette.headerBackground
         radius: Palette.radiusLg
         border.width: 1
@@ -109,8 +111,9 @@ Item {
 
                         SearchResultRow {
                             required property var modelData
+                            required property int index
 
-                            Layout.leftMargin: 20
+                            Layout.leftMargin: Palette.searchInset
                             Layout.rightMargin: Palette.searchInset
                             Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
@@ -130,6 +133,7 @@ Item {
 
                         SearchResultRow {
                             required property var modelData
+                            required property int index
 
                             Layout.leftMargin: Palette.searchInset
                             Layout.rightMargin: Palette.searchInset
@@ -150,6 +154,7 @@ Item {
 
                         SearchResultRow {
                             required property var modelData
+                            required property int index
 
                             Layout.leftMargin: Palette.searchInset
                             Layout.rightMargin: Palette.searchInset

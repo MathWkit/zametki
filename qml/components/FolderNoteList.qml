@@ -137,10 +137,10 @@ Column {
 
                 Image {
                     source: treeItem.isFolder ? "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg" : ""
-                    width: 16
-                    height: 16
-                    Layout.preferredWidth: 16
-                    Layout.preferredHeight: 16
+                    width: Palette.iconSmall
+                    height: Palette.iconSmall
+                    Layout.preferredWidth: Palette.iconSmall
+                    Layout.preferredHeight: Palette.iconSmall
                     Layout.alignment: Qt.AlignVCenter
                     fillMode: Image.PreserveAspectFit
                     rotation: treeItem.isFolder && root.expandedFolders[treeItem.modelData.path] ? 90 : 0
@@ -158,10 +158,10 @@ Column {
 
                         return treeItem.isSelected ? "qrc:/qt/qml/zametki/assets/icons/list/note-selected.svg" : "qrc:/qt/qml/zametki/assets/icons/list/note.svg";
                     }
-                    width: 16
-                    height: 16
-                    Layout.preferredWidth: 16
-                    Layout.preferredHeight: 16
+                    width: Palette.iconSmall
+                    height: Palette.iconSmall
+                    Layout.preferredWidth: Palette.iconSmall
+                    Layout.preferredHeight: Palette.iconSmall
                     Layout.alignment: Qt.AlignVCenter
                     fillMode: Image.PreserveAspectFit
                 }
@@ -220,10 +220,10 @@ Column {
 
                 Image {
                     source: noteItem.isSelected ? "qrc:/qt/qml/zametki/assets/icons/list/note-selected.svg" : "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
-                    width: 16
-                    height: 16
-                    Layout.preferredWidth: 16
-                    Layout.preferredHeight: 16
+                    width: Palette.iconSmall
+                    height: Palette.iconSmall
+                    Layout.preferredWidth: Palette.iconSmall
+                    Layout.preferredHeight: Palette.iconSmall
                     Layout.alignment: Qt.AlignVCenter
                     fillMode: Image.PreserveAspectFit
                 }

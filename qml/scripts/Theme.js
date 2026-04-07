@@ -124,6 +124,7 @@ var settingsPathFieldWidth = 220;
 var actionButtonMediumWidth = 120;
 
 var searchDialogHeight = 432;
+var searchDialogMinWidth = 360;
 var searchInset = 16;
 var searchSectionInset = 24;
 var searchCompactGap = 8;
