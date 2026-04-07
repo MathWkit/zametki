@@ -21,10 +21,10 @@ Item {
 
     // ===== STATE FOR ROLES =====
     property var peopleRoles: ({
-            "alex1": "Owner",
-            "alex2": "Owner"
+            "alex1": qsTr("Владелец"),
+            "alex2": qsTr("Владелец")
         })
-    property var roleOptions: ["Owner", "Editor", "Viewer"]
+    property var roleOptions: [qsTr("Владелец"), qsTr("Редактор"), qsTr("Читатель")]
 
     function changeRole(personId, newRole) {
         var updated = Object.assign({}, peopleRoles);
@@ -75,14 +75,16 @@ Item {
                     Layout.fillWidth: true
 
                     AppSidebarLabelText {
-                        text: "Share"
+                        text: qsTr("Доступ")
                     }
                     AppPageTitleText {
-                        text: "Share “”"
+                        text: qsTr("Поделиться заметкой")
                     }
                     AppDescriptionText {
-                        text: "Invite people, manage access, and copy a link to this note."
+                        text: qsTr("Приглашайте участников, управляйте правами и копируйте ссылку на заметку.")
                         wrapMode: Text.WordWrap
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 0
                     }
                 }
                 Item {
@@ -155,16 +157,17 @@ Item {
                                         }
 
                                         AppSidebarLabelText {
-                                            text: "Add people or groups"
+                                            text: qsTr("Добавьте людей или группы")
                                             horizontalAlignment: Text.AlignLeft
-                                            verticalAlignment: Text.AlignTop
+                                            verticalAlignment: Text.AlignVCenter
                                             Layout.fillWidth: true
+                                            elide: Text.ElideRight
                                         }
                                     }
                                 }
 
                                 AppActionButton {
-                                    text: "Send"
+                                    text: qsTr("Отправить")
                                     onClicked: sendClicked()
                                 }
                             }
@@ -183,7 +186,7 @@ Item {
                             spacing: Palette.spacingXl
 
                             AppSidebarLabelText {
-                                text: "People with access"
+                                text: qsTr("Люди с доступом")
                             }
 
                             // ── Первая строка (Alex) ──
@@ -205,7 +208,7 @@ Item {
                                     spacing: Palette.spacingSm
 
                                     AppBodyText {
-                                        text: "Alex Kim"
+                                        text: qsTr("Алекс Ким")
                                     }
 
                                     AppDescriptionText {
@@ -219,7 +222,7 @@ Item {
 
                                 AppDropdown {
                                     model: roleOptions
-                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex1"] || "Viewer"))
+                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex1"] || qsTr("Читатель")))
 
                                     onActivated: changeRole("alex1", currentText)
                                 }
@@ -244,7 +247,7 @@ Item {
                                     spacing: Palette.spacingSm
 
                                     AppBodyText {
-                                        text: "Alex Kim"
+                                        text: qsTr("Алекс Ким")
                                     }
 
                                     AppDescriptionText {
@@ -258,7 +261,7 @@ Item {
 
                                 AppDropdown {
                                     model: roleOptions
-                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex2"] || "Viewer"))
+                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex2"] || qsTr("Читатель")))
 
                                     onActivated: changeRole("alex2", currentText)
                                 }
@@ -278,7 +281,7 @@ Item {
                             spacing: Palette.spacingXl
 
                             AppSidebarLabelText {
-                                text: "General access"
+                                text: qsTr("Общий доступ")
                             }
 
                             RowLayout {
@@ -297,12 +300,14 @@ Item {
                                     Layout.fillWidth: true
 
                                     AppBodyText {
-                                        text: "Restricted"
+                                        text: qsTr("Ограничен")
                                     }
 
                                     AppDescriptionText {
-                                        text: "Only people added above can open this note."
+                                        text: qsTr("Открыть заметку смогут только люди, добавленные выше.")
                                         wrapMode: Text.WordWrap
+                                        Layout.fillWidth: true
+                                        Layout.minimumWidth: 0
                                     }
                                 }
 
@@ -312,7 +317,7 @@ Item {
 
                                 AppDropdown {
                                     model: roleOptions
-                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["general"] || "Viewer"))
+                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["general"] || qsTr("Читатель")))
 
                                     onActivated: changeRole("general", currentText)
                                 }
@@ -333,6 +338,8 @@ Item {
                     radius: Palette.radiusMd
                     implicitWidth: copyRow.implicitWidth + (Palette.spacingXxl * 2)
                     implicitHeight: copyRow.implicitHeight + Palette.spacingXxl
+                    Layout.maximumWidth: item1.width * 0.5
+                    clip: true
                     TapHandler {
                         onTapped: copyClicked()
                     }
@@ -347,7 +354,9 @@ Item {
                             Layout.preferredHeight: Palette.iconTiny
                         }
                         AppSidebarLabelText {
-                            text: "Copy link"
+                            text: qsTr("Копировать ссылку")
+                            Layout.fillWidth: true
+                            elide: Text.ElideRight
                         }
                     }
                 }
@@ -358,7 +367,7 @@ Item {
 
                 // Cancel
                 AppActionButton {
-                    text: "Cancel"
+                    text: qsTr("Отмена")
                     textColor: Palette.textPrimary
                     backgroundColor: Palette.surfaceColor
                     radius: Palette.radiusMd
@@ -367,7 +376,7 @@ Item {
 
                 // Done
                 AppActionButton {
-                    text: "Done"
+                    text: qsTr("Готово")
                     textColor: Palette.backgroundWhite
                     backgroundColor: Palette.accentPrimary
                     radius: Palette.radiusMd

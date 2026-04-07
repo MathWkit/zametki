@@ -79,7 +79,7 @@ Item {
                 spacing: Palette.spacingXl
 
                 AppPageTitleText {
-                    text: "Профиль"
+                    text: qsTr("Профиль")
                     Layout.fillWidth: true
                 }
 
@@ -104,7 +104,7 @@ Item {
                 spacing: Palette.spacingXl
 
                 AppSectionTitleText {
-                    text: "Текущий аккаунт"
+                    text: qsTr("Текущий аккаунт")
                 }
 
                 AppSectionCard {
@@ -155,11 +155,11 @@ Item {
                     Repeater {
                         model: [
                             {
-                                label: "Сменить Имя",
+                                label: qsTr("Сменить Имя"),
                                 signal: "changeNameClicked"
                             },
                             {
-                                label: "Сменить пароль",
+                                label: qsTr("Сменить пароль"),
                                 signal: "changePasswordClicked"
                             }
                         ]
@@ -199,12 +199,14 @@ Item {
                     spacing: Palette.spacingSm
 
                     AppSectionTitleText {
-                        text: "Аккаунты"
+                        text: qsTr("Аккаунты")
                     }
 
                     AppDescriptionText {
-                        text: "Switch between your local and work profiles"
+                        text: qsTr("Переключайтесь между личным и рабочим профилями")
                         wrapMode: Text.WordWrap
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 0
                     }
                 }
 
@@ -213,7 +215,7 @@ Item {
                 }
 
                 AppActionButton {
-                    text: "Добавить"
+                    text: qsTr("Добавить")
                     Layout.preferredWidth: Palette.actionButtonMediumWidth
                     Layout.preferredHeight: Palette.buttonHeightBase
                     textColor: Palette.backgroundWhite
@@ -281,7 +283,7 @@ Item {
                                     }
 
                                     AppActionButton {
-                                        text: modelData.isCurrent ? "Текущий" : "Выбрать"
+                                        text: modelData.isCurrent ? qsTr("Текущий") : qsTr("Выбрать")
                                         textColor: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
                                         backgroundColor: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
                                         borderColor: modelData.isCurrent ? Palette.accentPrimary : Palette.borderSoft
@@ -310,12 +312,14 @@ Item {
                 spacing: Palette.spacingXl
 
                 AppDescriptionText {
-                    text: "You can stay signed in to several accounts and switch instantly."
+                    text: qsTr("Вы можете оставаться в системе в нескольких аккаунтах и мгновенно переключаться между ними.")
                     wrapMode: Text.WordWrap
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 0
                 }
 
                 AppActionButton {
-                    text: "Log Out"
+                    text: qsTr("Выйти")
                     textColor: Palette.errorColor
                     backgroundColor: Palette.backgroundWhite
                     onClicked: {
