@@ -31,10 +31,6 @@ TextField {
         radius: Palette.radiusLg
         color: control.fieldBackgroundColor
         border.width: control.activeFocus ? 2 : 1
-        border.color: control.hasError
-            ? control.fieldErrorBorderColor
-            : (control.activeFocus
-                ? control.fieldFocusBorderColor
-                : (control.hovered ? control.fieldHoverBorderColor : control.fieldBorderColor))
+        border.color: control.hasError ? control.fieldErrorBorderColor : (control.activeFocus ? control.fieldFocusBorderColor : (control.hovered ? control.fieldHoverBorderColor : control.fieldBorderColor))
     }
 }

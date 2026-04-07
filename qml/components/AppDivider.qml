@@ -3,9 +3,9 @@ import QtQuick.Layouts 1.15
 import "../scripts/Theme.js" as Palette
 
 Rectangle {
-	property color dividerColor: Palette.border
+    property color dividerColor: Palette.border
 
-	color: dividerColor
-	Layout.preferredHeight: 1
-	Layout.fillWidth: true
+    color: dividerColor
+    Layout.preferredHeight: 1
+    Layout.fillWidth: true
 }

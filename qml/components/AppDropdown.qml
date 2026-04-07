@@ -3,83 +3,83 @@ import QtQuick.Controls 2.15
 import "../scripts/Theme.js" as Palette
 
 ComboBox {
-	id: control
+    id: control
 
-	property string uiFontFamily: Palette.fontFamily
-	property color dropdownTextColor: Palette.textPrimary
-	property color dropdownBackgroundColor: Palette.backgroundWhite
-	property color dropdownBorderColor: Palette.border
-	property int dropdownBorderWidth: 1
-	property color optionHoverColor: Palette.surfaceColor
-	property color optionTextColor: Palette.textPrimary
-	property string indicatorSource: "qrc:/qt/qml/zametki/assets/icons/unused/open-bracket.svg"
-	property int leftTextPadding: 12
-	property int rightTextPadding: 28
+    property string uiFontFamily: Palette.fontFamily
+    property color dropdownTextColor: Palette.textPrimary
+    property color dropdownBackgroundColor: Palette.backgroundWhite
+    property color dropdownBorderColor: Palette.border
+    property int dropdownBorderWidth: 1
+    property color optionHoverColor: Palette.surfaceColor
+    property color optionTextColor: Palette.textPrimary
+    property string indicatorSource: "qrc:/qt/qml/zametki/assets/icons/unused/open-bracket.svg"
+    property int leftTextPadding: 12
+    property int rightTextPadding: 28
 
-	topPadding: 12
-	bottomPadding: 12
+    topPadding: 12
+    bottomPadding: 12
 
-	contentItem: Text {
-		text: control.displayText
-		color: control.dropdownTextColor
-		leftPadding: control.leftTextPadding
-		rightPadding: control.rightTextPadding
-		verticalAlignment: Text.AlignVCenter
-		font.family: control.uiFontFamily
-	}
+    contentItem: Text {
+        text: control.displayText
+        color: control.dropdownTextColor
+        leftPadding: control.leftTextPadding
+        rightPadding: control.rightTextPadding
+        verticalAlignment: Text.AlignVCenter
+        font.family: control.uiFontFamily
+    }
 
-	indicator: Image {
-		source: control.indicatorSource
-		width: 12
-		height: 12
-		anchors.verticalCenter: parent.verticalCenter
-		anchors.right: parent.right
-		anchors.rightMargin: 10
-	}
+    indicator: Image {
+        source: control.indicatorSource
+        width: 12
+        height: 12
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+    }
 
-	background: Rectangle {
-		radius: Palette.radiusMd
-		color: control.dropdownBackgroundColor
-		border.color: control.dropdownBorderColor
-		border.width: control.dropdownBorderWidth
-	}
+    background: Rectangle {
+        radius: Palette.radiusMd
+        color: control.dropdownBackgroundColor
+        border.color: control.dropdownBorderColor
+        border.width: control.dropdownBorderWidth
+    }
 
-	delegate: ItemDelegate {
-		id: optionDelegate
-		required property string modelData
+    delegate: ItemDelegate {
+        id: optionDelegate
+        required property string modelData
 
-		width: ListView.view ? ListView.view.width : implicitWidth
+        width: ListView.view ? ListView.view.width : implicitWidth
 
-		background: Rectangle {
-			color: optionDelegate.hovered ? control.optionHoverColor : control.dropdownBackgroundColor
-		}
+        background: Rectangle {
+            color: optionDelegate.hovered ? control.optionHoverColor : control.dropdownBackgroundColor
+        }
 
-		contentItem: Text {
-			text: optionDelegate.modelData
-			color: control.optionTextColor
-			verticalAlignment: Text.AlignVCenter
-			leftPadding: 12
-			font.family: control.uiFontFamily
-		}
-	}
+        contentItem: Text {
+            text: optionDelegate.modelData
+            color: control.optionTextColor
+            verticalAlignment: Text.AlignVCenter
+            leftPadding: 12
+            font.family: control.uiFontFamily
+        }
+    }
 
-	popup: Popup {
-		y: control.height + 6
-		width: control.width
-		padding: 0
+    popup: Popup {
+        y: control.height + 6
+        width: control.width
+        padding: 0
 
-		contentItem: ListView {
-			clip: true
-			implicitHeight: contentHeight
-			model: control.popup.visible ? control.delegateModel : null
-			currentIndex: control.highlightedIndex
-		}
+        contentItem: ListView {
+            clip: true
+            implicitHeight: contentHeight
+            model: control.popup.visible ? control.delegateModel : null
+            currentIndex: control.highlightedIndex
+        }
 
-		background: Rectangle {
-			radius: Palette.radiusMd
-			color: control.dropdownBackgroundColor
-			border.color: control.dropdownBorderColor
-			border.width: control.dropdownBorderWidth
-		}
-	}
+        background: Rectangle {
+            radius: Palette.radiusMd
+            color: control.dropdownBackgroundColor
+            border.color: control.dropdownBorderColor
+            border.width: control.dropdownBorderWidth
+        }
+    }
 }

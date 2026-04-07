@@ -8,6 +8,8 @@ Item {
     id: root
     anchors.fill: parent
 
+    // Backward compatibility for Main.qml assignment.
+    property string fontFamily: Palette.fontFamily
     property int mode: 0
     property bool googleAuthAvailable: true
     property bool appleAuthAvailable: Qt.platform.os === "osx"

@@ -111,9 +111,7 @@ Item {
                 radius: Palette.radiusMd
                 color: rememberCheckBox.checked ? Palette.accentPrimary : Palette.backgroundWhite
                 border.width: 1
-                border.color: rememberCheckBox.checked
-                    ? Palette.accentPrimary
-                    : (rememberCheckBox.hovered ? Palette.authInputBorderHover : Palette.authInputBorder)
+                border.color: rememberCheckBox.checked ? Palette.accentPrimary : (rememberCheckBox.hovered ? Palette.authInputBorderHover : Palette.authInputBorder)
 
                 Text {
                     anchors.centerIn: parent
