@@ -1,5 +1,5 @@
 import QtQuick 6.8
-import QtQuick.Controls 2.15
+import QtQuick.Controls 6.8
 import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
 import "components"
@@ -323,7 +323,7 @@ Item {
                     textColor: Palette.errorColor
                     backgroundColor: Palette.backgroundWhite
                     onClicked: {
-                        console.log("Кнопка: Log Out");
+                        console.log("Кнопка: Выйти");
                         root.logoutClicked();
                     }
                 }

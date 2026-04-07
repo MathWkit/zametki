@@ -1,5 +1,5 @@
 import QtQuick 6.8
-import QtQuick.Controls 2.15
+import QtQuick.Controls 6.8
 import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
 import "components"
@@ -33,23 +33,23 @@ Item {
     }
 
     onSendClicked: {
-        console.log("SEND LOGIC");
+        console.log("Действие: отправка приглашения");
     }
 
     onCancelClicked: {
-        console.log("CANCEL LOGIC");
+        console.log("Действие: отмена приглашения");
     }
 
     onDoneClicked: {
-        console.log("SAVE DATA");
+        console.log("Действие: сохранение изменений");
     }
 
     onCopyClicked: {
-        console.log("COPY LINK");
+        console.log("Действие: копирование ссылки");
     }
 
     onCloseClicked: {
-        console.log("CLOSE DIALOG");
+        console.log("Действие: закрытие диалога");
     }
 
     Rectangle {

@@ -48,7 +48,7 @@ Window {
     height: 480
     minimumWidth: 500
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("Заметки")
 
     FontLoader {
         id: interFont
@@ -217,7 +217,7 @@ Window {
 
                 function onLogoutClicked() {
                     window.profileViewVisible = false;
-                    console.log("Logout clicked");
+                    console.log("Нажатие на Выход");
                 }
 
                 function onAddAccountClicked() {
@@ -258,19 +258,19 @@ Window {
             z: 9999
             fontFamily: interFont.name
             onLoginRequested: function (email, password) {
-                console.log("Login requested:", email, "password length:", password.length);
+                console.log("Запрос входа:", email, "длина пароля:", password.length);
                 window.authViewVisible = false;
             }
             onRegisterRequested: function (name, email, password) {
-                console.log("Register requested:", name, email, "password length:", password.length);
+                console.log("Запрос регистрации:", name, email, "длина пароля:", password.length);
                 window.authViewVisible = false;
             }
             onGoogleAuthRequested: {
-                console.log("Google auth requested");
+                console.log("Запрос входа через Google");
                 window.authViewVisible = false;
             }
             onAppleAuthRequested: {
-                console.log("Apple auth requested");
+                console.log("Запрос входа через Apple");
                 window.authViewVisible = false;
             }
         }
