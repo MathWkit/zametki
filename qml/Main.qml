@@ -4,6 +4,7 @@ import QtQuick 6.8
 import QtQuick.Window 6.8
 import "scripts/Theme.js" as Palette
 import "scripts/Handlers.mjs" as Handlers
+import "components/main"
 
 Window {
     id: window
@@ -165,7 +166,7 @@ Window {
             source: "Settings.qml"
         }
 
-        AppModalOverlay {
+        MainModalOverlay {
             id: searchOverlay
             visible: window.searchViewVisible && !window.settingsViewVisible
             z: 200
@@ -176,7 +177,7 @@ Window {
             }
         }
 
-        AppModalOverlay {
+        MainModalOverlay {
             id: shareOverlay
             visible: window.shareViewVisible && !window.settingsViewVisible
             z: 210
@@ -196,7 +197,7 @@ Window {
             }
         }
 
-        AppModalOverlay {
+        MainModalOverlay {
             id: profileOverlay
             visible: window.profileViewVisible && !window.settingsViewVisible
             z: 220

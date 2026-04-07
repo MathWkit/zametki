@@ -30,7 +30,7 @@ Rectangle {
 
     signal clicked
 
-    radius: 6
+    radius: Palette.radiusMd
     color: {
         if (!control.enabled) {
             return control.disabledBackgroundColor;

@@ -59,10 +59,10 @@ Item {
 
     Rectangle {
         id: dialog
-        width: 540
-        height: 430
+        width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, parent.width - (Palette.spacingXxl * 2)))
+        height: Math.min(430, Math.max(0, parent.height - (Palette.spacingXxl * 2)))
         color: Palette.headerBackground
-        radius: 8
+        radius: Palette.radiusLg
         border.width: 1
         border.color: Palette.border
         anchors.centerIn: parent
@@ -75,10 +75,10 @@ Item {
 
             SearchInputBar {
                 Layout.fillWidth: true
-                Layout.leftMargin: 20
-                Layout.rightMargin: 20
-                Layout.topMargin: 16
-                Layout.bottomMargin: 16
+                Layout.leftMargin: Palette.spacingXxl
+                Layout.rightMargin: Palette.spacingXxl
+                Layout.topMargin: Palette.spacingXxl
+                Layout.bottomMargin: Palette.spacingXxl
             }
 
             AppDivider {
@@ -100,8 +100,8 @@ Item {
 
                     SearchSectionHeader {
                         text: qsTr("RECENT NOTES")
-                        Layout.leftMargin: 24
-                        Layout.topMargin: 16
+                        Layout.leftMargin: Palette.spacingMassive
+                        Layout.topMargin: Palette.spacingXxl
                     }
 
                     Repeater {
@@ -110,9 +110,9 @@ Item {
                         SearchResultRow {
                             required property var modelData
 
-                            Layout.leftMargin: 20
-                            Layout.rightMargin: 20
-                            Layout.topMargin: index === 0 ? 12 : 0
+                            Layout.leftMargin: Palette.spacingXxl
+                            Layout.rightMargin: Palette.spacingXxl
+                            Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
                             subtitleText: modelData.subtitle
@@ -121,8 +121,8 @@ Item {
 
                     SearchSectionHeader {
                         text: qsTr("FOLDERS")
-                        Layout.leftMargin: 24
-                        Layout.topMargin: 18
+                        Layout.leftMargin: Palette.spacingMassive
+                        Layout.topMargin: Palette.spacingXxl
                     }
 
                     Repeater {
@@ -131,9 +131,9 @@ Item {
                         SearchResultRow {
                             required property var modelData
 
-                            Layout.leftMargin: 20
-                            Layout.rightMargin: 20
-                            Layout.topMargin: index === 0 ? 12 : 0
+                            Layout.leftMargin: Palette.spacingXxl
+                            Layout.rightMargin: Palette.spacingXxl
+                            Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
                         }
@@ -141,8 +141,8 @@ Item {
 
                     SearchSectionHeader {
                         text: qsTr("COMMANDS")
-                        Layout.leftMargin: 24
-                        Layout.topMargin: 18
+                        Layout.leftMargin: Palette.spacingMassive
+                        Layout.topMargin: Palette.spacingXxl
                     }
 
                     Repeater {
@@ -151,9 +151,9 @@ Item {
                         SearchResultRow {
                             required property var modelData
 
-                            Layout.leftMargin: 20
-                            Layout.rightMargin: 20
-                            Layout.topMargin: index === 0 ? 12 : 0
+                            Layout.leftMargin: Palette.spacingXxl
+                            Layout.rightMargin: Palette.spacingXxl
+                            Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
                         }

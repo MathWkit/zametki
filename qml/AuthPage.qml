@@ -38,7 +38,7 @@ Item {
 
     Rectangle {
         id: card
-        width: Math.min(Math.max(Palette.authCardMinWidth, root.width * 0.42), Palette.authCardMaxWidth)
+        width: Math.min(Palette.authCardMaxWidth, Math.max(Palette.authCardMinWidth, root.width - (Palette.spacingXxl * 2)))
         implicitHeight: contentLayout.implicitHeight + (Palette.spacingXxl * 2)
         anchors.centerIn: parent
         color: Palette.backgroundWhite

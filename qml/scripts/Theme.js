@@ -101,6 +101,7 @@ var authCardMaxWidth = 400;
 var sidebarMinWidth = 200;
 var sidebarWidthRatio = 0.2;
 var dialogMaxWidth = 540;
+var dialogMaxHeight = 600;
 var dialogPadding = 24;
 
 // ============================================================================
