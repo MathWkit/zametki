@@ -18,15 +18,15 @@ Rectangle {
     signal clicked
 
     Layout.fillWidth: true
-    implicitHeight: subtitleText.length > 0 ? 48 : 40
+    implicitHeight: subtitleText.length > 0 ? 44 : 36
     color: rowMouseArea.containsMouse && showHover ? rowHoverColor : rowColor
     radius: Palette.radiusMd
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: Palette.spacingXxl
-        anchors.rightMargin: Palette.spacingXxl
-        spacing: Palette.spacingLg
+        anchors.leftMargin: 14
+        anchors.rightMargin: 14
+        spacing: 10
 
         Image {
             source: control.iconSource
@@ -51,7 +51,7 @@ Rectangle {
                 visible: control.subtitleText.length > 0
                 text: control.subtitleText
                 textColor: control.subtitleColor
-                textPointSize: Palette.fontSizeSm
+                font.pointSize: 11
                 elide: Text.ElideRight
                 Layout.fillWidth: true
             }

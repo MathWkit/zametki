@@ -21,9 +21,9 @@ AppSectionCard {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: Palette.spacingXxl
-        anchors.rightMargin: Palette.spacingXxl
-        spacing: Palette.spacingLg
+        anchors.leftMargin: 14
+        anchors.rightMargin: 14
+        spacing: 10
 
         Image {
             source: control.iconSource

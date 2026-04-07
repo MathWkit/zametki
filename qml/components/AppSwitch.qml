@@ -1,12 +1,13 @@
 import QtQuick 6.8
 import QtQuick.Controls 2.15
+import "../scripts/Theme.js" as Palette
 
 Switch {
     id: control
 
-    property color activeColor: "#0B74DE"
-    property color inactiveTrackColor: "#ffffff"
-    property color inactiveHandleColor: Qt.rgba(0, 0, 0, 0.08)
+    property color activeColor: Palette.accentPrimary
+    property color inactiveTrackColor: Palette.backgroundWhite
+    property color inactiveHandleColor: Palette.border
 
     indicator: Rectangle {
         width: 45

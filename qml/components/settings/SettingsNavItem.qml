@@ -1,5 +1,6 @@
 import QtQuick 6.8
 import QtQuick.Layouts 1.15
+import "../../scripts/Theme.js" as Palette
 import ".."
 
 Rectangle {
@@ -9,27 +10,27 @@ Rectangle {
     required property string titleText
     property bool active: false
 
-    property string uiFontFamily: "Inter"
-    property color activeBackgroundColor: "#E6F0FF"
-    property color activeTextColor: "#0B74DE"
-    property color textColor: "#6B7280"
+    property string uiFontFamily: Palette.fontFamily
+    property color activeBackgroundColor: Palette.accentSidebar
+    property color activeTextColor: Palette.accentPrimary
+    property color textColor: Palette.textSecondary
 
     color: active ? activeBackgroundColor : "transparent"
-    radius: 6
+    radius: Palette.radiusMd
     Layout.fillWidth: true
-    implicitHeight: navLayout.implicitHeight + 24
-    implicitWidth: navLayout.implicitWidth + 24
+    implicitHeight: navLayout.implicitHeight + (Palette.spacingXl * 2)
+    implicitWidth: navLayout.implicitWidth + (Palette.spacingXl * 2)
 
     RowLayout {
         id: navLayout
         anchors.fill: parent
-        anchors.margins: 12
-        spacing: 12
+        anchors.margins: Palette.spacingXl
+        spacing: Palette.spacingXl
 
         Image {
             source: control.iconSource
-            Layout.preferredHeight: 18
-            Layout.preferredWidth: 18
+            Layout.preferredHeight: Palette.iconMedium
+            Layout.preferredWidth: Palette.iconMedium
         }
 
         AppSidebarLabelText {

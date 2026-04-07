@@ -12,6 +12,10 @@ Item {
     signal closeRequested
 
     readonly property color colorBackground: Palette.backgroundLight
+    readonly property int contentInset: Palette.contentInset
+    readonly property int sectionGap: Palette.sectionSpacing
+    readonly property int rowPadding: Palette.rowPadding
+    readonly property int rowPaddingCompact: Palette.rowPaddingCompact
 
     function dataDirectoryUrl() {
         if (!AppState.saveDirectory || AppState.saveDirectory.length === 0) {
@@ -34,10 +38,10 @@ Item {
                 anchors.left: parent.left
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                anchors.leftMargin: 16
-                anchors.topMargin: 24
-                anchors.bottomMargin: 24
-                spacing: 20
+                anchors.leftMargin: root.contentInset
+                anchors.topMargin: Palette.space3
+                anchors.bottomMargin: Palette.space3
+                spacing: root.sectionGap
 
                 AppPageTitleText {
                     text: "Настройки"
@@ -123,14 +127,14 @@ Item {
                     width: mainContentScroll.width
 
                     RowLayout {
-                        Layout.rightMargin: 24
+                        Layout.rightMargin: Palette.space3
 
                         ColumnLayout {
                             id: columnLayout4
-                            Layout.rightMargin: 24
-                            Layout.leftMargin: 24
+                            Layout.rightMargin: Palette.space3
+                            Layout.leftMargin: Palette.space3
                             Layout.bottomMargin: 0
-                            Layout.topMargin: 24
+                            Layout.topMargin: Palette.space3
                             AppSectionTitleText {
                                 text: "Общие настройки"
                             }
@@ -152,11 +156,11 @@ Item {
 
                     ColumnLayout {
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                        spacing: 48
-                        Layout.rightMargin: 40
-                        Layout.leftMargin: 40
-                        Layout.bottomMargin: 20
-                        Layout.topMargin: 20
+                        spacing: root.sectionGap
+                        Layout.rightMargin: Palette.space3
+                        Layout.leftMargin: Palette.space3
+                        Layout.bottomMargin: Palette.space2
+                        Layout.topMargin: Palette.space2
                         Layout.preferredWidth: -1
                         Layout.fillWidth: true
                         ColumnLayout {
@@ -173,10 +177,10 @@ Item {
                                     anchors.bottomMargin: 0
                                     SettingsControlRow {
                                         id: applicationLayout2
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
-
-                                        Layout.leftMargin: 18
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout6
 
@@ -195,10 +199,11 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout3
-                                        Layout.leftMargin: 18
-                                        Layout.rightMargin: 18
-                                        Layout.bottomMargin: 6
-                                        Layout.topMargin: 6
+                                        compact: true
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPaddingCompact
+                                        rowBottomMargin: root.rowPaddingCompact
                                         ColumnLayout {
                                             id: columnLayout7
 
@@ -217,7 +222,7 @@ Item {
 
                                         AppDropdown {
                                             id: appearanceCombo
-                                            Layout.preferredWidth: 160
+                                            Layout.preferredWidth: Palette.space4 * 5
 
                                             model: ["Light", "Dark", "Purple"]
                                         }
@@ -229,10 +234,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: editorLayout2
-
-                                        Layout.leftMargin: 18
-                                        Layout.bottomMargin: 16
-                                        Layout.topMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout8
 
@@ -887,8 +892,8 @@ Item {
 
                                     AppActionButton {
                                         text: "Открыть папку данных"
-                                        Layout.leftMargin: 12
-                                        Layout.bottomMargin: 12
+                                        Layout.leftMargin: Palette.spacingXl
+                                        Layout.bottomMargin: Palette.spacingXl
                                         clickable: AppState.saveDirectory && AppState.saveDirectory.length > 0
                                         onClicked: {
                                             if (!Qt.openUrlExternally(root.dataDirectoryUrl())) {

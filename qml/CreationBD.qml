@@ -15,7 +15,7 @@ Rectangle {
 
     signal createDatabaseRequested(string databaseName, string parentDirectoryPath)
 
-    color: Qt.rgba(0, 0, 0, 0.35)
+    color: Palette.overlayScrim
 
     AppSectionCard {
         width: Math.min(parent.width - 40, 480)

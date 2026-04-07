@@ -1,4 +1,5 @@
 import QtQuick 6.8
+import "../../scripts/Theme.js" as Palette
 
 Rectangle {
     id: control
@@ -10,7 +11,7 @@ Rectangle {
     signal outsideCloseRequested
 
     anchors.fill: parent
-    color: "#66000000"
+    color: Palette.overlayScrim
 
     MouseArea {
         anchors.fill: parent

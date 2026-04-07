@@ -41,6 +41,7 @@ var hover = "#f0f0f0";
 var selected = "#e8eefc";
 var dividerColor = "#f3f4f6";
 var errorColor = "#B91C1C";
+var overlayScrim = Qt.rgba(0, 0, 0, 0.4);
 
 // Auth screen specific colors
 var authAccentHover = "#0A67C7";
@@ -52,6 +53,12 @@ var authSocialButtonHover = "#F8FAFC";
 // ============================================================================
 // SPACING
 // ============================================================================
+var gridUnit = 8;
+var space1 = gridUnit;      // 8
+var space2 = gridUnit * 2;  // 16
+var space3 = gridUnit * 3;  // 24
+var space4 = gridUnit * 4;  // 32
+
 var spacingXs = 2;
 var spacingSm = 4;
 var spacingMd = 6;
@@ -78,6 +85,9 @@ var cornerRadius = 4;  // Legacy
 var buttonHeightSmall = 32;
 var buttonHeightBase = 36;
 var buttonHeightLarge = 40;
+var inputHeightBase = 40;
+var dropdownHeightBase = 40;
+var controlHeightBase = 40;
 
 var avatarSmall = 32;
 var avatarBase = 64;
@@ -101,8 +111,12 @@ var authCardMaxWidth = 400;
 var sidebarMinWidth = 200;
 var sidebarWidthRatio = 0.2;
 var dialogMaxWidth = 540;
-var dialogMaxHeight = 600;
+var dialogMaxHeight = 680;
 var dialogPadding = 24;
+var contentInset = 16;
+var sectionSpacing = 24;
+var rowPadding = 16;
+var rowPaddingCompact = 8;
 
 // ============================================================================
 // ANIMATION

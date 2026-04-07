@@ -1,11 +1,13 @@
 import QtQuick 6.8
 import QtQuick.Layouts 1.15
+import "../../scripts/Theme.js" as Palette
 
 RowLayout {
-    property int rowLeftMargin: 18
-    property int rowRightMargin: 0
-    property int rowTopMargin: 16
-    property int rowBottomMargin: 16
+    property bool compact: false
+    property int rowLeftMargin: Palette.contentInset
+    property int rowRightMargin: Palette.contentInset
+    property int rowTopMargin: compact ? Palette.rowPaddingCompact : Palette.rowPadding
+    property int rowBottomMargin: compact ? Palette.rowPaddingCompact : Palette.rowPadding
 
     Layout.leftMargin: rowLeftMargin
     Layout.rightMargin: rowRightMargin

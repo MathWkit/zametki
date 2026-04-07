@@ -23,16 +23,16 @@ Rectangle {
     Item {
         anchors.left: parent.left
         anchors.right: actionRow.left
-        anchors.rightMargin: 24
+        anchors.rightMargin: Palette.spacingMassive
         anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 24
+        anchors.leftMargin: Palette.spacingMassive
         height: 24
         clip: true
 
         Row {
             anchors.fill: parent
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 10
+            spacing: Palette.spacingLg
 
             MouseArea {
                 id: hideSidebarArea
@@ -85,7 +85,7 @@ Rectangle {
                             return root.notePathSegments[segmentIndex];
                         }
                         font.family: root.fontFamily
-                        font.pixelSize: 14
+                        font.pixelSize: Palette.fontSizeMd
                         font.weight: Font.Medium
                         color: isLastSegment ? "#0F1724" : "#667085"
                     }
@@ -96,10 +96,10 @@ Rectangle {
 
     Row {
         id: actionRow
-        spacing: 16
+        spacing: Palette.spacingXl
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.rightMargin: 24
+        anchors.rightMargin: Palette.spacingMassive
 
         MouseArea {
             id: shareArea
@@ -119,7 +119,7 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: 150
+                        duration: Palette.animationFast
                     }
                 }
             }
@@ -143,7 +143,7 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: 150
+                        duration: Palette.animationFast
                     }
                 }
             }
@@ -167,7 +167,7 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: 150
+                        duration: Palette.animationFast
                     }
                 }
             }

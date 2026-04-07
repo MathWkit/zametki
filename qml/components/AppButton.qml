@@ -1,12 +1,13 @@
 import QtQuick 6.8
+import "../scripts/Theme.js" as Palette
 
 Rectangle {
     id: control
 
     property alias text: label.text
-    property color textColor: "#0f1724"
+    property color textColor: Palette.textPrimary
     property color disabledTextColor: textColor
-    property color backgroundColor: "#f1f5f9"
+    property color backgroundColor: Palette.surfaceColor
     property color hoverBackgroundColor: backgroundColor
     property color pressedBackgroundColor: hoverBackgroundColor
     property color disabledBackgroundColor: backgroundColor
@@ -14,7 +15,7 @@ Rectangle {
     property color hoverBorderColor: borderColor
     property color pressedBorderColor: hoverBorderColor
     property color disabledBorderColor: borderColor
-    property string fontFamily: "Inter"
+    property string fontFamily: Palette.fontFamily
     property string fontStyleName: "Regular"
     property int fontPointSize: 14
     property int fontWeight: Font.Normal

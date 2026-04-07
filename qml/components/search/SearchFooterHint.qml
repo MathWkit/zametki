@@ -19,6 +19,6 @@ RowLayout {
 
     AppDescriptionText {
         text: control.textLabel
-        textPointSize: Palette.fontSizeSm
+        font.pointSize: 12
     }
 }

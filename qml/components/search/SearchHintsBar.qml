@@ -16,8 +16,8 @@ Rectangle {
     RowLayout {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.rightMargin: Palette.spacingXxl
-        spacing: Palette.spacingXxl
+        anchors.rightMargin: 14
+        spacing: 14
 
         Repeater {
             model: control.hintsModel

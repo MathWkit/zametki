@@ -52,23 +52,24 @@ Item {
 
     Rectangle {
         id: rectangle
-        width: 540
-        height: 561
+        width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, parent.width - (Palette.spacingXxl * 2)))
+        height: Math.min(Palette.dialogMaxHeight, Math.max(0, parent.height - (Palette.spacingXxl * 2)))
         color: Palette.backgroundWhite
-        radius: 10
+        radius: Palette.radiusXl
         anchors.centerIn: parent
+        clip: true
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 24
-            spacing: 20
+            anchors.margins: Palette.spacingMassive
+            spacing: Palette.spacingXl
 
             // ==================== 1. Заголовок Share ====================
             RowLayout {
                 Layout.fillWidth: true
 
                 ColumnLayout {
-                    spacing: 4
+                    spacing: Palette.spacingSm
                     Layout.fillWidth: true
 
                     AppSidebarLabelText {
@@ -87,19 +88,19 @@ Item {
                 }
                 Rectangle {
                     color: Palette.surfaceColor
-                    radius: 6
+                    radius: Palette.radiusMd
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                    Layout.preferredHeight: 36
-                    Layout.preferredWidth: 36
+                    Layout.preferredHeight: Palette.buttonHeightBase
+                    Layout.preferredWidth: Palette.buttonHeightBase
                     TapHandler {
                         onTapped: closeClicked()
                     }
                     Image {
                         anchors.fill: parent
-                        anchors.leftMargin: 8
-                        anchors.rightMargin: 8
-                        anchors.topMargin: 8
-                        anchors.bottomMargin: 8
+                        anchors.leftMargin: Palette.spacingLg
+                        anchors.rightMargin: Palette.spacingLg
+                        anchors.topMargin: Palette.spacingLg
+                        anchors.bottomMargin: Palette.spacingLg
                         source: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
                         Layout.alignment: Qt.AlignRight | Qt.AlignTop
                         Layout.fillWidth: false
@@ -109,190 +110,217 @@ Item {
                 }
             }
 
-            // ==================== 2. Add people or groups ====================
-            AppSectionCard {
+            Flickable {
+                id: bodyScroll
                 Layout.fillWidth: true
-                implicitHeight: addPeopleLayout.implicitHeight + 28
+                Layout.fillHeight: true
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
+                contentWidth: width
+                contentHeight: bodyContent.implicitHeight
 
                 ColumnLayout {
-                    id: addPeopleLayout
-                    anchors.fill: parent
-                    anchors.margins: 14
-                    spacing: 0
+                    id: bodyContent
+                    width: bodyScroll.width
+                    spacing: Palette.spacingXl
 
-                    RowLayout {
-                        spacing: 10
+                    // ==================== 2. Add people or groups ====================
+                    AppSectionCard {
                         Layout.fillWidth: true
+                        implicitHeight: addPeopleLayout.implicitHeight + (Palette.spacingXl * 2)
 
-                        Rectangle {
-                            radius: 6
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
+                        ColumnLayout {
+                            id: addPeopleLayout
+                            anchors.fill: parent
+                            anchors.margins: Palette.spacingXl
+                            spacing: Palette.spacingLg
 
                             RowLayout {
-                                anchors.fill: parent
-                                spacing: 8
-                                Image {
-                                    source: "qrc:/qt/qml/zametki/assets/icons/share/people.svg"
-                                    Layout.leftMargin: 12
-                                    Layout.preferredWidth: 16
-                                    Layout.preferredHeight: 16
+                                spacing: Palette.spacingLg
+                                Layout.fillWidth: true
+
+                                Rectangle {
+                                    id: addPeopleInputContainer
+                                    color: "transparent"
+                                    radius: Palette.radiusMd
+                                    Layout.fillWidth: true
+                                    implicitHeight: addPeopleInputRow.implicitHeight + (Palette.spacingXl * 2)
+
+                                    RowLayout {
+                                        id: addPeopleInputRow
+                                        anchors.fill: parent
+                                        anchors.margins: Palette.spacingXl
+                                        spacing: Palette.spacingLg
+
+                                        Image {
+                                            source: "qrc:/qt/qml/zametki/assets/icons/share/people.svg"
+                                            Layout.preferredWidth: Palette.iconSmall
+                                            Layout.preferredHeight: Palette.iconSmall
+                                        }
+
+                                        AppSidebarLabelText {
+                                            text: "Add people or groups"
+                                            horizontalAlignment: Text.AlignLeft
+                                            verticalAlignment: Text.AlignTop
+                                            Layout.fillWidth: true
+                                        }
+                                    }
                                 }
-                                AppSidebarLabelText {
-                                    text: "Add people or groups"
-                                    horizontalAlignment: Text.AlignLeft
-                                    verticalAlignment: Text.AlignTop
+
+                                AppActionButton {
+                                    text: "Send"
+                                    onClicked: sendClicked()
+                                }
+                            }
+                        }
+                    }
+
+                    // ==================== 3. People with access ====================
+                    AppSectionCard {
+                        Layout.fillWidth: true
+                        implicitHeight: peopleColumn.implicitHeight + (Palette.spacingXl * 2)
+
+                        ColumnLayout {
+                            id: peopleColumn
+                            anchors.fill: parent
+                            anchors.margins: Palette.spacingXl
+                            spacing: Palette.spacingXl
+
+                            AppSidebarLabelText {
+                                text: "People with access"
+                            }
+
+                            // ── Первая строка (Alex) ──
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: Palette.spacingXl
+
+                                AppInitialsAvatar {
+                                    initials: "AK"
+                                    avatarSize: 36
+                                    initialsPixelSize: Palette.fontSizeSm
+                                    Layout.preferredWidth: 36
+                                    Layout.preferredHeight: 36
+                                    Layout.alignment: Qt.AlignVCenter
+                                }
+
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    spacing: Palette.spacingSm
+
+                                    AppBodyText {
+                                        text: "Alex Kim"
+                                    }
+
+                                    AppDescriptionText {
+                                        text: "alex@vault.app"
+                                    }
+                                }
+
+                                Item {
                                     Layout.fillWidth: true
                                 }
+
+                                AppDropdown {
+                                    model: roleOptions
+                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex1"] || "Viewer"))
+
+                                    onActivated: changeRole("alex1", currentText)
+                                }
+                            }
+
+                            // ── Вторая строка (Alex) ──
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: Palette.spacingXl
+
+                                AppInitialsAvatar {
+                                    initials: "AK"
+                                    avatarSize: 36
+                                    initialsPixelSize: Palette.fontSizeSm
+                                    Layout.preferredWidth: 36
+                                    Layout.preferredHeight: 36
+                                    Layout.alignment: Qt.AlignVCenter
+                                }
+
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    spacing: Palette.spacingSm
+
+                                    AppBodyText {
+                                        text: "Alex Kim"
+                                    }
+
+                                    AppDescriptionText {
+                                        text: "alex@vault.app"
+                                    }
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+                                AppDropdown {
+                                    model: roleOptions
+                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex2"] || "Viewer"))
+
+                                    onActivated: changeRole("alex2", currentText)
+                                }
                             }
                         }
-
-                        AppActionButton {
-                            text: "Send"
-                            onClicked: sendClicked()
-                        }
-                    }
-                }
-            }
-
-            // ==================== 3. People with access ====================
-            AppSectionCard {
-                Layout.fillWidth: true
-                implicitHeight: peopleColumn.implicitHeight + 28
-
-                ColumnLayout {
-                    id: peopleColumn
-                    anchors.fill: parent
-                    anchors.margins: 14
-                    spacing: 16
-
-                    AppSidebarLabelText {
-                        text: "People with access"
                     }
 
-                    // ── Первая строка (Alex) ──
-                    RowLayout {
+                    // ==================== 4. General access ====================
+                    AppSectionCard {
                         Layout.fillWidth: true
-                        spacing: 12
-                        AppInitialsAvatar {
-                            initials: "AK"
-                            avatarSize: 36
-                            initialsPixelSize: 12
-                            Layout.preferredWidth: 36
-                            Layout.preferredHeight: 36
-                            Layout.alignment: Qt.AlignVCenter
-                        }
+                        implicitHeight: generalColumn.implicitHeight + (Palette.spacingXl * 2)
 
                         ColumnLayout {
-                            Layout.fillWidth: true
-                            spacing: 2
-                            AppBodyText {
-                                text: "Alex Kim"
+                            id: generalColumn
+                            anchors.fill: parent
+                            anchors.margins: Palette.spacingXl
+                            spacing: Palette.spacingXl
+
+                            AppSidebarLabelText {
+                                text: "General access"
                             }
-                            AppDescriptionText {
-                                text: "alex@vault.app"
+
+                            RowLayout {
+                                spacing: Palette.spacingXl
+                                Layout.fillWidth: true
+
+                                Image {
+                                    source: "qrc:/qt/qml/zametki/assets/icons/share/link.svg"
+                                    Layout.preferredWidth: 36
+                                    Layout.preferredHeight: 36
+                                    Layout.alignment: Qt.AlignVCenter
+                                }
+
+                                ColumnLayout {
+                                    spacing: Palette.spacingSm
+                                    Layout.fillWidth: true
+
+                                    AppBodyText {
+                                        text: "Restricted"
+                                    }
+
+                                    AppDescriptionText {
+                                        text: "Only people added above can open this note."
+                                        wrapMode: Text.WordWrap
+                                    }
+                                }
+
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+
+                                AppDropdown {
+                                    model: roleOptions
+                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["general"] || "Viewer"))
+
+                                    onActivated: changeRole("general", currentText)
+                                }
                             }
-                        }
-
-                        Item {
-                            Layout.fillWidth: true
-                        }
-
-                        AppDropdown {
-                            model: roleOptions
-                            currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex1"] || "Viewer"))
-
-                            onActivated: changeRole("alex1", currentText)
-                        }
-                    }
-
-                    // ── Вторая строка (Alex) ──
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 12
-
-                        AppInitialsAvatar {
-                            initials: "AK"
-                            avatarSize: 36
-                            initialsPixelSize: 12
-                            Layout.preferredWidth: 36
-                            Layout.preferredHeight: 36
-                            Layout.alignment: Qt.AlignVCenter
-                        }
-
-                        ColumnLayout {
-                            Layout.fillWidth: true
-                            spacing: 2
-                            AppBodyText {
-                                text: "Alex Kim"
-                            }
-                            AppDescriptionText {
-                                text: "alex@vault.app"
-                            }
-                        }
-
-                        Item {
-                            Layout.fillWidth: true
-                        }
-
-                        AppDropdown {
-                            model: roleOptions
-                            currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex2"] || "Viewer"))
-
-                            onActivated: changeRole("alex2", currentText)
-                        }
-                    }
-                }
-            }
-
-            // ==================== 4. General access ====================
-            AppSectionCard {
-                Layout.fillWidth: true
-                implicitHeight: generalColumn.implicitHeight + 28
-
-                ColumnLayout {
-                    id: generalColumn
-                    anchors.fill: parent
-                    anchors.margins: 14
-                    spacing: 12
-
-                    AppSidebarLabelText {
-                        text: "General access"
-                    }
-
-                    RowLayout {
-                        spacing: 12
-                        Layout.fillWidth: true
-
-                        Image {
-                            source: "qrc:/qt/qml/zametki/assets/icons/share/link.svg"
-                            Layout.preferredWidth: 36
-                            Layout.preferredHeight: 36
-                            Layout.alignment: Qt.AlignVCenter
-                        }
-
-                        ColumnLayout {
-                            spacing: 2
-                            Layout.fillWidth: true
-
-                            AppBodyText {
-                                text: "Restricted"
-                            }
-                            AppDescriptionText {
-                                text: "Only people added above can open this note."
-                                wrapMode: Text.WordWrap
-                            }
-                        }
-
-                        Item {
-                            Layout.fillWidth: true
-                        }
-
-                        AppDropdown {
-                            model: roleOptions
-                            currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["general"] || "Viewer"))
-
-                            onActivated: changeRole("general", currentText)
                         }
                     }
                 }
@@ -300,15 +328,15 @@ Item {
 
             // ==================== 5. Нижние кнопки ====================
             RowLayout {
-                spacing: 12
+                spacing: Palette.spacingXl
                 Layout.fillWidth: true
 
                 // Copy link
                 Rectangle {
                     color: Palette.surfaceColor
-                    radius: 6
-                    implicitWidth: copyRow.implicitWidth + 32
-                    implicitHeight: copyRow.implicitHeight + 16
+                    radius: Palette.radiusMd
+                    implicitWidth: copyRow.implicitWidth + (Palette.spacingXxl * 2)
+                    implicitHeight: copyRow.implicitHeight + Palette.spacingXxl
                     TapHandler {
                         onTapped: copyClicked()
                     }
@@ -316,7 +344,7 @@ Item {
                     RowLayout {
                         id: copyRow
                         anchors.centerIn: parent
-                        spacing: 8
+                        spacing: Palette.spacingLg
                         Image {
                             source: "qrc:/qt/qml/zametki/assets/icons/share/copy.svg"
                             Layout.preferredWidth: 14
@@ -337,6 +365,7 @@ Item {
                     text: "Cancel"
                     textColor: Palette.textPrimary
                     backgroundColor: Palette.surfaceColor
+                    radius: Palette.radiusMd
                     onClicked: cancelClicked()
                 }
 
@@ -345,6 +374,7 @@ Item {
                     text: "Done"
                     textColor: Palette.backgroundWhite
                     backgroundColor: Palette.accentPrimary
+                    radius: Palette.radiusMd
                     onClicked: doneClicked()
                 }
             }

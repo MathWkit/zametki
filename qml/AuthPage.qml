@@ -15,6 +15,9 @@ Item {
     property bool googleAuthAvailable: true
     property bool appleAuthAvailable: Qt.platform.os === "osx"
     property bool closeOnOutsideClick: false
+    readonly property int cardOuterMargin: Palette.space3
+    readonly property int cardContentPadding: Palette.space2
+    readonly property int cardContentSpacing: Palette.space2
 
     signal loginRequested(string email, string password)
     signal registerRequested(string name, string email, string password)
@@ -38,19 +41,20 @@ Item {
 
     Rectangle {
         id: card
-        width: Math.min(Palette.authCardMaxWidth, Math.max(Palette.authCardMinWidth, root.width - (Palette.spacingXxl * 2)))
-        implicitHeight: contentLayout.implicitHeight + (Palette.spacingXxl * 2)
+        width: Math.min(Math.max(Palette.authCardMinWidth, root.width * 0.42), Palette.authCardMaxWidth)
+        height: Math.min(contentLayout.implicitHeight + (root.cardContentPadding * 2), Math.max(Palette.authCardMinWidth, root.height - (root.cardOuterMargin * 2)))
         anchors.centerIn: parent
         color: Palette.backgroundWhite
         radius: Palette.authCardRadius
         border.width: 1
         border.color: Palette.border
+        clip: true
 
         ColumnLayout {
             id: contentLayout
             anchors.fill: parent
-            anchors.margins: Palette.spacingXxl
-            spacing: Palette.spacingXxl
+            anchors.margins: root.cardContentPadding
+            spacing: root.cardContentSpacing
 
             AppPageTitleText {
                 text: qsTr("Аккаунт")
@@ -88,44 +92,54 @@ Item {
                 }
             }
 
-            StackLayout {
-                id: authStack
+            ScrollView {
+                id: formsScroll
                 Layout.fillWidth: true
-                currentIndex: root.mode
+                Layout.fillHeight: true
+                Layout.preferredHeight: authStack.implicitHeight
+                clip: true
+                contentWidth: availableWidth
+                ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-                LoginForm {
-                    Layout.fillWidth: true
-                    showGoogleAuth: root.googleAuthAvailable
-                    showAppleAuth: root.appleAuthAvailable
-                    onLoginRequested: function (email, password) {
-                        root.loginRequested(email, password);
-                    }
-                    onGoogleAuthRequested: {
-                        root.googleAuthRequested();
-                    }
-                    onAppleAuthRequested: {
-                        root.appleAuthRequested();
-                    }
-                    onSwitchToRegisterRequested: {
-                        root.mode = 1;
-                    }
-                }
+                StackLayout {
+                    id: authStack
+                    width: formsScroll.availableWidth
+                    currentIndex: root.mode
 
-                RegisterForm {
-                    Layout.fillWidth: true
-                    showGoogleAuth: root.googleAuthAvailable
-                    showAppleAuth: root.appleAuthAvailable
-                    onRegisterRequested: function (name, email, password) {
-                        root.registerRequested(name, email, password);
+                    LoginForm {
+                        Layout.fillWidth: true
+                        showGoogleAuth: root.googleAuthAvailable
+                        showAppleAuth: root.appleAuthAvailable
+                        onLoginRequested: function (email, password) {
+                            root.loginRequested(email, password);
+                        }
+                        onGoogleAuthRequested: {
+                            root.googleAuthRequested();
+                        }
+                        onAppleAuthRequested: {
+                            root.appleAuthRequested();
+                        }
+                        onSwitchToRegisterRequested: {
+                            root.mode = 1;
+                        }
                     }
-                    onGoogleAuthRequested: {
-                        root.googleAuthRequested();
-                    }
-                    onAppleAuthRequested: {
-                        root.appleAuthRequested();
-                    }
-                    onSwitchToLoginRequested: {
-                        root.mode = 0;
+
+                    RegisterForm {
+                        Layout.fillWidth: true
+                        showGoogleAuth: root.googleAuthAvailable
+                        showAppleAuth: root.appleAuthAvailable
+                        onRegisterRequested: function (name, email, password) {
+                            root.registerRequested(name, email, password);
+                        }
+                        onGoogleAuthRequested: {
+                            root.googleAuthRequested();
+                        }
+                        onAppleAuthRequested: {
+                            root.appleAuthRequested();
+                        }
+                        onSwitchToLoginRequested: {
+                            root.mode = 0;
+                        }
                     }
                 }
             }

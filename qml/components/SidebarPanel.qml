@@ -28,27 +28,28 @@ Rectangle {
 
     component SidebarTitleText: Text {
         font.family: root.fontFamily
-        font.pixelSize: 14
+        font.pixelSize: Palette.fontSizeMd
         font.weight: Font.DemiBold
         color: Palette.textPrimary
     }
 
     component SidebarSubtitleText: Text {
         font.family: root.fontFamily
-        font.pixelSize: 14
+        font.pixelSize: Palette.fontSizeMd
         font.weight: Font.Medium
+        color: Palette.textPrimary
     }
 
     component SidebarBodyText: Text {
         font.family: root.fontFamily
-        font.pixelSize: 14
+        font.pixelSize: Palette.fontSizeMd
         font.weight: Font.Normal
         color: Palette.textPrimary
     }
 
     component SidebarSmallText: Text {
         font.family: root.fontFamily
-        font.pixelSize: 12
+        font.pixelSize: Palette.fontSizeSm
         font.weight: Font.Normal
         color: Palette.textSecondary
     }
@@ -63,19 +64,19 @@ Rectangle {
 
         Layout.fillWidth: true
         color: "transparent"
-        radius: Palette.cornerRadius
-        implicitHeight: actionContent.implicitHeight + 24
+        radius: Palette.radiusMd
+        implicitHeight: actionContent.implicitHeight + (Palette.spacingXl * 2)
 
         RowLayout {
             id: actionContent
             anchors.fill: parent
-            anchors.margins: 12
-            spacing: 6
+            anchors.margins: Palette.spacingXl
+            spacing: Palette.spacingMd
 
             Image {
                 source: actionRow.iconSource
-                width: 16
-                height: 16
+                width: Palette.iconSmall
+                height: Palette.iconSmall
             }
 
             SidebarSubtitleText {
@@ -103,19 +104,19 @@ Rectangle {
         signal clicked
 
         Layout.fillWidth: true
-        implicitHeight: 40
+        implicitHeight: Palette.buttonHeightBase + Palette.spacingSm
         color: "transparent"
 
         RowLayout {
             anchors.fill: parent
-            anchors.leftMargin: 12
-            anchors.rightMargin: 12
-            spacing: 8
+            anchors.leftMargin: Palette.spacingXl
+            anchors.rightMargin: Palette.spacingXl
+            spacing: Palette.spacingLg
 
             Image {
                 source: menuRow.iconSource
-                width: 16
-                height: 16
+                width: Palette.iconSmall
+                height: Palette.iconSmall
                 fillMode: Image.PreserveAspectFit
             }
 
@@ -141,30 +142,30 @@ Rectangle {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.leftMargin: 16
-            Layout.rightMargin: 16
-            Layout.topMargin: 8
+            Layout.leftMargin: Palette.spacingXxl
+            Layout.rightMargin: Palette.spacingXxl
+            Layout.topMargin: Palette.spacingLg
             color: "transparent"
-            implicitHeight: headerContent.implicitHeight + 16
+            implicitHeight: headerContent.implicitHeight + Palette.spacingXxl
 
             ColumnLayout {
                 id: headerContent
                 anchors.fill: parent
-                anchors.margins: 8
-                spacing: 8
+                anchors.margins: Palette.spacingLg
+                spacing: Palette.spacingLg
 
                 Item {
                     Layout.fillWidth: true
-                    implicitHeight: 24
+                    implicitHeight: Palette.iconLarge
 
                     RowLayout {
                         anchors.fill: parent
-                        spacing: 6
+                        spacing: Palette.spacingMd
 
                         Image {
                             source: "qrc:/qt/qml/zametki/assets/icons/sidebar/my-knowledge-base.svg"
-                            width: 24
-                            height: 24
+                            width: Palette.iconLarge
+                            height: Palette.iconLarge
                             fillMode: Image.PreserveAspectFit
                         }
 
@@ -177,8 +178,8 @@ Rectangle {
 
                         Image {
                             source: "qrc:/qt/qml/zametki/assets/icons/sidebar/chosen.svg"
-                            width: 16
-                            height: 16
+                            width: Palette.iconSmall
+                            height: Palette.iconSmall
                             fillMode: Image.PreserveAspectFit
                         }
                     }
@@ -194,10 +195,10 @@ Rectangle {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 12
-            Layout.rightMargin: 12
-            Layout.topMargin: 8
-            spacing: 4
+            Layout.leftMargin: Palette.spacingXl
+            Layout.rightMargin: Palette.spacingXl
+            Layout.topMargin: Palette.spacingLg
+            spacing: Palette.spacingSm
 
             SidebarActionRow {
                 iconSource: "qrc:/qt/qml/zametki/assets/icons/sidebar/search.svg"
@@ -222,10 +223,10 @@ Rectangle {
             id: noteListScroller
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.leftMargin: 12
-            Layout.rightMargin: 12
-            Layout.topMargin: 8
-            Layout.bottomMargin: 8
+            Layout.leftMargin: Palette.spacingXl
+            Layout.rightMargin: Palette.spacingXl
+            Layout.topMargin: Palette.spacingLg
+            Layout.bottomMargin: Palette.spacingLg
 
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -236,15 +237,15 @@ Rectangle {
             ScrollBar.vertical: ScrollBar {
                 policy: ScrollBar.AsNeeded
                 minimumSize: 0.1
-                width: 6
+                width: Palette.spacingSm + Palette.spacingSm
                 contentItem: Rectangle {
-                    implicitWidth: 6
-                    radius: 3
+                    implicitWidth: Palette.spacingSm + Palette.spacingSm
+                    radius: Palette.radiusSm
                     color: Palette.border
                 }
                 background: Rectangle {
-                    implicitWidth: 6
-                    radius: 3
+                    implicitWidth: Palette.spacingSm + Palette.spacingSm
+                    radius: Palette.radiusSm
                     color: "transparent"
                 }
             }
@@ -272,7 +273,7 @@ Rectangle {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.bottomMargin: 8
+            Layout.bottomMargin: Palette.spacingLg
             implicitHeight: 1
             color: Palette.border
         }
@@ -280,38 +281,38 @@ Rectangle {
         Rectangle {
             id: profileRow
             Layout.fillWidth: true
-            Layout.leftMargin: 12
-            Layout.rightMargin: 12
-            Layout.bottomMargin: 8
+            Layout.leftMargin: Palette.spacingXl
+            Layout.rightMargin: Palette.spacingXl
+            Layout.bottomMargin: Palette.spacingLg
             color: "transparent"
-            radius: Palette.cornerRadius
+            radius: Palette.radiusMd
             implicitHeight: profileCard.implicitHeight
 
             Rectangle {
                 id: profileCard
                 anchors.fill: parent
-                implicitHeight: profileContent.implicitHeight + 24
-                radius: Palette.cornerRadius
+                implicitHeight: profileContent.implicitHeight + (Palette.spacingXl * 2)
+                radius: Palette.radiusMd
                 color: Palette.headerBackground
                 border.width: 1
                 border.color: Palette.border
                 RowLayout {
                     id: profileContent
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 6
+                    anchors.margins: Palette.spacingXl
+                    spacing: Palette.spacingMd
                     Layout.fillWidth: true
                     Rectangle {
                         width: 32
                         height: 32
-                        radius: 32
+                        radius: width / 2
                         color: Palette.hover
 
                         Text {
                             text: "GL"
                             anchors.centerIn: parent
                             font.family: root.fontFamily
-                            font.pixelSize: 10
+                            font.pixelSize: Palette.fontSizeXs
                             font.weight: Font.Medium
                             color: Palette.textPrimary
                         }
@@ -360,11 +361,11 @@ Rectangle {
         padding: 0
         width: profileRow.width
         x: profileRow.x
-        y: Math.max(8, profileRow.y - implicitHeight - 8)
+        y: Math.max(Palette.spacingLg, profileRow.y - implicitHeight - Palette.spacingLg)
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
         background: Rectangle {
-            radius: Palette.cornerRadius
+            radius: Palette.radiusMd
             color: Palette.headerBackground
             border.width: 1
             border.color: Palette.border
