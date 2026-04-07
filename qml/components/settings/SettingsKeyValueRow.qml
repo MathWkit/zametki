@@ -1,5 +1,6 @@
 import QtQuick 6.8
 import QtQuick.Layouts 1.15
+import "../../scripts/Theme.js" as Palette
 import ".."
 
 RowLayout {
@@ -8,10 +9,10 @@ RowLayout {
     required property string keyText
     required property string valueText
 
-    property string uiFontFamily: "Inter"
-    property color keyColor: "#0F1724"
-    property color valueColor: "#6B7280"
-    property int leftMargin: 18
+    property string uiFontFamily: Palette.fontFamily
+    property color keyColor: Palette.textPrimary
+    property color valueColor: Palette.textSecondary
+    property int leftMargin: Palette.contentInset
 
     Layout.leftMargin: leftMargin
     Layout.fillWidth: true

@@ -117,6 +117,14 @@ var contentInset = 16;
 var sectionSpacing = 24;
 var rowPadding = 16;
 var rowPaddingCompact = 8;
+var settingsNumericFieldWidth = 80;
+var settingsPathFieldWidth = 220;
+
+var dropdownTextPaddingLeft = 12;
+var dropdownTextPaddingRight = 28;
+var dropdownIndicatorSize = 12;
+var dropdownIndicatorRightInset = 10;
+var dropdownPopupOffset = 6;
 
 // ============================================================================
 // ANIMATION

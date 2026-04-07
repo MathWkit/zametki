@@ -48,7 +48,7 @@ Item {
                 }
 
                 ColumnLayout {
-                    spacing: 4
+                    spacing: Palette.spacingSm
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
 
                     Repeater {
@@ -277,10 +277,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout4
-
-                                        Layout.leftMargin: 18
-                                        Layout.bottomMargin: 16
-                                        Layout.topMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout10
 
@@ -300,10 +300,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout5
-
-                                        Layout.leftMargin: 18
-                                        Layout.bottomMargin: 16
-                                        Layout.topMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout11
 
@@ -327,10 +327,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout8
-
-                                        Layout.leftMargin: 18
-                                        Layout.bottomMargin: 16
-                                        Layout.topMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout14
 
@@ -354,10 +354,11 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout7
-                                        Layout.rightMargin: 18
-                                        Layout.leftMargin: 18
-                                        Layout.bottomMargin: 10
-                                        Layout.topMargin: 10
+                                        compact: true
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPaddingCompact
+                                        rowBottomMargin: root.rowPaddingCompact
                                         ColumnLayout {
                                             id: columnLayout13
 
@@ -377,7 +378,7 @@ Item {
                                                 bottom: 1
                                             }
                                             horizontalAlignment: Text.AlignHCenter
-                                            Layout.preferredWidth: 80
+                                            Layout.preferredWidth: Palette.settingsNumericFieldWidth
                                         }
 
                                         Layout.fillWidth: true
@@ -388,10 +389,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout6
-
-                                        Layout.leftMargin: 18
-                                        Layout.bottomMargin: 16
-                                        Layout.topMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout12
 
@@ -424,10 +425,10 @@ Item {
                                     anchors.fill: parent
                                     SettingsControlRow {
                                         id: applicationLayout9
-
-                                        Layout.leftMargin: 18
-                                        Layout.bottomMargin: 16
-                                        Layout.topMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout16
 
@@ -446,10 +447,11 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout10
-                                        Layout.rightMargin: 18
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 10
-                                        Layout.bottomMargin: 10
+                                        compact: true
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPaddingCompact
+                                        rowBottomMargin: root.rowPaddingCompact
                                         ColumnLayout {
                                             id: columnLayout17
 
@@ -469,7 +471,7 @@ Item {
                                             id: pathText
                                             text: AppState.saveDirectory && AppState.saveDirectory.length > 0 ? AppState.saveDirectory : "Папка не выбрана"
                                             horizontalAlignment: Text.AlignLeft
-                                            Layout.preferredWidth: 220
+                                            Layout.preferredWidth: Palette.settingsPathFieldWidth
                                             readOnly: true
                                             selectByMouse: true
                                         }
@@ -485,10 +487,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout11
-
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout18
 
@@ -511,10 +513,11 @@ Item {
                                     AppDivider {}
                                     SettingsControlRow {
                                         id: applicationLayout12
-                                        Layout.rightMargin: 18
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 10
-                                        Layout.bottomMargin: 10
+                                        compact: true
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPaddingCompact
+                                        rowBottomMargin: root.rowPaddingCompact
                                         ColumnLayout {
                                             id: columnLayout19
                                             SettingsRowLabel {
@@ -533,7 +536,7 @@ Item {
                                                 bottom: 1
                                             }
                                             horizontalAlignment: Text.AlignHCenter
-                                            Layout.preferredWidth: 80
+                                            Layout.preferredWidth: Palette.settingsNumericFieldWidth
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
@@ -553,10 +556,10 @@ Item {
                                     anchors.fill: parent
                                     SettingsControlRow {
                                         id: applicationLayout13
-
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout21
 
@@ -576,10 +579,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout15
-
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout23
 
@@ -604,10 +607,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout16
-
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout24
 
@@ -631,11 +634,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: applicationLayout14
-                                        Layout.rightMargin: 18
-
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: columnLayout22
 
@@ -678,9 +680,10 @@ Item {
                                     anchors.fill: parent
 
                                     RowLayout {
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        Layout.leftMargin: root.contentInset
+                                        Layout.rightMargin: root.contentInset
+                                        Layout.topMargin: root.rowPadding
+                                        Layout.bottomMargin: root.rowPadding
 
                                         ColumnLayout {
                                             SettingsRowLabel {
@@ -699,10 +702,10 @@ Item {
                                     AppDivider {}
 
                                     RowLayout {
-                                        Layout.leftMargin: 18
-                                        Layout.rightMargin: 18
-                                        Layout.topMargin: 10
-                                        Layout.bottomMargin: 10
+                                        Layout.leftMargin: root.contentInset
+                                        Layout.rightMargin: root.contentInset
+                                        Layout.topMargin: root.rowPaddingCompact
+                                        Layout.bottomMargin: root.rowPaddingCompact
 
                                         ColumnLayout {
                                             SettingsRowLabel {
@@ -721,7 +724,7 @@ Item {
                                                 bottom: 1
                                             }
                                             horizontalAlignment: Text.AlignHCenter
-                                            Layout.preferredWidth: 80
+                                            Layout.preferredWidth: Palette.settingsNumericFieldWidth
                                         }
 
                                         Layout.fillWidth: true
@@ -731,9 +734,10 @@ Item {
                                     AppDivider {}
 
                                     RowLayout {
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        Layout.leftMargin: root.contentInset
+                                        Layout.rightMargin: root.contentInset
+                                        Layout.topMargin: root.rowPadding
+                                        Layout.bottomMargin: root.rowPadding
 
                                         ColumnLayout {
                                             SettingsRowLabel {
@@ -767,10 +771,10 @@ Item {
                                     anchors.fill: parent
                                     SettingsControlRow {
                                         id: securityFirstLayout
-
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: securityInfo
 
@@ -790,10 +794,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: passwordOnApp
-
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             id: passwordText
 
@@ -818,10 +822,10 @@ Item {
 
                                     SettingsControlRow {
                                         id: autoLock
-
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
-                                        Layout.bottomMargin: 16
+                                        rowLeftMargin: root.contentInset
+                                        rowRightMargin: root.contentInset
+                                        rowTopMargin: root.rowPadding
+                                        rowBottomMargin: root.rowPadding
                                         ColumnLayout {
                                             SettingsRowLabel {
                                                 text: "Автоблокировка"
@@ -854,11 +858,12 @@ Item {
                                 ColumnLayout {
                                     id: aboutColumnLayout
                                     anchors.fill: parent
-                                    spacing: 10
+                                    spacing: root.rowPaddingCompact
                                     RowLayout {
 
-                                        Layout.leftMargin: 18
-                                        Layout.topMargin: 16
+                                        Layout.leftMargin: root.contentInset
+                                        Layout.rightMargin: root.contentInset
+                                        Layout.topMargin: root.rowPadding
                                         ColumnLayout {
 
                                             SettingsRowLabel {

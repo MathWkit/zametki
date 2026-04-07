@@ -13,8 +13,8 @@ ComboBox {
     property color optionHoverColor: Palette.surfaceColor
     property color optionTextColor: Palette.textPrimary
     property string indicatorSource: "qrc:/qt/qml/zametki/assets/icons/unused/open-bracket.svg"
-    property int leftTextPadding: 12
-    property int rightTextPadding: 28
+    property int leftTextPadding: Palette.dropdownTextPaddingLeft
+    property int rightTextPadding: Palette.dropdownTextPaddingRight
 
     topPadding: 12
     bottomPadding: 12
@@ -30,11 +30,11 @@ ComboBox {
 
     indicator: Image {
         source: control.indicatorSource
-        width: 12
-        height: 12
+        width: Palette.dropdownIndicatorSize
+        height: Palette.dropdownIndicatorSize
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.rightMargin: Palette.dropdownIndicatorRightInset
     }
 
     background: Rectangle {
@@ -64,7 +64,7 @@ ComboBox {
     }
 
     popup: Popup {
-        y: control.height + 6
+        y: control.height + Palette.dropdownPopupOffset
         width: control.width
         padding: 0
 
