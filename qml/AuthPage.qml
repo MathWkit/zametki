@@ -2,12 +2,12 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import "scripts/Theme.js" as Palette
+import "components/auth"
 
 Item {
     id: root
     anchors.fill: parent
 
-    property string fontFamily: "Inter"
     property int mode: 0
     property bool googleAuthAvailable: true
     property bool appleAuthAvailable: Qt.platform.os === "osx"
@@ -19,19 +19,9 @@ Item {
     signal appleAuthRequested
     signal closeRequested
 
-    readonly property color pageBackground: Palette.backgroundLight
-    readonly property color cardColor: Palette.backgroundWhite
-    readonly property color cardBorderColor: Palette.border
-    readonly property color headingColor: Palette.textPrimary
-    readonly property color subtitleColor: Palette.textSecondary
-    readonly property color tabContainerColor: Palette.surfaceColor
-    readonly property color tabSelectedColor: Palette.accentPrimary
-    readonly property color tabHoverColor: Palette.selected
-    readonly property color tabTextColor: Palette.textPrimary
-
     Rectangle {
         anchors.fill: parent
-        color: root.pageBackground
+        color: Palette.backgroundLight
     }
 
     MouseArea {
@@ -48,10 +38,10 @@ Item {
         width: Math.min(Math.max(Palette.authCardMinWidth, root.width * 0.42), Palette.authCardMaxWidth)
         implicitHeight: contentLayout.implicitHeight + (Palette.spacingXxl * 2)
         anchors.centerIn: parent
-        color: root.cardColor
+        color: Palette.backgroundWhite
         radius: Palette.authCardRadius
         border.width: 1
-        border.color: root.cardBorderColor
+        border.color: Palette.border
 
         ColumnLayout {
             id: contentLayout
@@ -59,21 +49,15 @@ Item {
             anchors.margins: Palette.spacingXxl
             spacing: Palette.spacingXxl
 
-            Text {
+            AuthFormTitleText {
                 text: qsTr("Аккаунт")
+                textPixelSize: Palette.authTitleSize
                 Layout.fillWidth: true
-                color: root.headingColor
-                font.family: root.fontFamily
-                font.pixelSize: Palette.authTitleSize
-                font.weight: Font.DemiBold
             }
 
-            Text {
+            AuthFormSubtitleText {
                 text: qsTr("Войдите или создайте новый аккаунт")
                 Layout.fillWidth: true
-                color: root.subtitleColor
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeSm
             }
 
             TabBar {
@@ -83,52 +67,20 @@ Item {
                 spacing: Palette.spacingSm
 
                 background: Rectangle {
-                    color: root.tabContainerColor
+                    color: Palette.surfaceColor
                     radius: Palette.radiusXl
                 }
 
                 onCurrentIndexChanged: root.mode = currentIndex
 
-                TabButton {
+                AuthModeTabButton {
                     id: loginTab
                     text: qsTr("Вход")
-                    font.family: root.fontFamily
-                    font.pixelSize: Palette.fontSizeBase
-                    hoverEnabled: true
-
-                    contentItem: Text {
-                        text: loginTab.text
-                        font: loginTab.font
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        color: loginTab.checked ? Palette.backgroundWhite : root.tabTextColor
-                    }
-
-                    background: Rectangle {
-                        radius: Palette.radiusLg
-                        color: loginTab.checked ? root.tabSelectedColor : (loginTab.hovered ? root.tabHoverColor : "transparent")
-                    }
                 }
 
-                TabButton {
+                AuthModeTabButton {
                     id: registerTab
                     text: qsTr("Регистрация")
-                    font.family: root.fontFamily
-                    font.pixelSize: Palette.fontSizeBase
-                    hoverEnabled: true
-
-                    contentItem: Text {
-                        text: registerTab.text
-                        font: registerTab.font
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        color: registerTab.checked ? Palette.backgroundWhite : root.tabTextColor
-                    }
-
-                    background: Rectangle {
-                        radius: Palette.radiusLg
-                        color: registerTab.checked ? root.tabSelectedColor : (registerTab.hovered ? root.tabHoverColor : "transparent")
-                    }
                 }
             }
 
@@ -139,7 +91,6 @@ Item {
 
                 LoginForm {
                     Layout.fillWidth: true
-                    fontFamily: root.fontFamily
                     showGoogleAuth: root.googleAuthAvailable
                     showAppleAuth: root.appleAuthAvailable
                     onLoginRequested: function (email, password) {
@@ -158,7 +109,6 @@ Item {
 
                 RegisterForm {
                     Layout.fillWidth: true
-                    fontFamily: root.fontFamily
                     showGoogleAuth: root.googleAuthAvailable
                     showAppleAuth: root.appleAuthAvailable
                     onRegisterRequested: function (name, email, password) {

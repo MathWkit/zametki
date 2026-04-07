@@ -1,5 +1,6 @@
 import QtQuick 6.8
 import QtQuick.Layouts 1.15
+import ".."
 
 RowLayout {
     id: control
@@ -22,7 +23,7 @@ RowLayout {
         font.family: control.uiFontFamily
     }
 
-    SettingsDescriptionText {
+    AppDescriptionText {
         text: control.valueText
         uiFontFamily: control.uiFontFamily
         textColor: control.valueColor

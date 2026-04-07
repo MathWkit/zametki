@@ -2,7 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
-import "components/settings"
+import "components"
 
 Item {
     id: root
@@ -79,12 +79,12 @@ Item {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
 
-                SettingsPageTitleText {
+                AppPageTitleText {
                     text: "Профиль"
                     Layout.fillWidth: true
                 }
 
-                SettingsActionButtonCompact {
+                AppActionButtonCompact {
                     text: "✕"
                     backgroundColor: Palette.surfaceColor
                     Layout.preferredHeight: Palette.buttonHeightBase
@@ -97,18 +97,18 @@ Item {
             }
 
             // ==================== 2. Divider ====================
-            SettingsDivider {}
+            AppDivider {}
 
             // ==================== 3. Current Account ====================
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
 
-                SettingsSectionTitleText {
+                AppSectionTitleText {
                     text: "Текущий аккаунт"
                 }
 
-                SettingsSectionCard {
+                AppSectionCard {
                     Layout.fillWidth: true
                     Layout.preferredHeight: currentAccountContent.implicitHeight + Palette.spacingLg
 
@@ -141,7 +141,7 @@ Item {
                             Layout.alignment: Qt.AlignLeft
                             spacing: Palette.spacingSm
 
-                            SettingsBodyPrimaryText {
+                            AppBodyText {
                                 text: root.currentAccount.firstName + " " + root.currentAccount.lastName
                                 font.pointSize: Palette.fontSizeMd
                                 font.styleName: "SemiBold"
@@ -149,7 +149,7 @@ Item {
                                 horizontalAlignment: Text.AlignLeft
                             }
 
-                            SettingsDescriptionText {
+                            AppDescriptionText {
                                 text: root.currentAccount.email
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
@@ -175,7 +175,7 @@ Item {
                             }
                         ]
 
-                        SettingsActionButton {
+                        AppActionButton {
                             required property var modelData
                             text: modelData.label
                             Layout.fillWidth: true
@@ -209,11 +209,11 @@ Item {
                     Layout.fillWidth: true
                     spacing: Palette.spacingSm
 
-                    SettingsSectionTitleText {
+                    AppSectionTitleText {
                         text: "Аккаунты"
                     }
 
-                    SettingsDescriptionText {
+                    AppDescriptionText {
                         text: "Switch between your local and work profiles"
                         wrapMode: Text.WordWrap
                     }
@@ -223,7 +223,7 @@ Item {
                     Layout.fillWidth: true
                 }
 
-                SettingsActionButton {
+                AppActionButton {
                     text: "Добавить"
                     Layout.preferredWidth: 120
                     Layout.preferredHeight: Palette.buttonHeightBase
@@ -255,7 +255,7 @@ Item {
                             Layout.fillWidth: true
                             spacing: Palette.spacingLg
 
-                            SettingsSectionCard {
+                            AppSectionCard {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: Palette.avatarSmall + Palette.spacingLg + Palette.spacingLg
                                 cardColor: modelData.isCurrent ? Palette.accentSidebar : Palette.surfaceColor
@@ -288,11 +288,11 @@ Item {
                                         Layout.fillWidth: true
                                         spacing: Palette.spacingSm
 
-                                        SettingsBodyPrimaryText {
+                                        AppBodyText {
                                             text: modelData.firstName + " " + modelData.lastName
                                         }
 
-                                        SettingsDescriptionText {
+                                        AppDescriptionText {
                                             text: modelData.email
                                         }
                                     }
@@ -300,7 +300,7 @@ Item {
                                         Layout.fillWidth: true
                                     }
 
-                                    SettingsActionButton {
+                                    AppActionButton {
                                         text: modelData.isCurrent ? "Текущий" : "Выбрать"
                                         textColor: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
                                         backgroundColor: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
@@ -322,19 +322,19 @@ Item {
             }
 
             // ==================== 6. Divider ====================
-            SettingsDivider {}
+            AppDivider {}
 
             // ==================== 7. Footer ====================
             RowLayout {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
 
-                SettingsDescriptionText {
+                AppDescriptionText {
                     text: "You can stay signed in to several accounts and switch instantly."
                     wrapMode: Text.WordWrap
                 }
 
-                SettingsActionButton {
+                AppActionButton {
                     text: "Log Out"
                     textColor: Palette.errorColor
                     backgroundColor: Palette.backgroundWhite

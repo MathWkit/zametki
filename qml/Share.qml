@@ -1,7 +1,7 @@
 import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import "components/settings"
+import "components"
 
 Item {
     id: item1
@@ -76,13 +76,13 @@ Item {
                     spacing: 4
                     Layout.fillWidth: true
 
-                    SettingsSidebarLabelText {
+                    AppSidebarLabelText {
                         text: "Share"
                     }
-                    SettingsPageTitleText {
+                    AppPageTitleText {
                         text: "Share “”"
                     }
-                    SettingsDescriptionText {
+                    AppDescriptionText {
                         text: "Invite people, manage access, and copy a link to this note."
                         wrapMode: Text.WordWrap
                     }
@@ -115,7 +115,7 @@ Item {
             }
 
             // ==================== 2. Add people or groups ====================
-            SettingsSectionCard {
+            AppSectionCard {
                 Layout.fillWidth: true
                 implicitHeight: addPeopleLayout.implicitHeight + 28
 
@@ -143,7 +143,7 @@ Item {
                                     Layout.preferredWidth: 16
                                     Layout.preferredHeight: 16
                                 }
-                                SettingsSidebarLabelText {
+                                AppSidebarLabelText {
                                     text: "Add people or groups"
                                     horizontalAlignment: Text.AlignLeft
                                     verticalAlignment: Text.AlignTop
@@ -152,7 +152,7 @@ Item {
                             }
                         }
 
-                        SettingsActionButton {
+                        AppActionButton {
                             text: "Send"
                             onClicked: sendClicked()
                         }
@@ -161,7 +161,7 @@ Item {
             }
 
             // ==================== 3. People with access ====================
-            SettingsSectionCard {
+            AppSectionCard {
                 Layout.fillWidth: true
                 implicitHeight: peopleColumn.implicitHeight + 28
 
@@ -171,7 +171,7 @@ Item {
                     anchors.margins: 14
                     spacing: 16
 
-                    SettingsSidebarLabelText {
+                    AppSidebarLabelText {
                         text: "People with access"
                     }
 
@@ -197,10 +197,10 @@ Item {
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 2
-                            SettingsBodyPrimaryText {
+                            AppBodyText {
                                 text: "Alex Kim"
                             }
-                            SettingsDescriptionText {
+                            AppDescriptionText {
                                 text: "alex@vault.app"
                             }
                         }
@@ -209,7 +209,7 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        SettingsDropdown {
+                        AppDropdown {
                             model: roleOptions
                             currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex1"] || "Viewer"))
 
@@ -240,10 +240,10 @@ Item {
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 2
-                            SettingsBodyPrimaryText {
+                            AppBodyText {
                                 text: "Alex Kim"
                             }
-                            SettingsDescriptionText {
+                            AppDescriptionText {
                                 text: "alex@vault.app"
                             }
                         }
@@ -252,7 +252,7 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        SettingsDropdown {
+                        AppDropdown {
                             model: roleOptions
                             currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex2"] || "Viewer"))
 
@@ -263,7 +263,7 @@ Item {
             }
 
             // ==================== 4. General access ====================
-            SettingsSectionCard {
+            AppSectionCard {
                 Layout.fillWidth: true
                 implicitHeight: generalColumn.implicitHeight + 28
 
@@ -273,7 +273,7 @@ Item {
                     anchors.margins: 14
                     spacing: 12
 
-                    SettingsSidebarLabelText {
+                    AppSidebarLabelText {
                         text: "General access"
                     }
 
@@ -292,10 +292,10 @@ Item {
                             spacing: 2
                             Layout.fillWidth: true
 
-                            SettingsBodyPrimaryText {
+                            AppBodyText {
                                 text: "Restricted"
                             }
-                            SettingsDescriptionText {
+                            AppDescriptionText {
                                 text: "Only people added above can open this note."
                                 wrapMode: Text.WordWrap
                             }
@@ -305,7 +305,7 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        SettingsDropdown {
+                        AppDropdown {
                             model: roleOptions
                             currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["general"] || "Viewer"))
 
@@ -339,7 +339,7 @@ Item {
                             Layout.preferredWidth: 14
                             Layout.preferredHeight: 14
                         }
-                        SettingsSidebarLabelText {
+                        AppSidebarLabelText {
                             text: "Copy link"
                         }
                     }
@@ -350,7 +350,7 @@ Item {
                 }
 
                 // Cancel
-                SettingsActionButton {
+                AppActionButton {
                     text: "Cancel"
                     textColor: colorTextPrimary
                     backgroundColor: colorSurface
@@ -358,7 +358,7 @@ Item {
                 }
 
                 // Done
-                SettingsActionButton {
+                AppActionButton {
                     text: "Done"
                     textColor: colorBackground
                     backgroundColor: colorAccent

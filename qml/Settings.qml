@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 6.8
 import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
+import "components"
 import "components/settings"
 
 Item {
@@ -38,7 +39,7 @@ Item {
                 anchors.bottomMargin: 24
                 spacing: 20
 
-                SettingsPageTitleText {
+                AppPageTitleText {
                     text: "Настройки"
                 }
 
@@ -130,11 +131,11 @@ Item {
                             Layout.leftMargin: 24
                             Layout.bottomMargin: 0
                             Layout.topMargin: 24
-                            SettingsSectionTitleText {
+                            AppSectionTitleText {
                                 text: "Общие настройки"
                             }
 
-                            SettingsDescriptionText {
+                            AppDescriptionText {
                                 text: "Настройте внешний вид, поведение редактора и локальное хранение данных"
                             }
                         }
@@ -143,7 +144,7 @@ Item {
                             Layout.fillWidth: true
                         }
 
-                        SettingsActionButtonCompact {
+                        AppActionButtonCompact {
                             text: "Done"
                             onClicked: root.closeRequested()
                         }
@@ -161,7 +162,7 @@ Item {
                         ColumnLayout {
                             id: aboutSettings
 
-                            SettingsSectionCard {
+                            AppSectionCard {
                                 Layout.preferredHeight: columnLayout5.implicitHeight
                                 Layout.preferredWidth: columnLayout5.implicitWidth
 
@@ -183,14 +184,14 @@ Item {
                                                 text: "Общие"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Базовые параметры интерфейса и запуска приложения"
                                             }
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout3
@@ -205,7 +206,7 @@ Item {
                                                 text: "Appearance"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Выберите оформление приложения"
                                             }
                                         }
@@ -214,7 +215,7 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        SettingsDropdown {
+                                        AppDropdown {
                                             id: appearanceCombo
                                             Layout.preferredWidth: 160
 
@@ -224,7 +225,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: editorLayout2
@@ -239,7 +240,7 @@ Item {
                                                 text: "Открывать последнюю сессию"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Восстанавливать открытые заметки после запуска"
                                             }
                                         }
@@ -261,7 +262,7 @@ Item {
                         ColumnLayout {
                             id: aboutSettings1
 
-                            SettingsSectionCard {
+                            AppSectionCard {
                                 Layout.preferredHeight: columnLayout9.implicitHeight
                                 Layout.preferredWidth: columnLayout9.implicitWidth
 
@@ -282,7 +283,7 @@ Item {
                                                 text: "Редактор"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Параметры редактирования Markdown и автосохранения"
                                             }
                                         }
@@ -290,7 +291,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout5
@@ -317,7 +318,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout8
@@ -344,7 +345,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout7
@@ -364,7 +365,7 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        SettingsInputField {
+                                        AppInputField {
                                             id: timeText
                                             text: "20"
                                             validator: IntValidator {
@@ -378,7 +379,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout6
@@ -409,7 +410,7 @@ Item {
 
                         ColumnLayout {
                             id: aboutSettings2
-                            SettingsSectionCard {
+                            AppSectionCard {
                                 Layout.preferredHeight: columnLayout15.implicitHeight
                                 Layout.preferredWidth: columnLayout15.implicitWidth
 
@@ -429,14 +430,14 @@ Item {
                                                 text: "Заметки"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Папка хранения и резервные копии"
                                             }
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout10
@@ -451,7 +452,7 @@ Item {
                                                 text: "Папка заметок"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Локальное хранилище Markdown-файлов"
                                             }
                                         }
@@ -459,7 +460,7 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        SettingsInputField {
+                                        AppInputField {
                                             id: pathText
                                             text: AppState.saveDirectory && AppState.saveDirectory.length > 0 ? AppState.saveDirectory : "Папка не выбрана"
                                             horizontalAlignment: Text.AlignLeft
@@ -468,14 +469,14 @@ Item {
                                             selectByMouse: true
                                         }
 
-                                        SettingsActionButton {
+                                        AppActionButton {
                                             text: "Выбрать"
                                             onClicked: notesFolderDialog.open()
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
                                     }
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout11
@@ -502,7 +503,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
                                     SettingsControlRow {
                                         id: applicationLayout12
                                         Layout.rightMargin: 18
@@ -520,7 +521,7 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        SettingsInputField {
+                                        AppInputField {
                                             id: backupCount
                                             text: "20"
                                             validator: IntValidator {
@@ -538,7 +539,7 @@ Item {
 
                         ColumnLayout {
                             id: aboutSettings3
-                            SettingsSectionCard {
+                            AppSectionCard {
                                 Layout.preferredHeight: columnLayout20.implicitHeight
                                 Layout.preferredWidth: columnLayout20.implicitWidth
 
@@ -558,7 +559,7 @@ Item {
                                                 text: "Поиск"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Поведение полнотекстового и интеллектуального поиска"
                                             }
                                         }
@@ -566,7 +567,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout15
@@ -594,7 +595,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout16
@@ -621,7 +622,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: applicationLayout14
@@ -637,7 +638,7 @@ Item {
                                                 text: "Индекс поиска"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Обновите индекс после массового импорта заметок"
                                             }
                                         }
@@ -645,7 +646,7 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        SettingsActionButton {
+                                        AppActionButton {
                                             text: "Переиндексировать"
                                             onClicked: {
                                                 AppState.refreshNoteTitles();
@@ -663,7 +664,7 @@ Item {
 
                         ColumnLayout {
                             id: graphSettings
-                            SettingsSectionCard {
+                            AppSectionCard {
                                 Layout.preferredHeight: graphLayout.implicitHeight
                                 Layout.preferredWidth: graphLayout.implicitWidth
 
@@ -681,7 +682,7 @@ Item {
                                                 text: "Граф"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Настройки визуализации связей между заметками"
                                             }
                                         }
@@ -690,7 +691,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     RowLayout {
                                         Layout.leftMargin: 18
@@ -708,7 +709,7 @@ Item {
                                             Layout.fillWidth: true
                                         }
 
-                                        SettingsInputField {
+                                        AppInputField {
                                             id: graphDepthField
                                             text: "2"
                                             validator: IntValidator {
@@ -722,7 +723,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     RowLayout {
                                         Layout.leftMargin: 18
@@ -752,7 +753,7 @@ Item {
 
                         ColumnLayout {
                             id: securitySettings
-                            SettingsSectionCard {
+                            AppSectionCard {
                                 Layout.preferredHeight: secutiryLayout.implicitHeight
                                 Layout.preferredWidth: secutiryLayout.implicitWidth
 
@@ -772,7 +773,7 @@ Item {
                                                 text: "Безопасность"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Защита локального хранилища и доступа к приложению"
                                             }
                                         }
@@ -780,7 +781,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: passwordOnApp
@@ -808,7 +809,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsControlRow {
                                         id: autoLock
@@ -841,7 +842,7 @@ Item {
 
                         ColumnLayout {
                             id: aboutInfo
-                            SettingsSectionCard {
+                            AppSectionCard {
                                 Layout.preferredHeight: aboutColumnLayout.implicitHeight
                                 Layout.preferredWidth: aboutColumnLayout.implicitWidth
 
@@ -859,7 +860,7 @@ Item {
                                                 text: "О программе"
                                             }
 
-                                            SettingsDescriptionText {
+                                            AppDescriptionText {
                                                 text: "Информация о текущей версии приложения"
                                             }
                                         }
@@ -867,7 +868,7 @@ Item {
                                         Layout.fillHeight: false
                                     }
 
-                                    SettingsDivider {}
+                                    AppDivider {}
 
                                     SettingsKeyValueRow {
                                         keyText: "Версия:"
@@ -884,7 +885,7 @@ Item {
                                         valueText: "Local"
                                     }
 
-                                    SettingsActionButton {
+                                    AppActionButton {
                                         text: "Открыть папку данных"
                                         Layout.leftMargin: 12
                                         Layout.bottomMargin: 12

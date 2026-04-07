@@ -58,22 +58,34 @@ qt_add_qml_module(appzametki
         qml/components/MainHeaderBar.qml
         qml/components/AppSwitch.qml
         qml/components/AppButton.qml
-        qml/components/settings/SettingsPageTitleText.qml
-        qml/components/settings/SettingsSidebarLabelText.qml
-        qml/components/settings/SettingsSectionTitleText.qml
-        qml/components/settings/SettingsDescriptionText.qml
-        qml/components/settings/SettingsBodyPrimaryText.qml
-        qml/components/settings/SettingsSectionCard.qml
-        qml/components/settings/SettingsDivider.qml
+        qml/components/AppPageTitleText.qml
+        qml/components/AppSidebarLabelText.qml
+        qml/components/AppSectionTitleText.qml
+        qml/components/AppDescriptionText.qml
+        qml/components/AppBodyText.qml
+        qml/components/AppSectionCard.qml
+        qml/components/AppDivider.qml
+        qml/components/AppActionButton.qml
+        qml/components/AppActionButtonCompact.qml
+        qml/components/AppInputField.qml
+        qml/components/AppDropdown.qml
         qml/components/settings/SettingsNavItem.qml
-        qml/components/settings/SettingsInputField.qml
         qml/components/settings/SettingsControlRow.qml
-        qml/components/settings/SettingsActionButton.qml
-        qml/components/settings/SettingsActionButtonCompact.qml
         qml/components/settings/SettingsKeyValueRow.qml
-        qml/components/settings/SettingsDropdown.qml
+        qml/components/auth/AuthFormTitleText.qml
+        qml/components/auth/AuthFormSubtitleText.qml
+        qml/components/auth/AuthInputField.qml
+        qml/components/auth/AuthErrorText.qml
+        qml/components/auth/AuthPrimaryButton.qml
+        qml/components/auth/AuthSocialButton.qml
+        qml/components/auth/AuthLinkButton.qml
+        qml/components/auth/AuthDivider.qml
+        qml/components/auth/AuthModeTabButton.qml
         qml/components/auth/LoginForm.qml
         qml/components/auth/RegisterForm.qml
+        qml/components/search/SearchSectionHeader.qml
+        qml/components/search/SearchResultRow.qml
+        qml/components/search/SearchFooterHint.qml
         qml/CreationBD.qml
     RESOURCES
         assets/icons/sidebar/search.svg

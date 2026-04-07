@@ -1,5 +1,6 @@
 import QtQuick 6.8
 import QtQuick.Layouts 1.15
+import ".."
 
 Rectangle {
     id: control
@@ -31,7 +32,7 @@ Rectangle {
             Layout.preferredWidth: 18
         }
 
-        SettingsSidebarLabelText {
+        AppSidebarLabelText {
             text: control.titleText
             uiFontFamily: control.uiFontFamily
             textColor: control.active ? control.activeTextColor : control.textColor

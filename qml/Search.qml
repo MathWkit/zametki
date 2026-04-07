@@ -2,29 +2,69 @@ import QtQuick 6.8
 import QtQuick.Layouts 6.8
 import QtQuick.Controls 6.8
 import "scripts/Theme.js" as Palette
+import "components"
+import "components/search"
 
 Item {
     id: root
     clip: true
 
     readonly property Item dialogItem: dialog
-    readonly property string uiFontFamily: "Inter"
-    readonly property color colorWhite: Palette.headerBackground
-    readonly property color colorTextPrimary: Palette.textPrimary
-    readonly property color colorTextSecondary: Palette.textSecondary
-    readonly property color colorDivider: Palette.border
-    readonly property color colorSurface: "#fafbfc"
-    readonly property color colorHover: Palette.hover
-    readonly property real rowRadius: 6
+
+    property var recentNotes: [
+        {
+            title: "Note 1",
+            subtitle: "path / to / note",
+            icon: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
+        },
+        {
+            title: "Note 2",
+            subtitle: "path / to / second note",
+            icon: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
+        }
+    ]
+
+    property var folders: [
+        {
+            title: "Project Notes",
+            icon: "qrc:/qt/qml/zametki/assets/icons/list/folder.svg"
+        }
+    ]
+
+    property var commands: [
+        {
+            title: "Create New Note",
+            icon: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
+        },
+        {
+            title: "Open Graph View",
+            icon: "qrc:/qt/qml/zametki/assets/icons/sidebar/graph-view.svg"
+        }
+    ]
+
+    property var footerHints: [
+        {
+            icon: "qrc:/qt/qml/zametki/assets/icons/unused/open-bracket.svg",
+            label: qsTr("Navigate")
+        },
+        {
+            icon: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg",
+            label: qsTr("Open")
+        },
+        {
+            icon: "qrc:/qt/qml/zametki/assets/icons/header/more.svg",
+            label: qsTr("Close")
+        }
+    ]
 
     Rectangle {
         id: dialog
         width: 540
         height: 430
-        color: root.colorWhite
+        color: Palette.headerBackground
         radius: 8
         border.width: 1
-        border.color: root.colorDivider
+        border.color: Palette.border
         anchors.centerIn: parent
 
         antialiasing: true
@@ -33,17 +73,15 @@ Item {
             anchors.fill: parent
             spacing: 0
 
-            Rectangle {
+            AppSectionCard {
                 Layout.fillWidth: true
                 Layout.leftMargin: 20
                 Layout.rightMargin: 20
                 Layout.topMargin: 16
                 Layout.bottomMargin: 16
                 implicitHeight: 40
-                color: root.colorSurface
-                radius: root.rowRadius
-                border.width: 1
-                border.color: root.colorDivider
+                cardColor: Palette.backgroundLight
+                borderLineColor: Palette.border
 
                 RowLayout {
                     anchors.fill: parent
@@ -62,11 +100,11 @@ Item {
                     TextField {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignVCenter
-                        placeholderText: "Search for notes, folders, tags, or commands..."
-                        color: root.colorTextPrimary
-                        placeholderTextColor: root.colorTextSecondary
+                        placeholderText: qsTr("Search for notes, folders, tags, or commands...")
+                        color: Palette.textPrimary
+                        placeholderTextColor: Palette.textSecondary
                         font.pixelSize: 14
-                        font.family: root.uiFontFamily
+                        font.family: Palette.fontFamily
                         background: Rectangle {
                             color: "transparent"
                             border.width: 0
@@ -75,9 +113,7 @@ Item {
                 }
             }
 
-            Rectangle {
-                color: root.colorDivider
-                height: 1
+            AppDivider {
                 Layout.fillWidth: true
             }
 
@@ -94,251 +130,64 @@ Item {
                     width: parent.width
                     spacing: 0
 
-                    Text {
-                        text: "RECENT NOTES"
-                        color: root.colorTextSecondary
-                        font.pixelSize: 10
-                        font.family: root.uiFontFamily
-                        font.weight: Font.DemiBold
+                    SearchSectionHeader {
+                        text: qsTr("RECENT NOTES")
                         Layout.leftMargin: 24
                         Layout.topMargin: 16
                     }
 
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: 20
-                        Layout.rightMargin: 20
-                        Layout.topMargin: 12
-                        implicitHeight: 44
-                        color: "transparent"
-                        radius: root.rowRadius
+                    Repeater {
+                        model: root.recentNotes
 
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.leftMargin: 14
-                            anchors.rightMargin: 14
-                            spacing: 10
+                        SearchResultRow {
+                            required property var modelData
 
-                            Image {
-                                source: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
-                                Layout.preferredWidth: 16
-                                Layout.preferredHeight: 16
-                            }
-
-                            ColumnLayout {
-                                spacing: 1
-                                Layout.fillWidth: true
-
-                                Text {
-                                    text: "Note 1"
-                                    color: root.colorTextPrimary
-                                    font.pixelSize: 13
-                                    font.family: root.uiFontFamily
-                                    elide: Text.ElideRight
-                                    Layout.fillWidth: true
-                                }
-                                Text {
-                                    text: "path / to / note"
-                                    color: root.colorTextSecondary
-                                    font.pixelSize: 11
-                                    font.family: root.uiFontFamily
-                                    elide: Text.ElideRight
-                                    Layout.fillWidth: true
-                                }
-                            }
-                        }
-
-                        MouseArea {
-                            id: mouseRecent1
-                            anchors.fill: parent
-                            hoverEnabled: false
-                            acceptedButtons: Qt.NoButton
+                            Layout.leftMargin: 20
+                            Layout.rightMargin: 20
+                            Layout.topMargin: index === 0 ? 12 : 0
+                            iconSource: modelData.icon
+                            titleText: modelData.title
+                            subtitleText: modelData.subtitle
                         }
                     }
 
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: 20
-                        Layout.rightMargin: 20
-                        implicitHeight: 44
-                        color: "transparent"
-                        radius: root.rowRadius
-
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.leftMargin: 14
-                            anchors.rightMargin: 14
-                            spacing: 10
-
-                            Image {
-                                source: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
-                                Layout.preferredWidth: 16
-                                Layout.preferredHeight: 16
-                            }
-
-                            ColumnLayout {
-                                spacing: 1
-                                Layout.fillWidth: true
-
-                                Text {
-                                    text: "Note 2"
-                                    color: root.colorTextPrimary
-                                    font.pixelSize: 13
-                                    font.family: root.uiFontFamily
-                                    elide: Text.ElideRight
-                                    Layout.fillWidth: true
-                                }
-                                Text {
-                                    text: "path / to / second note"
-                                    color: root.colorTextSecondary
-                                    font.pixelSize: 11
-                                    font.family: root.uiFontFamily
-                                    elide: Text.ElideRight
-                                    Layout.fillWidth: true
-                                }
-                            }
-                        }
-
-                        MouseArea {
-                            id: mouseRecent2
-                            anchors.fill: parent
-                            hoverEnabled: false
-                            acceptedButtons: Qt.NoButton
-                        }
-                    }
-
-                    Text {
-                        text: "FOLDERS"
-                        color: root.colorTextSecondary
-                        font.pixelSize: 10
-                        font.family: root.uiFontFamily
-                        font.weight: Font.DemiBold
+                    SearchSectionHeader {
+                        text: qsTr("FOLDERS")
                         Layout.leftMargin: 24
                         Layout.topMargin: 18
                     }
 
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: 20
-                        Layout.rightMargin: 20
-                        Layout.topMargin: 12
-                        implicitHeight: 36
-                        color: "transparent"
-                        radius: root.rowRadius
+                    Repeater {
+                        model: root.folders
 
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.leftMargin: 14
-                            anchors.rightMargin: 14
-                            spacing: 10
+                        SearchResultRow {
+                            required property var modelData
 
-                            Image {
-                                source: "qrc:/qt/qml/zametki/assets/icons/list/folder.svg"
-                                Layout.preferredWidth: 16
-                                Layout.preferredHeight: 16
-                            }
-
-                            Text {
-                                text: "Project Notes"
-                                color: root.colorTextPrimary
-                                font.pixelSize: 13
-                                font.family: root.uiFontFamily
-                                elide: Text.ElideRight
-                                Layout.fillWidth: true
-                            }
-                        }
-
-                        MouseArea {
-                            id: mouseFolder
-                            anchors.fill: parent
-                            hoverEnabled: false
-                            acceptedButtons: Qt.NoButton
+                            Layout.leftMargin: 20
+                            Layout.rightMargin: 20
+                            Layout.topMargin: index === 0 ? 12 : 0
+                            iconSource: modelData.icon
+                            titleText: modelData.title
                         }
                     }
 
-                    Text {
-                        text: "COMMANDS"
-                        color: root.colorTextSecondary
-                        font.pixelSize: 10
-                        font.family: root.uiFontFamily
-                        font.weight: Font.DemiBold
+                    SearchSectionHeader {
+                        text: qsTr("COMMANDS")
                         Layout.leftMargin: 24
                         Layout.topMargin: 18
                     }
 
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: 20
-                        Layout.rightMargin: 20
-                        Layout.topMargin: 12
-                        implicitHeight: 36
-                        color: "transparent"
-                        radius: root.rowRadius
+                    Repeater {
+                        model: root.commands
 
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.leftMargin: 14
-                            anchors.rightMargin: 14
-                            spacing: 10
+                        SearchResultRow {
+                            required property var modelData
 
-                            Image {
-                                source: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
-                                Layout.preferredWidth: 16
-                                Layout.preferredHeight: 16
-                            }
-
-                            Text {
-                                text: "Create New Note"
-                                color: root.colorTextPrimary
-                                font.pixelSize: 13
-                                font.family: root.uiFontFamily
-                                Layout.fillWidth: true
-                            }
-                        }
-
-                        MouseArea {
-                            id: mouseCmd1
-                            anchors.fill: parent
-                            hoverEnabled: false
-                            acceptedButtons: Qt.NoButton
-                        }
-                    }
-
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.leftMargin: 20
-                        Layout.rightMargin: 20
-                        Layout.topMargin: 12
-                        implicitHeight: 36
-                        color: "transparent"
-                        radius: root.rowRadius
-
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.leftMargin: 14
-                            anchors.rightMargin: 14
-                            spacing: 10
-
-                            Image {
-                                source: "qrc:/qt/qml/zametki/assets/icons/sidebar/graph-view.svg"
-                                Layout.preferredWidth: 16
-                                Layout.preferredHeight: 16
-                            }
-
-                            Text {
-                                text: "Open Graph View"
-                                color: root.colorTextPrimary
-                                font.pixelSize: 13
-                                font.family: root.uiFontFamily
-                                Layout.fillWidth: true
-                            }
-                        }
-
-                        MouseArea {
-                            id: mouseCmd2
-                            anchors.fill: parent
-                            hoverEnabled: false
-                            acceptedButtons: Qt.NoButton
+                            Layout.leftMargin: 20
+                            Layout.rightMargin: 20
+                            Layout.topMargin: index === 0 ? 12 : 0
+                            iconSource: modelData.icon
+                            titleText: modelData.title
                         }
                     }
 
@@ -350,9 +199,9 @@ Item {
 
             Rectangle {
                 Layout.fillWidth: true
-                color: root.colorSurface
+                color: Palette.backgroundLight
                 border.width: 1
-                border.color: root.colorDivider
+                border.color: Palette.border
                 implicitHeight: 44
 
                 RowLayout {
@@ -361,53 +210,14 @@ Item {
                     anchors.rightMargin: 14
                     spacing: 14
 
-                    RowLayout {
-                        spacing: 6
-                        Image {
-                            source: "qrc:/qt/qml/zametki/assets/icons/unused/open-bracket.svg"
-                            Layout.preferredHeight: 14
-                            Layout.preferredWidth: 14
-                        }
-                        Image {
-                            source: "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg"
-                            Layout.preferredHeight: 14
-                            Layout.preferredWidth: 14
-                        }
-                        Text {
-                            color: root.colorTextSecondary
-                            text: qsTr("Navigate")
-                            font.pixelSize: 12
-                            font.family: root.uiFontFamily
-                        }
-                    }
+                    Repeater {
+                        model: root.footerHints
 
-                    RowLayout {
-                        spacing: 6
-                        Image {
-                            source: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
-                            Layout.preferredWidth: 14
-                            Layout.preferredHeight: 14
-                        }
-                        Text {
-                            color: root.colorTextSecondary
-                            text: qsTr("Open")
-                            font.pixelSize: 12
-                            font.family: root.uiFontFamily
-                        }
-                    }
+                        SearchFooterHint {
+                            required property var modelData
 
-                    RowLayout {
-                        spacing: 6
-                        Image {
-                            source: "qrc:/qt/qml/zametki/assets/icons/header/more.svg"
-                            Layout.preferredWidth: 14
-                            Layout.preferredHeight: 14
-                        }
-                        Text {
-                            color: root.colorTextSecondary
-                            text: qsTr("Close")
-                            font.pixelSize: 12
-                            font.family: root.uiFontFamily
+                            iconSource: modelData.icon
+                            textLabel: modelData.label
                         }
                     }
                 }

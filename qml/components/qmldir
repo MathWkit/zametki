@@ -4,3 +4,14 @@ SidebarPanel 1.0 SidebarPanel.qml
 MainHeaderBar 1.0 MainHeaderBar.qml
 AppSwitch 1.0 AppSwitch.qml
 AppButton 1.0 AppButton.qml
+AppPageTitleText 1.0 AppPageTitleText.qml
+AppSidebarLabelText 1.0 AppSidebarLabelText.qml
+AppSectionTitleText 1.0 AppSectionTitleText.qml
+AppDescriptionText 1.0 AppDescriptionText.qml
+AppBodyText 1.0 AppBodyText.qml
+AppSectionCard 1.0 AppSectionCard.qml
+AppDivider 1.0 AppDivider.qml
+AppActionButton 1.0 AppActionButton.qml
+AppActionButtonCompact 1.0 AppActionButtonCompact.qml
+AppInputField 1.0 AppInputField.qml
+AppDropdown 1.0 AppDropdown.qml
