@@ -120,11 +120,28 @@ var rowPaddingCompact = 8;
 var settingsNumericFieldWidth = 80;
 var settingsPathFieldWidth = 220;
 
+var searchDialogHeight = 432;
+var searchInset = 16;
+var searchSectionInset = 24;
+var searchCompactGap = 8;
+var searchHintBarHeight = 40;
+var searchResultRowHeight = 36;
+var searchResultRowHeightWithSubtitle = 44;
+
+var sidebarTreeIndentStep = 20;
+var sidebarTreeRowHeightFolder = 28;
+var sidebarTreeRowHeightNote = 32;
+var sidebarListInset = 12;
+var sidebarProfileTinyGap = 4;
+
 var dropdownTextPaddingLeft = 12;
 var dropdownTextPaddingRight = 28;
 var dropdownIndicatorSize = 12;
 var dropdownIndicatorRightInset = 10;
 var dropdownPopupOffset = 6;
+
+var inputBorderWidth = 1;
+var inputFocusBorderWidth = 1;
 
 // ============================================================================
 // ANIMATION

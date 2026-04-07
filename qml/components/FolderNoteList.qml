@@ -18,7 +18,7 @@ Column {
     signal noteClicked(string noteTitle)
     signal itemSelected(string itemKey)
 
-    spacing: 5
+    spacing: Palette.spacingSm + 1
 
     function toggleFolder(folderPath) {
         const expandedMap = Object.assign({}, root.expandedFolders);
@@ -105,11 +105,11 @@ Column {
     Text {
         text: "Папки"
         font.family: root.fontFamily
-        font.pixelSize: 11
+        font.pixelSize: Palette.fontSizeXs
         font.weight: Font.DemiBold
         color: Palette.textSecondary
         anchors.left: parent.left
-        anchors.leftMargin: 12
+        anchors.leftMargin: Palette.sidebarListInset
     }
 
     Repeater {
@@ -124,16 +124,16 @@ Column {
             readonly property bool isSelected: !isFolder && root.selectedItemKey === ("folder-note:" + modelData.path)
 
             width: parent ? parent.width : 0
-            height: isFolder ? 26 : 28
+            height: isFolder ? Palette.sidebarTreeRowHeightFolder : Palette.sidebarTreeRowHeightNote
             clip: true
-            color: treeItem.isSelected ? "#E6F0FF" : (itemMouseArea.containsMouse ? Palette.hover : "transparent")
-            radius: Palette.cornerRadius
+            color: treeItem.isSelected ? Palette.accentSidebar : (itemMouseArea.containsMouse ? Palette.hover : "transparent")
+            radius: Palette.radiusSm
 
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 12 + treeItem.depth * 20
-                anchors.rightMargin: 12
-                spacing: 8
+                anchors.leftMargin: Palette.sidebarListInset + treeItem.depth * Palette.sidebarTreeIndentStep
+                anchors.rightMargin: Palette.sidebarListInset
+                spacing: Palette.spacingLg
 
                 Image {
                     source: treeItem.isFolder
@@ -173,9 +173,9 @@ Column {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignVCenter
                     font.family: root.fontFamily
-                    font.pixelSize: 13
+                    font.pixelSize: Palette.fontSizeBase
                     font.weight: Font.Normal
-                    color: treeItem.isSelected ? "#0B74DE" : Palette.textPrimary
+                    color: treeItem.isSelected ? Palette.accentPrimary : Palette.textPrimary
                     wrapMode: Text.NoWrap
                     elide: Text.ElideRight
                 }
@@ -209,16 +209,16 @@ Column {
             readonly property bool isSelected: root.selectedItemKey === ("note:" + noteItem.modelData)
 
             width: parent ? parent.width : 0
-            height: 30
+            height: Palette.sidebarTreeRowHeightNote
             clip: true
-            color: noteItem.isSelected ? "#E6F0FF" : (noteMouseArea.containsMouse ? Palette.hover : "transparent")
-            radius: Palette.cornerRadius
+            color: noteItem.isSelected ? Palette.accentSidebar : (noteMouseArea.containsMouse ? Palette.hover : "transparent")
+            radius: Palette.radiusSm
 
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 12
-                anchors.rightMargin: 12
-                spacing: 8
+                anchors.leftMargin: Palette.sidebarListInset
+                anchors.rightMargin: Palette.sidebarListInset
+                spacing: Palette.spacingLg
 
                 Image {
                     source: noteItem.isSelected ? "qrc:/qt/qml/zametki/assets/icons/list/note-selected.svg" : "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
@@ -235,9 +235,9 @@ Column {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignVCenter
                     font.family: root.fontFamily
-                    font.pixelSize: 13
+                    font.pixelSize: Palette.fontSizeBase
                     font.weight: Font.Normal
-                    color: noteItem.isSelected ? "#0B74DE" : Palette.textPrimary
+                    color: noteItem.isSelected ? Palette.accentPrimary : Palette.textPrimary
                     wrapMode: Text.NoWrap
                     elide: Text.ElideRight
                 }

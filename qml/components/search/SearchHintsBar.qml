@@ -8,7 +8,7 @@ Rectangle {
     property var hintsModel: []
 
     Layout.fillWidth: true
-    implicitHeight: 44
+    implicitHeight: Palette.searchHintBarHeight
     color: Palette.backgroundLight
     border.width: 1
     border.color: Palette.border
@@ -16,8 +16,8 @@ Rectangle {
     RowLayout {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.rightMargin: 14
-        spacing: 14
+        anchors.rightMargin: Palette.searchInset
+        spacing: Palette.searchInset
 
         Repeater {
             model: control.hintsModel

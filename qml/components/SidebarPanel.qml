@@ -320,7 +320,7 @@ Rectangle {
 
                     ColumnLayout {
                         Layout.fillWidth: true
-                        spacing: 2
+                        spacing: Palette.sidebarProfileTinyGap
 
                         SidebarSubtitleText {
                             text: "Lox chvetochiy"

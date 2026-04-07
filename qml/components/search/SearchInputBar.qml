@@ -15,15 +15,15 @@ AppSectionCard {
     signal queryChanged(string query)
 
     Layout.fillWidth: true
-    implicitHeight: 40
+    implicitHeight: Palette.controlHeightBase
     cardColor: Palette.backgroundLight
     borderLineColor: Palette.border
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 14
-        anchors.rightMargin: 14
-        spacing: 10
+        anchors.leftMargin: Palette.searchInset
+        anchors.rightMargin: Palette.searchInset
+        spacing: Palette.searchCompactGap
 
         Image {
             source: control.iconSource

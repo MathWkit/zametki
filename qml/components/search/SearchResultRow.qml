@@ -18,15 +18,15 @@ Rectangle {
     signal clicked
 
     Layout.fillWidth: true
-    implicitHeight: subtitleText.length > 0 ? 44 : 36
+    implicitHeight: subtitleText.length > 0 ? Palette.searchResultRowHeightWithSubtitle : Palette.searchResultRowHeight
     color: rowMouseArea.containsMouse && showHover ? rowHoverColor : rowColor
     radius: Palette.radiusMd
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 14
-        anchors.rightMargin: 14
-        spacing: 10
+        anchors.leftMargin: Palette.searchInset
+        anchors.rightMargin: Palette.searchInset
+        spacing: Palette.searchCompactGap
 
         Image {
             source: control.iconSource
@@ -37,7 +37,7 @@ Rectangle {
         }
 
         ColumnLayout {
-            spacing: 1
+            spacing: Palette.spacingXs
             Layout.fillWidth: true
 
             AppBodyText {
@@ -51,7 +51,7 @@ Rectangle {
                 visible: control.subtitleText.length > 0
                 text: control.subtitleText
                 textColor: control.subtitleColor
-                font.pointSize: 11
+                textPointSize: Palette.fontSizeSm
                 elide: Text.ElideRight
                 Layout.fillWidth: true
             }

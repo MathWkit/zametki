@@ -59,10 +59,10 @@ Item {
 
     Rectangle {
         id: dialog
-        width: 540
-        height: 430
+        width: Palette.dialogMaxWidth
+        height: Palette.searchDialogHeight
         color: Palette.headerBackground
-        radius: 8
+        radius: Palette.radiusLg
         border.width: 1
         border.color: Palette.border
         anchors.centerIn: parent
@@ -75,10 +75,10 @@ Item {
 
             SearchInputBar {
                 Layout.fillWidth: true
-                Layout.leftMargin: 20
-                Layout.rightMargin: 20
-                Layout.topMargin: 16
-                Layout.bottomMargin: 16
+                Layout.leftMargin: Palette.searchInset
+                Layout.rightMargin: Palette.searchInset
+                Layout.topMargin: Palette.space2
+                Layout.bottomMargin: Palette.space2
             }
 
             AppDivider {
@@ -100,8 +100,8 @@ Item {
 
                     SearchSectionHeader {
                         text: qsTr("RECENT NOTES")
-                        Layout.leftMargin: 24
-                        Layout.topMargin: 16
+                        Layout.leftMargin: Palette.searchSectionInset
+                        Layout.topMargin: Palette.space2
                     }
 
                     Repeater {
@@ -111,8 +111,8 @@ Item {
                             required property var modelData
 
                             Layout.leftMargin: 20
-                            Layout.rightMargin: 20
-                            Layout.topMargin: index === 0 ? 12 : 0
+                            Layout.rightMargin: Palette.searchInset
+                            Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
                             subtitleText: modelData.subtitle
@@ -121,8 +121,8 @@ Item {
 
                     SearchSectionHeader {
                         text: qsTr("FOLDERS")
-                        Layout.leftMargin: 24
-                        Layout.topMargin: 18
+                        Layout.leftMargin: Palette.searchSectionInset
+                        Layout.topMargin: Palette.space2
                     }
 
                     Repeater {
@@ -131,9 +131,9 @@ Item {
                         SearchResultRow {
                             required property var modelData
 
-                            Layout.leftMargin: 20
-                            Layout.rightMargin: 20
-                            Layout.topMargin: index === 0 ? 12 : 0
+                            Layout.leftMargin: Palette.searchInset
+                            Layout.rightMargin: Palette.searchInset
+                            Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
                         }
@@ -141,8 +141,8 @@ Item {
 
                     SearchSectionHeader {
                         text: qsTr("COMMANDS")
-                        Layout.leftMargin: 24
-                        Layout.topMargin: 18
+                        Layout.leftMargin: Palette.searchSectionInset
+                        Layout.topMargin: Palette.space2
                     }
 
                     Repeater {
@@ -151,9 +151,9 @@ Item {
                         SearchResultRow {
                             required property var modelData
 
-                            Layout.leftMargin: 20
-                            Layout.rightMargin: 20
-                            Layout.topMargin: index === 0 ? 12 : 0
+                            Layout.leftMargin: Palette.searchInset
+                            Layout.rightMargin: Palette.searchInset
+                            Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
                         }

@@ -9,16 +9,16 @@ RowLayout {
     required property string iconSource
     required property string textLabel
 
-    spacing: 6
+    spacing: Palette.spacingLg
 
     Image {
         source: control.iconSource
-        Layout.preferredWidth: 14
-        Layout.preferredHeight: 14
+        Layout.preferredWidth: Palette.iconSmall
+        Layout.preferredHeight: Palette.iconSmall
     }
 
     AppDescriptionText {
         text: control.textLabel
-        font.pointSize: 12
+        textPointSize: Palette.fontSizeSm
     }
 }
