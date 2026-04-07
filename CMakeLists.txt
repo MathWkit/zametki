@@ -72,10 +72,7 @@ qt_add_qml_module(appzametki
         qml/components/settings/SettingsNavItem.qml
         qml/components/settings/SettingsControlRow.qml
         qml/components/settings/SettingsKeyValueRow.qml
-        qml/components/auth/AuthFormTitleText.qml
-        qml/components/auth/AuthFormSubtitleText.qml
         qml/components/auth/AuthInputField.qml
-        qml/components/auth/AuthErrorText.qml
         qml/components/auth/AuthPrimaryButton.qml
         qml/components/auth/AuthSocialButton.qml
         qml/components/auth/AuthLinkButton.qml

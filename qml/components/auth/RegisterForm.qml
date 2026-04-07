@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import "../../scripts/Theme.js" as Palette
+import ".."
 
 Item {
     id: root
@@ -60,13 +61,15 @@ Item {
         anchors.right: parent.right
         spacing: Palette.spacingXl
 
-        AuthFormTitleText {
+        AppPageTitleText {
             text: qsTr("Регистрация")
+            textPointSize: Palette.fontSizeXxl
             Layout.fillWidth: true
         }
 
-        AuthFormSubtitleText {
+        AppDescriptionText {
             text: qsTr("Создайте новый аккаунт")
+            textPointSize: Palette.fontSizeSm
             Layout.fillWidth: true
         }
 
@@ -83,8 +86,12 @@ Item {
             onAccepted: emailField.forceActiveFocus()
         }
 
-        AuthErrorText {
+        AppDescriptionText {
             text: root.nameError
+            visible: text.length > 0
+            textColor: Palette.errorColor
+            textPointSize: Palette.fontSizeSm
+            wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }
 
@@ -101,8 +108,12 @@ Item {
             onAccepted: passwordField.forceActiveFocus()
         }
 
-        AuthErrorText {
+        AppDescriptionText {
             text: root.emailError
+            visible: text.length > 0
+            textColor: Palette.errorColor
+            textPointSize: Palette.fontSizeSm
+            wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }
 
@@ -123,8 +134,12 @@ Item {
             onAccepted: confirmPasswordField.forceActiveFocus()
         }
 
-        AuthErrorText {
+        AppDescriptionText {
             text: root.passwordError
+            visible: text.length > 0
+            textColor: Palette.errorColor
+            textPointSize: Palette.fontSizeSm
+            wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }
 
@@ -142,8 +157,12 @@ Item {
             onAccepted: root.validateAndSubmit()
         }
 
-        AuthErrorText {
+        AppDescriptionText {
             text: root.confirmPasswordError
+            visible: text.length > 0
+            textColor: Palette.errorColor
+            textPointSize: Palette.fontSizeSm
+            wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }
 

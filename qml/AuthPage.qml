@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import "scripts/Theme.js" as Palette
+import "components"
 import "components/auth"
 
 Item {
@@ -51,14 +52,15 @@ Item {
             anchors.margins: Palette.spacingXxl
             spacing: Palette.spacingXxl
 
-            AuthFormTitleText {
+            AppPageTitleText {
                 text: qsTr("Аккаунт")
-                textPixelSize: Palette.authTitleSize
+                textPointSize: Palette.authTitleSize
                 Layout.fillWidth: true
             }
 
-            AuthFormSubtitleText {
+            AppDescriptionText {
                 text: qsTr("Войдите или создайте новый аккаунт")
+                textPointSize: Palette.fontSizeSm
                 Layout.fillWidth: true
             }
 
