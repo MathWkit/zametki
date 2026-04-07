@@ -10,9 +10,6 @@ Item {
     clip: false
 
     // ===== LAYOUT HELPERS =====
-    readonly property int avatarRadius: Palette.avatarBase / 2
-    readonly property int avatarSmallRadius: Palette.avatarSmall / 2
-    readonly property string fontFamily: "Inter"
     // Max height for accounts list to allow scrolling when there are many accounts (~2 items visible)
     readonly property int maxAccountsListHeight: (Palette.avatarSmall + Palette.spacingLg * 2) * 2 + Palette.spacingXl
     // Max height for the entire dialog to fit on screen with padding
@@ -119,21 +116,11 @@ Item {
                         spacing: Palette.spacingXl
 
                         // Avatar or Initials
-                        Rectangle {
+                        AppInitialsAvatar {
+                            initials: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
+                            avatarSize: Palette.avatarBase
                             Layout.preferredWidth: Palette.avatarBase
                             Layout.preferredHeight: Palette.avatarBase
-                            radius: root.avatarRadius
-                            color: Palette.accentPrimary
-                            clip: true
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
-                                color: Palette.backgroundWhite
-                                font.pixelSize: Palette.fontSizeXl
-                                font.family: root.fontFamily
-                                font.weight: 700
-                            }
                         }
 
                         ColumnLayout {
@@ -267,21 +254,12 @@ Item {
                                     spacing: Palette.spacingXl
 
                                     // Account Avatar
-                                    Rectangle {
+                                    AppInitialsAvatar {
+                                        initials: getInitials(modelData.firstName, modelData.lastName)
+                                        avatarSize: Palette.avatarSmall
+                                        initialsPixelSize: Palette.fontSizeSm
                                         Layout.preferredWidth: Palette.avatarSmall
                                         Layout.preferredHeight: Palette.avatarSmall
-                                        radius: root.avatarSmallRadius
-                                        color: Palette.accentPrimary
-                                        clip: true
-
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: getInitials(modelData.firstName, modelData.lastName)
-                                            color: Palette.backgroundWhite
-                                            font.pixelSize: Palette.fontSizeSm
-                                            font.family: root.fontFamily
-                                            font.weight: 700
-                                        }
                                     }
 
                                     ColumnLayout {

@@ -165,71 +165,29 @@ Window {
             source: "Settings.qml"
         }
 
-        Rectangle {
+        AppModalOverlay {
             id: searchOverlay
-            anchors.fill: parent
             visible: window.searchViewVisible && !window.settingsViewVisible
-            color: "#66000000"
             z: 200
+            source: Qt.resolvedUrl("Search.qml")
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: function (mouse) {
-                    if (!searchLoader.item || !searchLoader.item.dialogItem) {
-                        return;
-                    }
-
-                    const dialog = searchLoader.item.dialogItem;
-                    const dialogPos = dialog.mapToItem(searchOverlay, 0, 0);
-                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
-
-                    if (clickedOutsideDialog) {
-                        window.searchViewVisible = false;
-                    }
-                }
-            }
-
-            Loader {
-                id: searchLoader
-                anchors.fill: parent
-                active: searchOverlay.visible
-                source: "Search.qml"
+            onOutsideCloseRequested: {
+                window.searchViewVisible = false;
             }
         }
 
-        Rectangle {
+        AppModalOverlay {
             id: shareOverlay
-            anchors.fill: parent
             visible: window.shareViewVisible && !window.settingsViewVisible
-            color: "#66000000"
             z: 210
+            source: Qt.resolvedUrl("Share.qml")
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: function (mouse) {
-                    if (!shareLoader.item || !shareLoader.item.dialogItem) {
-                        return;
-                    }
-
-                    const dialog = shareLoader.item.dialogItem;
-                    const dialogPos = dialog.mapToItem(shareOverlay, 0, 0);
-                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
-
-                    if (clickedOutsideDialog) {
-                        window.shareViewVisible = false;
-                    }
-                }
-            }
-
-            Loader {
-                id: shareLoader
-                anchors.fill: parent
-                active: shareOverlay.visible
-                source: "Share.qml"
+            onOutsideCloseRequested: {
+                window.shareViewVisible = false;
             }
 
             Connections {
-                target: shareLoader.item
+                target: shareOverlay.loadedItem
                 ignoreUnknownSignals: true
 
                 function onCloseClicked() {
@@ -238,39 +196,18 @@ Window {
             }
         }
 
-        Rectangle {
+        AppModalOverlay {
             id: profileOverlay
-            anchors.fill: parent
             visible: window.profileViewVisible && !window.settingsViewVisible
-            color: "#66000000"
             z: 220
+            source: Qt.resolvedUrl("Profile.qml")
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: function (mouse) {
-                    if (!profileLoader.item || !profileLoader.item.dialogItem) {
-                        return;
-                    }
-
-                    const dialog = profileLoader.item.dialogItem;
-                    const dialogPos = dialog.mapToItem(profileOverlay, 0, 0);
-                    const clickedOutsideDialog = mouse.x < dialogPos.x || mouse.x > (dialogPos.x + dialog.width) || mouse.y < dialogPos.y || mouse.y > (dialogPos.y + dialog.height);
-
-                    if (clickedOutsideDialog) {
-                        window.profileViewVisible = false;
-                    }
-                }
-            }
-
-            Loader {
-                id: profileLoader
-                anchors.fill: parent
-                active: profileOverlay.visible
-                source: "Profile.qml"
+            onOutsideCloseRequested: {
+                window.profileViewVisible = false;
             }
 
             Connections {
-                target: profileLoader.item
+                target: profileOverlay.loadedItem
                 ignoreUnknownSignals: true
 
                 function onCloseClicked() {

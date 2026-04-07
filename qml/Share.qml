@@ -1,18 +1,13 @@
 import QtQuick 6.8
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "scripts/Theme.js" as Palette
 import "components"
 
 Item {
     id: item1
     anchors.fill: parent
     clip: false
-
-    // ===== COLORS =====
-    property color colorBackground: "#ffffff"
-    property color colorSurface: "#f1f5f9"
-    property color colorTextPrimary: "#0f1724"
-    property color colorAccent: "#0b74de"
 
     signal sendClicked
     signal cancelClicked
@@ -59,7 +54,7 @@ Item {
         id: rectangle
         width: 540
         height: 561
-        color: colorBackground
+        color: Palette.backgroundWhite
         radius: 10
         anchors.centerIn: parent
 
@@ -91,7 +86,7 @@ Item {
                     Layout.fillWidth: true
                 }
                 Rectangle {
-                    color: colorSurface
+                    color: Palette.surfaceColor
                     radius: 6
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                     Layout.preferredHeight: 36
@@ -179,19 +174,13 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 12
-                        Rectangle {
-                            radius: 100
+                        AppInitialsAvatar {
+                            initials: "AK"
+                            avatarSize: 36
+                            initialsPixelSize: 12
                             Layout.preferredWidth: 36
                             Layout.preferredHeight: 36
                             Layout.alignment: Qt.AlignVCenter
-                            Text {
-                                text: "AK"
-                                anchors.fill: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                                font.styleName: "Bold"
-                                font.family: "Inter"
-                            }
                         }
 
                         ColumnLayout {
@@ -222,16 +211,10 @@ Item {
                         Layout.fillWidth: true
                         spacing: 12
 
-                        Rectangle {
-                            radius: 100
-                            Text {
-                                text: "AK"
-                                anchors.fill: parent
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                                font.styleName: "Bold"
-                                font.family: "Inter"
-                            }
+                        AppInitialsAvatar {
+                            initials: "AK"
+                            avatarSize: 36
+                            initialsPixelSize: 12
                             Layout.preferredWidth: 36
                             Layout.preferredHeight: 36
                             Layout.alignment: Qt.AlignVCenter
@@ -322,7 +305,7 @@ Item {
 
                 // Copy link
                 Rectangle {
-                    color: colorSurface
+                    color: Palette.surfaceColor
                     radius: 6
                     implicitWidth: copyRow.implicitWidth + 32
                     implicitHeight: copyRow.implicitHeight + 16
@@ -352,16 +335,16 @@ Item {
                 // Cancel
                 AppActionButton {
                     text: "Cancel"
-                    textColor: colorTextPrimary
-                    backgroundColor: colorSurface
+                    textColor: Palette.textPrimary
+                    backgroundColor: Palette.surfaceColor
                     onClicked: cancelClicked()
                 }
 
                 // Done
                 AppActionButton {
                     text: "Done"
-                    textColor: colorBackground
-                    backgroundColor: colorAccent
+                    textColor: Palette.backgroundWhite
+                    backgroundColor: Palette.accentPrimary
                     onClicked: doneClicked()
                 }
             }

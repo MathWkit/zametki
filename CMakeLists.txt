@@ -69,6 +69,9 @@ qt_add_qml_module(appzametki
         qml/components/AppActionButtonCompact.qml
         qml/components/AppInputField.qml
         qml/components/AppDropdown.qml
+        qml/components/AppModalOverlay.qml
+        qml/components/AppSettingsRowLabel.qml
+        qml/components/AppInitialsAvatar.qml
         qml/components/settings/SettingsNavItem.qml
         qml/components/settings/SettingsControlRow.qml
         qml/components/settings/SettingsKeyValueRow.qml
@@ -83,6 +86,8 @@ qt_add_qml_module(appzametki
         qml/components/search/SearchSectionHeader.qml
         qml/components/search/SearchResultRow.qml
         qml/components/search/SearchFooterHint.qml
+        qml/components/search/SearchInputBar.qml
+        qml/components/search/SearchHintsBar.qml
         qml/CreationBD.qml
     RESOURCES
         assets/icons/sidebar/search.svg

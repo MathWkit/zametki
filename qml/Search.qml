@@ -73,44 +73,12 @@ Item {
             anchors.fill: parent
             spacing: 0
 
-            AppSectionCard {
+            SearchInputBar {
                 Layout.fillWidth: true
                 Layout.leftMargin: 20
                 Layout.rightMargin: 20
                 Layout.topMargin: 16
                 Layout.bottomMargin: 16
-                implicitHeight: 40
-                cardColor: Palette.backgroundLight
-                borderLineColor: Palette.border
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 14
-                    anchors.rightMargin: 14
-                    spacing: 10
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/sidebar/search.svg"
-                        fillMode: Image.PreserveAspectFit
-                        Layout.preferredWidth: 16
-                        Layout.preferredHeight: 16
-                        Layout.alignment: Qt.AlignVCenter
-                    }
-
-                    TextField {
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignVCenter
-                        placeholderText: qsTr("Search for notes, folders, tags, or commands...")
-                        color: Palette.textPrimary
-                        placeholderTextColor: Palette.textSecondary
-                        font.pixelSize: 14
-                        font.family: Palette.fontFamily
-                        background: Rectangle {
-                            color: "transparent"
-                            border.width: 0
-                        }
-                    }
-                }
             }
 
             AppDivider {
@@ -197,30 +165,8 @@ Item {
                 }
             }
 
-            Rectangle {
-                Layout.fillWidth: true
-                color: Palette.backgroundLight
-                border.width: 1
-                border.color: Palette.border
-                implicitHeight: 44
-
-                RowLayout {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.rightMargin: 14
-                    spacing: 14
-
-                    Repeater {
-                        model: root.footerHints
-
-                        SearchFooterHint {
-                            required property var modelData
-
-                            iconSource: modelData.icon
-                            textLabel: modelData.label
-                        }
-                    }
-                }
+            SearchHintsBar {
+                hintsModel: root.footerHints
             }
         }
     }

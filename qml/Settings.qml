@@ -180,7 +180,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout6
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Общие"
                                             }
 
@@ -202,7 +202,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout7
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Appearance"
                                             }
 
@@ -236,7 +236,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout8
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Открывать последнюю сессию"
                                             }
 
@@ -279,7 +279,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout10
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Редактор"
                                             }
 
@@ -302,7 +302,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout11
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Live Preview"
                                             }
                                         }
@@ -329,7 +329,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout14
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Автосохранение"
                                             }
                                         }
@@ -356,7 +356,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout13
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Интервал автосохранения (сек)"
                                             }
                                         }
@@ -390,7 +390,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout12
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Автозакрытие скобок"
                                             }
                                         }
@@ -426,7 +426,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout16
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Заметки"
                                             }
 
@@ -448,7 +448,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout17
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Папка заметок"
                                             }
 
@@ -487,7 +487,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout18
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Включить автобэкап"
                                             }
                                         }
@@ -512,7 +512,7 @@ Item {
                                         Layout.bottomMargin: 10
                                         ColumnLayout {
                                             id: columnLayout19
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Количество копий"
                                             }
                                         }
@@ -555,7 +555,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout21
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Поиск"
                                             }
 
@@ -578,7 +578,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout23
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Поиск по содержимому"
                                             }
                                         }
@@ -606,7 +606,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout24
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Fuzzy search"
                                             }
                                         }
@@ -634,7 +634,7 @@ Item {
                                         ColumnLayout {
                                             id: columnLayout22
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Индекс поиска"
                                             }
 
@@ -678,7 +678,7 @@ Item {
                                         Layout.bottomMargin: 16
 
                                         ColumnLayout {
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Граф"
                                             }
 
@@ -700,7 +700,7 @@ Item {
                                         Layout.bottomMargin: 10
 
                                         ColumnLayout {
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Глубина связей"
                                             }
                                         }
@@ -731,7 +731,7 @@ Item {
                                         Layout.bottomMargin: 16
 
                                         ColumnLayout {
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Показывать только текущую заметку"
                                             }
                                         }
@@ -769,7 +769,7 @@ Item {
                                         ColumnLayout {
                                             id: securityInfo
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Безопасность"
                                             }
 
@@ -792,7 +792,7 @@ Item {
                                         ColumnLayout {
                                             id: passwordText
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Пароль на приложение"
                                             }
                                         }
@@ -818,7 +818,7 @@ Item {
                                         Layout.topMargin: 16
                                         Layout.bottomMargin: 16
                                         ColumnLayout {
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "Автоблокировка"
                                             }
                                         }
@@ -856,7 +856,7 @@ Item {
                                         Layout.topMargin: 16
                                         ColumnLayout {
 
-                                            Text {
+                                            AppSettingsRowLabel {
                                                 text: "О программе"
                                             }
 
