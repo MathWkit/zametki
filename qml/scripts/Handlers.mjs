@@ -21,19 +21,19 @@ export function onSettingsClicked() {
 }
 
 export function onHideSidebarClicked() {
-    console.log("Нажатие на Hide Sidebar");
+    console.log("Нажатие на Скрыть боковую панель");
 }
 
 export function onShareClicked() {
-    console.log("Нажата иконка Share");
+    console.log("Нажатие на Поделиться");
 }
 
 export function onFavoriteClicked() {
-    console.log("Нажата иконка Favorite");
+    console.log("Нажатие на Избранное");
 }
 
 export function onMoreClicked() {
-    console.log("Нажата иконка More");
+    console.log("Нажатие на Дополнительно");
 }
 
 export function onNoteClicked(noteTitle) {

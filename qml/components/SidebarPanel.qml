@@ -26,54 +26,160 @@ Rectangle {
     border.width: 1
     border.color: Palette.border
 
+    component SidebarTitleText: Text {
+        font.family: root.fontFamily
+        font.pixelSize: Palette.fontSizeMd
+        font.weight: Font.DemiBold
+        color: Palette.textPrimary
+    }
+
+    component SidebarSubtitleText: Text {
+        font.family: root.fontFamily
+        font.pixelSize: Palette.fontSizeMd
+        font.weight: Font.Medium
+        color: Palette.textPrimary
+    }
+
+    component SidebarBodyText: Text {
+        font.family: root.fontFamily
+        font.pixelSize: Palette.fontSizeMd
+        font.weight: Font.Normal
+        color: Palette.textPrimary
+    }
+
+    component SidebarSmallText: Text {
+        font.family: root.fontFamily
+        font.pixelSize: Palette.fontSizeSm
+        font.weight: Font.Normal
+        color: Palette.textSecondary
+    }
+
+    component SidebarActionRow: Rectangle {
+        id: actionRow
+
+        required property string iconSource
+        required property string titleText
+
+        signal clicked
+
+        Layout.fillWidth: true
+        color: "transparent"
+        radius: Palette.radiusMd
+        implicitHeight: actionContent.implicitHeight + (Palette.spacingXl * 2)
+
+        RowLayout {
+            id: actionContent
+            anchors.fill: parent
+            anchors.margins: Palette.spacingXl
+            spacing: Palette.spacingMd
+
+            Image {
+                source: actionRow.iconSource
+                width: Palette.iconSmall
+                height: Palette.iconSmall
+            }
+
+            SidebarSubtitleText {
+                text: actionRow.titleText
+                Layout.fillWidth: true
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            hoverEnabled: true
+            onClicked: actionRow.clicked()
+            onEntered: actionRow.color = Palette.hover
+            onExited: actionRow.color = "transparent"
+        }
+    }
+
+    component ProfileMenuItemRow: Rectangle {
+        id: menuRow
+
+        required property string iconSource
+        required property string titleText
+
+        signal clicked
+
+        Layout.fillWidth: true
+        implicitHeight: Palette.buttonHeightBase + Palette.spacingSm
+        color: "transparent"
+
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: Palette.spacingXl
+            anchors.rightMargin: Palette.spacingXl
+            spacing: Palette.spacingLg
+
+            Image {
+                source: menuRow.iconSource
+                width: Palette.iconSmall
+                height: Palette.iconSmall
+                fillMode: Image.PreserveAspectFit
+            }
+
+            SidebarBodyText {
+                text: menuRow.titleText
+                Layout.fillWidth: true
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onEntered: menuRow.color = Palette.hover
+            onExited: menuRow.color = "transparent"
+            onClicked: menuRow.clicked()
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.leftMargin: 16
-            Layout.rightMargin: 16
-            Layout.topMargin: 8
+            Layout.leftMargin: Palette.spacingXxl
+            Layout.rightMargin: Palette.spacingXxl
+            Layout.topMargin: Palette.spacingLg
             color: "transparent"
-            implicitHeight: headerContent.implicitHeight + 16
+            implicitHeight: headerContent.implicitHeight + Palette.spacingXxl
 
             ColumnLayout {
                 id: headerContent
                 anchors.fill: parent
-                anchors.margins: 8
-                spacing: 8
+                anchors.margins: Palette.spacingLg
+                spacing: Palette.spacingLg
 
                 Item {
                     Layout.fillWidth: true
-                    implicitHeight: 24
+                    implicitHeight: Palette.iconLarge
 
                     RowLayout {
                         anchors.fill: parent
-                        spacing: 6
+                        spacing: Palette.spacingMd
 
                         Image {
                             source: "qrc:/qt/qml/zametki/assets/icons/sidebar/my-knowledge-base.svg"
-                            width: 24
-                            height: 24
+                            width: Palette.iconLarge
+                            height: Palette.iconLarge
                             fillMode: Image.PreserveAspectFit
                         }
 
-                        Text {
+                        SidebarTitleText {
                             text: "Моя база знаний"
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignLeft
-                            font.family: root.fontFamily
-                            font.pixelSize: 14
-                            font.weight: Font.DemiBold
-                            color: Palette.textPrimary
                             Layout.fillWidth: true
                         }
 
                         Image {
                             source: "qrc:/qt/qml/zametki/assets/icons/sidebar/chosen.svg"
-                            width: 16
-                            height: 16
+                            width: Palette.iconSmall
+                            height: Palette.iconSmall
                             fillMode: Image.PreserveAspectFit
                         }
                     }
@@ -89,123 +195,27 @@ Rectangle {
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 12
-            Layout.rightMargin: 12
-            Layout.topMargin: 8
-            spacing: 4
+            Layout.leftMargin: Palette.spacingXl
+            Layout.rightMargin: Palette.spacingXl
+            Layout.topMargin: Palette.spacingLg
+            spacing: Palette.spacingSm
 
-            Rectangle {
-                id: searchRow
-                Layout.fillWidth: true
-                color: "transparent"
-                radius: Palette.cornerRadius
-                implicitHeight: searchContent.implicitHeight + 24
-
-                RowLayout {
-                    id: searchContent
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 6
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/sidebar/search.svg"
-                        width: 16
-                        height: 16
-                    }
-
-                    Text {
-                        text: "Поиск"
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        font.weight: Font.Medium
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    hoverEnabled: true
-                    onClicked: root.searchClicked()
-                    onEntered: searchRow.color = Palette.hover
-                    onExited: searchRow.color = "transparent"
-                }
+            SidebarActionRow {
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/sidebar/search.svg"
+                titleText: "Поиск"
+                onClicked: root.searchClicked()
             }
 
-            Rectangle {
-                id: newNoteRow
-                Layout.fillWidth: true
-                color: "transparent"
-                radius: Palette.cornerRadius
-                implicitHeight: newNoteContent.implicitHeight + 24
-
-                RowLayout {
-                    id: newNoteContent
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 6
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
-                        width: 16
-                        height: 16
-                    }
-
-                    Text {
-                        text: "Новая заметка"
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        font.weight: Font.Medium
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    hoverEnabled: true
-                    onClicked: root.newNoteClicked()
-                    onEntered: newNoteRow.color = Palette.hover
-                    onExited: newNoteRow.color = "transparent"
-                }
+            SidebarActionRow {
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
+                titleText: "Новая заметка"
+                onClicked: root.newNoteClicked()
             }
 
-            Rectangle {
-                id: graphRow
-                Layout.fillWidth: true
-                color: "transparent"
-                radius: Palette.cornerRadius
-                implicitHeight: graphContent.implicitHeight + 24
-
-                RowLayout {
-                    id: graphContent
-                    anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 6
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/sidebar/graph-view.svg"
-                        width: 16
-                        height: 16
-                    }
-
-                    Text {
-                        text: "Вид графа"
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        font.weight: Font.Medium
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    hoverEnabled: true
-                    onClicked: root.graphClicked()
-                    onEntered: graphRow.color = Palette.hover
-                    onExited: graphRow.color = "transparent"
-                }
+            SidebarActionRow {
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/sidebar/graph-view.svg"
+                titleText: "Вид графа"
+                onClicked: root.graphClicked()
             }
         }
 
@@ -213,10 +223,10 @@ Rectangle {
             id: noteListScroller
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.leftMargin: 12
-            Layout.rightMargin: 12
-            Layout.topMargin: 8
-            Layout.bottomMargin: 8
+            Layout.leftMargin: Palette.spacingXl
+            Layout.rightMargin: Palette.spacingXl
+            Layout.topMargin: Palette.spacingLg
+            Layout.bottomMargin: Palette.spacingLg
 
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -227,15 +237,15 @@ Rectangle {
             ScrollBar.vertical: ScrollBar {
                 policy: ScrollBar.AsNeeded
                 minimumSize: 0.1
-                width: 6
+                width: Palette.spacingSm + Palette.spacingSm
                 contentItem: Rectangle {
-                    implicitWidth: 6
-                    radius: 3
+                    implicitWidth: Palette.spacingSm + Palette.spacingSm
+                    radius: Palette.radiusSm
                     color: Palette.border
                 }
                 background: Rectangle {
-                    implicitWidth: 6
-                    radius: 3
+                    implicitWidth: Palette.spacingSm + Palette.spacingSm
+                    radius: Palette.radiusSm
                     color: "transparent"
                 }
             }
@@ -263,7 +273,7 @@ Rectangle {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.bottomMargin: 8
+            Layout.bottomMargin: Palette.spacingLg
             implicitHeight: 1
             color: Palette.border
         }
@@ -271,38 +281,38 @@ Rectangle {
         Rectangle {
             id: profileRow
             Layout.fillWidth: true
-            Layout.leftMargin: 12
-            Layout.rightMargin: 12
-            Layout.bottomMargin: 8
+            Layout.leftMargin: Palette.spacingXl
+            Layout.rightMargin: Palette.spacingXl
+            Layout.bottomMargin: Palette.spacingLg
             color: "transparent"
-            radius: Palette.cornerRadius
+            radius: Palette.radiusMd
             implicitHeight: profileCard.implicitHeight
 
             Rectangle {
                 id: profileCard
                 anchors.fill: parent
-                implicitHeight: profileContent.implicitHeight + 24
-                radius: Palette.cornerRadius
+                implicitHeight: profileContent.implicitHeight + (Palette.spacingXl * 2)
+                radius: Palette.radiusMd
                 color: Palette.headerBackground
                 border.width: 1
                 border.color: Palette.border
                 RowLayout {
                     id: profileContent
                     anchors.fill: parent
-                    anchors.margins: 12
-                    spacing: 6
+                    anchors.margins: Palette.spacingXl
+                    spacing: Palette.spacingMd
                     Layout.fillWidth: true
                     Rectangle {
                         width: 32
                         height: 32
-                        radius: 32
+                        radius: width / 2
                         color: Palette.hover
 
                         Text {
                             text: "GL"
                             anchors.centerIn: parent
                             font.family: root.fontFamily
-                            font.pixelSize: 10
+                            font.pixelSize: Palette.fontSizeXs
                             font.weight: Font.Medium
                             color: Palette.textPrimary
                         }
@@ -310,20 +320,13 @@ Rectangle {
 
                     ColumnLayout {
                         Layout.fillWidth: true
-                        spacing: 2
+                        spacing: Palette.sidebarProfileTinyGap
 
-                        Text {
-                            text: "Loh Cvetochniy"
-                            font.family: root.fontFamily
-                            font.pixelSize: 14
-                            font.weight: Font.Medium
+                        SidebarSubtitleText {
+                            text: "Lox chvetochiy"
                         }
-                        Text {
-                            text: "lohcvet@titam.com"
-                            font.family: root.fontFamily
-                            font.pixelSize: 12
-                            font.weight: Font.Normal
-                            color: Palette.textSecondary
+                        SidebarSmallText {
+                            text: "loxcvetochiy@titam.com"
                         }
                     }
                     Item {
@@ -358,11 +361,11 @@ Rectangle {
         padding: 0
         width: profileRow.width
         x: profileRow.x
-        y: Math.max(8, profileRow.y - implicitHeight - 8)
+        y: Math.max(Palette.spacingLg, profileRow.y - implicitHeight - Palette.spacingLg)
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
         background: Rectangle {
-            radius: Palette.cornerRadius
+            radius: Palette.radiusMd
             color: Palette.headerBackground
             border.width: 1
             border.color: Palette.border
@@ -371,127 +374,31 @@ Rectangle {
         contentItem: ColumnLayout {
             spacing: 0
 
-            Rectangle {
-                id: menuProfileRow
-                Layout.fillWidth: true
-                implicitHeight: 40
-                color: "transparent"
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 8
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/profile/profile.svg"
-                        width: 16
-                        height: 16
-                        fillMode: Image.PreserveAspectFit
-                    }
-
-                    Text {
-                        text: "Профиль"
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        color: Palette.textPrimary
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onEntered: menuProfileRow.color = Palette.hover
-                    onExited: menuProfileRow.color = "transparent"
-                    onClicked: {
-                        root.profileMenuItemClicked("profile");
-                        profileMenu.close();
-                    }
+            ProfileMenuItemRow {
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/profile/profile.svg"
+                titleText: "Профиль"
+                onClicked: {
+                    root.profileMenuItemClicked("profile");
+                    profileMenu.close();
                 }
             }
 
-            Rectangle {
-                id: menuSettingsRow
-                Layout.fillWidth: true
-                implicitHeight: 40
-                color: "transparent"
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 8
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/profile/settings.svg"
-                        width: 16
-                        height: 16
-                        fillMode: Image.PreserveAspectFit
-                    }
-
-                    Text {
-                        text: "Настройки"
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        color: Palette.textPrimary
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onEntered: menuSettingsRow.color = Palette.hover
-                    onExited: menuSettingsRow.color = "transparent"
-                    onClicked: {
-                        root.settingsClicked();
-                        root.profileMenuItemClicked("settings");
-                        profileMenu.close();
-                    }
+            ProfileMenuItemRow {
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/profile/settings.svg"
+                titleText: "Настройки"
+                onClicked: {
+                    root.settingsClicked();
+                    root.profileMenuItemClicked("settings");
+                    profileMenu.close();
                 }
             }
 
-            Rectangle {
-                id: menuSyncRow
-                Layout.fillWidth: true
-                implicitHeight: 40
-                color: "transparent"
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 8
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/profile/sync.svg"
-                        width: 16
-                        height: 16
-                        fillMode: Image.PreserveAspectFit
-                    }
-
-                    Text {
-                        text: "Статус синхронизации"
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        color: Palette.textPrimary
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onEntered: menuSyncRow.color = Palette.hover
-                    onExited: menuSyncRow.color = "transparent"
-                    onClicked: {
-                        root.profileMenuItemClicked("sync-status");
-                        profileMenu.close();
-                    }
+            ProfileMenuItemRow {
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/profile/sync.svg"
+                titleText: "Статус синхронизации"
+                onClicked: {
+                    root.profileMenuItemClicked("sync-status");
+                    profileMenu.close();
                 }
             }
 
@@ -501,85 +408,21 @@ Rectangle {
                 color: Palette.border
             }
 
-            Rectangle {
-                id: menuHelpRow
-                Layout.fillWidth: true
-                implicitHeight: 40
-                color: "transparent"
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 8
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/profile/help.svg"
-                        width: 16
-                        height: 16
-                        fillMode: Image.PreserveAspectFit
-                    }
-
-                    Text {
-                        text: "Помощь и справка"
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        color: Palette.textPrimary
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onEntered: menuHelpRow.color = Palette.hover
-                    onExited: menuHelpRow.color = "transparent"
-                    onClicked: {
-                        root.profileMenuItemClicked("help");
-                        profileMenu.close();
-                    }
+            ProfileMenuItemRow {
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/profile/help.svg"
+                titleText: "Помощь и справка"
+                onClicked: {
+                    root.profileMenuItemClicked("help");
+                    profileMenu.close();
                 }
             }
 
-            Rectangle {
-                id: menuHotkeysRow
-                Layout.fillWidth: true
-                implicitHeight: 40
-                color: "transparent"
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 8
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/profile/keyboard.svg"
-                        width: 16
-                        height: 16
-                        fillMode: Image.PreserveAspectFit
-                    }
-
-                    Text {
-                        text: "Горячие клавиши"
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        color: Palette.textPrimary
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onEntered: menuHotkeysRow.color = Palette.hover
-                    onExited: menuHotkeysRow.color = "transparent"
-                    onClicked: {
-                        root.profileMenuItemClicked("hotkeys");
-                        profileMenu.close();
-                    }
+            ProfileMenuItemRow {
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/profile/keyboard.svg"
+                titleText: "Горячие клавиши"
+                onClicked: {
+                    root.profileMenuItemClicked("hotkeys");
+                    profileMenu.close();
                 }
             }
 
@@ -589,44 +432,12 @@ Rectangle {
                 color: Palette.border
             }
 
-            Rectangle {
-                id: menuLogoutRow
-                Layout.fillWidth: true
-                implicitHeight: 40
-                color: "transparent"
-
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    spacing: 8
-
-                    Image {
-                        source: "qrc:/qt/qml/zametki/assets/icons/profile/logout.svg"
-                        width: 16
-                        height: 16
-                        fillMode: Image.PreserveAspectFit
-                    }
-
-                    Text {
-                        text: "Выход"
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        color: Palette.textPrimary
-                        Layout.fillWidth: true
-                    }
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onEntered: menuLogoutRow.color = Palette.hover
-                    onExited: menuLogoutRow.color = "transparent"
-                    onClicked: {
-                        root.profileMenuItemClicked("logout");
-                        profileMenu.close();
-                    }
+            ProfileMenuItemRow {
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/profile/logout.svg"
+                titleText: "Выход"
+                onClicked: {
+                    root.profileMenuItemClicked("logout");
+                    profileMenu.close();
                 }
             }
         }

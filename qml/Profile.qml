@@ -1,7 +1,8 @@
 import QtQuick 6.8
-import QtQuick.Controls 2.15
+import QtQuick.Controls 6.8
 import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
+import "components"
 
 Item {
     id: root
@@ -9,13 +10,11 @@ Item {
     clip: false
 
     // ===== LAYOUT HELPERS =====
-    readonly property int avatarRadius: Palette.avatarBase / 2
-    readonly property int avatarSmallRadius: Palette.avatarSmall / 2
-    readonly property string fontFamily: "Inter"
     // Max height for accounts list to allow scrolling when there are many accounts (~2 items visible)
     readonly property int maxAccountsListHeight: (Palette.avatarSmall + Palette.spacingLg * 2) * 2 + Palette.spacingXl
     // Max height for the entire dialog to fit on screen with padding
-    readonly property int maxDialogHeight: Math.min(600, root.height * 0.9)
+    readonly property int maxDialogHeight: Math.min(Palette.dialogMaxHeight, root.height * 0.9)
+    readonly property int dialogHorizontalMargin: Palette.space2
 
     signal closeClicked
     signal logoutClicked
@@ -61,11 +60,12 @@ Item {
 
     Rectangle {
         id: mainRectangle
-        width: Palette.dialogMaxWidth
+        width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, root.width - (root.dialogHorizontalMargin * 2)))
         height: Math.min(contentLayout.implicitHeight + Palette.spacingHuge, root.maxDialogHeight)
         color: Palette.backgroundWhite
         radius: Palette.radiusXl
         anchors.centerIn: parent
+        clip: true
 
         ColumnLayout {
             id: contentLayout
@@ -78,60 +78,38 @@ Item {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
 
-                Text {
-                    text: "Профиль"
-                    color: Palette.textPrimary
-                    font.pixelSize: Palette.fontSizeXl
-                    font.family: root.fontFamily
-                    font.weight: 700
+                AppPageTitleText {
+                    text: qsTr("Профиль")
                     Layout.fillWidth: true
                 }
 
-                Rectangle {
-                    radius: Palette.radiusMd
+                AppActionButtonCompact {
+                    text: "✕"
+                    backgroundColor: Palette.surfaceColor
                     Layout.preferredHeight: Palette.buttonHeightBase
                     Layout.preferredWidth: Palette.buttonHeightBase
-                    TapHandler {
-                        onTapped: {
-                            console.log("Кнопка: Закрыть");
-                            root.closeClicked();
-                        }
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "✕"
-                        color: Palette.textPrimary
-                        font.pixelSize: Palette.fontSizeLg
-                        font.family: root.fontFamily
+                    onClicked: {
+                        console.log("Кнопка: Закрыть");
+                        root.closeClicked();
                     }
                 }
             }
 
             // ==================== 2. Divider ====================
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: Palette.dividerColor
-            }
+            AppDivider {}
 
             // ==================== 3. Current Account ====================
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
 
-                Text {
-                    text: "Текущий аккаунт"
-                    color: Palette.textPrimary
-                    font.family: root.fontFamily
-                    font.weight: 600
-                    font.pixelSize: Palette.fontSizeMd
+                AppSectionTitleText {
+                    text: qsTr("Текущий аккаунт")
                 }
 
-                Rectangle {
+                AppSectionCard {
                     Layout.fillWidth: true
                     Layout.preferredHeight: currentAccountContent.implicitHeight + Palette.spacingLg
-                    radius: Palette.radiusMd
 
                     RowLayout {
                         id: currentAccountContent
@@ -140,21 +118,11 @@ Item {
                         spacing: Palette.spacingXl
 
                         // Avatar or Initials
-                        Rectangle {
+                        AppInitialsAvatar {
+                            initials: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
+                            avatarSize: Palette.avatarBase
                             Layout.preferredWidth: Palette.avatarBase
                             Layout.preferredHeight: Palette.avatarBase
-                            radius: root.avatarRadius
-                            color: Palette.accentPrimary
-                            clip: true
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
-                                color: Palette.backgroundWhite
-                                font.pixelSize: Palette.fontSizeXl
-                                font.family: root.fontFamily
-                                font.weight: 700
-                            }
                         }
 
                         ColumnLayout {
@@ -162,21 +130,16 @@ Item {
                             Layout.alignment: Qt.AlignLeft
                             spacing: Palette.spacingSm
 
-                            Text {
+                            AppBodyText {
                                 text: root.currentAccount.firstName + " " + root.currentAccount.lastName
-                                color: Palette.textPrimary
-                                font.family: root.fontFamily
-                                font.weight: 600
-                                font.pixelSize: Palette.fontSizeMd
+                                font.pointSize: Palette.fontSizeMd
+                                font.styleName: "SemiBold"
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                             }
 
-                            Text {
+                            AppDescriptionText {
                                 text: root.currentAccount.email
-                                color: Palette.textSecondary
-                                font.family: root.fontFamily
-                                font.pixelSize: Palette.fontSizeSm
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                             }
@@ -192,45 +155,34 @@ Item {
                     Repeater {
                         model: [
                             {
-                                label: "Сменить Имя",
+                                label: qsTr("Сменить Имя"),
                                 signal: "changeNameClicked"
                             },
                             {
-                                label: "Сменить пароль",
+                                label: qsTr("Сменить пароль"),
                                 signal: "changePasswordClicked"
                             }
                         ]
 
-                        Rectangle {
+                        AppActionButton {
                             required property var modelData
+                            text: modelData.label
                             Layout.fillWidth: true
                             Layout.preferredHeight: Palette.buttonHeightBase
-                            color: Palette.backgroundWhite
-                            radius: Palette.radiusMd
-                            border.color: Palette.borderSoft
-                            border.width: 1
-
-                            TapHandler {
-                                onTapped: {
-                                    console.log("Кнопка: " + parent.modelData.label);
-                                    switch (parent.modelData.signal) {
-                                    case "changeNameClicked":
-                                        root.changeNameClicked();
-                                        break;
-                                    case "changePasswordClicked":
-                                        root.changePasswordClicked();
-                                        break;
-                                    }
+                            backgroundColor: Palette.backgroundWhite
+                            borderColor: Palette.borderSoft
+                            borderWidth: 1
+                            fontPointSize: Palette.fontSizeSm
+                            onClicked: {
+                                console.log("Кнопка: " + modelData.label);
+                                switch (modelData.signal) {
+                                case "changeNameClicked":
+                                    root.changeNameClicked();
+                                    break;
+                                case "changePasswordClicked":
+                                    root.changePasswordClicked();
+                                    break;
                                 }
-                            }
-
-                            Text {
-                                anchors.centerIn: parent
-                                text: parent.modelData.label
-                                color: Palette.textPrimary
-                                font.family: root.fontFamily
-                                font.weight: 600
-                                font.pixelSize: Palette.fontSizeSm
                             }
                         }
                     }
@@ -246,20 +198,15 @@ Item {
                     Layout.fillWidth: true
                     spacing: Palette.spacingSm
 
-                    Text {
-                        text: "Аккаунты"
-                        color: Palette.textPrimary
-                        font.family: root.fontFamily
-                        font.weight: 600
-                        font.pixelSize: Palette.fontSizeMd
+                    AppSectionTitleText {
+                        text: qsTr("Аккаунты")
                     }
 
-                    Text {
-                        text: "Switch between your local and work profiles"
-                        color: Palette.textSecondary
-                        font.family: root.fontFamily
-                        font.pixelSize: Palette.fontSizeSm
+                    AppDescriptionText {
+                        text: qsTr("Переключайтесь между личным и рабочим профилями")
                         wrapMode: Text.WordWrap
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 0
                     }
                 }
 
@@ -267,26 +214,15 @@ Item {
                     Layout.fillWidth: true
                 }
 
-                Rectangle {
-                    Layout.preferredWidth: 120
+                AppActionButton {
+                    text: qsTr("Добавить")
+                    Layout.preferredWidth: Palette.actionButtonMediumWidth
                     Layout.preferredHeight: Palette.buttonHeightBase
-                    color: Palette.accentPrimary
-                    radius: Palette.radiusMd
-
-                    TapHandler {
-                        onTapped: {
-                            console.log("Кнопка: Добавить");
-                            root.addAccountClicked();
-                        }
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Добавить"
-                        color: Palette.backgroundWhite
-                        font.family: root.fontFamily
-                        font.weight: 600
-                        font.pixelSize: Palette.fontSizeSm
+                    textColor: Palette.backgroundWhite
+                    backgroundColor: Palette.accentPrimary
+                    onClicked: {
+                        console.log("Кнопка: Добавить");
+                        root.addAccountClicked();
                     }
                 }
             }
@@ -310,11 +246,11 @@ Item {
                             Layout.fillWidth: true
                             spacing: Palette.spacingLg
 
-                            Rectangle {
+                            AppSectionCard {
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: Palette.avatarSmall + Palette.spacingLg + Palette.spacingLg
-                                color: modelData.isCurrent ? Palette.accentSidebar : Palette.surfaceColor
-                                radius: Palette.radiusMd
+                                cardColor: modelData.isCurrent ? Palette.accentSidebar : Palette.surfaceColor
+                                borderLineColor: "transparent"
 
                                 RowLayout {
                                     anchors.fill: parent
@@ -322,71 +258,42 @@ Item {
                                     spacing: Palette.spacingXl
 
                                     // Account Avatar
-                                    Rectangle {
+                                    AppInitialsAvatar {
+                                        initials: getInitials(modelData.firstName, modelData.lastName)
+                                        avatarSize: Palette.avatarSmall
+                                        initialsPixelSize: Palette.fontSizeSm
                                         Layout.preferredWidth: Palette.avatarSmall
                                         Layout.preferredHeight: Palette.avatarSmall
-                                        radius: root.avatarSmallRadius
-                                        color: Palette.accentPrimary
-                                        clip: true
-
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: getInitials(modelData.firstName, modelData.lastName)
-                                            color: Palette.backgroundWhite
-                                            font.pixelSize: Palette.fontSizeSm
-                                            font.family: root.fontFamily
-                                            font.weight: 700
-                                        }
                                     }
 
                                     ColumnLayout {
                                         Layout.fillWidth: true
                                         spacing: Palette.spacingSm
 
-                                        Text {
+                                        AppBodyText {
                                             text: modelData.firstName + " " + modelData.lastName
-                                            color: Palette.textPrimary
-                                            font.family: root.fontFamily
-                                            font.weight: 600
-                                            font.pixelSize: Palette.fontSizeSm
                                         }
 
-                                        Text {
+                                        AppDescriptionText {
                                             text: modelData.email
-                                            color: Palette.textSecondary
-                                            font.family: root.fontFamily
-                                            font.pixelSize: Palette.fontSizeXs
                                         }
                                     }
                                     Item {
                                         Layout.fillWidth: true
                                     }
 
-                                    Rectangle {
-                                        Layout.preferredWidth: 85
-                                        Layout.preferredHeight: switchText.implicitHeight + 20
-                                        color: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
-                                        radius: 100
-                                        border.color: modelData.isCurrent ? Palette.accentPrimary : Palette.borderSoft
-                                        border.width: 1
-
-                                        TapHandler {
-                                            onTapped: {
-                                                console.log("Кнопка: " + (modelData.isCurrent ? "Текущий" : "Выбрать"));
-                                                if (!modelData.isCurrent) {
-                                                    root.switchAccountClicked(modelData.id);
-                                                }
+                                    AppActionButton {
+                                        text: modelData.isCurrent ? qsTr("Текущий") : qsTr("Выбрать")
+                                        textColor: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
+                                        backgroundColor: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
+                                        borderColor: modelData.isCurrent ? Palette.accentPrimary : Palette.borderSoft
+                                        borderWidth: 1
+                                        clickable: !modelData.isCurrent
+                                        onClicked: {
+                                            console.log("Кнопка: " + (modelData.isCurrent ? "Текущий" : "Выбрать"));
+                                            if (!modelData.isCurrent) {
+                                                root.switchAccountClicked(modelData.id);
                                             }
-                                        }
-
-                                        Text {
-                                            id: switchText
-                                            anchors.centerIn: parent
-                                            text: modelData.isCurrent ? "Текущий" : "Выбрать"
-                                            color: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
-                                            font.family: root.fontFamily
-                                            font.weight: 600
-                                            font.pixelSize: Palette.fontSizeXs
                                         }
                                     }
                                 }
@@ -397,46 +304,27 @@ Item {
             }
 
             // ==================== 6. Divider ====================
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 1
-                color: Palette.dividerColor
-            }
+            AppDivider {}
 
             // ==================== 7. Footer ====================
             RowLayout {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
 
-                Text {
-                    text: "You can stay signed in to several accounts and switch instantly."
-                    color: Palette.textSecondary
-                    font.family: root.fontFamily
-                    font.pixelSize: Palette.fontSizeSm
+                AppDescriptionText {
+                    text: qsTr("Вы можете оставаться в системе в нескольких аккаунтах и мгновенно переключаться между ними.")
                     wrapMode: Text.WordWrap
                     Layout.fillWidth: true
+                    Layout.minimumWidth: 0
                 }
 
-                Rectangle {
-                    Layout.preferredWidth: 100
-                    Layout.preferredHeight: Palette.buttonHeightBase
-                    color: Palette.backgroundWhite
-                    radius: Palette.radiusMd
-
-                    TapHandler {
-                        onTapped: {
-                            console.log("Кнопка: Log Out");
-                            root.logoutClicked();
-                        }
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Log Out"
-                        color: Palette.errorColor
-                        font.family: root.fontFamily
-                        font.weight: 600
-                        font.pixelSize: Palette.fontSizeSm
+                AppActionButton {
+                    text: qsTr("Выйти")
+                    textColor: Palette.errorColor
+                    backgroundColor: Palette.backgroundWhite
+                    onClicked: {
+                        console.log("Кнопка: Выйти");
+                        root.logoutClicked();
                     }
                 }
             }

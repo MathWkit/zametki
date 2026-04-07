@@ -15,7 +15,7 @@ Rectangle {
     signal favoriteClicked
     signal moreClicked
 
-    height: 56
+    height: Palette.headerHeight
     color: Palette.headerBackground
     border.width: 1
     border.color: Palette.border
@@ -23,21 +23,21 @@ Rectangle {
     Item {
         anchors.left: parent.left
         anchors.right: actionRow.left
-        anchors.rightMargin: 24
+        anchors.rightMargin: Palette.spacingMassive
         anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 24
-        height: 24
+        anchors.leftMargin: Palette.spacingMassive
+        height: Palette.iconLarge
         clip: true
 
         Row {
             anchors.fill: parent
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 10
+            spacing: Palette.spacingLg
 
             MouseArea {
                 id: hideSidebarArea
-                width: 16
-                height: 16
+                width: Palette.iconSmall
+                height: Palette.iconSmall
                 anchors.verticalCenter: parent.verticalCenter
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
@@ -48,12 +48,12 @@ Rectangle {
                 Image {
                     id: hideSidebarImage
                     source: root.sidebarVisible ? "qrc:/qt/qml/zametki/assets/icons/header/hide-sidebar.svg" : "qrc:/qt/qml/zametki/assets/icons/header/show-sidebar.svg"
-                    width: 16
-                    height: 16
+                    width: Palette.iconSmall
+                    height: Palette.iconSmall
                     fillMode: Image.PreserveAspectFit
                     Behavior on opacity {
                         NumberAnimation {
-                            duration: 150
+                            duration: Palette.animationFast
                         }
                     }
                 }
@@ -61,7 +61,7 @@ Rectangle {
 
             Row {
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 8
+                spacing: Palette.spacingLg
 
                 Repeater {
                     model: root.notePathSegments.length > 0 ? (root.notePathSegments.length * 2 - 1) : 1
@@ -85,9 +85,9 @@ Rectangle {
                             return root.notePathSegments[segmentIndex];
                         }
                         font.family: root.fontFamily
-                        font.pixelSize: 14
+                        font.pixelSize: Palette.fontSizeMd
                         font.weight: Font.Medium
-                        color: isLastSegment ? "#0F1724" : "#667085"
+                        color: isLastSegment ? Palette.textPrimary : Palette.textSecondary
                     }
                 }
             }
@@ -96,15 +96,15 @@ Rectangle {
 
     Row {
         id: actionRow
-        spacing: 16
+        spacing: Palette.spacingXl
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.rightMargin: 24
+        anchors.rightMargin: Palette.spacingMassive
 
         MouseArea {
             id: shareArea
-            width: 16
-            height: 16
+            width: Palette.iconSmall
+            height: Palette.iconSmall
             cursorShape: Qt.PointingHandCursor
             hoverEnabled: true
             onClicked: root.shareClicked()
@@ -114,12 +114,12 @@ Rectangle {
             Image {
                 id: shareImage
                 source: "qrc:/qt/qml/zametki/assets/icons/header/share.svg"
-                width: 16
-                height: 16
+                width: Palette.iconSmall
+                height: Palette.iconSmall
                 fillMode: Image.PreserveAspectFit
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: 150
+                        duration: Palette.animationFast
                     }
                 }
             }
@@ -127,8 +127,8 @@ Rectangle {
 
         MouseArea {
             id: favoriteArea
-            width: 16
-            height: 16
+            width: Palette.iconSmall
+            height: Palette.iconSmall
             cursorShape: Qt.PointingHandCursor
             hoverEnabled: true
             onClicked: root.favoriteClicked()
@@ -138,12 +138,12 @@ Rectangle {
             Image {
                 id: favoriteImage
                 source: "qrc:/qt/qml/zametki/assets/icons/header/favorite.svg"
-                width: 16
-                height: 16
+                width: Palette.iconSmall
+                height: Palette.iconSmall
                 fillMode: Image.PreserveAspectFit
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: 150
+                        duration: Palette.animationFast
                     }
                 }
             }
@@ -151,8 +151,8 @@ Rectangle {
 
         MouseArea {
             id: moreArea
-            width: 16
-            height: 16
+            width: Palette.iconSmall
+            height: Palette.iconSmall
             cursorShape: Qt.PointingHandCursor
             hoverEnabled: true
             onClicked: root.moreClicked()
@@ -162,12 +162,12 @@ Rectangle {
             Image {
                 id: moreImage
                 source: "qrc:/qt/qml/zametki/assets/icons/header/more.svg"
-                width: 16
-                height: 16
+                width: Palette.iconSmall
+                height: Palette.iconSmall
                 fillMode: Image.PreserveAspectFit
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: 150
+                        duration: Palette.animationFast
                     }
                 }
             }

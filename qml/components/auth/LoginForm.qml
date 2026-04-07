@@ -2,6 +2,7 @@ import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Layouts 6.8
 import "../../scripts/Theme.js" as Palette
+import ".."
 
 Item {
     id: root
@@ -9,7 +10,6 @@ Item {
     implicitWidth: formLayout.implicitWidth
     implicitHeight: formLayout.implicitHeight
 
-    property string fontFamily: "Inter"
     property bool showGoogleAuth: true
     property bool showAppleAuth: Qt.platform.os === "osx"
 
@@ -20,20 +20,6 @@ Item {
 
     property string emailError: ""
     property string passwordError: ""
-
-    readonly property color textColor: Palette.textPrimary
-    readonly property color secondaryTextColor: Palette.textSecondary
-    readonly property color inputBackground: Palette.backgroundWhite
-    readonly property color inputBorder: Palette.authInputBorder
-    readonly property color inputBorderHover: Palette.authInputBorderHover
-    readonly property color accentColor: Palette.accentPrimary
-    readonly property color accentHoverColor: Palette.authAccentHover
-    readonly property color accentPressedColor: Palette.authAccentPressed
-    readonly property color errorColor: Palette.errorColor
-    readonly property color linkColor: Palette.accentPrimary
-    readonly property color socialButtonColor: Palette.backgroundWhite
-    readonly property color socialButtonBorderColor: Palette.authInputBorder
-    readonly property color socialButtonHoverColor: Palette.authSocialButtonHover
 
     function validateAndSubmit() {
         const email = emailField.text.trim();
@@ -62,107 +48,68 @@ Item {
         anchors.right: parent.right
         spacing: Palette.spacingXl
 
-        Text {
+        AppPageTitleText {
             text: qsTr("Вход")
+            textPointSize: Palette.fontSizeXxl
             Layout.fillWidth: true
-            color: root.textColor
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeXxl
-            font.weight: Font.DemiBold
         }
 
-        Text {
+        AppDescriptionText {
             text: qsTr("Используйте существующий аккаунт")
+            textPointSize: Palette.fontSizeSm
             Layout.fillWidth: true
-            color: root.secondaryTextColor
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeSm
         }
 
-        TextField {
+        AuthInputField {
             id: emailField
             Layout.fillWidth: true
             placeholderText: qsTr("Email или логин")
-            selectByMouse: true
-            hoverEnabled: true
-            color: root.textColor
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeMd
-            placeholderTextColor: root.secondaryTextColor
-            leftPadding: Palette.spacingXl
-            rightPadding: Palette.spacingXl
-            topPadding: Palette.authFieldVerticalPadding
-            bottomPadding: Palette.authFieldVerticalPadding
+            hasError: root.emailError.length > 0
             onTextChanged: {
                 if (root.emailError.length > 0) {
                     root.emailError = "";
                 }
             }
             onAccepted: passwordField.forceActiveFocus()
-
-            background: Rectangle {
-                radius: Palette.radiusLg
-                color: root.inputBackground
-                border.width: emailField.activeFocus ? 2 : 1
-                border.color: root.emailError.length > 0 ? root.errorColor : (emailField.activeFocus ? root.accentColor : (emailField.hovered ? root.inputBorderHover : root.inputBorder))
-            }
         }
 
-        Text {
-            visible: root.emailError.length > 0
+        AppDescriptionText {
             text: root.emailError
-            color: root.errorColor
-            Layout.fillWidth: true
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeSm
+            visible: text.length > 0
+            textColor: Palette.errorColor
+            textPointSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
+            Layout.fillWidth: true
         }
 
-        TextField {
+        AuthInputField {
             id: passwordField
             Layout.fillWidth: true
             placeholderText: qsTr("Пароль")
             echoMode: TextInput.Password
-            selectByMouse: true
-            hoverEnabled: true
-            color: root.textColor
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeMd
-            placeholderTextColor: root.secondaryTextColor
-            leftPadding: Palette.spacingXl
-            rightPadding: Palette.spacingXl
-            topPadding: Palette.authFieldVerticalPadding
-            bottomPadding: Palette.authFieldVerticalPadding
+            hasError: root.passwordError.length > 0
             onTextChanged: {
                 if (root.passwordError.length > 0) {
                     root.passwordError = "";
                 }
             }
             onAccepted: root.validateAndSubmit()
-
-            background: Rectangle {
-                radius: Palette.radiusLg
-                color: root.inputBackground
-                border.width: passwordField.activeFocus ? 2 : 1
-                border.color: root.passwordError.length > 0 ? root.errorColor : (passwordField.activeFocus ? root.accentColor : (passwordField.hovered ? root.inputBorderHover : root.inputBorder))
-            }
         }
 
-        Text {
-            visible: root.passwordError.length > 0
+        AppDescriptionText {
             text: root.passwordError
-            color: root.errorColor
-            Layout.fillWidth: true
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeSm
+            visible: text.length > 0
+            textColor: Palette.errorColor
+            textPointSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
+            Layout.fillWidth: true
         }
 
         CheckBox {
             id: rememberCheckBox
             text: qsTr("Запомнить меня")
             Layout.fillWidth: true
-            font.family: root.fontFamily
+            font.family: Palette.fontFamily
             font.pixelSize: Palette.fontSizeSm
             hoverEnabled: true
             spacing: Palette.spacingLg
@@ -173,168 +120,63 @@ Item {
                 implicitHeight: Palette.iconMedium
                 y: (rememberCheckBox.height - height) / 2
                 radius: Palette.radiusMd
-                color: rememberCheckBox.checked ? root.accentColor : root.inputBackground
+                color: rememberCheckBox.checked ? Palette.accentPrimary : Palette.backgroundWhite
                 border.width: 1
-                border.color: rememberCheckBox.checked ? root.accentColor : (rememberCheckBox.hovered ? root.inputBorderHover : root.inputBorder)
+                border.color: rememberCheckBox.checked ? Palette.accentPrimary : (rememberCheckBox.hovered ? Palette.authInputBorderHover : Palette.authInputBorder)
 
                 Text {
                     anchors.centerIn: parent
                     text: rememberCheckBox.checked ? "\u2713" : ""
                     color: Palette.backgroundWhite
                     font.pixelSize: Palette.fontSizeSm
-                    font.family: root.fontFamily
+                    font.family: Palette.fontFamily
                     font.weight: Font.DemiBold
                 }
             }
 
             contentItem: Text {
                 text: rememberCheckBox.text
-                color: root.secondaryTextColor
-                font.family: root.fontFamily
+                color: Palette.textSecondary
+                font.family: Palette.fontFamily
                 font.pixelSize: Palette.fontSizeSm
                 leftPadding: rememberCheckBox.indicator.width + rememberCheckBox.spacing
                 verticalAlignment: Text.AlignVCenter
             }
         }
 
-        Button {
+        AuthPrimaryButton {
             id: loginButton
             Layout.fillWidth: true
             Layout.topMargin: Palette.spacingSm
             text: qsTr("Войти")
-            hoverEnabled: true
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeMd
             onClicked: root.validateAndSubmit()
-
-            contentItem: Text {
-                text: loginButton.text
-                color: Palette.backgroundWhite
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeMd
-                font.weight: Font.DemiBold
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            background: Rectangle {
-                implicitHeight: Palette.buttonHeightLarge
-                radius: Palette.radiusLg
-                color: loginButton.down ? root.accentPressedColor : (loginButton.hovered ? root.accentHoverColor : root.accentColor)
-            }
         }
 
-        Item {
+        AuthDivider {
             Layout.fillWidth: true
-            implicitHeight: Palette.spacingHuge
-
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: dividerLabel.left
-                anchors.rightMargin: Palette.spacingLg
-                anchors.verticalCenter: parent.verticalCenter
-                height: 1
-                color: root.inputBorder
-            }
-
-            Text {
-                id: dividerLabel
-                anchors.centerIn: parent
-                text: qsTr("или")
-                color: root.secondaryTextColor
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeSm
-            }
-
-            Rectangle {
-                anchors.left: dividerLabel.right
-                anchors.leftMargin: Palette.spacingLg
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                height: 1
-                color: root.inputBorder
-            }
         }
 
-        Button {
+        AuthSocialButton {
             id: googleAuthButton
             visible: root.showGoogleAuth
             Layout.fillWidth: true
             text: qsTr("Продолжить с Google")
-            hoverEnabled: true
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeBase
             onClicked: root.googleAuthRequested()
-
-            contentItem: Text {
-                text: googleAuthButton.text
-                color: root.textColor
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeBase
-                font.weight: Font.DemiBold
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            background: Rectangle {
-                implicitHeight: Palette.authSocialButtonHeight
-                radius: Palette.radiusLg
-                color: googleAuthButton.hovered ? root.socialButtonHoverColor : root.socialButtonColor
-                border.width: 1
-                border.color: root.socialButtonBorderColor
-            }
         }
 
-        Button {
+        AuthSocialButton {
             id: appleAuthButton
             visible: root.showAppleAuth
             Layout.fillWidth: true
             text: qsTr("Продолжить с Apple ID")
-            hoverEnabled: true
-            font.family: root.fontFamily
-            font.pixelSize: Palette.fontSizeBase
             onClicked: root.appleAuthRequested()
-
-            contentItem: Text {
-                text: appleAuthButton.text
-                color: root.textColor
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeBase
-                font.weight: Font.DemiBold
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            background: Rectangle {
-                implicitHeight: Palette.authSocialButtonHeight
-                radius: Palette.radiusLg
-                color: appleAuthButton.hovered ? root.socialButtonHoverColor : root.socialButtonColor
-                border.width: 1
-                border.color: root.socialButtonBorderColor
-            }
         }
 
-        Button {
+        AuthLinkButton {
             id: registerLinkButton
             Layout.alignment: Qt.AlignHCenter
             text: qsTr("Нет аккаунта? Зарегистрироваться")
-            hoverEnabled: true
-            flat: true
             onClicked: root.switchToRegisterRequested()
-
-            contentItem: Text {
-                text: registerLinkButton.text
-                color: root.linkColor
-                font.family: root.fontFamily
-                font.pixelSize: Palette.fontSizeSm
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                font.underline: registerLinkButton.hovered
-            }
-
-            background: Rectangle {
-                color: "transparent"
-            }
         }
     }
 }

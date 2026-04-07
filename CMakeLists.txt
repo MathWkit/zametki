@@ -30,11 +30,6 @@ qt_add_executable(appzametki
     include/filecreator.h
 )
 
-set_source_files_properties(
-    qml/scripts/ThemeSingleton.qml
-    PROPERTIES QT_QML_SINGLETON_TYPE TRUE
-)
-
 target_include_directories(appzametki
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
@@ -51,13 +46,41 @@ qt_add_qml_module(appzametki
         qml/Profile.qml
         qml/scripts/Handlers.mjs
         qml/scripts/Theme.js
-        qml/scripts/ThemeSingleton.qml
-        qml/scripts/DesignTokens.js
         qml/components/FolderNoteList.qml
         qml/components/SidebarPanel.qml
         qml/components/MainHeaderBar.qml
+        qml/components/AppSwitch.qml
+        qml/components/AppButton.qml
+        qml/components/AppPageTitleText.qml
+        qml/components/AppSidebarLabelText.qml
+        qml/components/AppSectionTitleText.qml
+        qml/components/AppDescriptionText.qml
+        qml/components/AppBodyText.qml
+        qml/components/AppSectionCard.qml
+        qml/components/AppDivider.qml
+        qml/components/AppActionButton.qml
+        qml/components/AppActionButtonCompact.qml
+        qml/components/AppInputField.qml
+        qml/components/AppDropdown.qml
+        qml/components/AppInitialsAvatar.qml
+        qml/components/main/MainModalOverlay.qml
+        qml/components/settings/SettingsNavItem.qml
+        qml/components/settings/SettingsControlRow.qml
+        qml/components/settings/SettingsKeyValueRow.qml
+        qml/components/settings/SettingsRowLabel.qml
+        qml/components/auth/AuthInputField.qml
+        qml/components/auth/AuthPrimaryButton.qml
+        qml/components/auth/AuthSocialButton.qml
+        qml/components/auth/AuthLinkButton.qml
+        qml/components/auth/AuthDivider.qml
+        qml/components/auth/AuthModeTabButton.qml
         qml/components/auth/LoginForm.qml
         qml/components/auth/RegisterForm.qml
+        qml/components/search/SearchSectionHeader.qml
+        qml/components/search/SearchResultRow.qml
+        qml/components/search/SearchFooterHint.qml
+        qml/components/search/SearchInputBar.qml
+        qml/components/search/SearchHintsBar.qml
         qml/CreationBD.qml
     RESOURCES
         assets/icons/sidebar/search.svg

@@ -41,6 +41,7 @@ var hover = "#f0f0f0";
 var selected = "#e8eefc";
 var dividerColor = "#f3f4f6";
 var errorColor = "#B91C1C";
+var overlayScrim = Qt.rgba(0, 0, 0, 0.4);
 
 // Auth screen specific colors
 var authAccentHover = "#0A67C7";
@@ -52,6 +53,12 @@ var authSocialButtonHover = "#F8FAFC";
 // ============================================================================
 // SPACING
 // ============================================================================
+var gridUnit = 8;
+var space1 = gridUnit;      // 8
+var space2 = gridUnit * 2;  // 16
+var space3 = gridUnit * 3;  // 24
+var space4 = gridUnit * 4;  // 32
+
 var spacingXs = 2;
 var spacingSm = 4;
 var spacingMd = 6;
@@ -78,9 +85,14 @@ var cornerRadius = 4;  // Legacy
 var buttonHeightSmall = 32;
 var buttonHeightBase = 36;
 var buttonHeightLarge = 40;
+var inputHeightBase = 40;
+var dropdownHeightBase = 40;
+var controlHeightBase = 40;
 
 var avatarSmall = 32;
+var avatarMedium = 36;
 var avatarBase = 64;
+var iconTiny = 14;
 var iconSmall = 16;
 var iconMedium = 18;
 var iconLarge = 24;
@@ -101,7 +113,39 @@ var authCardMaxWidth = 400;
 var sidebarMinWidth = 200;
 var sidebarWidthRatio = 0.2;
 var dialogMaxWidth = 540;
+var dialogMaxHeight = 680;
 var dialogPadding = 24;
+var contentInset = 16;
+var sectionSpacing = 24;
+var rowPadding = 16;
+var rowPaddingCompact = 8;
+var settingsNumericFieldWidth = 80;
+var settingsPathFieldWidth = 220;
+var actionButtonMediumWidth = 120;
+
+var searchDialogHeight = 432;
+var searchDialogMinWidth = 360;
+var searchInset = 16;
+var searchSectionInset = 24;
+var searchCompactGap = 8;
+var searchHintBarHeight = 40;
+var searchResultRowHeight = 36;
+var searchResultRowHeightWithSubtitle = 44;
+
+var sidebarTreeIndentStep = 20;
+var sidebarTreeRowHeightFolder = 28;
+var sidebarTreeRowHeightNote = 32;
+var sidebarListInset = 12;
+var sidebarProfileTinyGap = 4;
+
+var dropdownTextPaddingLeft = 12;
+var dropdownTextPaddingRight = 28;
+var dropdownIndicatorSize = 12;
+var dropdownIndicatorRightInset = 10;
+var dropdownPopupOffset = 6;
+
+var inputBorderWidth = 1;
+var inputFocusBorderWidth = 1;
 
 // ============================================================================
 // ANIMATION
