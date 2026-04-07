@@ -13,7 +13,8 @@ Item {
     // Max height for accounts list to allow scrolling when there are many accounts (~2 items visible)
     readonly property int maxAccountsListHeight: (Palette.avatarSmall + Palette.spacingLg * 2) * 2 + Palette.spacingXl
     // Max height for the entire dialog to fit on screen with padding
-    readonly property int maxDialogHeight: Math.min(600, root.height * 0.9)
+    readonly property int maxDialogHeight: Math.min(Palette.dialogMaxHeight, root.height * 0.9)
+    readonly property int dialogHorizontalMargin: Palette.space2
 
     signal closeClicked
     signal logoutClicked
@@ -59,11 +60,12 @@ Item {
 
     Rectangle {
         id: mainRectangle
-        width: Palette.dialogMaxWidth
+        width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, root.width - (root.dialogHorizontalMargin * 2)))
         height: Math.min(contentLayout.implicitHeight + Palette.spacingHuge, root.maxDialogHeight)
         color: Palette.backgroundWhite
         radius: Palette.radiusXl
         anchors.centerIn: parent
+        clip: true
 
         ColumnLayout {
             id: contentLayout
@@ -212,7 +214,7 @@ Item {
 
                 AppActionButton {
                     text: "Добавить"
-                    Layout.preferredWidth: 120
+                    Layout.preferredWidth: Palette.actionButtonMediumWidth
                     Layout.preferredHeight: Palette.buttonHeightBase
                     textColor: Palette.backgroundWhite
                     backgroundColor: Palette.accentPrimary

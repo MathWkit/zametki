@@ -9,6 +9,8 @@ Item {
     anchors.fill: parent
     clip: false
 
+    readonly property int dialogHorizontalMargin: Palette.space2
+
     signal sendClicked
     signal cancelClicked
     signal doneClicked
@@ -52,8 +54,8 @@ Item {
 
     Rectangle {
         id: rectangle
-        width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, parent.width - (Palette.spacingXxl * 2)))
-        height: Math.min(Palette.dialogMaxHeight, Math.max(0, parent.height - (Palette.spacingXxl * 2)))
+        width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, parent.width - (item1.dialogHorizontalMargin * 2)))
+        height: Math.min(Palette.dialogMaxHeight, Math.max(0, parent.height - (item1.dialogHorizontalMargin * 2)))
         color: Palette.backgroundWhite
         radius: Palette.radiusXl
         anchors.centerIn: parent
@@ -96,16 +98,10 @@ Item {
                         onTapped: closeClicked()
                     }
                     Image {
-                        anchors.fill: parent
-                        anchors.leftMargin: Palette.spacingLg
-                        anchors.rightMargin: Palette.spacingLg
-                        anchors.topMargin: Palette.spacingLg
-                        anchors.bottomMargin: Palette.spacingLg
+                        anchors.centerIn: parent
                         source: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
-                        Layout.alignment: Qt.AlignRight | Qt.AlignTop
-                        Layout.fillWidth: false
-                        Layout.preferredWidth: 10
-                        Layout.preferredHeight: 10
+                        width: Palette.iconSmall
+                        height: Palette.iconSmall
                     }
                 }
             }
@@ -197,10 +193,10 @@ Item {
 
                                 AppInitialsAvatar {
                                     initials: "AK"
-                                    avatarSize: 36
+                                    avatarSize: Palette.avatarMedium
                                     initialsPixelSize: Palette.fontSizeSm
-                                    Layout.preferredWidth: 36
-                                    Layout.preferredHeight: 36
+                                    Layout.preferredWidth: Palette.avatarMedium
+                                    Layout.preferredHeight: Palette.avatarMedium
                                     Layout.alignment: Qt.AlignVCenter
                                 }
 
@@ -236,10 +232,10 @@ Item {
 
                                 AppInitialsAvatar {
                                     initials: "AK"
-                                    avatarSize: 36
+                                    avatarSize: Palette.avatarMedium
                                     initialsPixelSize: Palette.fontSizeSm
-                                    Layout.preferredWidth: 36
-                                    Layout.preferredHeight: 36
+                                    Layout.preferredWidth: Palette.avatarMedium
+                                    Layout.preferredHeight: Palette.avatarMedium
                                     Layout.alignment: Qt.AlignVCenter
                                 }
 
@@ -291,8 +287,8 @@ Item {
 
                                 Image {
                                     source: "qrc:/qt/qml/zametki/assets/icons/share/link.svg"
-                                    Layout.preferredWidth: 36
-                                    Layout.preferredHeight: 36
+                                    Layout.preferredWidth: Palette.avatarMedium
+                                    Layout.preferredHeight: Palette.avatarMedium
                                     Layout.alignment: Qt.AlignVCenter
                                 }
 
@@ -347,8 +343,8 @@ Item {
                         spacing: Palette.spacingLg
                         Image {
                             source: "qrc:/qt/qml/zametki/assets/icons/share/copy.svg"
-                            Layout.preferredWidth: 14
-                            Layout.preferredHeight: 14
+                            Layout.preferredWidth: Palette.iconTiny
+                            Layout.preferredHeight: Palette.iconTiny
                         }
                         AppSidebarLabelText {
                             text: "Copy link"

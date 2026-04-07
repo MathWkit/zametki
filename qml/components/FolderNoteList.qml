@@ -136,9 +136,7 @@ Column {
                 spacing: Palette.spacingLg
 
                 Image {
-                    source: treeItem.isFolder
-                        ? "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg"
-                        : ""
+                    source: treeItem.isFolder ? "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg" : ""
                     width: 16
                     height: 16
                     Layout.preferredWidth: 16

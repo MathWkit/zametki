@@ -90,7 +90,9 @@ var dropdownHeightBase = 40;
 var controlHeightBase = 40;
 
 var avatarSmall = 32;
+var avatarMedium = 36;
 var avatarBase = 64;
+var iconTiny = 14;
 var iconSmall = 16;
 var iconMedium = 18;
 var iconLarge = 24;
@@ -119,6 +121,7 @@ var rowPadding = 16;
 var rowPaddingCompact = 8;
 var settingsNumericFieldWidth = 80;
 var settingsPathFieldWidth = 220;
+var actionButtonMediumWidth = 120;
 
 var searchDialogHeight = 432;
 var searchInset = 16;
