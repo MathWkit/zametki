@@ -360,8 +360,9 @@ Item {
                             Layout.preferredWidth: Palette.iconTiny
                             Layout.preferredHeight: Palette.iconTiny
                         }
-                        AppSidebarLabelText {
+                        AppBodyText {
                             text: qsTr("Копировать ссылку")
+                            font.pointSize: Palette.fontSizeMd
                             Layout.fillWidth: true
                             elide: Text.ElideRight
                         }
