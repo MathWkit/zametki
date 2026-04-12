@@ -11,6 +11,6 @@ AppActionButton {
     fontPointSize: Palette.fontSizeSm
     horizontalPadding: 0
     verticalPadding: 0
-    underlineOnHover: true
+    underlineOnHover: false
     clickable: true
 }

@@ -55,19 +55,25 @@ Item {
     Rectangle {
         id: rectangle
         width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, parent.width - (item1.dialogHorizontalMargin * 2)))
-        height: Math.min(Palette.dialogMaxHeight, Math.max(0, parent.height - (item1.dialogHorizontalMargin * 2)))
+        readonly property int maxOuterHeight: Math.min(Palette.dialogMaxHeight, Math.max(0, item1.height - (item1.dialogHorizontalMargin * 2)))
+        readonly property int columnVMargins: Palette.spacingMassive * 2
+        readonly property int columnGaps: Palette.spacingXl * 2
+        readonly property int maxBodyHeight: Math.max(120, maxOuterHeight - columnVMargins - shareHeaderRow.implicitHeight - shareFooterRow.implicitHeight - columnGaps)
+        height: Math.min(maxOuterHeight, shareColumn.implicitHeight + columnVMargins)
         color: Palette.backgroundWhite
         radius: Palette.radiusXl
         anchors.centerIn: parent
         clip: true
 
         ColumnLayout {
+            id: shareColumn
             anchors.fill: parent
             anchors.margins: Palette.spacingMassive
             spacing: Palette.spacingXl
 
             // ==================== 1. Заголовок Share ====================
             RowLayout {
+                id: shareHeaderRow
                 Layout.fillWidth: true
 
                 ColumnLayout {
@@ -111,7 +117,7 @@ Item {
             Flickable {
                 id: bodyScroll
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+                Layout.preferredHeight: Math.min(bodyContent.implicitHeight, rectangle.maxBodyHeight)
                 clip: true
                 boundsBehavior: Flickable.StopAtBounds
                 contentWidth: width
@@ -329,6 +335,7 @@ Item {
 
             // ==================== 5. Нижние кнопки ====================
             RowLayout {
+                id: shareFooterRow
                 spacing: Palette.spacingXl
                 Layout.fillWidth: true
 
