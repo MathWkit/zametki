@@ -45,7 +45,7 @@ Item {
         height: Math.min(contentLayout.implicitHeight + (root.cardContentPadding * 2), Math.max(Palette.authCardMinWidth, root.height - (root.cardOuterMargin * 2)))
         anchors.centerIn: parent
         color: Palette.backgroundWhite
-        radius: Palette.authCardRadius
+        radius: Palette.modalSurfaceRadius
         border.width: 1
         border.color: Palette.border
         clip: true
@@ -58,13 +58,13 @@ Item {
 
             AppPageTitleText {
                 text: qsTr("Аккаунт")
-                textPointSize: Palette.authTitleSize
+                textPixelSize: Palette.authTitleSize
                 Layout.fillWidth: true
             }
 
             AppDescriptionText {
                 text: qsTr("Войдите или создайте новый аккаунт")
-                textPointSize: Palette.fontSizeSm
+                textPixelSize: Palette.fontSizeSm
                 Layout.fillWidth: true
             }
 

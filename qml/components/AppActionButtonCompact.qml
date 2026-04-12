@@ -3,7 +3,7 @@ import "../scripts/Theme.js" as Palette
 
 AppActionButton {
     fontStyleName: "Medium"
-    fontPointSize: Palette.fontSizeMd
+    fontPixelSize: Palette.fontSizeMd
     horizontalPadding: Palette.actionButtonCompactPadding
     verticalPadding: Palette.actionButtonCompactPadding
 }

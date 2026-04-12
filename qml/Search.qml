@@ -46,7 +46,7 @@ Item {
 
     property var footerHints: [
         {
-            icon: "qrc:/qt/qml/zametki/assets/icons/unused/open-bracket.svg",
+            icon: "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg",
             label: qsTr("Navigate")
         },
         {
@@ -54,7 +54,7 @@ Item {
             label: qsTr("Open")
         },
         {
-            icon: "qrc:/qt/qml/zametki/assets/icons/header/more.svg",
+            icon: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg",
             label: qsTr("Close")
         }
     ]
@@ -64,7 +64,7 @@ Item {
         width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.searchDialogMinWidth, root.width - (root.dialogMargin * 2)))
         height: Math.min(Palette.searchDialogHeight, Math.max(root.dialogMinHeight, root.height - (root.dialogMargin * 2)))
         color: Palette.headerBackground
-        radius: Palette.radiusLg
+        radius: Palette.modalSurfaceRadius
         border.width: 1
         border.color: Palette.border
         anchors.centerIn: parent

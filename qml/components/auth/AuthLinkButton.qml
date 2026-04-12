@@ -8,7 +8,7 @@ AppActionButton {
     hoverBackgroundColor: "transparent"
     pressedBackgroundColor: "transparent"
     fontFamily: Palette.fontFamily
-    fontPointSize: Palette.fontSizeSm
+    fontPixelSize: Palette.fontSizeSm
     horizontalPadding: 0
     verticalPadding: 0
     underlineOnHover: false

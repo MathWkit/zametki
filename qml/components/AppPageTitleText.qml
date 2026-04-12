@@ -4,10 +4,10 @@ import "../scripts/Theme.js" as Palette
 Text {
     property string uiFontFamily: Palette.fontFamily
     property color textColor: Palette.textPrimary
-    property int textPointSize: Palette.fontSizeXl
+    property int textPixelSize: Palette.fontSizeXl
 
     font.styleName: "SemiBold"
-    font.pointSize: textPointSize
+    font.pixelSize: textPixelSize
     font.family: uiFontFamily
     color: textColor
 }

@@ -8,7 +8,7 @@ AppActionButton {
     hoverBackgroundColor: Palette.authAccentHover
     pressedBackgroundColor: Palette.authAccentPressed
     fontFamily: Palette.fontFamily
-    fontPointSize: Palette.fontSizeMd
+    fontPixelSize: Palette.fontSizeMd
     fontWeight: Font.DemiBold
     radius: Palette.radiusLg
     implicitHeight: Palette.buttonHeightLarge

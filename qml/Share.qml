@@ -62,7 +62,7 @@ Item {
         readonly property int maxBodyHeight: Math.max(120, maxOuterHeight - columnVMargins - shareHeaderRow.implicitHeight - shareFooterRow.implicitHeight - columnGaps)
         height: Math.min(maxOuterHeight, shareColumn.implicitHeight + columnVMargins)
         color: Palette.backgroundWhite
-        radius: Palette.radiusXl
+        radius: Palette.modalSurfaceRadius
         anchors.centerIn: parent
         clip: true
 
@@ -286,14 +286,17 @@ Item {
 
                 // Copy link
                 Rectangle {
-                    color: Palette.surfaceColor
+                    color: copyLinkMouse.containsMouse ? Palette.hover : Palette.surfaceColor
                     radius: Palette.radiusMd
                     implicitWidth: copyRow.implicitWidth + (Palette.spacingXxl * 2)
                     implicitHeight: copyRow.implicitHeight + Palette.spacingXxl
                     Layout.maximumWidth: item1.width * 0.5
                     clip: true
-                    TapHandler {
-                        onTapped: copyClicked()
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Palette.animationFast
+                        }
                     }
 
                     RowLayout {
@@ -305,12 +308,20 @@ Item {
                             Layout.preferredWidth: Palette.iconTiny
                             Layout.preferredHeight: Palette.iconTiny
                         }
-                        AppBodyText {
+                        AppSidebarLabelText {
                             text: qsTr("Копировать ссылку")
-                            font.pointSize: Palette.fontSizeMd
+                            textColor: Palette.textPrimary
                             Layout.fillWidth: true
                             elide: Text.ElideRight
                         }
+                    }
+
+                    MouseArea {
+                        id: copyLinkMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: copyClicked()
                     }
                 }
 

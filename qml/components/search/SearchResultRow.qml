@@ -51,7 +51,7 @@ Rectangle {
                 visible: control.subtitleText.length > 0
                 text: control.subtitleText
                 textColor: control.subtitleColor
-                textPointSize: Palette.fontSizeSm
+                textPixelSize: Palette.fontSizeSm
                 elide: Text.ElideRight
                 Layout.fillWidth: true
             }

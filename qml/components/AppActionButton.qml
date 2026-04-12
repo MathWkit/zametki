@@ -5,7 +5,7 @@ AppButton {
     textColor: Palette.textPrimary
     backgroundColor: Palette.surfaceColor
     fontFamily: Palette.fontFamily
-    fontPointSize: Palette.fontSizeMd
+    fontPixelSize: Palette.fontSizeMd
     horizontalPadding: Palette.spacingXxl
     verticalPadding: Palette.spacingLg
     clickable: true

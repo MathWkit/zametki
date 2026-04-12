@@ -14,11 +14,13 @@ Rectangle {
 
     implicitWidth: Palette.buttonHeightBase
     implicitHeight: Palette.buttonHeightBase
-    color: surfaceColor
+    color: mouseArea.containsMouse ? Palette.hover : surfaceColor
     radius: cornerRadius
 
-    TapHandler {
-        onTapped: control.clicked()
+    Behavior on color {
+        ColorAnimation {
+            duration: Palette.animationFast
+        }
     }
 
     Image {
@@ -27,5 +29,13 @@ Rectangle {
         width: control.iconWidth
         height: control.iconHeight
         fillMode: Image.PreserveAspectFit
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
+        onClicked: control.clicked()
     }
 }

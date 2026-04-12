@@ -34,26 +34,31 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             spacing: Palette.spacingLg
 
-            MouseArea {
-                id: hideSidebarArea
-                width: Palette.iconSmall
-                height: Palette.iconSmall
+            Item {
+                width: Palette.buttonHeightSmall
+                height: Palette.buttonHeightSmall
                 anchors.verticalCenter: parent.verticalCenter
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: root.hideSidebarClicked()
-                onEntered: hideSidebarImage.opacity = 0.6
-                onExited: hideSidebarImage.opacity = 1.0
 
-                Image {
-                    id: hideSidebarImage
-                    source: root.sidebarVisible ? "qrc:/qt/qml/zametki/assets/icons/header/hide-sidebar.svg" : "qrc:/qt/qml/zametki/assets/icons/header/show-sidebar.svg"
-                    width: Palette.iconSmall
-                    height: Palette.iconSmall
-                    fillMode: Image.PreserveAspectFit
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Palette.animationFast
+                MouseArea {
+                    id: hideSidebarArea
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: root.hideSidebarClicked()
+                    onEntered: hideSidebarImage.opacity = 0.6
+                    onExited: hideSidebarImage.opacity = 1.0
+
+                    Image {
+                        id: hideSidebarImage
+                        anchors.centerIn: parent
+                        source: root.sidebarVisible ? "qrc:/qt/qml/zametki/assets/icons/header/hide-sidebar.svg" : "qrc:/qt/qml/zametki/assets/icons/header/show-sidebar.svg"
+                        width: Palette.iconSmall
+                        height: Palette.iconSmall
+                        fillMode: Image.PreserveAspectFit
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: Palette.animationFast
+                            }
                         }
                     }
                 }
@@ -101,73 +106,91 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: Palette.spacingMassive
 
-        MouseArea {
-            id: shareArea
-            width: Palette.iconSmall
-            height: Palette.iconSmall
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
-            onClicked: root.shareClicked()
-            onEntered: shareImage.opacity = 0.6
-            onExited: shareImage.opacity = 1.0
+        Item {
+            width: Palette.buttonHeightSmall
+            height: Palette.buttonHeightSmall
+            anchors.verticalCenter: parent.verticalCenter
 
-            Image {
-                id: shareImage
-                source: "qrc:/qt/qml/zametki/assets/icons/header/share.svg"
-                width: Palette.iconSmall
-                height: Palette.iconSmall
-                fillMode: Image.PreserveAspectFit
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Palette.animationFast
+            MouseArea {
+                id: shareArea
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
+                onClicked: root.shareClicked()
+                onEntered: shareImage.opacity = 0.6
+                onExited: shareImage.opacity = 1.0
+
+                Image {
+                    id: shareImage
+                    anchors.centerIn: parent
+                    source: "qrc:/qt/qml/zametki/assets/icons/header/share.svg"
+                    width: Palette.iconSmall
+                    height: Palette.iconSmall
+                    fillMode: Image.PreserveAspectFit
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Palette.animationFast
+                        }
                     }
                 }
             }
         }
 
-        MouseArea {
-            id: favoriteArea
-            width: Palette.iconSmall
-            height: Palette.iconSmall
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
-            onClicked: root.favoriteClicked()
-            onEntered: favoriteImage.opacity = 0.6
-            onExited: favoriteImage.opacity = 1.0
+        Item {
+            width: Palette.buttonHeightSmall
+            height: Palette.buttonHeightSmall
+            anchors.verticalCenter: parent.verticalCenter
 
-            Image {
-                id: favoriteImage
-                source: "qrc:/qt/qml/zametki/assets/icons/header/favorite.svg"
-                width: Palette.iconSmall
-                height: Palette.iconSmall
-                fillMode: Image.PreserveAspectFit
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Palette.animationFast
+            MouseArea {
+                id: favoriteArea
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
+                onClicked: root.favoriteClicked()
+                onEntered: favoriteImage.opacity = 0.6
+                onExited: favoriteImage.opacity = 1.0
+
+                Image {
+                    id: favoriteImage
+                    anchors.centerIn: parent
+                    source: "qrc:/qt/qml/zametki/assets/icons/header/favorite.svg"
+                    width: Palette.iconSmall
+                    height: Palette.iconSmall
+                    fillMode: Image.PreserveAspectFit
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Palette.animationFast
+                        }
                     }
                 }
             }
         }
 
-        MouseArea {
-            id: moreArea
-            width: Palette.iconSmall
-            height: Palette.iconSmall
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
-            onClicked: root.moreClicked()
-            onEntered: moreImage.opacity = 0.6
-            onExited: moreImage.opacity = 1.0
+        Item {
+            width: Palette.buttonHeightSmall
+            height: Palette.buttonHeightSmall
+            anchors.verticalCenter: parent.verticalCenter
 
-            Image {
-                id: moreImage
-                source: "qrc:/qt/qml/zametki/assets/icons/header/more.svg"
-                width: Palette.iconSmall
-                height: Palette.iconSmall
-                fillMode: Image.PreserveAspectFit
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Palette.animationFast
+            MouseArea {
+                id: moreArea
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
+                onClicked: root.moreClicked()
+                onEntered: moreImage.opacity = 0.6
+                onExited: moreImage.opacity = 1.0
+
+                Image {
+                    id: moreImage
+                    anchors.centerIn: parent
+                    source: "qrc:/qt/qml/zametki/assets/icons/header/more.svg"
+                    width: Palette.iconSmall
+                    height: Palette.iconSmall
+                    fillMode: Image.PreserveAspectFit
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Palette.animationFast
+                        }
                     }
                 }
             }

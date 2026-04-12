@@ -23,7 +23,7 @@ Rectangle {
         height: implicitHeight
         anchors.centerIn: parent
         cardColor: Palette.headerBackground
-        cornerRadius: Palette.radiusLg
+        cornerRadius: Palette.modalSurfaceRadius
         borderLineWidth: 1
         borderLineColor: Palette.border
 
@@ -35,14 +35,14 @@ Rectangle {
             AppPageTitleText {
                 text: "CreationBD"
                 uiFontFamily: root.fontFamily
-                textPointSize: Palette.fontSizeXxl
+                textPixelSize: Palette.fontSizeXxl
                 Layout.fillWidth: true
             }
 
             AppDescriptionText {
                 text: "Введите название базы и выберите папку, где она будет храниться"
                 uiFontFamily: root.fontFamily
-                textPointSize: Palette.fontSizeBase
+                textPixelSize: Palette.fontSizeBase
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true
             }
@@ -50,7 +50,7 @@ Rectangle {
             AppInputField {
                 id: databaseNameField
                 placeholderText: "Название базы данных"
-                font.family: root.fontFamily
+                uiFontFamily: root.fontFamily !== "" ? root.fontFamily : Palette.fontFamily
                 selectByMouse: true
                 Layout.fillWidth: true
             }
@@ -63,7 +63,7 @@ Rectangle {
                     id: chooseFolderButton
                     text: "Выбрать папку"
                     fontFamily: root.fontFamily
-                    fontPointSize: Palette.fontSizeBase
+                    fontPixelSize: Palette.fontSizeBase
                     textColor: Palette.textPrimary
                     backgroundColor: Palette.surfaceColor
                     hoverBackgroundColor: Palette.hover
@@ -77,7 +77,7 @@ Rectangle {
                     Layout.alignment: Qt.AlignVCenter
                     text: root.selectedDirectoryPath === "" ? "Папка не выбрана" : root.selectedDirectoryPath
                     uiFontFamily: root.fontFamily
-                    textPointSize: Palette.fontSizeSm
+                    textPixelSize: Palette.fontSizeSm
                     elide: Text.ElideMiddle
                 }
             }
@@ -86,7 +86,7 @@ Rectangle {
                 visible: root.errorText.length > 0
                 text: root.errorText
                 uiFontFamily: root.fontFamily
-                textPointSize: Palette.fontSizeSm
+                textPixelSize: Palette.fontSizeSm
                 textColor: Palette.errorColor
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true
@@ -96,7 +96,7 @@ Rectangle {
                 id: createButton
                 text: "Создать"
                 fontFamily: root.fontFamily
-                fontPointSize: Palette.fontSizeMd
+                fontPixelSize: Palette.fontSizeMd
                 fontWeight: Font.DemiBold
                 textColor: Palette.backgroundWhite
                 backgroundColor: Palette.accentPrimary
@@ -104,7 +104,7 @@ Rectangle {
                 pressedBackgroundColor: Palette.authAccentPressed
                 disabledBackgroundColor: Palette.authInputBorder
                 radius: Palette.radiusLg
-                implicitHeight: Palette.buttonHeightBase
+                implicitHeight: Palette.buttonHeightLarge
                 enabled: databaseNameField.text.trim().length > 0 && root.selectedDirectoryPath.length > 0
                 onClicked: {
                     root.errorText = "";

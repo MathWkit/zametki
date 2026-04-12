@@ -12,7 +12,7 @@ AppActionButton {
     hoverBorderColor: Palette.authInputBorder
     pressedBorderColor: Palette.authInputBorder
     fontFamily: Palette.fontFamily
-    fontPointSize: Palette.fontSizeBase
+    fontPixelSize: Palette.fontSizeBase
     fontWeight: Font.DemiBold
     radius: Palette.radiusLg
     implicitHeight: Palette.authSocialButtonHeight

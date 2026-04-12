@@ -63,7 +63,7 @@ Item {
         width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, root.width - (root.dialogHorizontalMargin * 2)))
         height: Math.min(contentLayout.implicitHeight + Palette.spacingHuge, root.maxDialogHeight)
         color: Palette.backgroundWhite
-        radius: Palette.radiusXl
+        radius: Palette.modalSurfaceRadius
         anchors.centerIn: parent
         clip: true
 
@@ -128,10 +128,9 @@ Item {
                             Layout.alignment: Qt.AlignLeft
                             spacing: Palette.spacingSm
 
-                            AppBodyText {
+                            AppPageTitleText {
                                 text: root.currentAccount.firstName + " " + root.currentAccount.lastName
-                                font.pointSize: Palette.fontSizeMd
-                                font.styleName: "SemiBold"
+                                textPixelSize: Palette.fontSizeMd
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                             }
@@ -170,7 +169,7 @@ Item {
                             backgroundColor: Palette.backgroundWhite
                             borderColor: Palette.borderSoft
                             borderWidth: 1
-                            fontPointSize: Palette.fontSizeSm
+                            fontPixelSize: Palette.fontSizeSm
                             onClicked: {
                                 console.log("Кнопка: " + modelData.label);
                                 switch (modelData.signal) {

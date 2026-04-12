@@ -79,6 +79,11 @@ var radiusLg = 8;
 var radiusXl = 10;
 var cornerRadius = 4;  // Legacy
 
+// Shared radius for auth card, profile/share/search modals, and similar surfaces
+var modalSurfaceRadius = 10;
+// Legacy name — keep in sync with modal surfaces
+var authCardRadius = modalSurfaceRadius;
+
 // ============================================================================
 // COMPONENT SIZES
 // ============================================================================
@@ -100,7 +105,6 @@ var iconLarge = 24;
 var headerHeight = 56;
 
 // Auth component sizes
-var authCardRadius = 12;
 var authTitleSize = 22;
 var authSocialButtonHeight = 38;
 var authFieldVerticalPadding = 10;
@@ -151,6 +155,11 @@ var dropdownTextPaddingRight = 28;
 var dropdownIndicatorSize = 12;
 var dropdownIndicatorRightInset = 10;
 var dropdownPopupOffset = 6;
+
+// Switch (custom indicator) — keep magic numbers in one place
+var switchTrackWidth = 45;
+var switchTrackHeight = 25;
+var switchHandleMargin = 3;
 
 var inputBorderWidth = 1;
 var inputFocusBorderWidth = 1;

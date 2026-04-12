@@ -10,18 +10,19 @@ Switch {
     property color inactiveHandleColor: Palette.border
 
     indicator: Rectangle {
-        width: 45
-        height: 25
+        width: Palette.switchTrackWidth
+        height: Palette.switchTrackHeight
         radius: height / 2
 
         color: control.checked ? control.activeColor : control.inactiveTrackColor
         border.color: control.checked ? control.inactiveTrackColor : control.inactiveHandleColor
 
         Rectangle {
-            width: parent.height - 6
+            readonly property int margin: Palette.switchHandleMargin
+            width: parent.height - margin * 2
             height: width
             radius: width / 2
-            x: control.checked ? parent.width - width - 3 : 3
+            x: control.checked ? parent.width - width - margin : margin
             y: (parent.height - height) / 2
             color: control.checked ? control.inactiveTrackColor : control.inactiveHandleColor
         }

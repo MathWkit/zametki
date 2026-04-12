@@ -26,33 +26,7 @@ Rectangle {
     border.width: 1
     border.color: Palette.border
 
-    component SidebarTitleText: Text {
-        font.family: root.fontFamily
-        font.pixelSize: Palette.fontSizeMd
-        font.weight: Font.DemiBold
-        color: Palette.textPrimary
-    }
-
-    component SidebarSubtitleText: Text {
-        font.family: root.fontFamily
-        font.pixelSize: Palette.fontSizeMd
-        font.weight: Font.Medium
-        color: Palette.textPrimary
-    }
-
-    component SidebarBodyText: Text {
-        font.family: root.fontFamily
-        font.pixelSize: Palette.fontSizeMd
-        font.weight: Font.Normal
-        color: Palette.textPrimary
-    }
-
-    component SidebarSmallText: Text {
-        font.family: root.fontFamily
-        font.pixelSize: Palette.fontSizeSm
-        font.weight: Font.Normal
-        color: Palette.textSecondary
-    }
+    readonly property string uiFontFamily: root.fontFamily !== "" ? root.fontFamily : Palette.fontFamily
 
     component SidebarActionRow: Rectangle {
         id: actionRow
@@ -79,7 +53,9 @@ Rectangle {
                 height: Palette.iconSmall
             }
 
-            SidebarSubtitleText {
+            AppSidebarLabelText {
+                uiFontFamily: root.uiFontFamily
+                textColor: Palette.textPrimary
                 text: actionRow.titleText
                 Layout.fillWidth: true
             }
@@ -120,7 +96,9 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
             }
 
-            SidebarBodyText {
+            AppBodyText {
+                uiFontFamily: root.uiFontFamily
+                textPixelSize: Palette.fontSizeMd
                 text: menuRow.titleText
                 Layout.fillWidth: true
             }
@@ -169,7 +147,9 @@ Rectangle {
                             fillMode: Image.PreserveAspectFit
                         }
 
-                        SidebarTitleText {
+                        AppPageTitleText {
+                            uiFontFamily: root.uiFontFamily
+                            textPixelSize: Palette.fontSizeMd
                             text: "Моя база знаний"
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignLeft
@@ -302,30 +282,30 @@ Rectangle {
                     anchors.margins: Palette.spacingXl
                     spacing: Palette.spacingMd
                     Layout.fillWidth: true
-                    Rectangle {
-                        width: 32
-                        height: 32
-                        radius: width / 2
-                        color: Palette.hover
-
-                        Text {
-                            text: "GL"
-                            anchors.centerIn: parent
-                            font.family: root.fontFamily
-                            font.pixelSize: Palette.fontSizeXs
-                            font.weight: Font.Medium
-                            color: Palette.textPrimary
-                        }
+                    AppInitialsAvatar {
+                        uiFontFamily: root.uiFontFamily
+                        initials: "GL"
+                        avatarSize: Palette.avatarSmall
+                        initialsPixelSize: Palette.fontSizeXs
+                        initialsWeight: Font.Medium
+                        avatarColor: Palette.hover
+                        initialsColor: Palette.textPrimary
+                        Layout.preferredWidth: Palette.avatarSmall
+                        Layout.preferredHeight: Palette.avatarSmall
                     }
 
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: Palette.sidebarProfileTinyGap
 
-                        SidebarSubtitleText {
+                        AppSidebarLabelText {
+                            uiFontFamily: root.uiFontFamily
+                            textColor: Palette.textPrimary
                             text: "Lox chvetochiy"
                         }
-                        SidebarSmallText {
+                        AppDescriptionText {
+                            uiFontFamily: root.uiFontFamily
+                            textPixelSize: Palette.fontSizeSm
                             text: "loxcvetochiy@titam.com"
                         }
                     }
@@ -335,8 +315,8 @@ Rectangle {
                     Image {
                         source: "qrc:/qt/qml/zametki/assets/icons/sidebar/chosen.svg"
 
-                        width: 16
-                        height: 16
+                        width: Palette.iconSmall
+                        height: Palette.iconSmall
                         fillMode: Image.PreserveAspectFit
                     }
                 }

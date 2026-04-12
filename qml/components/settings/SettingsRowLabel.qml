@@ -3,6 +3,4 @@ import "../../scripts/Theme.js" as Palette
 import ".."
 
 AppBodyText {
-    font.styleName: "Regular"
-    font.pointSize: Palette.fontSizeBase
 }
