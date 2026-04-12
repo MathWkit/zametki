@@ -122,6 +122,14 @@ var rowPaddingCompact = 8;
 var settingsNumericFieldWidth = 80;
 var settingsPathFieldWidth = 220;
 var actionButtonMediumWidth = 120;
+var actionButtonCompactPadding = 10;
+
+// Creation BD overlay card
+var creationBdCardHorizontalMargin = 40;
+var creationBdMaxCardWidth = 480;
+var creationBdContentPadding = 20;
+var creationBdColumnSpacing = 12;
+var creationBdFolderRowSpacing = 8;
 
 var searchDialogHeight = 432;
 var searchDialogMinWidth = 360;

@@ -3,6 +3,7 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
 import "components"
+import "components/share"
 
 Item {
     id: item1
@@ -96,21 +97,10 @@ Item {
                 Item {
                     Layout.fillWidth: true
                 }
-                Rectangle {
-                    color: Palette.surfaceColor
-                    radius: Palette.radiusMd
+                AppIconSurfaceButton {
+                    iconSource: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                    Layout.preferredHeight: Palette.buttonHeightBase
-                    Layout.preferredWidth: Palette.buttonHeightBase
-                    TapHandler {
-                        onTapped: closeClicked()
-                    }
-                    Image {
-                        anchors.centerIn: parent
-                        source: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
-                        width: Palette.iconSmall
-                        height: Palette.iconSmall
-                    }
+                    onClicked: closeClicked()
                 }
             }
 
@@ -195,81 +185,36 @@ Item {
                                 text: qsTr("Люди с доступом")
                             }
 
-                            // ── Первая строка (Alex) ──
-                            RowLayout {
-                                Layout.fillWidth: true
-                                spacing: Palette.spacingXl
-
-                                AppInitialsAvatar {
-                                    initials: "AK"
-                                    avatarSize: Palette.avatarMedium
-                                    initialsPixelSize: Palette.fontSizeSm
-                                    Layout.preferredWidth: Palette.avatarMedium
-                                    Layout.preferredHeight: Palette.avatarMedium
-                                    Layout.alignment: Qt.AlignVCenter
-                                }
-
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: Palette.spacingSm
-
-                                    AppBodyText {
-                                        text: qsTr("Алекс Ким")
+                            Repeater {
+                                model: [
+                                    {
+                                        participantId: "alex1",
+                                        initials: "AK",
+                                        name: qsTr("Алекс Ким"),
+                                        email: "alex@vault.app"
+                                    },
+                                    {
+                                        participantId: "alex2",
+                                        initials: "AK",
+                                        name: qsTr("Алекс Ким"),
+                                        email: "alex@vault.app"
                                     }
+                                ]
 
-                                    AppDescriptionText {
-                                        text: "alex@vault.app"
-                                    }
-                                }
-
-                                Item {
+                                ShareParticipantRow {
+                                    required property var modelData
                                     Layout.fillWidth: true
-                                }
 
-                                AppDropdown {
-                                    model: roleOptions
-                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex1"] || qsTr("Читатель")))
+                                    participantId: modelData.participantId
+                                    avatarInitials: modelData.initials
+                                    nameText: modelData.name
+                                    emailText: modelData.email
+                                    roleOptionsModel: item1.roleOptions
+                                    roleCurrentIndex: Math.max(0, item1.roleOptions.indexOf(item1.peopleRoles[modelData.participantId] || qsTr("Читатель")))
 
-                                    onActivated: changeRole("alex1", currentText)
-                                }
-                            }
-
-                            // ── Вторая строка (Alex) ──
-                            RowLayout {
-                                Layout.fillWidth: true
-                                spacing: Palette.spacingXl
-
-                                AppInitialsAvatar {
-                                    initials: "AK"
-                                    avatarSize: Palette.avatarMedium
-                                    initialsPixelSize: Palette.fontSizeSm
-                                    Layout.preferredWidth: Palette.avatarMedium
-                                    Layout.preferredHeight: Palette.avatarMedium
-                                    Layout.alignment: Qt.AlignVCenter
-                                }
-
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: Palette.spacingSm
-
-                                    AppBodyText {
-                                        text: qsTr("Алекс Ким")
+                                    onRoleActivated: function (newRole) {
+                                        item1.changeRole(modelData.participantId, newRole);
                                     }
-
-                                    AppDescriptionText {
-                                        text: "alex@vault.app"
-                                    }
-                                }
-
-                                Item {
-                                    Layout.fillWidth: true
-                                }
-
-                                AppDropdown {
-                                    model: roleOptions
-                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex2"] || qsTr("Читатель")))
-
-                                    onActivated: changeRole("alex2", currentText)
                                 }
                             }
                         }

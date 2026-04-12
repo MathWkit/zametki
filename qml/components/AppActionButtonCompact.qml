@@ -4,6 +4,6 @@ import "../scripts/Theme.js" as Palette
 AppActionButton {
     fontStyleName: "Medium"
     fontPointSize: Palette.fontSizeMd
-    horizontalPadding: 10
-    verticalPadding: 10
+    horizontalPadding: Palette.actionButtonCompactPadding
+    verticalPadding: Palette.actionButtonCompactPadding
 }

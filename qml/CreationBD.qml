@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Dialogs 6.8
+import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
 import "components"
 
@@ -18,30 +19,32 @@ Rectangle {
     color: Palette.overlayScrim
 
     AppSectionCard {
-        width: Math.min(parent.width - 40, 480)
+        width: Math.min(parent.width - Palette.creationBdCardHorizontalMargin, Palette.creationBdMaxCardWidth)
         height: implicitHeight
         anchors.centerIn: parent
         cardColor: Palette.headerBackground
-        cornerRadius: 8
+        cornerRadius: Palette.radiusLg
         borderLineWidth: 1
         borderLineColor: Palette.border
 
-        Column {
+        ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 20
-            spacing: 12
+            anchors.margins: Palette.creationBdContentPadding
+            spacing: Palette.creationBdColumnSpacing
 
             AppPageTitleText {
                 text: "CreationBD"
                 uiFontFamily: root.fontFamily
-                textPointSize: 20
+                textPointSize: Palette.fontSizeXxl
+                Layout.fillWidth: true
             }
 
             AppDescriptionText {
                 text: "Введите название базы и выберите папку, где она будет храниться"
                 uiFontFamily: root.fontFamily
-                textPointSize: 13
+                textPointSize: Palette.fontSizeBase
                 wrapMode: Text.WordWrap
+                Layout.fillWidth: true
             }
 
             AppInputField {
@@ -49,11 +52,12 @@ Rectangle {
                 placeholderText: "Название базы данных"
                 font.family: root.fontFamily
                 selectByMouse: true
+                Layout.fillWidth: true
             }
 
-            Row {
-                spacing: 8
-                width: parent.width
+            RowLayout {
+                spacing: Palette.creationBdFolderRowSpacing
+                Layout.fillWidth: true
 
                 AppActionButton {
                     id: chooseFolderButton
@@ -69,11 +73,11 @@ Rectangle {
                 }
 
                 AppDescriptionText {
-                    width: parent.width - 140
-                    anchors.verticalCenter: parent.verticalCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
                     text: root.selectedDirectoryPath === "" ? "Папка не выбрана" : root.selectedDirectoryPath
                     uiFontFamily: root.fontFamily
-                    textPointSize: 12
+                    textPointSize: Palette.fontSizeSm
                     elide: Text.ElideMiddle
                 }
             }
@@ -82,9 +86,10 @@ Rectangle {
                 visible: root.errorText.length > 0
                 text: root.errorText
                 uiFontFamily: root.fontFamily
-                textPointSize: 12
+                textPointSize: Palette.fontSizeSm
                 textColor: Palette.errorColor
                 wrapMode: Text.WordWrap
+                Layout.fillWidth: true
             }
 
             AppActionButton {
@@ -105,6 +110,7 @@ Rectangle {
                     root.errorText = "";
                     root.createDatabaseRequested(databaseNameField.text, root.selectedDirectoryPath);
                 }
+                Layout.fillWidth: true
             }
         }
     }

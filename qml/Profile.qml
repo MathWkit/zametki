@@ -83,11 +83,9 @@ Item {
                     Layout.fillWidth: true
                 }
 
-                AppActionButtonCompact {
-                    text: "✕"
-                    backgroundColor: Palette.surfaceColor
-                    Layout.preferredHeight: Palette.buttonHeightBase
-                    Layout.preferredWidth: Palette.buttonHeightBase
+                AppIconSurfaceButton {
+                    iconSource: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
+                    Layout.alignment: Qt.AlignTop
                     onClicked: {
                         console.log("Кнопка: Закрыть");
                         root.closeClicked();
