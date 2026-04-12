@@ -85,7 +85,7 @@ Item {
 
                 AppIconSurfaceButton {
                     iconSource: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
-                    Layout.alignment: Qt.AlignTop
+                    Layout.alignment: Qt.AlignVCenter
                     onClicked: {
                         console.log("Кнопка: Закрыть");
                         root.closeClicked();
