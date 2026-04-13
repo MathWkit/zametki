@@ -149,7 +149,7 @@ Item {
                         }
 
                         AppActionButtonCompact {
-                            text: "Done"
+                            text: qsTr("Готово")
                             onClicked: root.closeRequested()
                         }
                     }
@@ -208,7 +208,7 @@ Item {
                                             id: columnLayout7
 
                                             SettingsRowLabel {
-                                                text: "Appearance"
+                                                text: qsTr("Оформление")
                                             }
 
                                             AppDescriptionText {
@@ -224,7 +224,7 @@ Item {
                                             id: appearanceCombo
                                             Layout.preferredWidth: Palette.space4 * 5
 
-                                            model: ["Light", "Dark", "Purple"]
+                                            model: [qsTr("Светлая"), qsTr("Тёмная"), qsTr("Фиолетовая")]
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
@@ -308,7 +308,7 @@ Item {
                                             id: columnLayout11
 
                                             SettingsRowLabel {
-                                                text: "Live Preview"
+                                                text: qsTr("Live Preview")
                                             }
                                         }
 
@@ -615,7 +615,7 @@ Item {
                                             id: columnLayout24
 
                                             SettingsRowLabel {
-                                                text: "Fuzzy search"
+                                                text: qsTr("Fuzzy search")
                                             }
                                         }
 
