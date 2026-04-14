@@ -175,6 +175,15 @@ Window {
             onOutsideCloseRequested: {
                 window.searchViewVisible = false;
             }
+
+            Connections {
+                target: searchOverlay.loadedItem
+                ignoreUnknownSignals: true
+
+                function onCloseClicked() {
+                    window.searchViewVisible = false;
+                }
+            }
         }
 
         MainModalOverlay {
@@ -257,6 +266,9 @@ Window {
             visible: window.authViewVisible
             z: 9999
             fontFamily: interFont.name
+            onCloseRequested: {
+                window.authViewVisible = false;
+            }
             onLoginRequested: function (email, password) {
                 console.log("Запрос входа:", email, "длина пароля:", password.length);
                 window.authViewVisible = false;

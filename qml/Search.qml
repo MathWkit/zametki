@@ -9,6 +9,8 @@ Item {
     id: root
     clip: true
 
+    signal closeClicked
+
     readonly property Item dialogItem: dialog
     readonly property int dialogMargin: Palette.space2
     readonly property int dialogMinHeight: Palette.controlHeightBase + Palette.searchHintBarHeight + Palette.space4
@@ -75,12 +77,23 @@ Item {
             anchors.fill: parent
             spacing: 0
 
-            SearchInputBar {
+            RowLayout {
                 Layout.fillWidth: true
                 Layout.leftMargin: Palette.searchInset
                 Layout.rightMargin: Palette.searchInset
                 Layout.topMargin: Palette.space2
                 Layout.bottomMargin: Palette.space2
+                spacing: Palette.spacingXl
+
+                SearchInputBar {
+                    Layout.fillWidth: true
+                }
+
+                AppIconSurfaceButton {
+                    iconSource: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
+                    Layout.alignment: Qt.AlignVCenter
+                    onClicked: root.closeClicked()
+                }
             }
 
             AppDivider {

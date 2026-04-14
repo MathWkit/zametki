@@ -56,10 +56,21 @@ Item {
             anchors.margins: root.cardContentPadding
             spacing: root.cardContentSpacing
 
-            AppPageTitleText {
-                text: qsTr("Аккаунт")
-                textPixelSize: Palette.authTitleSize
+            RowLayout {
                 Layout.fillWidth: true
+                spacing: Palette.spacingXl
+
+                AppPageTitleText {
+                    text: qsTr("Аккаунт")
+                    textPixelSize: Palette.authTitleSize
+                    Layout.fillWidth: true
+                }
+
+                AppIconSurfaceButton {
+                    iconSource: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
+                    Layout.alignment: Qt.AlignVCenter
+                    onClicked: root.closeRequested()
+                }
             }
 
             AppDescriptionText {
