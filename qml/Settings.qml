@@ -10,6 +10,7 @@ Item {
     id: root
     anchors.fill: parent
     signal closeRequested
+    property int selectedSectionIndex: 0
 
     readonly property color colorBackground: Palette.backgroundLight
     readonly property int contentInset: Palette.contentInset
@@ -102,10 +103,12 @@ Item {
 
                         delegate: SettingsNavItem {
                             required property var modelData
+                            required property int index
 
                             iconSource: modelData.iconSource
                             titleText: modelData.titleText
-                            active: modelData.active
+                            active: index === root.selectedSectionIndex
+                            onClicked: root.selectedSectionIndex = index
                         }
                     }
 
@@ -308,7 +311,7 @@ Item {
                                             id: columnLayout11
 
                                             SettingsRowLabel {
-                                                text: qsTr("Live Preview")
+                                                text: qsTr("Живой предпросмотр")
                                             }
                                         }
 
@@ -615,7 +618,7 @@ Item {
                                             id: columnLayout24
 
                                             SettingsRowLabel {
-                                                text: qsTr("Fuzzy search")
+                                                text: qsTr("Нечеткий поиск")
                                             }
                                         }
 
@@ -892,7 +895,7 @@ Item {
 
                                     SettingsKeyValueRow {
                                         keyText: "Хранилище: "
-                                        valueText: "Local"
+                                        valueText: "Локальное"
                                     }
 
                                     AppActionButton {
