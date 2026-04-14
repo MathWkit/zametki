@@ -33,7 +33,7 @@ Rectangle {
             spacing: Palette.creationBdColumnSpacing
 
             AppPageTitleText {
-                text: "CreationBD"
+                text: "Создание базы данных"
                 uiFontFamily: root.fontFamily
                 textPixelSize: Palette.fontSizeXxl
                 Layout.fillWidth: true

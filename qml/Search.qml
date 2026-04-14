@@ -17,31 +17,31 @@ Item {
 
     property var recentNotes: [
         {
-            title: "Note 1",
-            subtitle: "path / to / note",
+            title: qsTr("Заметка 1"),
+            subtitle: "путь / к / заметке",
             icon: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
         },
         {
-            title: "Note 2",
-            subtitle: "path / to / second note",
+            title: qsTr("Заметка 2"),
+            subtitle: "путь / ко / второй заметке",
             icon: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
         }
     ]
 
     property var folders: [
         {
-            title: "Project Notes",
+            title: qsTr("Проектные заметки"),
             icon: "qrc:/qt/qml/zametki/assets/icons/list/folder.svg"
         }
     ]
 
     property var commands: [
         {
-            title: "Create New Note",
+            title: qsTr("Создать заметку"),
             icon: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
         },
         {
-            title: "Open Graph View",
+            title: qsTr("Открыть граф"),
             icon: "qrc:/qt/qml/zametki/assets/icons/sidebar/graph-view.svg"
         }
     ]
@@ -49,15 +49,15 @@ Item {
     property var footerHints: [
         {
             icon: "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg",
-            label: qsTr("Navigate")
+            label: qsTr("Навигация")
         },
         {
             icon: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg",
-            label: qsTr("Open")
+            label: qsTr("Открыть")
         },
         {
             icon: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg",
-            label: qsTr("Close")
+            label: qsTr("Закрыть")
         }
     ]
 
@@ -114,7 +114,7 @@ Item {
                     spacing: 0
 
                     SearchSectionHeader {
-                        text: qsTr("RECENT NOTES")
+                        text: qsTr("ПОСЛЕДНИЕ ЗАМЕТКИ")
                         Layout.leftMargin: Palette.searchSectionInset
                         Layout.topMargin: Palette.space2
                     }
@@ -136,7 +136,7 @@ Item {
                     }
 
                     SearchSectionHeader {
-                        text: qsTr("FOLDERS")
+                        text: qsTr("ПАПКИ")
                         Layout.leftMargin: Palette.searchSectionInset
                         Layout.topMargin: Palette.space2
                     }
@@ -157,7 +157,7 @@ Item {
                     }
 
                     SearchSectionHeader {
-                        text: qsTr("COMMANDS")
+                        text: qsTr("КОМАНДЫ")
                         Layout.leftMargin: Palette.searchSectionInset
                         Layout.topMargin: Palette.space2
                     }

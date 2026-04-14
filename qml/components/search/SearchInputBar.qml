@@ -8,7 +8,7 @@ AppSectionCard {
     id: control
 
     property alias text: searchField.text
-    property string placeholderText: qsTr("Search for notes, folders, tags, or commands...")
+    property string placeholderText: qsTr("Поиск по заметкам, папкам, тегам и командам...")
     property string iconSource: "qrc:/qt/qml/zametki/assets/icons/sidebar/search.svg"
 
     signal accepted(string query)
