@@ -58,6 +58,32 @@ Window {
     Item {
         anchors.fill: parent
 
+        Shortcut {
+            sequence: "Escape"
+            enabled: window.authViewVisible || window.profileViewVisible || window.shareViewVisible || window.searchViewVisible || window.settingsViewVisible
+            onActivated: {
+                if (window.authViewVisible) {
+                    window.authViewVisible = false;
+                    return;
+                }
+                if (window.profileViewVisible) {
+                    window.profileViewVisible = false;
+                    return;
+                }
+                if (window.shareViewVisible) {
+                    window.shareViewVisible = false;
+                    return;
+                }
+                if (window.searchViewVisible) {
+                    window.searchViewVisible = false;
+                    return;
+                }
+                if (window.settingsViewVisible) {
+                    window.settingsViewVisible = false;
+                }
+            }
+        }
+
         SidebarPanel {
             id: aside
             width: (!window.settingsViewVisible && window.sidebarVisible) ? window.asideWidth : 0
@@ -266,6 +292,7 @@ Window {
             visible: window.authViewVisible
             z: 9999
             fontFamily: interFont.name
+            closeOnOutsideClick: true
             onCloseRequested: {
                 window.authViewVisible = false;
             }
