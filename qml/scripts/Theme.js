@@ -62,12 +62,12 @@ var space4 = gridUnit * 4;  // 32
 var spacingXs = 2;
 var spacingSm = 4;
 var spacingMd = 6;
-var spacingLg = 8;
+var spacingLg = space1;
 var spacingXl = 12;
-var spacingXxl = 16;
+var spacingXxl = space2;
 var spacingXxxl = 18;
 var spacingHuge = 20;
-var spacingMassive = 24;
+var spacingMassive = space3;
 
 // ============================================================================
 // BORDER RADIUS
@@ -118,11 +118,11 @@ var sidebarMinWidth = 200;
 var sidebarWidthRatio = 0.2;
 var dialogMaxWidth = 540;
 var dialogMaxHeight = 680;
-var dialogPadding = 24;
-var contentInset = 16;
-var sectionSpacing = 24;
-var rowPadding = 16;
-var rowPaddingCompact = 8;
+var dialogPadding = space3;
+var contentInset = space2;
+var sectionSpacing = space3;
+var rowPadding = space2;
+var rowPaddingCompact = space1;
 var settingsNumericFieldWidth = 80;
 var settingsPathFieldWidth = 220;
 var actionButtonMediumWidth = 120;
@@ -131,15 +131,15 @@ var actionButtonCompactPadding = 10;
 // Creation BD overlay card
 var creationBdCardHorizontalMargin = 40;
 var creationBdMaxCardWidth = 480;
-var creationBdContentPadding = 20;
-var creationBdColumnSpacing = 12;
-var creationBdFolderRowSpacing = 8;
+var creationBdContentPadding = spacingHuge;
+var creationBdColumnSpacing = spacingXl;
+var creationBdFolderRowSpacing = spacingLg;
 
 var searchDialogHeight = 432;
 var searchDialogMinWidth = 360;
-var searchInset = 16;
-var searchSectionInset = 24;
-var searchCompactGap = 8;
+var searchInset = space2;
+var searchSectionInset = space3;
+var searchCompactGap = spacingLg;
 var searchHintBarHeight = 40;
 var searchResultRowHeight = 36;
 var searchResultRowHeightWithSubtitle = 44;
@@ -148,9 +148,9 @@ var sidebarTreeIndentStep = 20;
 var sidebarTreeRowHeightFolder = 28;
 var sidebarTreeRowHeightNote = 32;
 var sidebarListInset = 12;
-var sidebarProfileTinyGap = 4;
+var sidebarProfileTinyGap = spacingSm;
 
-var dropdownTextPaddingLeft = 12;
+var dropdownTextPaddingLeft = spacingXl;
 var dropdownTextPaddingRight = 28;
 var dropdownIndicatorSize = 12;
 var dropdownIndicatorRightInset = 10;

@@ -14,7 +14,7 @@ Item {
     property int mode: 0
     property bool googleAuthAvailable: true
     property bool appleAuthAvailable: Qt.platform.os === "osx"
-    property bool closeOnOutsideClick: false
+    property bool closeOnOutsideClick: true
     readonly property int cardOuterMargin: Palette.space3
     readonly property int cardContentPadding: Palette.dialogPadding
     readonly property int cardContentSpacing: Palette.space2
