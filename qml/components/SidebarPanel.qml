@@ -37,7 +37,15 @@ Rectangle {
         signal clicked
 
         Layout.fillWidth: true
-        color: "transparent"
+        color: {
+            if (actionRowMouseArea.pressed) {
+                return Palette.selected;
+            }
+            if (actionRowMouseArea.containsMouse) {
+                return Palette.hover;
+            }
+            return "transparent";
+        }
         radius: Palette.radiusMd
         implicitHeight: actionContent.implicitHeight + (Palette.spacingXl * 2)
 
@@ -62,12 +70,11 @@ Rectangle {
         }
 
         MouseArea {
+            id: actionRowMouseArea
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             hoverEnabled: true
             onClicked: actionRow.clicked()
-            onEntered: actionRow.color = Palette.hover
-            onExited: actionRow.color = "transparent"
         }
     }
 
@@ -81,7 +88,15 @@ Rectangle {
 
         Layout.fillWidth: true
         implicitHeight: Palette.buttonHeightBase + Palette.spacingSm
-        color: "transparent"
+        color: {
+            if (menuRowMouseArea.pressed) {
+                return Palette.selected;
+            }
+            if (menuRowMouseArea.containsMouse) {
+                return Palette.hover;
+            }
+            return "transparent";
+        }
 
         RowLayout {
             anchors.fill: parent
@@ -105,11 +120,10 @@ Rectangle {
         }
 
         MouseArea {
+            id: menuRowMouseArea
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
-            onEntered: menuRow.color = Palette.hover
-            onExited: menuRow.color = "transparent"
             onClicked: menuRow.clicked()
         }
     }
@@ -273,7 +287,15 @@ Rectangle {
                 anchors.fill: parent
                 implicitHeight: profileContent.implicitHeight + (Palette.spacingXl * 2)
                 radius: Palette.radiusMd
-                color: Palette.headerBackground
+                color: {
+                    if (profileCardMouseArea.pressed) {
+                        return Palette.selected;
+                    }
+                    if (profileCardMouseArea.containsMouse) {
+                        return Palette.hover;
+                    }
+                    return Palette.headerBackground;
+                }
                 border.width: 1
                 border.color: Palette.border
                 RowLayout {
@@ -322,12 +344,11 @@ Rectangle {
                 }
 
                 MouseArea {
+                    id: profileCardMouseArea
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     hoverEnabled: true
                     onClicked: profileMenu.open()
-                    onEntered: profileCard.color = Palette.hover
-                    onExited: profileCard.color = Palette.headerBackground
                 }
             }
         }

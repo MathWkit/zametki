@@ -8,14 +8,30 @@ Rectangle {
     property int iconWidth: Palette.iconSmall
     property int iconHeight: Palette.iconSmall
     property color surfaceColor: Palette.surfaceColor
+    property color hoverSurfaceColor: Palette.hover
+    property color pressedSurfaceColor: Palette.selected
+    property color disabledSurfaceColor: surfaceColor
     property int cornerRadius: Palette.radiusMd
+    property bool clickable: true
 
     signal clicked
 
     implicitWidth: Palette.buttonHeightBase
     implicitHeight: Palette.buttonHeightBase
-    color: mouseArea.containsMouse ? Palette.hover : surfaceColor
+    color: {
+        if (!control.enabled) {
+            return control.disabledSurfaceColor;
+        }
+        if (mouseArea.pressed) {
+            return control.pressedSurfaceColor;
+        }
+        if (mouseArea.containsMouse) {
+            return control.hoverSurfaceColor;
+        }
+        return control.surfaceColor;
+    }
     radius: cornerRadius
+    opacity: control.enabled ? 1 : 0.6
 
     Behavior on color {
         ColorAnimation {
@@ -34,8 +50,9 @@ Rectangle {
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
+        enabled: control.clickable && control.enabled
+        hoverEnabled: control.enabled
+        cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: control.clicked()
     }
 }
