@@ -70,7 +70,7 @@ Item {
         ColumnLayout {
             id: contentLayout
             anchors.fill: parent
-            anchors.margins: Palette.spacingMassive
+            anchors.margins: Palette.dialogPadding
             spacing: Palette.spacingHuge
 
             // ==================== 1. Header ====================

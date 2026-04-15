@@ -69,7 +69,7 @@ Item {
         ColumnLayout {
             id: shareColumn
             anchors.fill: parent
-            anchors.margins: Palette.spacingMassive
+            anchors.margins: Palette.dialogPadding
             spacing: Palette.spacingXl
 
             // ==================== 1. Заголовок Share ====================

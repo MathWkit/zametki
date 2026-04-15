@@ -16,7 +16,7 @@ Item {
     property bool appleAuthAvailable: Qt.platform.os === "osx"
     property bool closeOnOutsideClick: false
     readonly property int cardOuterMargin: Palette.space3
-    readonly property int cardContentPadding: Palette.space2
+    readonly property int cardContentPadding: Palette.dialogPadding
     readonly property int cardContentSpacing: Palette.space2
 
     signal loginRequested(string email, string password)

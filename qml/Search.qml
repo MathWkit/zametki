@@ -79,10 +79,10 @@ Item {
 
             RowLayout {
                 Layout.fillWidth: true
-                Layout.leftMargin: Palette.searchInset
-                Layout.rightMargin: Palette.searchInset
-                Layout.topMargin: Palette.space2
-                Layout.bottomMargin: Palette.space2
+                Layout.leftMargin: Palette.dialogPadding
+                Layout.rightMargin: Palette.dialogPadding
+                Layout.topMargin: Palette.spacingXl
+                Layout.bottomMargin: Palette.spacingXl
                 spacing: Palette.spacingXl
 
                 SearchInputBar {
@@ -115,7 +115,7 @@ Item {
 
                     SearchSectionHeader {
                         text: qsTr("ПОСЛЕДНИЕ ЗАМЕТКИ")
-                        Layout.leftMargin: Palette.searchSectionInset
+                        Layout.leftMargin: Palette.dialogPadding
                         Layout.topMargin: Palette.space2
                     }
 
@@ -127,7 +127,7 @@ Item {
                             required property int index
 
                             Layout.leftMargin: Palette.searchInset
-                            Layout.rightMargin: Palette.searchInset
+                            Layout.rightMargin: Palette.dialogPadding
                             Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
@@ -137,7 +137,7 @@ Item {
 
                     SearchSectionHeader {
                         text: qsTr("ПАПКИ")
-                        Layout.leftMargin: Palette.searchSectionInset
+                        Layout.leftMargin: Palette.dialogPadding
                         Layout.topMargin: Palette.space2
                     }
 
@@ -149,7 +149,7 @@ Item {
                             required property int index
 
                             Layout.leftMargin: Palette.searchInset
-                            Layout.rightMargin: Palette.searchInset
+                            Layout.rightMargin: Palette.dialogPadding
                             Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
@@ -158,7 +158,7 @@ Item {
 
                     SearchSectionHeader {
                         text: qsTr("КОМАНДЫ")
-                        Layout.leftMargin: Palette.searchSectionInset
+                        Layout.leftMargin: Palette.dialogPadding
                         Layout.topMargin: Palette.space2
                     }
 
@@ -170,7 +170,7 @@ Item {
                             required property int index
 
                             Layout.leftMargin: Palette.searchInset
-                            Layout.rightMargin: Palette.searchInset
+                            Layout.rightMargin: Palette.dialogPadding
                             Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
