@@ -33,6 +33,7 @@ qt_add_executable(appzametki
     include/core/blocks/heading_block.h
     include/core/blocks/todo_block.h
         include/core/block.h
+        include/core/document.h
 )
 
 target_include_directories(appzametki
