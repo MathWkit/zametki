@@ -28,6 +28,7 @@ qt_add_executable(appzametki
     src/main.cpp
     src/filecreator.cpp
     src/core/id_generator.cpp
+    src/core/document_factory.cpp
     include/filecreator.h
     include/core/block_type.h
     include/core/blocks/paragraph_block.h
