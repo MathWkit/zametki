@@ -27,15 +27,16 @@ qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(appzametki
     src/main.cpp
     src/filecreator.cpp
+    src/core/id_generator.cpp
     include/filecreator.h
     include/core/block_type.h
     include/core/blocks/paragraph_block.h
     include/core/blocks/heading_block.h
     include/core/blocks/todo_block.h
-        include/core/block.h
-        include/core/document.h
-        include/core/unsupported_block.h
-        include/core/id_generator.h
+    include/core/block.h
+    include/core/document.h
+    include/core/unsupported_block.h
+    include/core/id_generator.h
 )
 
 target_include_directories(appzametki
