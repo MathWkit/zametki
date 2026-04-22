@@ -29,6 +29,7 @@ qt_add_executable(appzametki
     src/filecreator.cpp
     include/filecreator.h
         include/core/block_type.h
+        include/core/blocks/paragraph_block.h
 )
 
 target_include_directories(appzametki
