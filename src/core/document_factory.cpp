@@ -1,5 +1,7 @@
 #include "core/document_factory.h"
 
+#include <QVariantMap>
+
 namespace zametki::core
 {
 DocumentFactory::DocumentFactory(const IdGenerator &idGenerator)
@@ -21,6 +23,15 @@ Block DocumentFactory::createParagraphBlock(const QString &text) const
     block.id = m_idGenerator.create();
     block.type = BlockType::Paragraph;
     block.data = text;
+    return block;
+}
+
+Block DocumentFactory::createHeadingBlock(const QString &text, const int level) const
+{
+    Block block;
+    block.id = m_idGenerator.create();
+    block.type = BlockType::Heading;
+    block.data = QVariantMap{{QStringLiteral("text"), text}, {QStringLiteral("level"), level}};
     return block;
 }
 }
