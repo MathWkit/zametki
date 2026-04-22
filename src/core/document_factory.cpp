@@ -14,5 +14,13 @@ Document DocumentFactory::createEmptyDocument(const QString &title) const
     document.title = title;
     return document;
 }
-}
 
+Block DocumentFactory::createParagraphBlock(const QString &text) const
+{
+    Block block;
+    block.id = m_idGenerator.create();
+    block.type = BlockType::Paragraph;
+    block.data = text;
+    return block;
+}
+}
