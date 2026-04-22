@@ -35,6 +35,7 @@ qt_add_executable(appzametki
         include/core/block.h
         include/core/document.h
         include/core/unsupported_block.h
+        include/core/id_generator.h
 )
 
 target_include_directories(appzametki
