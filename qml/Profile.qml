@@ -107,7 +107,8 @@ Item {
 
                 AppSectionCard {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: currentAccountContent.implicitHeight + Palette.spacingLg
+                    Layout.preferredHeight: Math.max(currentAccountContent.implicitHeight + Palette.spacingXl,
+                                                     Palette.avatarBase + Palette.spacingXl * 2)
 
                     RowLayout {
                         id: currentAccountContent
