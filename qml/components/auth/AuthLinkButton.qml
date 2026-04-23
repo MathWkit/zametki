@@ -3,7 +3,7 @@ import ".."
 import "../../scripts/Theme.js" as Palette
 
 AppActionButton {
-    textColor: Palette.accentPrimary
+    textColor: Palette.textPrimary
     backgroundColor: "transparent"
     hoverBackgroundColor: "transparent"
     pressedBackgroundColor: "transparent"
