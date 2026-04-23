@@ -3,6 +3,7 @@ import QtQuick.Controls 6.8
 import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
 import "components"
+import "components/share"
 
 Item {
     id: item1
@@ -55,19 +56,25 @@ Item {
     Rectangle {
         id: rectangle
         width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, parent.width - (item1.dialogHorizontalMargin * 2)))
-        height: Math.min(Palette.dialogMaxHeight, Math.max(0, parent.height - (item1.dialogHorizontalMargin * 2)))
+        readonly property int maxOuterHeight: Math.min(Palette.dialogMaxHeight, Math.max(0, item1.height - (item1.dialogHorizontalMargin * 2)))
+        readonly property int columnVMargins: Palette.spacingMassive * 2
+        readonly property int columnGaps: Palette.spacingXl * 2
+        readonly property int maxBodyHeight: Math.max(120, maxOuterHeight - columnVMargins - shareHeaderRow.implicitHeight - shareFooterRow.implicitHeight - columnGaps)
+        height: Math.min(maxOuterHeight, shareColumn.implicitHeight + columnVMargins)
         color: Palette.backgroundWhite
-        radius: Palette.radiusXl
+        radius: Palette.modalSurfaceRadius
         anchors.centerIn: parent
         clip: true
 
         ColumnLayout {
+            id: shareColumn
             anchors.fill: parent
-            anchors.margins: Palette.spacingMassive
+            anchors.margins: Palette.dialogPadding
             spacing: Palette.spacingXl
 
             // ==================== 1. Заголовок Share ====================
             RowLayout {
+                id: shareHeaderRow
                 Layout.fillWidth: true
 
                 ColumnLayout {
@@ -90,28 +97,17 @@ Item {
                 Item {
                     Layout.fillWidth: true
                 }
-                Rectangle {
-                    color: Palette.surfaceColor
-                    radius: Palette.radiusMd
+                AppIconSurfaceButton {
+                    iconSource: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
                     Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                    Layout.preferredHeight: Palette.buttonHeightBase
-                    Layout.preferredWidth: Palette.buttonHeightBase
-                    TapHandler {
-                        onTapped: closeClicked()
-                    }
-                    Image {
-                        anchors.centerIn: parent
-                        source: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
-                        width: Palette.iconSmall
-                        height: Palette.iconSmall
-                    }
+                    onClicked: closeClicked()
                 }
             }
 
             Flickable {
                 id: bodyScroll
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+                Layout.preferredHeight: Math.min(bodyContent.implicitHeight, rectangle.maxBodyHeight)
                 clip: true
                 boundsBehavior: Flickable.StopAtBounds
                 contentWidth: width
@@ -189,81 +185,36 @@ Item {
                                 text: qsTr("Люди с доступом")
                             }
 
-                            // ── Первая строка (Alex) ──
-                            RowLayout {
-                                Layout.fillWidth: true
-                                spacing: Palette.spacingXl
-
-                                AppInitialsAvatar {
-                                    initials: "AK"
-                                    avatarSize: Palette.avatarMedium
-                                    initialsPixelSize: Palette.fontSizeSm
-                                    Layout.preferredWidth: Palette.avatarMedium
-                                    Layout.preferredHeight: Palette.avatarMedium
-                                    Layout.alignment: Qt.AlignVCenter
-                                }
-
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: Palette.spacingSm
-
-                                    AppBodyText {
-                                        text: qsTr("Алекс Ким")
+                            Repeater {
+                                model: [
+                                    {
+                                        participantId: "alex1",
+                                        initials: "AK",
+                                        name: qsTr("Алекс Ким"),
+                                        email: "alex@vault.app"
+                                    },
+                                    {
+                                        participantId: "alex2",
+                                        initials: "AK",
+                                        name: qsTr("Алекс Ким"),
+                                        email: "alex@vault.app"
                                     }
+                                ]
 
-                                    AppDescriptionText {
-                                        text: "alex@vault.app"
-                                    }
-                                }
-
-                                Item {
+                                ShareParticipantRow {
+                                    required property var modelData
                                     Layout.fillWidth: true
-                                }
 
-                                AppDropdown {
-                                    model: roleOptions
-                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex1"] || qsTr("Читатель")))
+                                    participantId: modelData.participantId
+                                    avatarInitials: modelData.initials
+                                    nameText: modelData.name
+                                    emailText: modelData.email
+                                    roleOptionsModel: item1.roleOptions
+                                    roleCurrentIndex: Math.max(0, item1.roleOptions.indexOf(item1.peopleRoles[modelData.participantId] || qsTr("Читатель")))
 
-                                    onActivated: changeRole("alex1", currentText)
-                                }
-                            }
-
-                            // ── Вторая строка (Alex) ──
-                            RowLayout {
-                                Layout.fillWidth: true
-                                spacing: Palette.spacingXl
-
-                                AppInitialsAvatar {
-                                    initials: "AK"
-                                    avatarSize: Palette.avatarMedium
-                                    initialsPixelSize: Palette.fontSizeSm
-                                    Layout.preferredWidth: Palette.avatarMedium
-                                    Layout.preferredHeight: Palette.avatarMedium
-                                    Layout.alignment: Qt.AlignVCenter
-                                }
-
-                                ColumnLayout {
-                                    Layout.fillWidth: true
-                                    spacing: Palette.spacingSm
-
-                                    AppBodyText {
-                                        text: qsTr("Алекс Ким")
+                                    onRoleActivated: function (newRole) {
+                                        item1.changeRole(modelData.participantId, newRole);
                                     }
-
-                                    AppDescriptionText {
-                                        text: "alex@vault.app"
-                                    }
-                                }
-
-                                Item {
-                                    Layout.fillWidth: true
-                                }
-
-                                AppDropdown {
-                                    model: roleOptions
-                                    currentIndex: Math.max(0, roleOptions.indexOf(peopleRoles["alex2"] || qsTr("Читатель")))
-
-                                    onActivated: changeRole("alex2", currentText)
                                 }
                             }
                         }
@@ -329,19 +280,23 @@ Item {
 
             // ==================== 5. Нижние кнопки ====================
             RowLayout {
+                id: shareFooterRow
                 spacing: Palette.spacingXl
                 Layout.fillWidth: true
 
                 // Copy link
                 Rectangle {
-                    color: Palette.surfaceColor
+                    color: copyLinkMouse.containsMouse ? Palette.hover : Palette.surfaceColor
                     radius: Palette.radiusMd
                     implicitWidth: copyRow.implicitWidth + (Palette.spacingXxl * 2)
                     implicitHeight: copyRow.implicitHeight + Palette.spacingXxl
                     Layout.maximumWidth: item1.width * 0.5
                     clip: true
-                    TapHandler {
-                        onTapped: copyClicked()
+
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Palette.animationFast
+                        }
                     }
 
                     RowLayout {
@@ -355,9 +310,18 @@ Item {
                         }
                         AppSidebarLabelText {
                             text: qsTr("Копировать ссылку")
+                            textColor: Palette.textPrimary
                             Layout.fillWidth: true
                             elide: Text.ElideRight
                         }
+                    }
+
+                    MouseArea {
+                        id: copyLinkMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: copyClicked()
                     }
                 }
 
@@ -377,7 +341,7 @@ Item {
                 // Done
                 AppActionButton {
                     text: qsTr("Готово")
-                    textColor: Palette.backgroundWhite
+                    textColor: Palette.textPrimary
                     backgroundColor: Palette.accentPrimary
                     radius: Palette.radiusMd
                     onClicked: doneClicked()

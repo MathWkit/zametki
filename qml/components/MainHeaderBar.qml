@@ -17,8 +17,7 @@ Rectangle {
 
     height: Palette.headerHeight
     color: Palette.headerBackground
-    border.width: 1
-    border.color: Palette.border
+    border.width: 0
 
     Item {
         anchors.left: parent.left
@@ -34,28 +33,21 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             spacing: Palette.spacingLg
 
-            MouseArea {
-                id: hideSidebarArea
-                width: Palette.iconSmall
-                height: Palette.iconSmall
+            Item {
+                width: Palette.buttonHeightSmall
+                height: Palette.buttonHeightSmall
                 anchors.verticalCenter: parent.verticalCenter
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: root.hideSidebarClicked()
-                onEntered: hideSidebarImage.opacity = 0.6
-                onExited: hideSidebarImage.opacity = 1.0
 
-                Image {
-                    id: hideSidebarImage
-                    source: root.sidebarVisible ? "qrc:/qt/qml/zametki/assets/icons/header/hide-sidebar.svg" : "qrc:/qt/qml/zametki/assets/icons/header/show-sidebar.svg"
-                    width: Palette.iconSmall
-                    height: Palette.iconSmall
-                    fillMode: Image.PreserveAspectFit
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Palette.animationFast
-                        }
-                    }
+                AppIconSurfaceButton {
+                    anchors.fill: parent
+                    iconSource: root.sidebarVisible ? "qrc:/qt/qml/zametki/assets/icons/header/hide-sidebar.svg" : "qrc:/qt/qml/zametki/assets/icons/header/show-sidebar.svg"
+                    iconWidth: Palette.iconSmall
+                    iconHeight: Palette.iconSmall
+                    surfaceColor: "transparent"
+                    hoverSurfaceColor: Palette.hover
+                    pressedSurfaceColor: Palette.selected
+                    cornerRadius: Palette.radiusMd
+                    onClicked: root.hideSidebarClicked()
                 }
             }
 
@@ -101,76 +93,66 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: Palette.spacingMassive
 
-        MouseArea {
-            id: shareArea
-            width: Palette.iconSmall
-            height: Palette.iconSmall
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
-            onClicked: root.shareClicked()
-            onEntered: shareImage.opacity = 0.6
-            onExited: shareImage.opacity = 1.0
+        Item {
+            width: Palette.buttonHeightSmall
+            height: Palette.buttonHeightSmall
+            anchors.verticalCenter: parent.verticalCenter
 
-            Image {
-                id: shareImage
-                source: "qrc:/qt/qml/zametki/assets/icons/header/share.svg"
-                width: Palette.iconSmall
-                height: Palette.iconSmall
-                fillMode: Image.PreserveAspectFit
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Palette.animationFast
-                    }
-                }
+            AppIconSurfaceButton {
+                anchors.fill: parent
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/header/share.svg"
+                iconWidth: Palette.iconSmall
+                iconHeight: Palette.iconSmall
+                surfaceColor: "transparent"
+                hoverSurfaceColor: Palette.hover
+                pressedSurfaceColor: Palette.selected
+                cornerRadius: Palette.radiusMd
+                onClicked: root.shareClicked()
             }
         }
 
-        MouseArea {
-            id: favoriteArea
-            width: Palette.iconSmall
-            height: Palette.iconSmall
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
-            onClicked: root.favoriteClicked()
-            onEntered: favoriteImage.opacity = 0.6
-            onExited: favoriteImage.opacity = 1.0
+        Item {
+            width: Palette.buttonHeightSmall
+            height: Palette.buttonHeightSmall
+            anchors.verticalCenter: parent.verticalCenter
 
-            Image {
-                id: favoriteImage
-                source: "qrc:/qt/qml/zametki/assets/icons/header/favorite.svg"
-                width: Palette.iconSmall
-                height: Palette.iconSmall
-                fillMode: Image.PreserveAspectFit
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Palette.animationFast
-                    }
-                }
+            AppIconSurfaceButton {
+                anchors.fill: parent
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/header/favorite.svg"
+                iconWidth: Palette.iconSmall
+                iconHeight: Palette.iconSmall
+                surfaceColor: "transparent"
+                hoverSurfaceColor: Palette.hover
+                pressedSurfaceColor: Palette.selected
+                cornerRadius: Palette.radiusMd
+                onClicked: root.favoriteClicked()
             }
         }
 
-        MouseArea {
-            id: moreArea
-            width: Palette.iconSmall
-            height: Palette.iconSmall
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
-            onClicked: root.moreClicked()
-            onEntered: moreImage.opacity = 0.6
-            onExited: moreImage.opacity = 1.0
+        Item {
+            width: Palette.buttonHeightSmall
+            height: Palette.buttonHeightSmall
+            anchors.verticalCenter: parent.verticalCenter
 
-            Image {
-                id: moreImage
-                source: "qrc:/qt/qml/zametki/assets/icons/header/more.svg"
-                width: Palette.iconSmall
-                height: Palette.iconSmall
-                fillMode: Image.PreserveAspectFit
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: Palette.animationFast
-                    }
-                }
+            AppIconSurfaceButton {
+                anchors.fill: parent
+                iconSource: "qrc:/qt/qml/zametki/assets/icons/header/more.svg"
+                iconWidth: Palette.iconSmall
+                iconHeight: Palette.iconSmall
+                surfaceColor: "transparent"
+                hoverSurfaceColor: Palette.hover
+                pressedSurfaceColor: Palette.selected
+                cornerRadius: Palette.radiusMd
+                onClicked: root.moreClicked()
             }
         }
+    }
+
+    Rectangle {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        implicitHeight: 1
+        color: Palette.border
     }
 }

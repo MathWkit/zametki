@@ -7,7 +7,7 @@ Rectangle {
     property string initials: ""
     property int avatarSize: Palette.avatarBase
     property color avatarColor: Palette.accentPrimary
-    property color initialsColor: Palette.backgroundWhite
+    property color initialsColor: Palette.textPrimary
     property string uiFontFamily: Palette.fontFamily
     property int initialsPixelSize: Palette.fontSizeXl
     property int initialsWeight: 700

@@ -63,6 +63,8 @@ qt_add_qml_module(appzametki
         qml/components/AppInputField.qml
         qml/components/AppDropdown.qml
         qml/components/AppInitialsAvatar.qml
+        qml/components/AppIconSurfaceButton.qml
+        qml/components/share/ShareParticipantRow.qml
         qml/components/main/MainModalOverlay.qml
         qml/components/settings/SettingsNavItem.qml
         qml/components/settings/SettingsControlRow.qml

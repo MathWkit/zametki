@@ -12,10 +12,26 @@ Rectangle {
 
     property string uiFontFamily: Palette.fontFamily
     property color activeBackgroundColor: Palette.accentSidebar
-    property color activeTextColor: Palette.accentPrimary
+    property color hoverBackgroundColor: Palette.hover
+    property color pressedBackgroundColor: Palette.selected
+    property color activeTextColor: Palette.textPrimary
     property color textColor: Palette.textSecondary
+    property bool clickable: true
 
-    color: active ? activeBackgroundColor : "transparent"
+    signal clicked
+
+    color: {
+        if (active) {
+            return activeBackgroundColor;
+        }
+        if (navMouseArea.pressed && clickable) {
+            return pressedBackgroundColor;
+        }
+        if (navMouseArea.containsMouse && clickable) {
+            return hoverBackgroundColor;
+        }
+        return "transparent";
+    }
     radius: Palette.radiusMd
     Layout.fillWidth: true
     implicitHeight: navLayout.implicitHeight + (Palette.spacingXl * 2)
@@ -38,5 +54,14 @@ Rectangle {
             uiFontFamily: control.uiFontFamily
             textColor: control.active ? control.activeTextColor : control.textColor
         }
+    }
+
+    MouseArea {
+        id: navMouseArea
+        anchors.fill: parent
+        enabled: control.clickable
+        hoverEnabled: control.clickable
+        cursorShape: control.clickable ? Qt.PointingHandCursor : Qt.ArrowCursor
+        onClicked: control.clicked()
     }
 }

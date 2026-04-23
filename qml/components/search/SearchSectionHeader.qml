@@ -7,6 +7,6 @@ Text {
 
     color: textColor
     font.family: uiFontFamily
-    font.pixelSize: Palette.fontSizeXs
+    font.pixelSize: Palette.fontSizeSm
     font.weight: Font.DemiBold
 }

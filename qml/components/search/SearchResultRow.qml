@@ -11,6 +11,7 @@ Rectangle {
     property string subtitleText: ""
     property color rowColor: "transparent"
     property color rowHoverColor: Palette.hover
+    property color rowPressedColor: Palette.selected
     property color titleColor: Palette.textPrimary
     property color subtitleColor: Palette.textSecondary
     property bool showHover: true
@@ -19,7 +20,18 @@ Rectangle {
 
     Layout.fillWidth: true
     implicitHeight: subtitleText.length > 0 ? Palette.searchResultRowHeightWithSubtitle : Palette.searchResultRowHeight
-    color: rowMouseArea.containsMouse && showHover ? rowHoverColor : rowColor
+    color: {
+        if (!showHover) {
+            return rowColor;
+        }
+        if (rowMouseArea.pressed) {
+            return rowPressedColor;
+        }
+        if (rowMouseArea.containsMouse) {
+            return rowHoverColor;
+        }
+        return rowColor;
+    }
     radius: Palette.radiusMd
 
     RowLayout {
@@ -31,8 +43,8 @@ Rectangle {
         Image {
             source: control.iconSource
             fillMode: Image.PreserveAspectFit
-            Layout.preferredWidth: 16
-            Layout.preferredHeight: 16
+            Layout.preferredWidth: Palette.iconSmall
+            Layout.preferredHeight: Palette.iconSmall
             Layout.alignment: Qt.AlignVCenter
         }
 
@@ -51,7 +63,7 @@ Rectangle {
                 visible: control.subtitleText.length > 0
                 text: control.subtitleText
                 textColor: control.subtitleColor
-                textPointSize: Palette.fontSizeSm
+                textPixelSize: Palette.fontSizeSm
                 elide: Text.ElideRight
                 Layout.fillWidth: true
             }

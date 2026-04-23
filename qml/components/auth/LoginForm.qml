@@ -50,13 +50,13 @@ Item {
 
         AppPageTitleText {
             text: qsTr("Вход")
-            textPointSize: Palette.fontSizeXxl
+            textPixelSize: Palette.fontSizeXxl
             Layout.fillWidth: true
         }
 
         AppDescriptionText {
             text: qsTr("Используйте существующий аккаунт")
-            textPointSize: Palette.fontSizeSm
+            textPixelSize: Palette.fontSizeSm
             Layout.fillWidth: true
         }
 
@@ -77,7 +77,7 @@ Item {
             text: root.emailError
             visible: text.length > 0
             textColor: Palette.errorColor
-            textPointSize: Palette.fontSizeSm
+            textPixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }
@@ -100,7 +100,7 @@ Item {
             text: root.passwordError
             visible: text.length > 0
             textColor: Palette.errorColor
-            textPointSize: Palette.fontSizeSm
+            textPixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }
@@ -127,7 +127,7 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     text: rememberCheckBox.checked ? "\u2713" : ""
-                    color: Palette.backgroundWhite
+                    color: Palette.textPrimary
                     font.pixelSize: Palette.fontSizeSm
                     font.family: Palette.fontFamily
                     font.weight: Font.DemiBold

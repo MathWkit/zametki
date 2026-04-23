@@ -3,12 +3,12 @@ import ".."
 import "../../scripts/Theme.js" as Palette
 
 AppActionButton {
-    textColor: Palette.backgroundWhite
+    textColor: Palette.textPrimary
     backgroundColor: Palette.accentPrimary
     hoverBackgroundColor: Palette.authAccentHover
     pressedBackgroundColor: Palette.authAccentPressed
     fontFamily: Palette.fontFamily
-    fontPointSize: Palette.fontSizeMd
+    fontPixelSize: Palette.fontSizeMd
     fontWeight: Font.DemiBold
     radius: Palette.radiusLg
     implicitHeight: Palette.buttonHeightLarge
