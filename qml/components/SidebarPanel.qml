@@ -136,9 +136,8 @@ Rectangle {
             Layout.fillWidth: true
             Layout.leftMargin: Palette.spacingXxl
             Layout.rightMargin: Palette.spacingXxl
-            Layout.topMargin: Palette.spacingLg
             color: "transparent"
-            implicitHeight: headerContent.implicitHeight + Palette.spacingXxl
+            implicitHeight: Palette.headerHeight - 1
 
             ColumnLayout {
                 id: headerContent
@@ -178,13 +177,13 @@ Rectangle {
                         }
                     }
                 }
-
-                Rectangle {
-                    Layout.fillWidth: true
-                    implicitHeight: 1
-                    color: Palette.border
-                }
             }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            implicitHeight: 1
+            color: Palette.border
         }
 
         ColumnLayout {
