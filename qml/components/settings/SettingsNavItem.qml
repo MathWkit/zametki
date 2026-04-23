@@ -14,7 +14,7 @@ Rectangle {
     property color activeBackgroundColor: Palette.accentSidebar
     property color hoverBackgroundColor: Palette.hover
     property color pressedBackgroundColor: Palette.selected
-    property color activeTextColor: Palette.accentPrimary
+    property color activeTextColor: Palette.textPrimary
     property color textColor: Palette.textSecondary
     property bool clickable: true
 
