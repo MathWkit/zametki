@@ -17,8 +17,7 @@ Rectangle {
 
     height: Palette.headerHeight
     color: Palette.headerBackground
-    border.width: 1
-    border.color: Palette.border
+    border.width: 0
 
     Item {
         anchors.left: parent.left
@@ -147,5 +146,13 @@ Rectangle {
                 onClicked: root.moreClicked()
             }
         }
+    }
+
+    Rectangle {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        implicitHeight: 1
+        color: Palette.border
     }
 }
