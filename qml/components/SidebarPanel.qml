@@ -225,10 +225,12 @@ Rectangle {
             clip: true
             boundsBehavior: Flickable.StopAtBounds
             flickableDirection: Flickable.VerticalFlick
-            contentWidth: width
+            readonly property real scrollBarReserve: noteListScrollBar.visible ? (noteListScrollBar.width + Palette.spacingSm) : 0
+            contentWidth: Math.max(0, width - scrollBarReserve)
             contentHeight: folderNoteList.implicitHeight
 
             ScrollBar.vertical: ScrollBar {
+                id: noteListScrollBar
                 policy: ScrollBar.AsNeeded
                 minimumSize: 0.1
                 width: Palette.spacingSm + Palette.spacingSm
@@ -246,7 +248,7 @@ Rectangle {
 
             FolderNoteList {
                 id: folderNoteList
-                width: noteListScroller.width
+                width: noteListScroller.contentWidth
 
                 fontFamily: root.fontFamily
                 folderTitles: root.folderTitles
