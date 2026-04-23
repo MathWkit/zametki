@@ -127,7 +127,7 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     text: rememberCheckBox.checked ? "\u2713" : ""
-                    color: Palette.backgroundWhite
+                    color: Palette.textPrimary
                     font.pixelSize: Palette.fontSizeSm
                     font.family: Palette.fontFamily
                     font.weight: Font.DemiBold

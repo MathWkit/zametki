@@ -215,7 +215,7 @@ Item {
                     text: qsTr("Добавить")
                     Layout.preferredWidth: Palette.actionButtonMediumWidth
                     Layout.preferredHeight: Palette.buttonHeightBase
-                    textColor: Palette.backgroundWhite
+                    textColor: Palette.textPrimary
                     backgroundColor: Palette.accentPrimary
                     onClicked: {
                         console.log("Кнопка: Добавить");
@@ -281,7 +281,7 @@ Item {
 
                                     AppActionButton {
                                         text: modelData.isCurrent ? qsTr("Текущий") : qsTr("Выбрать")
-                                        textColor: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
+                                        textColor: Palette.textPrimary
                                         backgroundColor: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
                                         borderColor: modelData.isCurrent ? Palette.accentPrimary : Palette.borderSoft
                                         borderWidth: 1

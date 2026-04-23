@@ -341,7 +341,7 @@ Item {
                 // Done
                 AppActionButton {
                     text: qsTr("Готово")
-                    textColor: Palette.backgroundWhite
+                    textColor: Palette.textPrimary
                     backgroundColor: Palette.accentPrimary
                     radius: Palette.radiusMd
                     onClicked: doneClicked()

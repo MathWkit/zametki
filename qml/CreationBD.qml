@@ -98,7 +98,7 @@ Rectangle {
                 fontFamily: root.fontFamily
                 fontPixelSize: Palette.fontSizeMd
                 fontWeight: Font.DemiBold
-                textColor: Palette.backgroundWhite
+                textColor: Palette.textPrimary
                 backgroundColor: Palette.accentPrimary
                 hoverBackgroundColor: Palette.authAccentHover
                 pressedBackgroundColor: Palette.authAccentPressed
