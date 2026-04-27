@@ -196,6 +196,42 @@ QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) con
     return blockObject;
 }
 
+core::Block DocumentJsonSerializer::deserializeBlock(const QJsonObject &object) const
+{
+    core::Block block;
+
+    if (object.contains(QStringLiteral("id")) && object.value(QStringLiteral("id")).isString())
+    {
+        block.id = object.value(QStringLiteral("id")).toString();
+    }
+    else
+    {
+        block.id.clear();
+    }
+
+    if (object.contains(QStringLiteral("type")) && object.value(QStringLiteral("type")).isString())
+    {
+        block.type = BlockTypeCodec::fromString(object.value(QStringLiteral("type")).toString());
+    }
+    else
+    {
+        block.type = core::BlockType::Paragraph;
+    }
+
+    if (object.contains(QStringLiteral("data")) && object.value(QStringLiteral("data")).isObject())
+    {
+        const QJsonObject dataObj = object.value(QStringLiteral("data")).toObject();
+        const QVariantMap vm = dataObj.toVariantMap();
+        block.data = vm;
+    }
+    else
+    {
+        block.data = QVariant();
+    }
+
+    return block;
+}
+
 QJsonObject DocumentJsonSerializer::serializeHeadingBlock(const core::HeadingBlock &block) const
 {
     QJsonObject object;
