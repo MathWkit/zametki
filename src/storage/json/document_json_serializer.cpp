@@ -368,6 +368,12 @@ bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, Q
         return false;
     }
 
+    if (object.contains(QStringLiteral("tags")) && !object.value(QStringLiteral("tags")).isArray())
+    {
+        error = QStringLiteral("'tags' is present but not an array");
+        return false;
+    }
+
     return true;
 }
 
