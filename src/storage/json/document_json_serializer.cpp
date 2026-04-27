@@ -5,6 +5,7 @@
 #include <QDate>
 
 #include "storage/json/block_type_codec.h"
+#include <QDebug>
 
 namespace zametki::storage::json
 {
@@ -33,38 +34,37 @@ QJsonObject DocumentJsonSerializer::serialize(const core::Document &document) co
 
 core::Document DocumentJsonSerializer::deserialize(const QJsonObject &object) const
 {
+    QString error;
+    if (!validateDocumentObject(object, error))
+    {
+        qWarning().noquote() << QStringLiteral("Document JSON validation failed:") << error;
+        return {};
+    }
+
     core::Document document;
+    document.id = object.value(QStringLiteral("id")).toString();
+    document.title = object.value(QStringLiteral("title")).toString();
 
-    if (object.contains(QStringLiteral("id")) && object.value(QStringLiteral("id")).isString())
+    const QJsonArray tagsArray = object.value(QStringLiteral("tags")).toArray();
+    for (const QJsonValue &v : tagsArray)
     {
-        document.id = object.value(QStringLiteral("id")).toString();
+        if (v.isString())
+            document.tags.append(v.toString());
     }
 
-    if (object.contains(QStringLiteral("title")) && object.value(QStringLiteral("title")).isString())
+    const QJsonArray blocksArray = object.value(QStringLiteral("blocks")).toArray();
+    for (const QJsonValue &bv : blocksArray)
     {
-        document.title = object.value(QStringLiteral("title")).toString();
-    }
-
-    if (object.contains(QStringLiteral("tags")) && object.value(QStringLiteral("tags")).isArray())
-    {
-        const QJsonArray tagsArray = object.value(QStringLiteral("tags")).toArray();
-        for (const QJsonValue &v : tagsArray)
+        if (!bv.isObject())
+            continue;
+        const QJsonObject bobj = bv.toObject();
+        QString berr;
+        if (!validateBlockObject(bobj, berr))
         {
-            if (v.isString())
-                document.tags.append(v.toString());
+            qWarning().noquote() << QStringLiteral("Skipping invalid block:") << berr;
+            continue;
         }
-    }
-
-    if (object.contains(QStringLiteral("blocks")) && object.value(QStringLiteral("blocks")).isArray())
-    {
-        const QJsonArray blocksArray = object.value(QStringLiteral("blocks")).toArray();
-        for (const QJsonValue &bv : blocksArray)
-        {
-            if (!bv.isObject())
-                continue;
-            const QJsonObject bobj = bv.toObject();
-            document.blocks.append(deserializeBlock(bobj));
-        }
+        document.blocks.append(deserializeBlock(bobj));
     }
 
     return document;
@@ -263,6 +263,54 @@ core::Block DocumentJsonSerializer::deserializeBlock(const QJsonObject &object) 
     }
 
     return block;
+}
+
+bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, QString &error) const
+{
+    if (!object.contains(QStringLiteral("id")) || !object.value(QStringLiteral("id")).isString())
+    {
+        error = QStringLiteral("missing or invalid 'id'");
+        return false;
+    }
+
+    if (!object.contains(QStringLiteral("blocks")) || !object.value(QStringLiteral("blocks")).isArray())
+    {
+        error = QStringLiteral("missing or invalid 'blocks' array");
+        return false;
+    }
+
+    // title is optional but if present must be string
+    if (object.contains(QStringLiteral("title")) && !object.value(QStringLiteral("title")).isString())
+    {
+        error = QStringLiteral("'title' is present but not a string");
+        return false;
+    }
+
+    return true;
+}
+
+bool DocumentJsonSerializer::validateBlockObject(const QJsonObject &object, QString &error) const
+{
+    if (!object.contains(QStringLiteral("id")) || !object.value(QStringLiteral("id")).isString())
+    {
+        error = QStringLiteral("block missing or invalid 'id'");
+        return false;
+    }
+
+    if (!object.contains(QStringLiteral("type")) || !object.value(QStringLiteral("type")).isString())
+    {
+        error = QStringLiteral("block missing or invalid 'type'");
+        return false;
+    }
+
+    // data may be object; if present must be object
+    if (object.contains(QStringLiteral("data")) && !object.value(QStringLiteral("data")).isObject())
+    {
+        error = QStringLiteral("block 'data' is present but not an object");
+        return false;
+    }
+
+    return true;
 }
 
 QJsonObject DocumentJsonSerializer::serializeHeadingBlock(const core::HeadingBlock &block) const
