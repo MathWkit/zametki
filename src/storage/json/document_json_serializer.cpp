@@ -13,7 +13,6 @@ namespace zametki::storage::json
 QJsonObject DocumentJsonSerializer::serialize(const core::Document &document) const
 {
     QJsonObject object;
-    // document format version
     object.insert(QStringLiteral("format_version"), QStringLiteral("v1"));
     object.insert(QStringLiteral("id"), document.id);
     object.insert(QStringLiteral("title"), document.title);
@@ -226,7 +225,6 @@ QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) con
     }
     else
     {
-        // if Unsupported, try to return original sourceType/sourceData if present
         if (block.type == core::BlockType::Unsupported)
         {
             if (block.data.canConvert<QVariantMap>())
@@ -234,9 +232,11 @@ QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) con
                 const QVariantMap um = block.data.toMap();
                 const QString sourceType = um.value(QStringLiteral("sourceType")).toString();
                 const QVariantMap sourceData = um.value(QStringLiteral("sourceData")).toMap();
-                // set type to original sourceType
-                blockObject.insert(QStringLiteral("type"), sourceType);
-                // convert sourceData to QJsonObject
+
+                if (!sourceType.isEmpty())
+                {
+                    blockObject.insert(QStringLiteral("type"), sourceType);
+                }
                 QJsonObject dataObj = QJsonObject::fromVariantMap(sourceData);
                 blockObject.insert(QStringLiteral("data"), dataObj);
             }
@@ -340,7 +340,6 @@ bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, Q
         error = QStringLiteral("missing or invalid 'blocks' array");
         return false;
     }
-    // check uniqueness of block ids
     {
         const QJsonArray blocksArray = object.value(QStringLiteral("blocks")).toArray();
         QSet<QString> seenIds;
@@ -363,7 +362,6 @@ bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, Q
             seenIds.insert(id);
         }
     }
-    // title is optional but if present must be string
     if (object.contains(QStringLiteral("title")) && !object.value(QStringLiteral("title")).isString())
     {
         error = QStringLiteral("'title' is present but not a string");
@@ -387,7 +385,6 @@ bool DocumentJsonSerializer::validateBlockObject(const QJsonObject &object, QStr
         return false;
     }
 
-    // data may be object; if present must be object
     if (object.contains(QStringLiteral("data")) && !object.value(QStringLiteral("data")).isObject())
     {
         error = QStringLiteral("block 'data' is present but not an object");
