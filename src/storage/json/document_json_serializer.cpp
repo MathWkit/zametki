@@ -1,6 +1,7 @@
 #include "storage/json/document_json_serializer.h"
 
 #include <QJsonArray>
+#include <QVariantMap>
 
 #include "storage/json/block_type_codec.h"
 
@@ -31,6 +32,23 @@ QJsonObject DocumentJsonSerializer::serialize(const core::Document &document) co
             const core::ParagraphBlock paragraphBlock{block.data.toString()};
             blockObject.insert(QStringLiteral("data"), serializeParagraphBlock(paragraphBlock));
         }
+        else if (block.type == core::BlockType::Heading)
+        {
+            core::HeadingBlock headingBlock;
+
+            if (block.data.canConvert<QVariantMap>())
+            {
+                const QVariantMap headingData = block.data.toMap();
+                headingBlock.text = headingData.value(QStringLiteral("text")).toString();
+                headingBlock.level = headingData.value(QStringLiteral("level"), 1).toInt();
+            }
+            else
+            {
+                headingBlock.text = block.data.toString();
+            }
+
+            blockObject.insert(QStringLiteral("data"), serializeHeadingBlock(headingBlock));
+        }
         else
         {
             blockObject.insert(QStringLiteral("data"), QJsonObject{});
@@ -53,6 +71,14 @@ QJsonObject DocumentJsonSerializer::serializeParagraphBlock(const core::Paragrap
 {
     QJsonObject object;
     object.insert(QStringLiteral("text"), block.text);
+    return object;
+}
+
+QJsonObject DocumentJsonSerializer::serializeHeadingBlock(const core::HeadingBlock &block) const
+{
+    QJsonObject object;
+    object.insert(QStringLiteral("text"), block.text);
+    object.insert(QStringLiteral("level"), block.level);
     return object;
 }
 }

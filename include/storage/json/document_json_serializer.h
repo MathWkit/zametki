@@ -3,6 +3,7 @@
 
 #include <QJsonObject>
 
+#include "core/blocks/heading_block.h"
 #include "core/blocks/paragraph_block.h"
 #include "core/document.h"
 
@@ -16,6 +17,7 @@ public:
 
 private:
     QJsonObject serializeParagraphBlock(const core::ParagraphBlock &block) const;
+    QJsonObject serializeHeadingBlock(const core::HeadingBlock &block) const;
 };
 }
 
