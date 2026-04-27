@@ -21,6 +21,7 @@ private:
     QJsonObject serializeHeadingBlock(const core::HeadingBlock &block) const;
     QJsonObject serializeTodoBlock(const core::TodoBlock &block) const;
     QJsonObject serializeBlock(const core::Block &block) const;
+    core::ParagraphBlock deserializeParagraphBlock(const QJsonObject &object) const;
 };
 }
 

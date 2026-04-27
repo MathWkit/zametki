@@ -43,6 +43,20 @@ QJsonObject DocumentJsonSerializer::serializeParagraphBlock(const core::Paragrap
     return object;
 }
 
+core::ParagraphBlock DocumentJsonSerializer::deserializeParagraphBlock(const QJsonObject &object) const
+{
+    core::ParagraphBlock block;
+    if (object.contains(QStringLiteral("text")) && object.value(QStringLiteral("text")).isString())
+    {
+        block.text = object.value(QStringLiteral("text")).toString();
+    }
+    else
+    {
+        block.text.clear();
+    }
+    return block;
+}
+
 QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) const
 {
     QJsonObject blockObject;
