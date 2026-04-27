@@ -1,6 +1,7 @@
 #include "storage/json/document_file_repository.h"
 
 #include <QFile>
+#include <QSaveFile>
 #include <QJsonDocument>
 #include <QDir>
 #include <QDebug>
@@ -50,9 +51,35 @@ core::Document DocumentFileRepository::read(const QString &id) const
 
 bool DocumentFileRepository::write(const QString &id, const core::Document &document) const
 {
-    Q_UNUSED(id)
-    Q_UNUSED(document)
-    return false;
+    const QString filePath = documentFilePath(id);
+
+    QSaveFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        qWarning().noquote() << QStringLiteral("Failed to open document file for writing:") << filePath;
+        return false;
+    }
+
+    DocumentJsonSerializer serializer;
+    const QJsonObject obj = serializer.serialize(document);
+    const QJsonDocument doc(obj);
+    const QByteArray data = doc.toJson(QJsonDocument::Indented);
+
+    qint64 written = file.write(data);
+    if (written != data.size())
+    {
+        qWarning().noquote() << QStringLiteral("Failed to write complete data to file:") << filePath;
+        file.cancelWriting();
+        return false;
+    }
+
+    if (!file.commit())
+    {
+        qWarning().noquote() << QStringLiteral("Failed to commit file write:") << filePath;
+        return false;
+    }
+
+    return true;
 }
 
 bool DocumentFileRepository::remove(const QString &id) const
