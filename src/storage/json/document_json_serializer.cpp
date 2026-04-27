@@ -296,7 +296,17 @@ core::Block DocumentJsonSerializer::deserializeBlock(const QJsonObject &object) 
     }
     else
     {
-        block.data = QVariant();
+        if (block.type == core::BlockType::Unsupported)
+        {
+            QVariantMap umap;
+            umap.insert(QStringLiteral("sourceType"), typeStr);
+            umap.insert(QStringLiteral("sourceData"), QVariantMap{});
+            block.data = umap;
+        }
+        else
+        {
+            block.data = QVariant();
+        }
     }
 
     return block;
