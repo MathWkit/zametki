@@ -346,7 +346,10 @@ bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, Q
         for (const QJsonValue &bv : blocksArray)
         {
             if (!bv.isObject())
-                continue;
+            {
+                error = QStringLiteral("blocks array contains non-object item");
+                return false;
+            }
             const QJsonObject bobj = bv.toObject();
             if (!bobj.contains(QStringLiteral("id")) || !bobj.value(QStringLiteral("id")).isString())
             {
@@ -362,6 +365,7 @@ bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, Q
             seenIds.insert(id);
         }
     }
+    // title is optional but if present must be string
     if (object.contains(QStringLiteral("title")) && !object.value(QStringLiteral("title")).isString())
     {
         error = QStringLiteral("'title' is present but not a string");
@@ -372,6 +376,18 @@ bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, Q
     {
         error = QStringLiteral("'tags' is present but not an array");
         return false;
+    }
+    if (object.contains(QStringLiteral("tags")))
+    {
+        const QJsonArray tagsArray = object.value(QStringLiteral("tags")).toArray();
+        for (const QJsonValue &tv : tagsArray)
+        {
+            if (!tv.isString())
+            {
+                error = QStringLiteral("tags array contains non-string item");
+                return false;
+            }
+        }
     }
 
     return true;
