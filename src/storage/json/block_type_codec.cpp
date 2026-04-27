@@ -12,9 +12,11 @@ QString BlockTypeCodec::toString(const core::BlockType type)
         return QStringLiteral("heading");
     case core::BlockType::Todo:
         return QStringLiteral("todo");
+    case core::BlockType::Unsupported:
+        return QStringLiteral("unsupported");
     }
 
-    return QStringLiteral("paragraph");
+    return QStringLiteral("unsupported");
 }
 
 core::BlockType BlockTypeCodec::fromString(const QString &value)
@@ -34,7 +36,8 @@ core::BlockType BlockTypeCodec::fromString(const QString &value)
         return core::BlockType::Todo;
     }
 
-    return core::BlockType::Paragraph;
+    // unknown type
+    return core::BlockType::Unsupported;
 }
 }
 
