@@ -42,6 +42,7 @@ qt_add_executable(appzametki
     include/core/document_factory.h
     include/core/block_text_accessor.h
         include/storage/json/block_type_codec.h
+        src/storage/json/block_type_codec.cpp
 )
 
 target_include_directories(appzametki
