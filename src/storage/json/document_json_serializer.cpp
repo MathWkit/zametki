@@ -57,6 +57,30 @@ core::ParagraphBlock DocumentJsonSerializer::deserializeParagraphBlock(const QJs
     return block;
 }
 
+core::HeadingBlock DocumentJsonSerializer::deserializeHeadingBlock(const QJsonObject &object) const
+{
+    core::HeadingBlock block;
+    if (object.contains(QStringLiteral("text")) && object.value(QStringLiteral("text")).isString())
+    {
+        block.text = object.value(QStringLiteral("text")).toString();
+    }
+    else
+    {
+        block.text.clear();
+    }
+
+    if (object.contains(QStringLiteral("level")) && object.value(QStringLiteral("level")).isDouble())
+    {
+        block.level = object.value(QStringLiteral("level")).toInt();
+    }
+    else
+    {
+        block.level = 1;
+    }
+
+    return block;
+}
+
 QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) const
 {
     QJsonObject blockObject;
