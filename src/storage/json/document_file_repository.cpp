@@ -104,7 +104,18 @@ bool DocumentFileRepository::remove(const QString &id) const
 
 QList<QString> DocumentFileRepository::listAll() const
 {
-    return {};
+    QDir notesDir(m_notesPath);
+    QList<QString> ids;
+
+    const QStringList jsonFiles = notesDir.entryList(QStringList() << QStringLiteral("*.json"), QDir::Files);
+    for (const QString &filename : jsonFiles)
+    {
+        const QString id = filename.left(filename.size() - 5);
+        if (!id.isEmpty())
+            ids.append(id);
+    }
+
+    return ids;
 }
 
 QString DocumentFileRepository::documentFilePath(const QString &id) const
