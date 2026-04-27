@@ -3,6 +3,7 @@
 #include <QJsonArray>
 #include <QVariantMap>
 #include <QDate>
+#include <QSet>
 
 #include "storage/json/block_type_codec.h"
 #include <QDebug>
@@ -278,7 +279,29 @@ bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, Q
         error = QStringLiteral("missing or invalid 'blocks' array");
         return false;
     }
-
+    // check uniqueness of block ids
+    {
+        const QJsonArray blocksArray = object.value(QStringLiteral("blocks")).toArray();
+        QSet<QString> seenIds;
+        for (const QJsonValue &bv : blocksArray)
+        {
+            if (!bv.isObject())
+                continue;
+            const QJsonObject bobj = bv.toObject();
+            if (!bobj.contains(QStringLiteral("id")) || !bobj.value(QStringLiteral("id")).isString())
+            {
+                error = QStringLiteral("block missing or invalid 'id' (for uniqueness check)");
+                return false;
+            }
+            const QString id = bobj.value(QStringLiteral("id")).toString();
+            if (seenIds.contains(id))
+            {
+                error = QStringLiteral("duplicate block id: %1").arg(id);
+                return false;
+            }
+            seenIds.insert(id);
+        }
+    }
     // title is optional but if present must be string
     if (object.contains(QStringLiteral("title")) && !object.value(QStringLiteral("title")).isString())
     {
