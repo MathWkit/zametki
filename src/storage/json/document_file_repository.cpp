@@ -84,8 +84,22 @@ bool DocumentFileRepository::write(const QString &id, const core::Document &docu
 
 bool DocumentFileRepository::remove(const QString &id) const
 {
-    Q_UNUSED(id)
-    return false;
+    const QString filePath = documentFilePath(id);
+    QFile file(filePath);
+
+    if (!file.exists())
+    {
+        qWarning().noquote() << QStringLiteral("Document file does not exist:") << filePath;
+        return false;
+    }
+
+    if (!file.remove())
+    {
+        qWarning().noquote() << QStringLiteral("Failed to remove document file:") << filePath;
+        return false;
+    }
+
+    return true;
 }
 
 QList<QString> DocumentFileRepository::listAll() const
