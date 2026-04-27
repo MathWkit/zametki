@@ -13,6 +13,8 @@ namespace zametki::storage::json
 QJsonObject DocumentJsonSerializer::serialize(const core::Document &document) const
 {
     QJsonObject object;
+    // document format version
+    object.insert(QStringLiteral("format_version"), QStringLiteral("v1"));
     object.insert(QStringLiteral("id"), document.id);
     object.insert(QStringLiteral("title"), document.title);
 
@@ -302,6 +304,21 @@ core::Block DocumentJsonSerializer::deserializeBlock(const QJsonObject &object) 
 
 bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, QString &error) const
 {
+    // version check: if present only v1 is supported for now
+    if (object.contains(QStringLiteral("format_version")))
+    {
+        if (!object.value(QStringLiteral("format_version")).isString())
+        {
+            error = QStringLiteral("invalid 'format_version' field");
+            return false;
+        }
+        const QString ver = object.value(QStringLiteral("format_version")).toString();
+        if (ver != QStringLiteral("v1"))
+        {
+            error = QStringLiteral("unsupported format version: %1").arg(ver);
+            return false;
+        }
+    }
     if (!object.contains(QStringLiteral("id")) || !object.value(QStringLiteral("id")).isString())
     {
         error = QStringLiteral("missing or invalid 'id'");
