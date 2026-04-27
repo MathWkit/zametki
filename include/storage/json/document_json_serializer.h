@@ -3,6 +3,7 @@
 
 #include <QJsonObject>
 
+#include "core/blocks/paragraph_block.h"
 #include "core/document.h"
 
 namespace zametki::storage::json
@@ -12,6 +13,9 @@ class DocumentJsonSerializer
 public:
     QJsonObject serialize(const core::Document &document) const;
     core::Document deserialize(const QJsonObject &object) const;
+
+private:
+    QJsonObject serializeParagraphBlock(const core::ParagraphBlock &block) const;
 };
 }
 
