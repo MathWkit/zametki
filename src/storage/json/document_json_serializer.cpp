@@ -2,6 +2,7 @@
 
 #include <QJsonArray>
 #include <QVariantMap>
+#include <QDate>
 
 #include "storage/json/block_type_codec.h"
 
@@ -76,6 +77,59 @@ core::HeadingBlock DocumentJsonSerializer::deserializeHeadingBlock(const QJsonOb
     else
     {
         block.level = 1;
+    }
+
+    return block;
+}
+
+core::TodoBlock DocumentJsonSerializer::deserializeTodoBlock(const QJsonObject &object) const
+{
+    core::TodoBlock block;
+    if (object.contains(QStringLiteral("text")) && object.value(QStringLiteral("text")).isString())
+    {
+        block.text = object.value(QStringLiteral("text")).toString();
+    }
+    else
+    {
+        block.text.clear();
+    }
+
+    if (object.contains(QStringLiteral("done")))
+    {
+        const QJsonValue v = object.value(QStringLiteral("done"));
+        if (v.isBool()) block.done = v.toBool();
+        else block.done = v.toInt() != 0;
+    }
+    else
+    {
+        block.done = false;
+    }
+
+    if (object.contains(QStringLiteral("priority")) && object.value(QStringLiteral("priority")).isString())
+    {
+        block.priority = object.value(QStringLiteral("priority")).toString();
+    }
+    else
+    {
+        block.priority.clear();
+    }
+
+    if (object.contains(QStringLiteral("deadline")) && object.value(QStringLiteral("deadline")).isString())
+    {
+        block.deadline = QDate::fromString(object.value(QStringLiteral("deadline")).toString(), Qt::ISODate);
+    }
+    else
+    {
+        block.deadline = QDate();
+    }
+
+    if (object.contains(QStringLiteral("color")) && object.value(QStringLiteral("color")).isString())
+    {
+        block.color = object.value(QStringLiteral("color")).toString();
+    }
+    else
+    {
+        block.color.clear();
     }
 
     return block;
