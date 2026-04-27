@@ -7,7 +7,8 @@ enum class BlockType
 {
     Paragraph,
     Heading,
-    Todo
+    Todo,
+    Unsupported
 };
 }
 
