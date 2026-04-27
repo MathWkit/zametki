@@ -224,7 +224,29 @@ QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) con
     }
     else
     {
-        blockObject.insert(QStringLiteral("data"), QJsonObject{});
+        // if Unsupported, try to return original sourceType/sourceData if present
+        if (block.type == core::BlockType::Unsupported)
+        {
+            if (block.data.canConvert<QVariantMap>())
+            {
+                const QVariantMap um = block.data.toMap();
+                const QString sourceType = um.value(QStringLiteral("sourceType")).toString();
+                const QVariantMap sourceData = um.value(QStringLiteral("sourceData")).toMap();
+                // set type to original sourceType
+                blockObject.insert(QStringLiteral("type"), sourceType);
+                // convert sourceData to QJsonObject
+                QJsonObject dataObj = QJsonObject::fromVariantMap(sourceData);
+                blockObject.insert(QStringLiteral("data"), dataObj);
+            }
+            else
+            {
+                blockObject.insert(QStringLiteral("data"), QJsonObject{});
+            }
+        }
+        else
+        {
+            blockObject.insert(QStringLiteral("data"), QJsonObject{});
+        }
     }
 
     return blockObject;
@@ -243,20 +265,32 @@ core::Block DocumentJsonSerializer::deserializeBlock(const QJsonObject &object) 
         block.id.clear();
     }
 
+    QString typeStr;
     if (object.contains(QStringLiteral("type")) && object.value(QStringLiteral("type")).isString())
     {
-        block.type = BlockTypeCodec::fromString(object.value(QStringLiteral("type")).toString());
+        typeStr = object.value(QStringLiteral("type")).toString();
+        block.type = BlockTypeCodec::fromString(typeStr);
     }
     else
     {
-        block.type = core::BlockType::Paragraph;
+        block.type = core::BlockType::Unsupported;
     }
 
     if (object.contains(QStringLiteral("data")) && object.value(QStringLiteral("data")).isObject())
     {
         const QJsonObject dataObj = object.value(QStringLiteral("data")).toObject();
         const QVariantMap vm = dataObj.toVariantMap();
-        block.data = vm;
+        if (block.type == core::BlockType::Unsupported)
+        {
+            QVariantMap umap;
+            umap.insert(QStringLiteral("sourceType"), typeStr);
+            umap.insert(QStringLiteral("sourceData"), vm);
+            block.data = umap;
+        }
+        else
+        {
+            block.data = vm;
+        }
     }
     else
     {
