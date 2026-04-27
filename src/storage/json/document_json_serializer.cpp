@@ -49,6 +49,28 @@ QJsonObject DocumentJsonSerializer::serialize(const core::Document &document) co
 
             blockObject.insert(QStringLiteral("data"), serializeHeadingBlock(headingBlock));
         }
+        else if (block.type == core::BlockType::Todo)
+        {
+            core::TodoBlock todoBlock;
+
+            if (block.data.canConvert<QVariantMap>())
+            {
+                const QVariantMap todoData = block.data.toMap();
+                todoBlock.text = todoData.value(QStringLiteral("text")).toString();
+                todoBlock.done = todoData.value(QStringLiteral("done"), false).toBool();
+                todoBlock.priority = todoData.value(QStringLiteral("priority")).toString();
+                todoBlock.deadline = QDate::fromString(
+                    todoData.value(QStringLiteral("deadline")).toString(),
+                    Qt::ISODate);
+                todoBlock.color = todoData.value(QStringLiteral("color")).toString();
+            }
+            else
+            {
+                todoBlock.text = block.data.toString();
+            }
+
+            blockObject.insert(QStringLiteral("data"), serializeTodoBlock(todoBlock));
+        }
         else
         {
             blockObject.insert(QStringLiteral("data"), QJsonObject{});
@@ -79,6 +101,17 @@ QJsonObject DocumentJsonSerializer::serializeHeadingBlock(const core::HeadingBlo
     QJsonObject object;
     object.insert(QStringLiteral("text"), block.text);
     object.insert(QStringLiteral("level"), block.level);
+    return object;
+}
+
+QJsonObject DocumentJsonSerializer::serializeTodoBlock(const core::TodoBlock &block) const
+{
+    QJsonObject object;
+    object.insert(QStringLiteral("text"), block.text);
+    object.insert(QStringLiteral("done"), block.done);
+    object.insert(QStringLiteral("priority"), block.priority);
+    object.insert(QStringLiteral("deadline"), block.deadline.toString(Qt::ISODate));
+    object.insert(QStringLiteral("color"), block.color);
     return object;
 }
 }

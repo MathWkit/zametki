@@ -5,6 +5,7 @@
 
 #include "core/blocks/heading_block.h"
 #include "core/blocks/paragraph_block.h"
+#include "core/blocks/todo_block.h"
 #include "core/document.h"
 
 namespace zametki::storage::json
@@ -18,6 +19,7 @@ public:
 private:
     QJsonObject serializeParagraphBlock(const core::ParagraphBlock &block) const;
     QJsonObject serializeHeadingBlock(const core::HeadingBlock &block) const;
+    QJsonObject serializeTodoBlock(const core::TodoBlock &block) const;
 };
 }
 
