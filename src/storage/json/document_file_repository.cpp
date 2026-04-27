@@ -53,6 +53,13 @@ bool DocumentFileRepository::write(const QString &id, const core::Document &docu
 {
     const QString filePath = documentFilePath(id);
 
+    QDir notesDir(m_notesPath);
+    if (!notesDir.exists() && !notesDir.mkpath(QStringLiteral(".")))
+    {
+        qWarning().noquote() << QStringLiteral("Failed to create notes directory:") << m_notesPath;
+        return false;
+    }
+
     QSaveFile file(filePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
