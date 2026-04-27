@@ -44,6 +44,7 @@ qt_add_executable(appzametki
         include/storage/json/block_type_codec.h
         src/storage/json/block_type_codec.cpp
         include/storage/json/document_json_serializer.h
+        src/storage/json/document_json_serializer.cpp
 )
 
 target_include_directories(appzametki
