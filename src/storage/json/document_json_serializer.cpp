@@ -33,8 +33,41 @@ QJsonObject DocumentJsonSerializer::serialize(const core::Document &document) co
 
 core::Document DocumentJsonSerializer::deserialize(const QJsonObject &object) const
 {
-    Q_UNUSED(object)
-    return {};
+    core::Document document;
+
+    if (object.contains(QStringLiteral("id")) && object.value(QStringLiteral("id")).isString())
+    {
+        document.id = object.value(QStringLiteral("id")).toString();
+    }
+
+    if (object.contains(QStringLiteral("title")) && object.value(QStringLiteral("title")).isString())
+    {
+        document.title = object.value(QStringLiteral("title")).toString();
+    }
+
+    if (object.contains(QStringLiteral("tags")) && object.value(QStringLiteral("tags")).isArray())
+    {
+        const QJsonArray tagsArray = object.value(QStringLiteral("tags")).toArray();
+        for (const QJsonValue &v : tagsArray)
+        {
+            if (v.isString())
+                document.tags.append(v.toString());
+        }
+    }
+
+    if (object.contains(QStringLiteral("blocks")) && object.value(QStringLiteral("blocks")).isArray())
+    {
+        const QJsonArray blocksArray = object.value(QStringLiteral("blocks")).toArray();
+        for (const QJsonValue &bv : blocksArray)
+        {
+            if (!bv.isObject())
+                continue;
+            const QJsonObject bobj = bv.toObject();
+            document.blocks.append(deserializeBlock(bobj));
+        }
+    }
+
+    return document;
 }
 
 QJsonObject DocumentJsonSerializer::serializeParagraphBlock(const core::ParagraphBlock &block) const
