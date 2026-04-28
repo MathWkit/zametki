@@ -10,13 +10,27 @@ if(WIN32 AND NOT DEFINED CMAKE_GENERATOR)
     endif()
 endif()
 
+# CRDT-based Note-taking Application
+# Architecture:
+#   CRDT (source of truth) -> Document (snapshot) -> JSON (persistence) -> SQLite (index)
+#
+# Build phases:
+#   Phase 0: Adapt existing files (IdGenerator, JsonSerializer, FileRepository)
+#   Phase 1-4: Add CRDT layer
+#   Phase 5: Add snapshot converter
+#   Phase 6: Add DocumentManager & AutosaveManager
+#   Phase 7: Add SQLite indexing
+#   Phase 8: Add links & backlinks
+#   Phase 9: Add editor widgets
+#   Phase 10: Add QML bridge & markdown exporter
+
 project(zametki VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ⚡ Здесь ключевое: правильные имена компонентов
-find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 QuickLayouts)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 QuickLayouts)
 
 # Set Qt policies
 qt_policy(SET QTP0001 NEW)
@@ -153,6 +167,7 @@ set_target_properties(appzametki PROPERTIES
 # ⚡ Линковка с правильными компонентами
 target_link_libraries(appzametki
     PRIVATE
+        Qt6::Core
         Qt6::Quick
         Qt6::QuickControls2
         Qt6::QuickLayouts
