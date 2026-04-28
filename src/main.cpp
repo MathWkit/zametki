@@ -3,8 +3,15 @@
 #include <QQuickStyle>
 #include <QQmlApplicationEngine>
 #include <qqml.h>
+#include <QStandardPaths>
+#include <QDir>
 
-#include "filecreator.h"
+#include "core/id_generator.h"
+#include "core/document_manager.h"
+#include "core/autosave_manager.h"
+#include "storage/json/document_file_repository.h"
+#include "storage/json/document_json_serializer.h"
+#include "bridge/document_bridge.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,8 +21,19 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("zametki");
 
     QQmlApplicationEngine engine;
-    FileCreator fileCreator;
-    qmlRegisterSingletonInstance("zametki", 1, 0, "AppState", &fileCreator);
+
+    const QString notesPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/notes");
+    QDir().mkpath(notesPath);
+
+    zametki::storage::json::DocumentJsonSerializer serializer;
+    zametki::storage::json::DocumentFileRepository repository(notesPath);
+    zametki::core::UuidIdGenerator idGenerator;
+    zametki::core::DocumentManager documentManager(&documentManager, &repository, &serializer, &idGenerator);
+    zametki::core::AutosaveManager autosaveManager(&documentManager);
+    autosaveManager.setDebounceInterval(300);
+    zametki::bridge::DocumentBridge documentBridge(&documentManager);
+
+    qmlRegisterSingletonInstance("zametki", 1, 0, "AppState", &documentBridge);
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

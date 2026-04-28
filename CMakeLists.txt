@@ -40,11 +40,9 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appzametki
     src/main.cpp
-    src/filecreator.cpp
     src/core/id_generator.cpp
     src/core/document_factory.cpp
     src/core/block_text_accessor.cpp
-    include/filecreator.h
     include/core/block_type.h
     include/core/blocks/paragraph_block.h
     include/core/blocks/heading_block.h
