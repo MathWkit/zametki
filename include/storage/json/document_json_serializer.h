@@ -18,22 +18,22 @@ public:
     QJsonObject serialize(const core::Document &document) const;
     core::Document deserialize(const QJsonObject &object) const;
 
-    static QString getCurrentFormatVersion();
-    static bool supportsVersion(const QString &version);
-    static bool validateFormatVersion(const QJsonObject &object, QString &error);
+    QString getCurrentFormatVersion() const;
+    bool supportsVersion(const QString &version) const;
+    bool validateFormatVersion(const QJsonObject &object, QString &error) const;
 
 private:
-    static QJsonObject serializeParagraphBlock(const core::ParagraphBlock &block);
-    static QJsonObject serializeHeadingBlock(const core::HeadingBlock &block);
-    static QJsonObject serializeTodoBlock(const core::TodoBlock &block);
-    static QJsonObject serializeBlock(const core::Block &block);
+    QJsonObject serializeParagraphBlock(const core::ParagraphBlock &block) const;
+    QJsonObject serializeHeadingBlock(const core::HeadingBlock &block) const;
+    QJsonObject serializeTodoBlock(const core::TodoBlock &block) const;
+    QJsonObject serializeBlock(const core::Block &block) const;
     core::Block deserializeBlock(const QJsonObject &object) const;
     bool validateDocumentObject(const QJsonObject &object, QString &error) const;
-    static bool validateBlockObject(const QJsonObject &object, QString &error);
+    bool validateBlockObject(const QJsonObject &object, QString &error) const;
     core::ParagraphBlock deserializeParagraphBlock(const QJsonObject &object) const;
     core::HeadingBlock deserializeHeadingBlock(const QJsonObject &object) const;
     core::TodoBlock deserializeTodoBlock(const QJsonObject &object) const;
-    static core::Document migrateFromV1ToV2(const core::Document &docV1);
+    core::Document migrateFromV1ToV2(const core::Document &docV1) const;
 };
 }
 

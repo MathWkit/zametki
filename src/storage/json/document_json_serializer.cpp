@@ -100,14 +100,14 @@ core::Document DocumentJsonSerializer::deserialize(const QJsonObject &object) co
     return document;
 }
 
-QJsonObject DocumentJsonSerializer::serializeParagraphBlock(const core::ParagraphBlock &block)
+QJsonObject DocumentJsonSerializer::serializeParagraphBlock(const core::ParagraphBlock &block) const
 {
     QJsonObject object;
     object.insert(QStringLiteral("text"), block.text);
     return object;
 }
 
-QJsonObject DocumentJsonSerializer::serializeHeadingBlock(const core::HeadingBlock &block)
+QJsonObject DocumentJsonSerializer::serializeHeadingBlock(const core::HeadingBlock &block) const
 {
     QJsonObject object;
     object.insert(QStringLiteral("text"), block.text);
@@ -115,7 +115,7 @@ QJsonObject DocumentJsonSerializer::serializeHeadingBlock(const core::HeadingBlo
     return object;
 }
 
-QJsonObject DocumentJsonSerializer::serializeTodoBlock(const core::TodoBlock &block)
+QJsonObject DocumentJsonSerializer::serializeTodoBlock(const core::TodoBlock &block) const
 {
     QJsonObject object;
     object.insert(QStringLiteral("text"), block.text);
@@ -126,7 +126,7 @@ QJsonObject DocumentJsonSerializer::serializeTodoBlock(const core::TodoBlock &bl
     return object;
 }
 
-QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block)
+QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) const
 {
     QJsonObject blockObject;
     blockObject.insert(QStringLiteral("id"), block.id);
@@ -348,7 +348,7 @@ bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, Q
     return true;
 }
 
-bool DocumentJsonSerializer::validateBlockObject(const QJsonObject &object, QString &error)
+bool DocumentJsonSerializer::validateBlockObject(const QJsonObject &object, QString &error) const
 {
     if (!object.contains(QStringLiteral("id")) || !object.value(QStringLiteral("id")).isString())
     {
@@ -371,17 +371,17 @@ bool DocumentJsonSerializer::validateBlockObject(const QJsonObject &object, QStr
     return true;
 }
 
-QString DocumentJsonSerializer::getCurrentFormatVersion()
+QString DocumentJsonSerializer::getCurrentFormatVersion() const
 {
     return QStringLiteral("v2");
 }
 
-bool DocumentJsonSerializer::supportsVersion(const QString &version)
+bool DocumentJsonSerializer::supportsVersion(const QString &version) const
 {
     return version == QStringLiteral("v1") || version == QStringLiteral("v2");
 }
 
-bool DocumentJsonSerializer::validateFormatVersion(const QJsonObject &object, QString &error)
+bool DocumentJsonSerializer::validateFormatVersion(const QJsonObject &object, QString &error) const
 {
     if (!object.contains(QStringLiteral("format_version")))
     {
@@ -404,9 +404,9 @@ bool DocumentJsonSerializer::validateFormatVersion(const QJsonObject &object, QS
     return true;
 }
 
-core::Document DocumentJsonSerializer::migrateFromV1ToV2(const core::Document &docV1)
+core::Document DocumentJsonSerializer::migrateFromV1ToV2(const core::Document &docV1) const
 {
     return docV1;
 }
 
-} // namespace zametki::storage::json
+}
