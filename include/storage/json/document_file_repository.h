@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QList>
+#include <QDateTime>
 
 #include "core/document.h"
 
@@ -21,8 +22,15 @@ public:
 
     QList<QString> listAll() const;
 
+    QDateTime lastModifiedTime(const QString &id) const;
+
+    bool hasChanged(const QString &id, const QDateTime &since) const;
+
+    QString lastError() const;
+
 private:
     QString m_notesPath;
+    mutable QString m_lastError;
 
     QString documentFilePath(const QString &id) const;
 };
