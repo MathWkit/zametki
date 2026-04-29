@@ -278,6 +278,56 @@ core::Block DocumentJsonSerializer::deserializeBlock(const QJsonObject &object) 
     return block;
 }
 
+core::ParagraphBlock DocumentJsonSerializer::deserializeParagraphBlock(const QJsonObject &object) const
+{
+    core::ParagraphBlock block;
+    if (object.contains(QStringLiteral("text")) && object.value(QStringLiteral("text")).isString())
+    {
+        block.text = object.value(QStringLiteral("text")).toString();
+    }
+    return block;
+}
+
+core::HeadingBlock DocumentJsonSerializer::deserializeHeadingBlock(const QJsonObject &object) const
+{
+    core::HeadingBlock block;
+    if (object.contains(QStringLiteral("text")) && object.value(QStringLiteral("text")).isString())
+    {
+        block.text = object.value(QStringLiteral("text")).toString();
+    }
+    if (object.contains(QStringLiteral("level")) && object.value(QStringLiteral("level")).isDouble())
+    {
+        block.level = object.value(QStringLiteral("level")).toInt();
+    }
+    return block;
+}
+
+core::TodoBlock DocumentJsonSerializer::deserializeTodoBlock(const QJsonObject &object) const
+{
+    core::TodoBlock block;
+    if (object.contains(QStringLiteral("text")) && object.value(QStringLiteral("text")).isString())
+    {
+        block.text = object.value(QStringLiteral("text")).toString();
+    }
+    if (object.contains(QStringLiteral("done")) && object.value(QStringLiteral("done")).isBool())
+    {
+        block.done = object.value(QStringLiteral("done")).toBool();
+    }
+    if (object.contains(QStringLiteral("priority")) && object.value(QStringLiteral("priority")).isString())
+    {
+        block.priority = object.value(QStringLiteral("priority")).toString();
+    }
+    if (object.contains(QStringLiteral("deadline")) && object.value(QStringLiteral("deadline")).isString())
+    {
+        block.deadline = QDate::fromString(object.value(QStringLiteral("deadline")).toString(), Qt::ISODate);
+    }
+    if (object.contains(QStringLiteral("color")) && object.value(QStringLiteral("color")).isString())
+    {
+        block.color = object.value(QStringLiteral("color")).toString();
+    }
+    return block;
+}
+
 bool DocumentJsonSerializer::validateDocumentObject(const QJsonObject &object, QString &error) const
 {
     if (!validateFormatVersion(object, error))

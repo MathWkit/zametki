@@ -43,6 +43,7 @@ qt_add_executable(appzametki
     src/core/id_generator.cpp
     src/core/document_factory.cpp
     src/core/block_text_accessor.cpp
+    src/bridge/document_bridge.cpp
     include/core/block_type.h
     include/core/blocks/paragraph_block.h
     include/core/blocks/heading_block.h
@@ -61,9 +62,9 @@ qt_add_executable(appzametki
         src/storage/json/document_file_repository.cpp
         include/core/document_manager.h
         src/core/document_manager.cpp
-        src/core/document_manager.cpp
         include/core/autosave_manager.h
         src/core/autosave_manager.cpp
+        include/bridge/document_bridge.h
 )
 
 target_include_directories(appzametki
