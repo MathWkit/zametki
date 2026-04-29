@@ -60,6 +60,8 @@ qt_add_executable(appzametki
         include/storage/json/document_file_repository.h
         src/storage/json/document_file_repository.cpp
         include/core/document_manager.h
+        src/core/document_manager.cpp
+        src/core/document_manager.cpp
 )
 
 target_include_directories(appzametki
