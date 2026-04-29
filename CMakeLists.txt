@@ -63,6 +63,7 @@ qt_add_executable(appzametki
         src/core/document_manager.cpp
         src/core/document_manager.cpp
         include/core/autosave_manager.h
+        src/core/autosave_manager.cpp
 )
 
 target_include_directories(appzametki
