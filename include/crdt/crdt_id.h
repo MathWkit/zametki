@@ -10,6 +10,8 @@ struct CRDTId
     quint32 siteId = 0;
     quint64 counter = 0;
 };
+
+CRDTId createCRDTId(quint32 siteId);
 }
 
 #endif // ZAMETKI_CRDT_ID_H

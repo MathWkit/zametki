@@ -28,6 +28,14 @@ qt_add_executable(appzametki
     src/core/document_factory.cpp
     src/core/block_text_accessor.cpp
     src/bridge/document_bridge.cpp
+    src/crdt/crdt_id.cpp
+    src/crdt/crdt_clock.cpp
+    src/crdt/crdt_map.cpp
+    src/crdt/crdt_result.cpp
+    src/crdt/crdt_errors.cpp
+    src/crdt/crdt_block.cpp
+    src/crdt/crdt_document.cpp
+    src/crdt/crdt_sequence_id.cpp
     include/core/block_type.h
     include/core/blocks/paragraph_block.h
     include/core/blocks/heading_block.h
@@ -38,21 +46,32 @@ qt_add_executable(appzametki
     include/core/id_generator.h
     include/core/document_factory.h
     include/core/block_text_accessor.h
-        include/storage/json/block_type_codec.h
-        src/storage/json/block_type_codec.cpp
-        include/storage/json/document_json_serializer.h
-        src/storage/json/document_json_serializer.cpp
-        include/storage/json/document_file_repository.h
-        src/storage/json/document_file_repository.cpp
-        include/core/document_manager.h
-        src/core/document_manager.cpp
-        include/core/autosave_manager.h
-        src/core/autosave_manager.cpp
-        include/bridge/document_bridge.h
+    include/crdt/crdt_operation.h
+    include/crdt/crdt_id.h
+    include/crdt/crdt_clock.h
+    include/crdt/crdt_map.h
+    include/crdt/crdt_result.h
+    include/crdt/crdt_errors.h
+    include/crdt/crdt_block.h
+    include/crdt/crdt_document.h
+    include/crdt/crdt_sequence_id.h
+    include/storage/json/block_type_codec.h
+    src/storage/json/block_type_codec.cpp
+    include/storage/json/document_json_serializer.h
+    src/storage/json/document_json_serializer.cpp
+    include/storage/json/document_file_repository.h
+    src/storage/json/document_file_repository.cpp
+    include/core/document_manager.h
+    src/core/document_manager.cpp
+    include/core/autosave_manager.h
+    src/core/autosave_manager.cpp
+    include/bridge/document_bridge.h
 )
 
 target_include_directories(appzametki
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/crdt
 )
 
 qt_add_qml_module(appzametki
