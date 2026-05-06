@@ -168,5 +168,14 @@ QString DocumentFileRepository::documentFilePath(const QString &id) const
 {
     return m_notesPath + QDir::separator() + id + QStringLiteral(".json");
 }
+
+QString DocumentFileRepository::notesPath() const
+{
+    return m_notesPath;
 }
 
+QString DocumentFileRepository::documentPath(const QString &id) const
+{
+    return documentFilePath(id);
+}
+}

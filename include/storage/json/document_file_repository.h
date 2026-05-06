@@ -27,6 +27,8 @@ public:
     bool hasChanged(const QString &id, const QDateTime &since) const;
 
     QString lastError() const;
+    QString notesPath() const;
+    QString documentPath(const QString &id) const;
 
 private:
     QString m_notesPath;

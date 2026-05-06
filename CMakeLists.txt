@@ -15,7 +15,7 @@ project(zametki VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 QuickLayouts)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 QuickLayouts Sql)
 
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
@@ -72,6 +72,12 @@ qt_add_executable(appzametki
     include/core/autosave_manager.h
     src/core/autosave_manager.cpp
     include/bridge/document_bridge.h
+    include/storage/sqlite/sqlite_connection_provider.h
+    include/storage/sqlite/sqlite_note_index_repository.h
+    include/storage/search/search_indexer.h
+    src/storage/sqlite/sqlite_connection_provider.cpp
+    src/storage/sqlite/sqlite_note_index_repository.cpp
+    src/storage/search/search_indexer.cpp
 )
 
 target_include_directories(appzametki
@@ -183,6 +189,7 @@ target_link_libraries(appzametki
         Qt6::Quick
         Qt6::QuickControls2
         Qt6::QuickLayouts
+        Qt6::Sql
 )
 
 include(GNUInstallDirs)

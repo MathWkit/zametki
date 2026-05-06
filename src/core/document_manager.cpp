@@ -12,7 +12,10 @@ DocumentManager::DocumentManager(QObject *parent)
     : QObject(parent),
       m_siteId(m_idGenerator.createSiteId()),
       m_repository(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/notes")),
-      m_converter(m_siteId)
+      m_converter(m_siteId),
+      m_sqliteProvider(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/index.db")),
+      m_noteIndexRepository(&m_sqliteProvider),
+      m_searchIndexer(&m_sqliteProvider)
 {
     QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/notes"));
     m_document = crdt::CRDTDocument(m_siteId);
@@ -54,6 +57,32 @@ bool DocumentManager::save()
     }
 
     updateSnapshot();
+
+    const QString path = m_repository.documentPath(m_document.id);
+    if (!m_noteIndexRepository.upsertNote(m_document.id, m_document.title, path))
+    {
+        setError(m_noteIndexRepository.lastError());
+        return false;
+    }
+
+    if (!m_noteIndexRepository.upsertTags(m_document.id, m_document.tags))
+    {
+        setError(m_noteIndexRepository.lastError());
+        return false;
+    }
+
+    if (!m_noteIndexRepository.cleanupOrphanTags())
+    {
+        setError(m_noteIndexRepository.lastError());
+        return false;
+    }
+
+    if (!m_searchIndexer.upsert(m_snapshot))
+    {
+        setError(m_searchIndexer.lastError());
+        return false;
+    }
+
     return true;
 }
 
@@ -90,6 +119,24 @@ bool DocumentManager::deleteDocument(const QString &id)
     if (!m_repository.remove(id))
     {
         setError(m_repository.lastError().isEmpty() ? QStringLiteral("delete_failed") : m_repository.lastError());
+        return false;
+    }
+
+    if (!m_noteIndexRepository.deleteNote(id))
+    {
+        setError(m_noteIndexRepository.lastError());
+        return false;
+    }
+
+    if (!m_noteIndexRepository.cleanupOrphanTags())
+    {
+        setError(m_noteIndexRepository.lastError());
+        return false;
+    }
+
+    if (!m_searchIndexer.remove(id))
+    {
+        setError(m_searchIndexer.lastError());
         return false;
     }
 
