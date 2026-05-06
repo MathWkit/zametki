@@ -38,6 +38,7 @@ qt_add_executable(appzametki
     src/crdt/crdt_sequence_id.cpp
     src/crdt/crdt_text.cpp
     src/crdt/crdt_block_sequence.cpp
+    src/core/crdt_snapshot_converter.cpp
     include/core/block_type.h
     include/core/blocks/paragraph_block.h
     include/core/blocks/heading_block.h
@@ -48,6 +49,7 @@ qt_add_executable(appzametki
     include/core/id_generator.h
     include/core/document_factory.h
     include/core/block_text_accessor.h
+    include/core/crdt_snapshot_converter.h
     include/crdt/crdt_operation.h
     include/crdt/crdt_id.h
     include/crdt/crdt_clock.h
