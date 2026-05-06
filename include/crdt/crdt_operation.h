@@ -9,6 +9,7 @@ enum class CRDTOperationType
     DeleteText,
     InsertBlock,
     DeleteBlock,
+    ReorderBlock,
     UpdateBlockField,
     UpdateDocumentField
 };
