@@ -39,6 +39,8 @@ qt_add_executable(appzametki
     src/crdt/crdt_text.cpp
     src/crdt/crdt_block_sequence.cpp
     src/core/crdt_snapshot_converter.cpp
+    src/core/link_parser.cpp
+    src/storage/sqlite/sqlite_links_repository.cpp
     include/core/block_type.h
     include/core/blocks/paragraph_block.h
     include/core/blocks/heading_block.h
@@ -50,6 +52,21 @@ qt_add_executable(appzametki
     include/core/document_factory.h
     include/core/block_text_accessor.h
     include/core/crdt_snapshot_converter.h
+    include/core/link_parser.h
+    include/core/graph_node.h
+    include/core/graph_edge.h
+    include/storage/sqlite/sqlite_connection_provider.h
+    include/storage/sqlite/sqlite_note_index_repository.h
+    include/storage/sqlite/sqlite_links_repository.h
+    include/storage/search/search_indexer.h
+    src/storage/sqlite/sqlite_connection_provider.cpp
+    src/storage/sqlite/sqlite_note_index_repository.cpp
+    src/storage/search/search_indexer.cpp
+    include/core/document_manager.h
+    src/core/document_manager.cpp
+    include/core/autosave_manager.h
+    src/core/autosave_manager.cpp
+    include/bridge/document_bridge.h
     include/crdt/crdt_operation.h
     include/crdt/crdt_id.h
     include/crdt/crdt_clock.h
@@ -67,17 +84,6 @@ qt_add_executable(appzametki
     src/storage/json/document_json_serializer.cpp
     include/storage/json/document_file_repository.h
     src/storage/json/document_file_repository.cpp
-    include/core/document_manager.h
-    src/core/document_manager.cpp
-    include/core/autosave_manager.h
-    src/core/autosave_manager.cpp
-    include/bridge/document_bridge.h
-    include/storage/sqlite/sqlite_connection_provider.h
-    include/storage/sqlite/sqlite_note_index_repository.h
-    include/storage/search/search_indexer.h
-    src/storage/sqlite/sqlite_connection_provider.cpp
-    src/storage/sqlite/sqlite_note_index_repository.cpp
-    src/storage/search/search_indexer.cpp
 )
 
 target_include_directories(appzametki
