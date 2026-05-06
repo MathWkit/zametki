@@ -14,7 +14,9 @@
 #include "storage/json/document_json_serializer.h"
 #include "storage/sqlite/sqlite_connection_provider.h"
 #include "storage/sqlite/sqlite_note_index_repository.h"
+#include "storage/sqlite/sqlite_links_repository.h"
 #include "storage/search/search_indexer.h"
+#include "core/link_parser.h"
 
 namespace zametki::core
 {
@@ -61,7 +63,9 @@ private:
     quint64 m_blockVersionCounter = 0;
     storage::sqlite::SQLiteConnectionProvider m_sqliteProvider;
     storage::sqlite::SQLiteNoteIndexRepository m_noteIndexRepository;
+    storage::sqlite::SQLiteLinksRepository m_linksRepository;
     storage::search::SearchIndexer m_searchIndexer;
+    core::LinkParser m_linkParser;
 };
 }
 

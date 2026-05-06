@@ -3,7 +3,9 @@
 #include <QDate>
 #include <QDir>
 #include <QStandardPaths>
+#include <QStringList>
 
+#include "core/block_text_accessor.h"
 #include "crdt/crdt_id.h"
 
 namespace zametki::core
@@ -15,6 +17,7 @@ DocumentManager::DocumentManager(QObject *parent)
       m_converter(m_siteId),
       m_sqliteProvider(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/index.db")),
       m_noteIndexRepository(&m_sqliteProvider),
+      m_linksRepository(&m_sqliteProvider),
       m_searchIndexer(&m_sqliteProvider)
 {
     QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/notes"));
@@ -81,6 +84,50 @@ bool DocumentManager::save()
     {
         setError(m_searchIndexer.lastError());
         return false;
+    }
+
+    if (!m_linksRepository.clearLinks(m_document.id))
+    {
+        setError(m_linksRepository.lastError());
+        return false;
+    }
+
+    QSet<QString> linkKeys;
+    QVector<storage::sqlite::LinkRecord> linkRecords;
+    for (const auto &block : m_snapshot.blocks)
+    {
+        const QString text = core::BlockTextAccessor::getText(block);
+        const auto links = m_linkParser.parse(text);
+        for (const auto &link : links)
+        {
+            storage::sqlite::LinkRecord record;
+            const QString resolved = m_linksRepository.resolveTitleToId(link.target);
+            if (!resolved.isEmpty())
+            {
+                record.toNoteId = resolved;
+            }
+            else
+            {
+                record.toNoteTitle = link.target;
+            }
+
+            const QString key = record.toNoteId + QLatin1Char('|') + record.toNoteTitle;
+            if (linkKeys.contains(key))
+            {
+                continue;
+            }
+            linkKeys.insert(key);
+            linkRecords.push_back(record);
+        }
+    }
+
+    if (!linkRecords.isEmpty())
+    {
+        if (!m_linksRepository.insertLinks(m_document.id, linkRecords))
+        {
+            setError(m_linksRepository.lastError());
+            return false;
+        }
     }
 
     return true;
