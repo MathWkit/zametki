@@ -36,6 +36,8 @@ qt_add_executable(appzametki
     src/crdt/crdt_block.cpp
     src/crdt/crdt_document.cpp
     src/crdt/crdt_sequence_id.cpp
+    src/crdt/crdt_text.cpp
+    src/crdt/crdt_block_sequence.cpp
     include/core/block_type.h
     include/core/blocks/paragraph_block.h
     include/core/blocks/heading_block.h
@@ -55,6 +57,8 @@ qt_add_executable(appzametki
     include/crdt/crdt_block.h
     include/crdt/crdt_document.h
     include/crdt/crdt_sequence_id.h
+    include/crdt/crdt_text.h
+    include/crdt/crdt_block_sequence.h
     include/storage/json/block_type_codec.h
     src/storage/json/block_type_codec.cpp
     include/storage/json/document_json_serializer.h
