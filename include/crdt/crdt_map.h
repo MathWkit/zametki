@@ -4,6 +4,7 @@
 #include <QHash>
 #include <QString>
 #include <QVariant>
+#include <QJsonObject>
 
 namespace zametki::crdt
 {
@@ -20,6 +21,8 @@ public:
     QVariant value(const QString &key) const;
     quint64 version(const QString &key) const;
     void set(const QString &key, const QVariant &value, quint64 version);
+    QJsonObject serialize() const;
+    static CRDTMap deserialize(const QJsonObject &object);
 
 private:
     QHash<QString, CRDTMapEntry> m_entries;
