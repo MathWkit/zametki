@@ -12,6 +12,9 @@
 #include "crdt/crdt_document.h"
 #include "storage/json/document_file_repository.h"
 #include "storage/json/document_json_serializer.h"
+#include "storage/sqlite/sqlite_connection_provider.h"
+#include "storage/sqlite/sqlite_note_index_repository.h"
+#include "storage/search/search_indexer.h"
 
 namespace zametki::core
 {
@@ -56,6 +59,9 @@ private:
     QString m_lastError;
     quint32 m_siteId = 0;
     quint64 m_blockVersionCounter = 0;
+    storage::sqlite::SQLiteConnectionProvider m_sqliteProvider;
+    storage::sqlite::SQLiteNoteIndexRepository m_noteIndexRepository;
+    storage::search::SearchIndexer m_searchIndexer;
 };
 }
 
