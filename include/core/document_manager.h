@@ -7,6 +7,11 @@
 #include "core/document.h"
 #include "core/block_type.h"
 #include "core/blocks/todo_block.h"
+#include "core/id_generator.h"
+#include "core/crdt_snapshot_converter.h"
+#include "crdt/crdt_document.h"
+#include "storage/json/document_file_repository.h"
+#include "storage/json/document_json_serializer.h"
 
 namespace zametki::core
 {
@@ -17,9 +22,13 @@ public:
     explicit DocumentManager(QObject *parent = nullptr);
 
     Document getSnapshot() const;
+    QString lastError() const;
 
     bool load(const QString &id);
     bool save();
+    bool createEmptyDocument();
+    bool renameDocument(const QString &title);
+    bool deleteDocument(const QString &id);
 
     void applyTextInsert(const QString &blockId, int position, const QString &text);
     void applyTextDelete(const QString &blockId, int position, int length);
@@ -31,6 +40,22 @@ public:
 
 signals:
     void snapshotChanged();
+
+private:
+    bool parseBlockId(const QString &text, crdt::CRDTId &outId) const;
+    QString makeBlockId(const crdt::CRDTId &id) const;
+    void updateSnapshot();
+    void setError(const QString &message);
+
+    crdt::CRDTDocument m_document;
+    Document m_snapshot;
+    storage::json::DocumentFileRepository m_repository;
+    storage::json::DocumentJsonSerializer m_serializer;
+    CRDTSnapshotConverter m_converter;
+    UuidIdGenerator m_idGenerator;
+    QString m_lastError;
+    quint32 m_siteId = 0;
+    quint64 m_blockVersionCounter = 0;
 };
 }
 
