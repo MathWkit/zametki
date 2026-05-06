@@ -1,57 +1,341 @@
 #include "core/document_manager.h"
 
+#include <QDate>
+#include <QDir>
+#include <QStandardPaths>
+
+#include "crdt/crdt_id.h"
+
 namespace zametki::core
 {
 DocumentManager::DocumentManager(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_siteId(m_idGenerator.createSiteId()),
+      m_repository(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/notes")),
+      m_converter(m_siteId)
 {
+    QDir().mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/notes"));
+    m_document = crdt::CRDTDocument(m_siteId);
 }
 
 Document DocumentManager::getSnapshot() const
 {
-    return {};
+    return m_snapshot;
+}
+
+QString DocumentManager::lastError() const
+{
+    return m_lastError;
 }
 
 bool DocumentManager::load(const QString &id)
 {
-    Q_UNUSED(id)
-    return false;
+    setError(QString());
+    crdt::CRDTDocument document(m_siteId);
+    if (!m_converter.loadFromRepository(id, m_repository, m_serializer, document))
+    {
+        setError(m_repository.lastError().isEmpty() ? QStringLiteral("load_failed") : m_repository.lastError());
+        return false;
+    }
+
+    m_document = document;
+    updateSnapshot();
+    emit snapshotChanged();
+    return true;
 }
 
 bool DocumentManager::save()
 {
-    return false;
+    setError(QString());
+    if (!m_converter.saveToRepository(m_document.id, m_document, m_repository, m_serializer))
+    {
+        setError(m_repository.lastError().isEmpty() ? QStringLiteral("save_failed") : m_repository.lastError());
+        return false;
+    }
+
+    updateSnapshot();
+    return true;
+}
+
+bool DocumentManager::createEmptyDocument()
+{
+    setError(QString());
+    m_document = crdt::CRDTDocument(m_siteId);
+    m_document.id = m_idGenerator.create();
+    m_document.title = QString();
+    m_document.tags.clear();
+    m_document.blocks = crdt::CRDTBlockSequence(m_siteId);
+    updateSnapshot();
+    emit snapshotChanged();
+    return true;
+}
+
+bool DocumentManager::renameDocument(const QString &title)
+{
+    const QString opId = m_idGenerator.createOperationId();
+    if (!m_document.applyUpdateDocumentField(opId, QStringLiteral("title"), title))
+    {
+        setError(QStringLiteral("rename_failed"));
+        return false;
+    }
+
+    updateSnapshot();
+    emit snapshotChanged();
+    return true;
+}
+
+bool DocumentManager::deleteDocument(const QString &id)
+{
+    setError(QString());
+    if (!m_repository.remove(id))
+    {
+        setError(m_repository.lastError().isEmpty() ? QStringLiteral("delete_failed") : m_repository.lastError());
+        return false;
+    }
+
+    if (m_document.id == id)
+    {
+        m_document.clear();
+        m_snapshot = {};
+        emit snapshotChanged();
+    }
+
+    return true;
 }
 
 void DocumentManager::applyTextInsert(const QString &blockId, int position, const QString &text)
 {
-    Q_UNUSED(blockId)
-    Q_UNUSED(position)
-    Q_UNUSED(text)
+    crdt::CRDTId id;
+    if (!parseBlockId(blockId, id))
+    {
+        return;
+    }
+
+    QVector<crdt::CRDTBlockEntry> entries = m_document.blocks.exportSequence();
+    bool updated = false;
+
+    for (auto &entry : entries)
+    {
+        if (entry.deleted)
+        {
+            continue;
+        }
+
+        if (entry.block.id.siteId == id.siteId && entry.block.id.counter == id.counter)
+        {
+            QJsonObject textObj = entry.block.data.value(QStringLiteral("text")).toJsonObject();
+            crdt::CRDTText crdtText = crdt::CRDTText::deserialize(textObj);
+            crdtText.setSiteId(m_siteId);
+            const QString opId = m_idGenerator.createOperationId();
+            if (!crdtText.applyInsert(opId, position, text))
+            {
+                return;
+            }
+
+            const QString opFieldId = m_idGenerator.createOperationId();
+            m_document.applyUpdateBlockField(opFieldId, id, QStringLiteral("text"), crdtText.serialize(), ++m_blockVersionCounter);
+            updated = true;
+            break;
+        }
+    }
+
+    if (updated)
+    {
+        updateSnapshot();
+        emit snapshotChanged();
+    }
 }
 
 void DocumentManager::applyTextDelete(const QString &blockId, int position, int length)
 {
-    Q_UNUSED(blockId)
-    Q_UNUSED(position)
-    Q_UNUSED(length)
+    crdt::CRDTId id;
+    if (!parseBlockId(blockId, id))
+    {
+        return;
+    }
+
+    QVector<crdt::CRDTBlockEntry> entries = m_document.blocks.exportSequence();
+    bool updated = false;
+
+    for (auto &entry : entries)
+    {
+        if (entry.deleted)
+        {
+            continue;
+        }
+
+        if (entry.block.id.siteId == id.siteId && entry.block.id.counter == id.counter)
+        {
+            QJsonObject textObj = entry.block.data.value(QStringLiteral("text")).toJsonObject();
+            crdt::CRDTText crdtText = crdt::CRDTText::deserialize(textObj);
+            crdtText.setSiteId(m_siteId);
+            const QString opId = m_idGenerator.createOperationId();
+            if (!crdtText.applyDelete(opId, position, length))
+            {
+                return;
+            }
+
+            const QString opFieldId = m_idGenerator.createOperationId();
+            m_document.applyUpdateBlockField(opFieldId, id, QStringLiteral("text"), crdtText.serialize(), ++m_blockVersionCounter);
+            updated = true;
+            break;
+        }
+    }
+
+    if (updated)
+    {
+        updateSnapshot();
+        emit snapshotChanged();
+    }
 }
 
 void DocumentManager::insertBlock(const QString &afterBlockId, BlockType type)
 {
-    Q_UNUSED(afterBlockId)
-    Q_UNUSED(type)
+    crdt::CRDTId afterId;
+    if (!afterBlockId.isEmpty() && !parseBlockId(afterBlockId, afterId))
+    {
+        return;
+    }
+
+    crdt::CRDTBlock block;
+    block.id = crdt::createCRDTId(m_siteId);
+    block.type = type;
+
+    if (type == BlockType::Paragraph)
+    {
+        crdt::CRDTText text(m_siteId);
+        text.fromQString(QString(), m_siteId);
+        block.data.set(QStringLiteral("text"), text.serialize(), 0);
+    }
+    else if (type == BlockType::Heading)
+    {
+        crdt::CRDTText text(m_siteId);
+        text.fromQString(QString(), m_siteId);
+        block.data.set(QStringLiteral("text"), text.serialize(), 0);
+        block.data.set(QStringLiteral("level"), 1, 0);
+    }
+    else if (type == BlockType::Todo)
+    {
+        crdt::CRDTText text(m_siteId);
+        text.fromQString(QString(), m_siteId);
+        block.data.set(QStringLiteral("text"), text.serialize(), 0);
+        block.data.set(QStringLiteral("done"), false, 0);
+        block.data.set(QStringLiteral("priority"), QString(), 0);
+        block.data.set(QStringLiteral("deadline"), QDate(), 0);
+        block.data.set(QStringLiteral("color"), QString(), 0);
+    }
+    else if (type == BlockType::Unsupported)
+    {
+        block.data.set(QStringLiteral("source_type"), QStringLiteral("unsupported"), 0);
+        block.data.set(QStringLiteral("source_data"), QVariantMap(), 0);
+    }
+
+    crdt::CRDTSequenceId left;
+    crdt::CRDTSequenceId right;
+    const QVector<crdt::CRDTBlockEntry> entries = m_document.blocks.exportSequence();
+
+    if (afterId.siteId != 0 || afterId.counter != 0)
+    {
+        for (int i = 0; i < entries.size(); ++i)
+        {
+            const auto &entry = entries.at(i);
+            if (!entry.deleted && entry.block.id.siteId == afterId.siteId && entry.block.id.counter == afterId.counter)
+            {
+                left = entry.position;
+                for (int j = i + 1; j < entries.size(); ++j)
+                {
+                    if (!entries.at(j).deleted)
+                    {
+                        right = entries.at(j).position;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    if (!left.isValid())
+    {
+        for (const auto &entry : entries)
+        {
+            if (!entry.deleted)
+            {
+                right = entry.position;
+                break;
+            }
+        }
+    }
+
+    const QString opId = m_idGenerator.createOperationId();
+    if (m_document.applyInsertBlock(opId, block, left, right))
+    {
+        updateSnapshot();
+        emit snapshotChanged();
+    }
 }
 
 void DocumentManager::deleteBlock(const QString &blockId)
 {
-    Q_UNUSED(blockId)
+    crdt::CRDTId id;
+    if (!parseBlockId(blockId, id))
+    {
+        return;
+    }
+
+    const QString opId = m_idGenerator.createOperationId();
+    if (m_document.applyDeleteBlock(opId, id))
+    {
+        updateSnapshot();
+        emit snapshotChanged();
+    }
 }
 
 void DocumentManager::updateTodoBlock(const QString &blockId, const TodoBlock &data)
 {
-    Q_UNUSED(blockId)
-    Q_UNUSED(data)
-}
+    crdt::CRDTId id;
+    if (!parseBlockId(blockId, id))
+    {
+        return;
+    }
+
+    crdt::CRDTText text(m_siteId);
+    text.fromQString(data.text, m_siteId);
+    const QString opId = m_idGenerator.createOperationId();
+    if (m_document.applyUpdateTodo(opId, id, text, data, ++m_blockVersionCounter))
+    {
+        updateSnapshot();
+        emit snapshotChanged();
+    }
 }
 
+bool DocumentManager::parseBlockId(const QString &text, crdt::CRDTId &outId) const
+{
+    const QStringList parts = text.split(QLatin1Char(':'));
+    if (parts.size() != 2)
+    {
+        return false;
+    }
+
+    bool okSite = false;
+    bool okCounter = false;
+    outId.siteId = parts.at(0).toUInt(&okSite);
+    outId.counter = parts.at(1).toULongLong(&okCounter);
+    return okSite && okCounter;
+}
+
+QString DocumentManager::makeBlockId(const crdt::CRDTId &id) const
+{
+    return QString::number(id.siteId) + QLatin1Char(':') + QString::number(id.counter);
+}
+
+void DocumentManager::updateSnapshot()
+{
+    m_snapshot = m_converter.toSnapshot(m_document);
+}
+
+void DocumentManager::setError(const QString &message)
+{
+    m_lastError = message;
+}
+}

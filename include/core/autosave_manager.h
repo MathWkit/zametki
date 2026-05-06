@@ -6,6 +6,8 @@
 
 namespace zametki::core
 {
+class DocumentManager;
+
 class AutosaveManager : public QObject
 {
     Q_OBJECT
@@ -16,9 +18,11 @@ public:
     void markDirty();
     void scheduleSave();
     void flushNow();
+    void setDocumentManager(DocumentManager *manager);
 
 private:
     QTimer m_timer;
+    DocumentManager *m_manager = nullptr;
 };
 }
 
