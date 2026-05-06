@@ -11,6 +11,7 @@ enum class CRDTOperationType
     DeleteBlock,
     ReorderBlock,
     UpdateBlockField,
+    SetBlockType,
     UpdateDocumentField
 };
 }
