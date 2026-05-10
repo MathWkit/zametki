@@ -29,6 +29,10 @@ public:
     Document getSnapshot() const;
     QString lastError() const;
 
+    QVector<Document> listAllDocuments();
+    QVector<Document> searchDocuments(const QString &query);
+    QVector<Document> getBacklinks(const QString &noteId);
+
     bool load(const QString &id);
     bool save();
     bool createEmptyDocument();
