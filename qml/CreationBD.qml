@@ -113,7 +113,9 @@ Rectangle {
         id: folderDialog
         title: "Выберите папку для базы данных"
         onAccepted: {
-            root.selectedDirectoryPath = String(selectedFolder);
+            var rawPath = String(selectedFolder);
+            var cleaned = rawPath.replace(/^file:\/\//, "");
+            root.selectedDirectoryPath = decodeURIComponent(cleaned);
             root.errorText = "";
         }
     }

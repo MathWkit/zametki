@@ -15,7 +15,7 @@ project(zametki VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 QuickLayouts Sql)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 QuickLayouts Sql Widgets)
 
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
@@ -28,6 +28,12 @@ qt_add_executable(appzametki
     src/core/document_factory.cpp
     src/core/block_text_accessor.cpp
     src/bridge/document_bridge.cpp
+    src/editor/block_widget.cpp
+    src/editor/paragraph_widget.cpp
+    src/editor/heading_widget.cpp
+    src/editor/todo_widget.cpp
+    src/editor/editor_canvas_widget.cpp
+    src/editor/editor_controller.cpp
     src/crdt/crdt_id.cpp
     src/crdt/crdt_clock.cpp
     src/crdt/crdt_map.cpp
@@ -69,6 +75,12 @@ qt_add_executable(appzametki
     include/core/autosave_manager.h
     src/core/autosave_manager.cpp
     include/bridge/document_bridge.h
+    include/editor/block_widget.h
+    include/editor/paragraph_widget.h
+    include/editor/heading_widget.h
+    include/editor/todo_widget.h
+    include/editor/editor_canvas_widget.h
+    include/editor/editor_controller.h
     include/crdt/crdt_operation.h
     include/crdt/crdt_id.h
     include/crdt/crdt_clock.h
@@ -198,6 +210,7 @@ target_link_libraries(appzametki
         Qt6::QuickControls2
         Qt6::QuickLayouts
         Qt6::Sql
+        Qt6::Widgets
 )
 
 include(GNUInstallDirs)

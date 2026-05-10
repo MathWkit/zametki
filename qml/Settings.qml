@@ -22,7 +22,12 @@ Item {
             return "";
         }
 
-        return "file://" + encodeURI(AppState.saveDirectory);
+        let normalizedPath = AppState.saveDirectory.replace(/\\/g, "/");
+        if (normalizedPath.indexOf("/") === 0) {
+            return "file://" + encodeURI(normalizedPath);
+        }
+
+        return "file:///" + encodeURI(normalizedPath);
     }
 
     Rectangle {
@@ -920,7 +925,9 @@ Item {
             id: notesFolderDialog
             title: "Выберите папку для заметок"
             onAccepted: {
-                AppState.saveDirectory = String(selectedFolder);
+                var rawPath = String(selectedFolder);
+                var cleaned = rawPath.replace(/^file:\/\//, "");
+                AppState.saveDirectory = decodeURIComponent(cleaned);
             }
         }
     }
