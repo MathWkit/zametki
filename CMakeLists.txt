@@ -40,6 +40,7 @@ qt_add_executable(appzametki
     src/crdt/crdt_block_sequence.cpp
     src/core/crdt_snapshot_converter.cpp
     src/core/link_parser.cpp
+    src/export/markdown_exporter.cpp
     src/storage/sqlite/sqlite_links_repository.cpp
     include/core/block_type.h
     include/core/blocks/paragraph_block.h
@@ -53,6 +54,7 @@ qt_add_executable(appzametki
     include/core/block_text_accessor.h
     include/core/crdt_snapshot_converter.h
     include/core/link_parser.h
+    include/export/markdown_exporter.h
     include/core/graph_node.h
     include/core/graph_edge.h
     include/storage/sqlite/sqlite_connection_provider.h

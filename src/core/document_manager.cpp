@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QStringList>
+#include <QSet>
 
 #include "core/block_text_accessor.h"
 #include "crdt/crdt_id.h"
@@ -32,6 +33,116 @@ Document DocumentManager::getSnapshot() const
 QString DocumentManager::lastError() const
 {
     return m_lastError;
+}
+
+QVector<Document> DocumentManager::listAllDocuments()
+{
+    setError(QString());
+    QVector<Document> documents;
+    const QList<QString> ids = m_repository.listAll();
+    documents.reserve(ids.size());
+
+    for (const auto &id : ids)
+    {
+        Document snapshot;
+        if (m_converter.hasSnapshot(id))
+        {
+            snapshot = m_converter.cachedSnapshot(id);
+        }
+        else
+        {
+            snapshot = m_repository.read(id);
+            if (snapshot.id.isEmpty())
+            {
+                continue;
+            }
+            m_converter.storeSnapshot(snapshot);
+        }
+
+        documents.push_back(snapshot);
+    }
+
+    return documents;
+}
+
+QVector<Document> DocumentManager::searchDocuments(const QString &query)
+{
+    setError(QString());
+    const QString trimmed = query.trimmed();
+    if (trimmed.isEmpty())
+    {
+        return listAllDocuments();
+    }
+
+    QVector<Document> documents;
+    const QStringList ids = m_searchIndexer.search(trimmed);
+    documents.reserve(ids.size());
+
+    QSet<QString> seen;
+    for (const auto &id : ids)
+    {
+        if (seen.contains(id))
+        {
+            continue;
+        }
+        seen.insert(id);
+
+        Document snapshot;
+        if (m_converter.hasSnapshot(id))
+        {
+            snapshot = m_converter.cachedSnapshot(id);
+        }
+        else
+        {
+            snapshot = m_repository.read(id);
+            if (snapshot.id.isEmpty())
+            {
+                continue;
+            }
+            m_converter.storeSnapshot(snapshot);
+        }
+
+        documents.push_back(snapshot);
+    }
+
+    return documents;
+}
+
+QVector<Document> DocumentManager::getBacklinks(const QString &noteId)
+{
+    setError(QString());
+    QVector<Document> documents;
+    const QStringList ids = m_linksRepository.getBacklinks(noteId);
+    documents.reserve(ids.size());
+
+    QSet<QString> seen;
+    for (const auto &id : ids)
+    {
+        if (seen.contains(id))
+        {
+            continue;
+        }
+        seen.insert(id);
+
+        Document snapshot;
+        if (m_converter.hasSnapshot(id))
+        {
+            snapshot = m_converter.cachedSnapshot(id);
+        }
+        else
+        {
+            snapshot = m_repository.read(id);
+            if (snapshot.id.isEmpty())
+            {
+                continue;
+            }
+            m_converter.storeSnapshot(snapshot);
+        }
+
+        documents.push_back(snapshot);
+    }
+
+    return documents;
 }
 
 bool DocumentManager::load(const QString &id)

@@ -15,6 +15,7 @@ Window {
     property bool searchViewVisible: false
     property bool shareViewVisible: false
     property bool profileViewVisible: false
+    readonly property bool blockEditorEnabled: AppState.blockEditorEnabled
     readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
     readonly property var selectedNotePathSegments: buildSelectedNotePathSegments(selectedItemKey)
 
@@ -127,6 +128,7 @@ Window {
         Item {
             id: main
             visible: !window.settingsViewVisible
+            enabled: window.blockEditorEnabled
             anchors.left: aside.right
             anchors.right: parent.right
             anchors.top: parent.top
