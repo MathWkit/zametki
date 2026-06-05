@@ -16,8 +16,12 @@ public:
     QString text() const;
     void setText(const QString &text);
 
+signals:
+    void textEdited(const QString &text);
+
 private:
     QTextEdit *m_editor = nullptr;
+    bool m_ignoreChanges = false;
 };
 }
 

@@ -26,6 +26,8 @@ class DocumentManager : public QObject
 public:
     explicit DocumentManager(QObject *parent = nullptr);
 
+    bool setStorageRoot(const QString &notesPath);
+
     Document getSnapshot() const;
     QString lastError() const;
 
@@ -42,10 +44,11 @@ public:
     void applyTextInsert(const QString &blockId, int position, const QString &text);
     void applyTextDelete(const QString &blockId, int position, int length);
 
-    void insertBlock(const QString &afterBlockId, BlockType type);
+    QString insertBlock(const QString &afterBlockId, BlockType type);
     void deleteBlock(const QString &blockId);
 
     void updateTodoBlock(const QString &blockId, const TodoBlock &data);
+    void convertBlockType(const QString &blockId, BlockType type, int headingLevel = 1, bool todoDone = false);
 
 signals:
     void snapshotChanged();
@@ -74,4 +77,3 @@ private:
 }
 
 #endif // ZAMETKI_DOCUMENT_MANAGER_H
-

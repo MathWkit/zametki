@@ -14,6 +14,15 @@ ParagraphWidget::ParagraphWidget(QWidget *parent)
     m_editor = new QTextEdit(this);
     m_editor->setAcceptRichText(false);
     layout->addWidget(m_editor);
+
+    connect(m_editor, &QTextEdit::textChanged, this, [this]()
+    {
+        if (m_ignoreChanges)
+        {
+            return;
+        }
+        emit textEdited(m_editor->toPlainText());
+    });
 }
 
 QString ParagraphWidget::text() const
@@ -25,8 +34,9 @@ void ParagraphWidget::setText(const QString &text)
 {
     if (m_editor)
     {
+        m_ignoreChanges = true;
         m_editor->setPlainText(text);
+        m_ignoreChanges = false;
     }
 }
 }
-

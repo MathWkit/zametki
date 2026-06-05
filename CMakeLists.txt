@@ -117,10 +117,12 @@ qt_add_qml_module(appzametki
         qml/Share.qml
         qml/Profile.qml
         qml/scripts/Handlers.mjs
+        qml/scripts/EditorShortcuts.mjs
         qml/scripts/Theme.js
         qml/components/FolderNoteList.qml
         qml/components/SidebarPanel.qml
         qml/components/MainHeaderBar.qml
+        qml/components/editor/NoteBlockEditor.qml
         qml/components/AppSwitch.qml
         qml/components/AppButton.qml
         qml/components/AppPageTitleText.qml
