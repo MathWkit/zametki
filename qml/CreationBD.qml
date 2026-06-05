@@ -8,6 +8,8 @@ import "scripts/Theme.js" as Palette
 import "components"
 
 Rectangle {
+    width: 500
+    height: 500
     id: root
 
     property string fontFamily: ""
@@ -19,8 +21,8 @@ Rectangle {
     color: Palette.overlayScrim
 
     AppSectionCard {
-        width: Math.min(parent.width - Palette.creationBdCardHorizontalMargin, Palette.creationBdMaxCardWidth)
-        height: implicitHeight
+        width: 500
+        height: 500
         anchors.centerIn: parent
         cardColor: Palette.headerBackground
         cornerRadius: Palette.modalSurfaceRadius
