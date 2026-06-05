@@ -17,9 +17,13 @@ public:
     void setText(const QString &text);
     void setLevel(int level);
 
+signals:
+    void textEdited(const QString &text);
+
 private:
     QTextEdit *m_editor = nullptr;
     int m_level = 1;
+    bool m_ignoreChanges = false;
 };
 }
 

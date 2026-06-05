@@ -12,7 +12,7 @@ namespace zametki::storage::json
 class DocumentFileRepository
 {
 public:
-    explicit DocumentFileRepository(const QString &notesPath);
+    explicit DocumentFileRepository(QString notesPath);
 
     core::Document read(const QString &id) const;
 
@@ -34,6 +34,7 @@ private:
     QString m_notesPath;
     mutable QString m_lastError;
 
+    QString resolveDocumentFilePath(const QString &id) const;
     QString documentFilePath(const QString &id) const;
 };
 }

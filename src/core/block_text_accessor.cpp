@@ -1,20 +1,24 @@
 #include "core/block_text_accessor.h"
 
+#include "core/blocks/heading_block.h"
+#include "core/blocks/paragraph_block.h"
+#include "core/blocks/todo_block.h"
 
 namespace zametki::core
 {
 QString BlockTextAccessor::getText(const Block &block)
 {
-    switch (block.type)
+    if (block.data.canConvert<ParagraphBlock>())
     {
-    case BlockType::Paragraph:
-        return block.data.toString();
-    case BlockType::Heading:
-    case BlockType::Todo:
-    {
-        const QVariantMap map = block.data.toMap();
-        return map.value(QStringLiteral("text")).toString();
+        return block.data.value<ParagraphBlock>().text;
     }
+    if (block.data.canConvert<HeadingBlock>())
+    {
+        return block.data.value<HeadingBlock>().text;
+    }
+    if (block.data.canConvert<TodoBlock>())
+    {
+        return block.data.value<TodoBlock>().text;
     }
 
     return QString();
@@ -22,19 +26,26 @@ QString BlockTextAccessor::getText(const Block &block)
 
 bool BlockTextAccessor::setText(Block &block, const QString &text)
 {
-    switch (block.type)
+    if (block.data.canConvert<ParagraphBlock>())
     {
-    case BlockType::Paragraph:
-        block.data = text;
-        return true;
-    case BlockType::Heading:
-    case BlockType::Todo:
-    {
-        QVariantMap map = block.data.toMap();
-        map.insert(QStringLiteral("text"), text);
-        block.data = map;
+        ParagraphBlock data = block.data.value<ParagraphBlock>();
+        data.text = text;
+        block.data = QVariant::fromValue(data);
         return true;
     }
+    if (block.data.canConvert<HeadingBlock>())
+    {
+        HeadingBlock data = block.data.value<HeadingBlock>();
+        data.text = text;
+        block.data = QVariant::fromValue(data);
+        return true;
+    }
+    if (block.data.canConvert<TodoBlock>())
+    {
+        TodoBlock data = block.data.value<TodoBlock>();
+        data.text = text;
+        block.data = QVariant::fromValue(data);
+        return true;
     }
 
     return false;

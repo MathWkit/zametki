@@ -17,6 +17,15 @@ HeadingWidget::HeadingWidget(QWidget *parent)
 	m_editor->setAcceptRichText(false);
 	layout->addWidget(m_editor);
 
+	connect(m_editor, &QTextEdit::textChanged, this, [this]()
+	{
+		if (m_ignoreChanges)
+		{
+			return;
+		}
+		emit textEdited(m_editor->toPlainText());
+	});
+
 	setLevel(1);
 }
 
@@ -29,7 +38,9 @@ void HeadingWidget::setText(const QString &text)
 {
 	if (m_editor)
 	{
+		m_ignoreChanges = true;
 		m_editor->setPlainText(text);
+		m_ignoreChanges = false;
 	}
 }
 

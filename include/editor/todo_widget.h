@@ -19,9 +19,14 @@ public:
     bool done() const;
     void setDone(bool done);
 
+signals:
+    void textEdited(const QString &text);
+    void doneToggled(bool done);
+
 private:
     QCheckBox *m_check = nullptr;
     QTextEdit *m_editor = nullptr;
+    bool m_ignoreChanges = false;
 };
 }
 

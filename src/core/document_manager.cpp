@@ -25,6 +25,34 @@ DocumentManager::DocumentManager(QObject *parent)
     m_document = crdt::CRDTDocument(m_siteId);
 }
 
+bool DocumentManager::setStorageRoot(const QString &notesPath)
+{
+    const QString trimmed = notesPath.trimmed();
+    if (trimmed.isEmpty())
+    {
+        setError(QStringLiteral("storage_path_empty"));
+        return false;
+    }
+
+    QDir dir(trimmed);
+    if (!dir.exists() && !dir.mkpath(QStringLiteral(".")))
+    {
+        setError(QStringLiteral("storage_path_create_failed"));
+        return false;
+    }
+
+    const QString absoluteNotesPath = dir.absolutePath();
+    m_repository = storage::json::DocumentFileRepository(absoluteNotesPath);
+
+    const QString indexPath = dir.absoluteFilePath(QStringLiteral("index.db"));
+    m_sqliteProvider.setDatabasePath(indexPath);
+    m_noteIndexRepository.setProvider(&m_sqliteProvider);
+    m_linksRepository.setProvider(&m_sqliteProvider);
+    m_searchIndexer.setProvider(&m_sqliteProvider);
+
+    return true;
+}
+
 Document DocumentManager::getSnapshot() const
 {
     return m_snapshot;
@@ -247,11 +275,43 @@ bool DocumentManager::save()
 bool DocumentManager::createEmptyDocument()
 {
     setError(QString());
+    const QVector<Document> existingDocuments = listAllDocuments();
+    QString title = QStringLiteral("Новая заметка");
+    int suffix = 2;
+    QSet<QString> existingTitles;
+    for (const auto &document : existingDocuments)
+    {
+        if (!document.title.trimmed().isEmpty())
+        {
+            existingTitles.insert(document.title.trimmed());
+        }
+    }
+    while (existingTitles.contains(title))
+    {
+        title = QStringLiteral("Новая заметка %1").arg(suffix++);
+    }
+
     m_document = crdt::CRDTDocument(m_siteId);
     m_document.id = m_idGenerator.create();
-    m_document.title = QString();
+    m_document.title = title;
     m_document.tags.clear();
     m_document.blocks = crdt::CRDTBlockSequence(m_siteId);
+
+    crdt::CRDTBlock block;
+    block.id = crdt::createCRDTId(m_siteId);
+    block.type = BlockType::Paragraph;
+    crdt::CRDTText text(m_siteId);
+    text.fromQString(QString(), m_siteId);
+    block.data.set(QStringLiteral("text"), text.serialize(), 0);
+
+    const QString opId = m_idGenerator.createOperationId();
+    if (m_document.applyInsertBlock(opId, block, crdt::CRDTSequenceId(), crdt::CRDTSequenceId()))
+    {
+        updateSnapshot();
+        emit snapshotChanged();
+        return true;
+    }
+
     updateSnapshot();
     emit snapshotChanged();
     return true;
@@ -394,12 +454,19 @@ void DocumentManager::applyTextDelete(const QString &blockId, int position, int 
     }
 }
 
-void DocumentManager::insertBlock(const QString &afterBlockId, BlockType type)
+QString DocumentManager::insertBlock(const QString &afterBlockId, BlockType type)
 {
+    if (m_document.id.isEmpty())
+    {
+        m_document.id = m_idGenerator.create();
+        m_document.title.clear();
+        m_document.tags.clear();
+    }
+
     crdt::CRDTId afterId;
     if (!afterBlockId.isEmpty() && !parseBlockId(afterBlockId, afterId))
     {
-        return;
+        return {};
     }
 
     crdt::CRDTBlock block;
@@ -477,7 +544,10 @@ void DocumentManager::insertBlock(const QString &afterBlockId, BlockType type)
     {
         updateSnapshot();
         emit snapshotChanged();
+        return makeBlockId(block.id);
     }
+
+    return {};
 }
 
 void DocumentManager::deleteBlock(const QString &blockId)
@@ -512,6 +582,42 @@ void DocumentManager::updateTodoBlock(const QString &blockId, const TodoBlock &d
         updateSnapshot();
         emit snapshotChanged();
     }
+}
+
+void DocumentManager::convertBlockType(const QString &blockId, BlockType type, int headingLevel, bool todoDone)
+{
+    crdt::CRDTId id;
+    if (!parseBlockId(blockId, id))
+    {
+        return;
+    }
+
+    const QString typeOpId = m_idGenerator.createOperationId();
+    if (!m_document.applySetBlockType(typeOpId, id, type))
+    {
+        return;
+    }
+
+    if (type == BlockType::Heading)
+    {
+        const int level = qBound(1, headingLevel, 3);
+        const QString levelOpId = m_idGenerator.createOperationId();
+        m_document.applyUpdateBlockField(levelOpId, id, QStringLiteral("level"), level, ++m_blockVersionCounter);
+    }
+    else if (type == BlockType::Todo)
+    {
+        const QString doneOpId = m_idGenerator.createOperationId();
+        m_document.applyUpdateBlockField(doneOpId, id, QStringLiteral("done"), todoDone, ++m_blockVersionCounter);
+        const QString priorityOpId = m_idGenerator.createOperationId();
+        m_document.applyUpdateBlockField(priorityOpId, id, QStringLiteral("priority"), QString(), ++m_blockVersionCounter);
+        const QString deadlineOpId = m_idGenerator.createOperationId();
+        m_document.applyUpdateBlockField(deadlineOpId, id, QStringLiteral("deadline"), QDate(), ++m_blockVersionCounter);
+        const QString colorOpId = m_idGenerator.createOperationId();
+        m_document.applyUpdateBlockField(colorOpId, id, QStringLiteral("color"), QString(), ++m_blockVersionCounter);
+    }
+
+    updateSnapshot();
+    emit snapshotChanged();
 }
 
 bool DocumentManager::parseBlockId(const QString &text, crdt::CRDTId &outId) const

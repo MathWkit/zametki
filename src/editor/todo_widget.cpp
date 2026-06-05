@@ -18,6 +18,24 @@ TodoWidget::TodoWidget(QWidget *parent)
     m_editor = new QTextEdit(this);
     m_editor->setAcceptRichText(false);
     layout->addWidget(m_editor, 1);
+
+    connect(m_editor, &QTextEdit::textChanged, this, [this]()
+    {
+        if (m_ignoreChanges)
+        {
+            return;
+        }
+        emit textEdited(m_editor->toPlainText());
+    });
+
+    connect(m_check, &QCheckBox::toggled, this, [this](bool checked)
+    {
+        if (m_ignoreChanges)
+        {
+            return;
+        }
+        emit doneToggled(checked);
+    });
 }
 
 QString TodoWidget::text() const
@@ -29,7 +47,9 @@ void TodoWidget::setText(const QString &text)
 {
     if (m_editor)
     {
+        m_ignoreChanges = true;
         m_editor->setPlainText(text);
+        m_ignoreChanges = false;
     }
 }
 
@@ -42,8 +62,9 @@ void TodoWidget::setDone(bool done)
 {
     if (m_check)
     {
+        m_ignoreChanges = true;
         m_check->setChecked(done);
+        m_ignoreChanges = false;
     }
 }
 }
-
