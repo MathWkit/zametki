@@ -15,10 +15,8 @@ project(zametki VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# ⚡ Здесь ключевое: правильные имена компонентов
-find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 QuickLayouts)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 QuickLayouts Sql Widgets)
 
-# Set Qt policies
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
 
@@ -26,12 +24,86 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appzametki
     src/main.cpp
-    src/filecreator.cpp
-    include/filecreator.h
+    src/core/id_generator.cpp
+    src/core/document_factory.cpp
+    src/core/block_text_accessor.cpp
+    src/bridge/document_bridge.cpp
+    src/editor/block_widget.cpp
+    src/editor/paragraph_widget.cpp
+    src/editor/heading_widget.cpp
+    src/editor/todo_widget.cpp
+    src/editor/editor_canvas_widget.cpp
+    src/editor/editor_controller.cpp
+    src/crdt/crdt_id.cpp
+    src/crdt/crdt_clock.cpp
+    src/crdt/crdt_map.cpp
+    src/crdt/crdt_result.cpp
+    src/crdt/crdt_errors.cpp
+    src/crdt/crdt_block.cpp
+    src/crdt/crdt_document.cpp
+    src/crdt/crdt_sequence_id.cpp
+    src/crdt/crdt_text.cpp
+    src/crdt/crdt_block_sequence.cpp
+    src/core/crdt_snapshot_converter.cpp
+    src/core/link_parser.cpp
+    src/export/markdown_exporter.cpp
+    src/storage/sqlite/sqlite_links_repository.cpp
+    include/core/block_type.h
+    include/core/blocks/paragraph_block.h
+    include/core/blocks/heading_block.h
+    include/core/blocks/todo_block.h
+    include/core/block.h
+    include/core/document.h
+    include/core/unsupported_block.h
+    include/core/id_generator.h
+    include/core/document_factory.h
+    include/core/block_text_accessor.h
+    include/core/crdt_snapshot_converter.h
+    include/core/link_parser.h
+    include/export/markdown_exporter.h
+    include/core/graph_node.h
+    include/core/graph_edge.h
+    include/storage/sqlite/sqlite_connection_provider.h
+    include/storage/sqlite/sqlite_note_index_repository.h
+    include/storage/sqlite/sqlite_links_repository.h
+    include/storage/search/search_indexer.h
+    src/storage/sqlite/sqlite_connection_provider.cpp
+    src/storage/sqlite/sqlite_note_index_repository.cpp
+    src/storage/search/search_indexer.cpp
+    include/core/document_manager.h
+    src/core/document_manager.cpp
+    include/core/autosave_manager.h
+    src/core/autosave_manager.cpp
+    include/bridge/document_bridge.h
+    include/editor/block_widget.h
+    include/editor/paragraph_widget.h
+    include/editor/heading_widget.h
+    include/editor/todo_widget.h
+    include/editor/editor_canvas_widget.h
+    include/editor/editor_controller.h
+    include/crdt/crdt_operation.h
+    include/crdt/crdt_id.h
+    include/crdt/crdt_clock.h
+    include/crdt/crdt_map.h
+    include/crdt/crdt_result.h
+    include/crdt/crdt_errors.h
+    include/crdt/crdt_block.h
+    include/crdt/crdt_document.h
+    include/crdt/crdt_sequence_id.h
+    include/crdt/crdt_text.h
+    include/crdt/crdt_block_sequence.h
+    include/storage/json/block_type_codec.h
+    src/storage/json/block_type_codec.cpp
+    include/storage/json/document_json_serializer.h
+    src/storage/json/document_json_serializer.cpp
+    include/storage/json/document_file_repository.h
+    src/storage/json/document_file_repository.cpp
 )
 
 target_include_directories(appzametki
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/crdt
 )
 
 qt_add_qml_module(appzametki
@@ -45,10 +117,12 @@ qt_add_qml_module(appzametki
         qml/Share.qml
         qml/Profile.qml
         qml/scripts/Handlers.mjs
+        qml/scripts/EditorShortcuts.mjs
         qml/scripts/Theme.js
         qml/components/FolderNoteList.qml
         qml/components/SidebarPanel.qml
         qml/components/MainHeaderBar.qml
+        qml/components/editor/NoteBlockEditor.qml
         qml/components/AppSwitch.qml
         qml/components/AppButton.qml
         qml/components/AppPageTitleText.qml
@@ -133,12 +207,14 @@ set_target_properties(appzametki PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-# ⚡ Линковка с правильными компонентами
 target_link_libraries(appzametki
     PRIVATE
+        Qt6::Core
         Qt6::Quick
         Qt6::QuickControls2
         Qt6::QuickLayouts
+        Qt6::Sql
+        Qt6::Widgets
 )
 
 include(GNUInstallDirs)
