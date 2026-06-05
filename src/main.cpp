@@ -1,34 +1,21 @@
 #include <QCoreApplication>
-#include <QApplication>
+#include <QGuiApplication>
 #include <QQuickStyle>
 #include <QQmlApplicationEngine>
 #include <qqml.h>
-#include <QStandardPaths>
-#include <QDir>
-#include <QObject>
 
-#include "core/document_manager.h"
-#include "core/autosave_manager.h"
-#include "bridge/document_bridge.h"
+#include "filecreator.h"
 
 int main(int argc, char *argv[])
 {
     QQuickStyle::setStyle(QStringLiteral("Basic"));
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
     QCoreApplication::setOrganizationName("zametki");
     QCoreApplication::setApplicationName("zametki");
 
     QQmlApplicationEngine engine;
-
-    const QString notesPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/notes");
-    QDir().mkpath(notesPath);
-
-    zametki::core::DocumentManager documentManager;
-    zametki::core::AutosaveManager autosaveManager(&documentManager);
-    autosaveManager.setDebounceInterval(300);
-    zametki::bridge::DocumentBridge documentBridge(&documentManager);
-
-    qmlRegisterSingletonInstance("zametki", 1, 0, "AppState", &documentBridge);
+    FileCreator fileCreator;
+    qmlRegisterSingletonInstance("zametki", 1, 0, "AppState", &fileCreator);
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,

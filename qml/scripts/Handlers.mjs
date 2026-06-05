@@ -2,13 +2,13 @@ export function onSearchClicked() {
     console.log("Нажатие на Поиск");
 }
 
-export function onNewNoteClicked(appState) {
-    if (appState && appState.createEmptyDocument && appState.createEmptyDocument()) {
+export function onNewNoteClicked(fileCreator) {
+    if (fileCreator && fileCreator.createDesktopMarkdown()) {
         console.log("Создана новая заметка");
-    } else if (appState) {
-        console.log("Не удалось создать заметку:", appState.lastError());
+    } else if (fileCreator) {
+        console.log("Не удалось создать файл:", fileCreator.lastError());
     } else {
-        console.log("Не удалось создать заметку: AppState не задан");
+        console.log("Не удалось создать файл: fileCreator не задан");
     }
 }
 
@@ -36,14 +36,8 @@ export function onMoreClicked() {
     console.log("Нажатие на Дополнительно");
 }
 
-export function onNoteClicked(appState, noteTitle) {
-    if (appState && appState.openDocumentByTitle && appState.openDocumentByTitle(noteTitle)) {
-        console.log("Открыта заметка:", noteTitle);
-    } else if (appState) {
-        console.log("Не удалось открыть заметку:", appState.lastError());
-    } else {
-        console.log("Не удалось открыть заметку: AppState не задан");
-    }
+export function onNoteClicked(noteTitle) {
+    console.log("Выбрана заметка:", noteTitle);
 }
 
 export function onFolderClicked(folderTitle) {
