@@ -6,7 +6,7 @@ Text {
     property color textColor: Palette.textSecondary
 
     font.styleName: "Medium"
-    font.pointSize: Palette.fontSizeMd
+    font.pixelSize: Palette.fontSizeMd
     font.family: uiFontFamily
     color: textColor
 }

@@ -63,14 +63,14 @@ Item {
         width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.authCardMinWidth, root.width - (root.dialogHorizontalMargin * 2)))
         height: Math.min(contentLayout.implicitHeight + Palette.spacingHuge, root.maxDialogHeight)
         color: Palette.backgroundWhite
-        radius: Palette.radiusXl
+        radius: Palette.modalSurfaceRadius
         anchors.centerIn: parent
         clip: true
 
         ColumnLayout {
             id: contentLayout
             anchors.fill: parent
-            anchors.margins: Palette.spacingMassive
+            anchors.margins: Palette.dialogPadding
             spacing: Palette.spacingHuge
 
             // ==================== 1. Header ====================
@@ -83,11 +83,9 @@ Item {
                     Layout.fillWidth: true
                 }
 
-                AppActionButtonCompact {
-                    text: "✕"
-                    backgroundColor: Palette.surfaceColor
-                    Layout.preferredHeight: Palette.buttonHeightBase
-                    Layout.preferredWidth: Palette.buttonHeightBase
+                AppIconSurfaceButton {
+                    iconSource: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
+                    Layout.alignment: Qt.AlignVCenter
                     onClicked: {
                         console.log("Кнопка: Закрыть");
                         root.closeClicked();
@@ -109,7 +107,8 @@ Item {
 
                 AppSectionCard {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: currentAccountContent.implicitHeight + Palette.spacingLg
+                    Layout.preferredHeight: Math.max(currentAccountContent.implicitHeight + Palette.spacingXl,
+                                                     Palette.avatarBase + Palette.spacingXl * 2)
 
                     RowLayout {
                         id: currentAccountContent
@@ -130,10 +129,9 @@ Item {
                             Layout.alignment: Qt.AlignLeft
                             spacing: Palette.spacingSm
 
-                            AppBodyText {
+                            AppPageTitleText {
                                 text: root.currentAccount.firstName + " " + root.currentAccount.lastName
-                                font.pointSize: Palette.fontSizeMd
-                                font.styleName: "SemiBold"
+                                textPixelSize: Palette.fontSizeMd
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                             }
@@ -172,7 +170,7 @@ Item {
                             backgroundColor: Palette.backgroundWhite
                             borderColor: Palette.borderSoft
                             borderWidth: 1
-                            fontPointSize: Palette.fontSizeSm
+                            fontPixelSize: Palette.fontSizeSm
                             onClicked: {
                                 console.log("Кнопка: " + modelData.label);
                                 switch (modelData.signal) {
@@ -218,7 +216,7 @@ Item {
                     text: qsTr("Добавить")
                     Layout.preferredWidth: Palette.actionButtonMediumWidth
                     Layout.preferredHeight: Palette.buttonHeightBase
-                    textColor: Palette.backgroundWhite
+                    textColor: Palette.textPrimary
                     backgroundColor: Palette.accentPrimary
                     onClicked: {
                         console.log("Кнопка: Добавить");
@@ -284,7 +282,7 @@ Item {
 
                                     AppActionButton {
                                         text: modelData.isCurrent ? qsTr("Текущий") : qsTr("Выбрать")
-                                        textColor: modelData.isCurrent ? Palette.backgroundWhite : Palette.textPrimary
+                                        textColor: Palette.textPrimary
                                         backgroundColor: modelData.isCurrent ? Palette.accentPrimary : Palette.backgroundWhite
                                         borderColor: modelData.isCurrent ? Palette.accentPrimary : Palette.borderSoft
                                         borderWidth: 1

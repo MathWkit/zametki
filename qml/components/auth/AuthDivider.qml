@@ -7,7 +7,7 @@ Item {
 
     property string labelText: qsTr("или")
     property string uiFontFamily: Palette.fontFamily
-    property color lineColor: Palette.authInputBorder
+    property color lineColor: Palette.dividerColor
     property color labelColor: Palette.textSecondary
 
     Layout.fillWidth: true

@@ -173,7 +173,7 @@ Column {
                     font.family: root.fontFamily
                     font.pixelSize: Palette.fontSizeBase
                     font.weight: Font.Normal
-                    color: treeItem.isSelected ? Palette.accentPrimary : Palette.textPrimary
+                    color: Palette.textPrimary
                     wrapMode: Text.NoWrap
                     elide: Text.ElideRight
                 }
@@ -235,7 +235,7 @@ Column {
                     font.family: root.fontFamily
                     font.pixelSize: Palette.fontSizeBase
                     font.weight: Font.Normal
-                    color: noteItem.isSelected ? Palette.accentPrimary : Palette.textPrimary
+                    color: Palette.textPrimary
                     wrapMode: Text.NoWrap
                     elide: Text.ElideRight
                 }

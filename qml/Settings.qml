@@ -10,6 +10,7 @@ Item {
     id: root
     anchors.fill: parent
     signal closeRequested
+    property int selectedSectionIndex: 0
 
     readonly property color colorBackground: Palette.backgroundLight
     readonly property int contentInset: Palette.contentInset
@@ -107,10 +108,12 @@ Item {
 
                         delegate: SettingsNavItem {
                             required property var modelData
+                            required property int index
 
                             iconSource: modelData.iconSource
                             titleText: modelData.titleText
-                            active: modelData.active
+                            active: index === root.selectedSectionIndex
+                            onClicked: root.selectedSectionIndex = index
                         }
                     }
 
@@ -154,7 +157,7 @@ Item {
                         }
 
                         AppActionButtonCompact {
-                            text: "Done"
+                            text: qsTr("Готово")
                             onClicked: root.closeRequested()
                         }
                     }
@@ -213,7 +216,7 @@ Item {
                                             id: columnLayout7
 
                                             SettingsRowLabel {
-                                                text: "Appearance"
+                                                text: qsTr("Оформление")
                                             }
 
                                             AppDescriptionText {
@@ -229,7 +232,7 @@ Item {
                                             id: appearanceCombo
                                             Layout.preferredWidth: Palette.space4 * 5
 
-                                            model: ["Light", "Dark", "Purple"]
+                                            model: [qsTr("Светлая"), qsTr("Тёмная"), qsTr("Фиолетовая")]
                                         }
                                         Layout.fillWidth: true
                                         Layout.fillHeight: false
@@ -313,7 +316,7 @@ Item {
                                             id: columnLayout11
 
                                             SettingsRowLabel {
-                                                text: "Live Preview"
+                                                text: qsTr("Живой предпросмотр")
                                             }
                                         }
 
@@ -620,7 +623,7 @@ Item {
                                             id: columnLayout24
 
                                             SettingsRowLabel {
-                                                text: "Fuzzy search"
+                                                text: qsTr("Нечеткий поиск")
                                             }
                                         }
 
@@ -897,7 +900,7 @@ Item {
 
                                     SettingsKeyValueRow {
                                         keyText: "Хранилище: "
-                                        valueText: "Local"
+                                        valueText: "Локальное"
                                     }
 
                                     AppActionButton {

@@ -16,3 +16,4 @@ AppActionButtonCompact 1.0 AppActionButtonCompact.qml
 AppInputField 1.0 AppInputField.qml
 AppDropdown 1.0 AppDropdown.qml
 AppInitialsAvatar 1.0 AppInitialsAvatar.qml
+AppIconSurfaceButton 1.0 AppIconSurfaceButton.qml

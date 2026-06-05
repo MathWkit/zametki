@@ -9,53 +9,55 @@ Item {
     id: root
     clip: true
 
+    signal closeClicked
+
     readonly property Item dialogItem: dialog
     readonly property int dialogMargin: Palette.space2
     readonly property int dialogMinHeight: Palette.controlHeightBase + Palette.searchHintBarHeight + Palette.space4
 
     property var recentNotes: [
         {
-            title: "Note 1",
-            subtitle: "path / to / note",
+            title: qsTr("Заметка 1"),
+            subtitle: "путь / к / заметке",
             icon: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
         },
         {
-            title: "Note 2",
-            subtitle: "path / to / second note",
+            title: qsTr("Заметка 2"),
+            subtitle: "путь / ко / второй заметке",
             icon: "qrc:/qt/qml/zametki/assets/icons/list/note.svg"
         }
     ]
 
     property var folders: [
         {
-            title: "Project Notes",
+            title: qsTr("Проектные заметки"),
             icon: "qrc:/qt/qml/zametki/assets/icons/list/folder.svg"
         }
     ]
 
     property var commands: [
         {
-            title: "Create New Note",
+            title: qsTr("Создать заметку"),
             icon: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg"
         },
         {
-            title: "Open Graph View",
+            title: qsTr("Открыть граф"),
             icon: "qrc:/qt/qml/zametki/assets/icons/sidebar/graph-view.svg"
         }
     ]
 
     property var footerHints: [
         {
-            icon: "qrc:/qt/qml/zametki/assets/icons/unused/open-bracket.svg",
-            label: qsTr("Navigate")
+            icon: "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg",
+            label: qsTr("Навигация")
         },
         {
             icon: "qrc:/qt/qml/zametki/assets/icons/sidebar/new-note.svg",
-            label: qsTr("Open")
+            label: qsTr("Открыть")
         },
         {
-            icon: "qrc:/qt/qml/zametki/assets/icons/header/more.svg",
-            label: qsTr("Close")
+            icon: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg",
+            label: qsTr("Закрыть")
         }
     ]
 
@@ -64,7 +66,7 @@ Item {
         width: Math.min(Palette.dialogMaxWidth, Math.max(Palette.searchDialogMinWidth, root.width - (root.dialogMargin * 2)))
         height: Math.min(Palette.searchDialogHeight, Math.max(root.dialogMinHeight, root.height - (root.dialogMargin * 2)))
         color: Palette.headerBackground
-        radius: Palette.radiusLg
+        radius: Palette.modalSurfaceRadius
         border.width: 1
         border.color: Palette.border
         anchors.centerIn: parent
@@ -75,12 +77,23 @@ Item {
             anchors.fill: parent
             spacing: 0
 
-            SearchInputBar {
+            RowLayout {
                 Layout.fillWidth: true
-                Layout.leftMargin: Palette.searchInset
-                Layout.rightMargin: Palette.searchInset
-                Layout.topMargin: Palette.space2
-                Layout.bottomMargin: Palette.space2
+                Layout.leftMargin: Palette.dialogPadding
+                Layout.rightMargin: Palette.dialogPadding
+                Layout.topMargin: Palette.spacingXl
+                Layout.bottomMargin: Palette.spacingXl
+                spacing: Palette.spacingXl
+
+                SearchInputBar {
+                    Layout.fillWidth: true
+                }
+
+                AppIconSurfaceButton {
+                    iconSource: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
+                    Layout.alignment: Qt.AlignVCenter
+                    onClicked: root.closeClicked()
+                }
             }
 
             AppDivider {
@@ -101,8 +114,8 @@ Item {
                     spacing: 0
 
                     SearchSectionHeader {
-                        text: qsTr("RECENT NOTES")
-                        Layout.leftMargin: Palette.searchSectionInset
+                        text: qsTr("ПОСЛЕДНИЕ ЗАМЕТКИ")
+                        Layout.leftMargin: Palette.dialogPadding
                         Layout.topMargin: Palette.space2
                     }
 
@@ -114,7 +127,7 @@ Item {
                             required property int index
 
                             Layout.leftMargin: Palette.searchInset
-                            Layout.rightMargin: Palette.searchInset
+                            Layout.rightMargin: Palette.dialogPadding
                             Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
@@ -123,8 +136,8 @@ Item {
                     }
 
                     SearchSectionHeader {
-                        text: qsTr("FOLDERS")
-                        Layout.leftMargin: Palette.searchSectionInset
+                        text: qsTr("ПАПКИ")
+                        Layout.leftMargin: Palette.dialogPadding
                         Layout.topMargin: Palette.space2
                     }
 
@@ -136,7 +149,7 @@ Item {
                             required property int index
 
                             Layout.leftMargin: Palette.searchInset
-                            Layout.rightMargin: Palette.searchInset
+                            Layout.rightMargin: Palette.dialogPadding
                             Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title
@@ -144,8 +157,8 @@ Item {
                     }
 
                     SearchSectionHeader {
-                        text: qsTr("COMMANDS")
-                        Layout.leftMargin: Palette.searchSectionInset
+                        text: qsTr("КОМАНДЫ")
+                        Layout.leftMargin: Palette.dialogPadding
                         Layout.topMargin: Palette.space2
                     }
 
@@ -157,7 +170,7 @@ Item {
                             required property int index
 
                             Layout.leftMargin: Palette.searchInset
-                            Layout.rightMargin: Palette.searchInset
+                            Layout.rightMargin: Palette.dialogPadding
                             Layout.topMargin: index === 0 ? Palette.spacingXl : 0
                             iconSource: modelData.icon
                             titleText: modelData.title

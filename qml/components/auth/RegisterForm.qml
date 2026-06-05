@@ -63,13 +63,13 @@ Item {
 
         AppPageTitleText {
             text: qsTr("Регистрация")
-            textPointSize: Palette.fontSizeXxl
+            textPixelSize: Palette.fontSizeXxl
             Layout.fillWidth: true
         }
 
         AppDescriptionText {
             text: qsTr("Создайте новый аккаунт")
-            textPointSize: Palette.fontSizeSm
+            textPixelSize: Palette.fontSizeSm
             Layout.fillWidth: true
         }
 
@@ -90,7 +90,7 @@ Item {
             text: root.nameError
             visible: text.length > 0
             textColor: Palette.errorColor
-            textPointSize: Palette.fontSizeSm
+            textPixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }
@@ -112,7 +112,7 @@ Item {
             text: root.emailError
             visible: text.length > 0
             textColor: Palette.errorColor
-            textPointSize: Palette.fontSizeSm
+            textPixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }
@@ -138,7 +138,7 @@ Item {
             text: root.passwordError
             visible: text.length > 0
             textColor: Palette.errorColor
-            textPointSize: Palette.fontSizeSm
+            textPixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }
@@ -161,7 +161,7 @@ Item {
             text: root.confirmPasswordError
             visible: text.length > 0
             textColor: Palette.errorColor
-            textPointSize: Palette.fontSizeSm
+            textPixelSize: Palette.fontSizeSm
             wrapMode: Text.WordWrap
             Layout.fillWidth: true
         }

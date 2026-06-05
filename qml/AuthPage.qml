@@ -14,9 +14,9 @@ Item {
     property int mode: 0
     property bool googleAuthAvailable: true
     property bool appleAuthAvailable: Qt.platform.os === "osx"
-    property bool closeOnOutsideClick: false
+    property bool closeOnOutsideClick: true
     readonly property int cardOuterMargin: Palette.space3
-    readonly property int cardContentPadding: Palette.space2
+    readonly property int cardContentPadding: Palette.dialogPadding
     readonly property int cardContentSpacing: Palette.space2
 
     signal loginRequested(string email, string password)
@@ -45,7 +45,7 @@ Item {
         height: Math.min(contentLayout.implicitHeight + (root.cardContentPadding * 2), Math.max(Palette.authCardMinWidth, root.height - (root.cardOuterMargin * 2)))
         anchors.centerIn: parent
         color: Palette.backgroundWhite
-        radius: Palette.authCardRadius
+        radius: Palette.modalSurfaceRadius
         border.width: 1
         border.color: Palette.border
         clip: true
@@ -56,15 +56,26 @@ Item {
             anchors.margins: root.cardContentPadding
             spacing: root.cardContentSpacing
 
-            AppPageTitleText {
-                text: qsTr("Аккаунт")
-                textPointSize: Palette.authTitleSize
+            RowLayout {
                 Layout.fillWidth: true
+                spacing: Palette.spacingXl
+
+                AppPageTitleText {
+                    text: qsTr("Аккаунт")
+                    textPixelSize: Palette.authTitleSize
+                    Layout.fillWidth: true
+                }
+
+                AppIconSurfaceButton {
+                    iconSource: "qrc:/qt/qml/zametki/assets/icons/share/close-btn.svg"
+                    Layout.alignment: Qt.AlignVCenter
+                    onClicked: root.closeRequested()
+                }
             }
 
             AppDescriptionText {
                 text: qsTr("Войдите или создайте новый аккаунт")
-                textPointSize: Palette.fontSizeSm
+                textPixelSize: Palette.fontSizeSm
                 Layout.fillWidth: true
             }
 

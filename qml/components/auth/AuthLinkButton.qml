@@ -3,14 +3,14 @@ import ".."
 import "../../scripts/Theme.js" as Palette
 
 AppActionButton {
-    textColor: Palette.accentPrimary
+    textColor: Palette.textPrimary
     backgroundColor: "transparent"
     hoverBackgroundColor: "transparent"
     pressedBackgroundColor: "transparent"
     fontFamily: Palette.fontFamily
-    fontPointSize: Palette.fontSizeSm
+    fontPixelSize: Palette.fontSizeSm
     horizontalPadding: 0
     verticalPadding: 0
-    underlineOnHover: true
+    underlineOnHover: false
     clickable: true
 }

@@ -21,5 +21,5 @@ AppInputField {
     fieldBottomPadding: Palette.authFieldVerticalPadding
     cornerRadius: Palette.radiusLg
     borderWidthNormal: Palette.inputBorderWidth
-    borderWidthFocused: 2
+    borderWidthFocused: Palette.inputFocusBorderWidth
 }

@@ -19,7 +19,7 @@ TabButton {
         font: control.font
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        color: control.checked ? Palette.backgroundWhite : control.normalTextColor
+        color: control.normalTextColor
     }
 
     background: Rectangle {

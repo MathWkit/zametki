@@ -12,12 +12,12 @@ ComboBox {
     property int dropdownBorderWidth: 1
     property color optionHoverColor: Palette.surfaceColor
     property color optionTextColor: Palette.textPrimary
-    property string indicatorSource: "qrc:/qt/qml/zametki/assets/icons/unused/open-bracket.svg"
+    property string indicatorSource: "qrc:/qt/qml/zametki/assets/icons/list/closed-bracket.svg"
     property int leftTextPadding: Palette.dropdownTextPaddingLeft
     property int rightTextPadding: Palette.dropdownTextPaddingRight
 
-    topPadding: 12
-    bottomPadding: 12
+    topPadding: Palette.spacingXl
+    bottomPadding: Palette.spacingXl
 
     contentItem: Text {
         text: control.displayText
@@ -26,6 +26,7 @@ ComboBox {
         rightPadding: control.rightTextPadding
         verticalAlignment: Text.AlignVCenter
         font.family: control.uiFontFamily
+        font.pixelSize: Palette.fontSizeMd
     }
 
     indicator: Image {
@@ -58,8 +59,9 @@ ComboBox {
             text: optionDelegate.modelData
             color: control.optionTextColor
             verticalAlignment: Text.AlignVCenter
-            leftPadding: 12
+            leftPadding: Palette.spacingXl
             font.family: control.uiFontFamily
+            font.pixelSize: Palette.fontSizeMd
         }
     }
 

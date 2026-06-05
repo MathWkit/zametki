@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick 6.8
 import QtQuick.Controls 6.8
 import QtQuick.Dialogs 6.8
+import QtQuick.Layouts 1.15
 import "scripts/Theme.js" as Palette
 import "components"
 
@@ -18,48 +19,51 @@ Rectangle {
     color: Palette.overlayScrim
 
     AppSectionCard {
-        width: Math.min(parent.width - 40, 480)
+        width: Math.min(parent.width - Palette.creationBdCardHorizontalMargin, Palette.creationBdMaxCardWidth)
         height: implicitHeight
         anchors.centerIn: parent
         cardColor: Palette.headerBackground
-        cornerRadius: 8
+        cornerRadius: Palette.modalSurfaceRadius
         borderLineWidth: 1
         borderLineColor: Palette.border
 
-        Column {
+        ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 20
-            spacing: 12
+            anchors.margins: Palette.creationBdContentPadding
+            spacing: Palette.creationBdColumnSpacing
 
             AppPageTitleText {
-                text: "CreationBD"
+                text: "Создание базы данных"
                 uiFontFamily: root.fontFamily
-                textPointSize: 20
+                textPixelSize: Palette.fontSizeXxl
+                Layout.fillWidth: true
             }
 
             AppDescriptionText {
                 text: "Введите название базы и выберите папку, где она будет храниться"
                 uiFontFamily: root.fontFamily
-                textPointSize: 13
+                textPixelSize: Palette.fontSizeBase
                 wrapMode: Text.WordWrap
+                Layout.fillWidth: true
             }
 
             AppInputField {
                 id: databaseNameField
                 placeholderText: "Название базы данных"
-                font.family: root.fontFamily
+                uiFontFamily: root.fontFamily !== "" ? root.fontFamily : Palette.fontFamily
                 selectByMouse: true
+                Layout.fillWidth: true
             }
 
-            Row {
-                spacing: 8
-                width: parent.width
+            RowLayout {
+                spacing: Palette.creationBdFolderRowSpacing
+                Layout.fillWidth: true
 
                 AppActionButton {
                     id: chooseFolderButton
                     text: "Выбрать папку"
                     fontFamily: root.fontFamily
-                    fontPointSize: Palette.fontSizeBase
+                    fontPixelSize: Palette.fontSizeBase
                     textColor: Palette.textPrimary
                     backgroundColor: Palette.surfaceColor
                     hoverBackgroundColor: Palette.hover
@@ -69,11 +73,11 @@ Rectangle {
                 }
 
                 AppDescriptionText {
-                    width: parent.width - 140
-                    anchors.verticalCenter: parent.verticalCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
                     text: root.selectedDirectoryPath === "" ? "Папка не выбрана" : root.selectedDirectoryPath
                     uiFontFamily: root.fontFamily
-                    textPointSize: 12
+                    textPixelSize: Palette.fontSizeSm
                     elide: Text.ElideMiddle
                 }
             }
@@ -82,29 +86,31 @@ Rectangle {
                 visible: root.errorText.length > 0
                 text: root.errorText
                 uiFontFamily: root.fontFamily
-                textPointSize: 12
+                textPixelSize: Palette.fontSizeSm
                 textColor: Palette.errorColor
                 wrapMode: Text.WordWrap
+                Layout.fillWidth: true
             }
 
             AppActionButton {
                 id: createButton
                 text: "Создать"
                 fontFamily: root.fontFamily
-                fontPointSize: Palette.fontSizeMd
+                fontPixelSize: Palette.fontSizeMd
                 fontWeight: Font.DemiBold
-                textColor: Palette.backgroundWhite
+                textColor: Palette.textPrimary
                 backgroundColor: Palette.accentPrimary
                 hoverBackgroundColor: Palette.authAccentHover
                 pressedBackgroundColor: Palette.authAccentPressed
                 disabledBackgroundColor: Palette.authInputBorder
                 radius: Palette.radiusLg
-                implicitHeight: Palette.buttonHeightBase
+                implicitHeight: Palette.buttonHeightLarge
                 enabled: databaseNameField.text.trim().length > 0 && root.selectedDirectoryPath.length > 0
                 onClicked: {
                     root.errorText = "";
                     root.createDatabaseRequested(databaseNameField.text, root.selectedDirectoryPath);
                 }
+                Layout.fillWidth: true
             }
         }
     }

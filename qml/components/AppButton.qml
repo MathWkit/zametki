@@ -17,11 +17,11 @@ Rectangle {
     property color disabledBorderColor: borderColor
     property string fontFamily: Palette.fontFamily
     property string fontStyleName: "Regular"
-    property int fontPointSize: 14
+    property int fontPixelSize: Palette.fontSizeMd
     property int fontWeight: Font.Normal
     property bool underlineOnHover: false
-    property int horizontalPadding: 12
-    property int verticalPadding: 12
+    property int horizontalPadding: Palette.spacingXl
+    property int verticalPadding: Palette.spacingXl
     property int borderWidth: 0
     property real disabledOpacity: 0.6
     property bool clickable: false
@@ -73,7 +73,7 @@ Rectangle {
         color: control.enabled ? control.textColor : control.disabledTextColor
         font.family: control.fontFamily
         font.styleName: control.fontStyleName
-        font.pointSize: control.fontPointSize
+        font.pixelSize: control.fontPixelSize
         font.weight: control.fontWeight
         font.underline: control.underlineOnHover && control.hovered
     }
