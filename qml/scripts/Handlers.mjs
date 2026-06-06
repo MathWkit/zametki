@@ -122,6 +122,34 @@ export function onNoteAction(appState, syncState, action, itemKey, window) {
     return false;
 }
 
+export function onProfileSyncAction(syncState, actionKey, window) {
+    if (!syncState || !syncState.isLoggedIn) {
+        console.log("Синхронизация: требуется вход в аккаунт");
+        return false;
+    }
+
+    if (window) {
+        window.flushAllDelegates();
+    }
+
+    if (actionKey === "upload-all") {
+        syncState.uploadAllNotesNow();
+        return true;
+    }
+
+    if (actionKey === "unload-soft-all") {
+        syncState.softUnloadAllNotesNow();
+        return true;
+    }
+
+    if (actionKey === "unload-hard-all") {
+        syncState.hardUnloadAllNotesNow();
+        return true;
+    }
+
+    return false;
+}
+
 export function onMoreClicked(appState, window) {
     if (!window || !window.openNoteActionsMenu) {
         console.log("Нажатие на Дополнительно");

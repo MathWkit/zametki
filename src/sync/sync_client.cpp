@@ -196,14 +196,11 @@ void SyncClient::syncNow()
         }
         saveNoteMapping();
 
-        // Phase 1: download notes we don't have locally
+        // Download notes we don't have locally
         downloadMissingNotes(serverNotes, [this]() {
-            // Phase 2: upload all local notes
-            uploadAllLocalNotes([this]() {
-                m_isSyncing = false;
-                emit isSyncingChanged();
-                emit syncFinished(true, QString());
-            });
+            m_isSyncing = false;
+            emit isSyncingChanged();
+            emit syncFinished(true, QString());
         });
     });
 }
@@ -262,64 +259,6 @@ void SyncClient::downloadMissingNotes(const QMap<QString, QString> &serverNotes,
             checkDone();
         });
     }
-}
-
-void SyncClient::uploadAllLocalNotes(std::function<void()> onDone)
-{
-    if (m_notesPath.isEmpty()) {
-        onDone();
-        return;
-    }
-
-    QStringList localFiles;
-    QDirIterator it(m_notesPath, QStringList() << QStringLiteral("*.json"),
-                    QDir::Files, QDirIterator::Subdirectories);
-    while (it.hasNext()) {
-        const QString path = it.next();
-        const QString noteId = QFileInfo(path).baseName();
-        // Skip SQLite index files that end in .json by mistake; baseName must look like a UUID
-        if (!noteId.isEmpty()) {
-            localFiles.append(path);
-        }
-    }
-
-    if (localFiles.isEmpty()) {
-        onDone();
-        return;
-    }
-
-    auto pending = std::make_shared<int>(localFiles.size());
-    auto notified = std::make_shared<bool>(false);
-
-    auto checkDone = [pending, notified, onDone]() {
-        if (--(*pending) == 0 && !*notified) {
-            *notified = true;
-            onDone();
-        }
-    };
-
-    for (const QString &filePath : localFiles) {
-        const QString noteId = QFileInfo(filePath).baseName();
-        uploadNote(noteId, filePath);
-        // uploadNote is async; we need to track completion separately.
-        // For simplicity here we call checkDone after scheduling (fire-and-forget style).
-        // In the sync context we just fire all uploads; syncFinished emits after scheduling.
-        // A proper implementation would track per-upload completion; the simple version below
-        // calls onDone immediately after scheduling all uploads.
-    }
-
-    // We've scheduled all uploads. Since the server is eventually consistent from our writes,
-    // we treat scheduling as "done" for the sync phase indicator.
-    // This avoids blocking the UI on all network round-trips.
-    onDone();
-}
-
-void SyncClient::onDocumentSaved(const QString &noteId, const QString &filePath)
-{
-    if (!isLoggedIn() || noteId.isEmpty() || filePath.isEmpty())
-        return;
-
-    uploadNote(noteId, filePath, false);
 }
 
 void SyncClient::uploadNoteNow(const QString &noteId)
@@ -405,6 +344,237 @@ void SyncClient::downloadNoteNow(const QString &noteId)
     });
 }
 
+void SyncClient::uploadAllNotesNow()
+{
+    if (!isLoggedIn()) {
+        emit syncActionFinished(QStringLiteral("upload_all"), false, QStringLiteral("not_logged_in"));
+        return;
+    }
+    if (m_isSyncing) {
+        return;
+    }
+
+    const QStringList noteIds = listLocalNoteIds();
+    if (noteIds.isEmpty()) {
+        emit syncActionFinished(QStringLiteral("upload_all"), true, QString());
+        return;
+    }
+
+    m_isSyncing = true;
+    emit isSyncingChanged();
+
+    auto pending = std::make_shared<int>(noteIds.size());
+    auto failed = std::make_shared<bool>(false);
+    auto lastError = std::make_shared<QString>();
+
+    const auto checkDone = [this, pending, failed, lastError]() {
+        if (--(*pending) > 0) {
+            return;
+        }
+
+        m_isSyncing = false;
+        emit isSyncingChanged();
+        emit syncActionFinished(QStringLiteral("upload_all"),
+                                !*failed,
+                                *failed ? *lastError : QString());
+    };
+
+    for (const QString &noteId : noteIds) {
+        const QString filePath = noteFilePath(noteId);
+        if (filePath.isEmpty()) {
+            *failed = true;
+            *lastError = QStringLiteral("note_not_found");
+            checkDone();
+            continue;
+        }
+
+        uploadNote(noteId, filePath, false, [failed, lastError, checkDone](bool success, const QString &error) {
+            if (!success) {
+                *failed = true;
+                if (!error.isEmpty()) {
+                    *lastError = error;
+                }
+            }
+            checkDone();
+        });
+    }
+}
+
+void SyncClient::softUnloadAllNotesNow()
+{
+    deleteAllNotesFromServer(QStringLiteral("unload_soft_all"));
+}
+
+void SyncClient::hardUnloadAllNotesNow()
+{
+    deleteAllNotesFromServer(QStringLiteral("unload_hard_all"));
+}
+
+void SyncClient::resolveServerUuid(const QString &noteId, std::function<void(const QString &uuid)> onResolved)
+{
+    if (m_noteToUuid.contains(noteId)) {
+        onResolved(m_noteToUuid.value(noteId));
+        return;
+    }
+
+    QNetworkRequest req(QUrl(m_serverUrl + QStringLiteral("/api/files")));
+    req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
+
+    auto *reply = m_nam->get(req);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, noteId, onResolved]() {
+        reply->deleteLater();
+        const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+        if (status == 401) {
+            handleTokenExpired();
+            onResolved({});
+            return;
+        }
+        if (reply->error() != QNetworkReply::NoError) {
+            onResolved({});
+            return;
+        }
+
+        const QJsonArray files = QJsonDocument::fromJson(reply->readAll()).array();
+        QString foundUuid;
+        for (const QJsonValue &val : files) {
+            const QJsonObject obj = val.toObject();
+            const QString name = obj[QStringLiteral("name")].toString();
+            if (name == noteId + QStringLiteral(".json")) {
+                foundUuid = obj[QStringLiteral("uuid")].toString();
+                if (!foundUuid.isEmpty()) {
+                    m_noteToUuid.insert(noteId, foundUuid);
+                    m_uuidToNote.insert(foundUuid, noteId);
+                }
+                break;
+            }
+        }
+        saveNoteMapping();
+        onResolved(foundUuid);
+    });
+}
+
+void SyncClient::deleteAllNotesFromServer(const QString &action)
+{
+    if (!isLoggedIn()) {
+        emit syncActionFinished(action, false, QStringLiteral("not_logged_in"));
+        return;
+    }
+    if (m_isSyncing) {
+        return;
+    }
+
+    m_isSyncing = true;
+    emit isSyncingChanged();
+
+    QNetworkRequest req(QUrl(m_serverUrl + QStringLiteral("/api/files")));
+    req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
+
+    auto *reply = m_nam->get(req);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, action]() {
+        reply->deleteLater();
+        const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+        if (status == 401) {
+            handleTokenExpired();
+            m_isSyncing = false;
+            emit isSyncingChanged();
+            emit syncActionFinished(action, false, QStringLiteral("token_expired"));
+            return;
+        }
+        if (reply->error() != QNetworkReply::NoError) {
+            m_isSyncing = false;
+            emit isSyncingChanged();
+            emit syncActionFinished(action, false, reply->errorString());
+            return;
+        }
+
+        QStringList uuids;
+        const QJsonArray files = QJsonDocument::fromJson(reply->readAll()).array();
+        for (const QJsonValue &val : files) {
+            const QJsonObject obj = val.toObject();
+            const QString name = obj[QStringLiteral("name")].toString();
+            if (!name.endsWith(QStringLiteral(".json"))) {
+                continue;
+            }
+
+            const QString uuid = obj[QStringLiteral("uuid")].toString();
+            if (!uuid.isEmpty()) {
+                uuids.append(uuid);
+            }
+        }
+
+        if (uuids.isEmpty()) {
+            m_noteToUuid.clear();
+            m_uuidToNote.clear();
+            saveNoteMapping();
+            m_isSyncing = false;
+            emit isSyncingChanged();
+            emit syncActionFinished(action, true, QString());
+            return;
+        }
+
+        auto pending = std::make_shared<int>(uuids.size());
+        auto failed = std::make_shared<bool>(false);
+        auto lastError = std::make_shared<QString>();
+
+        const auto checkDone = [this, action, pending, failed, lastError]() {
+            if (--(*pending) > 0) {
+                return;
+            }
+
+            m_noteToUuid.clear();
+            m_uuidToNote.clear();
+            saveNoteMapping();
+            m_isSyncing = false;
+            emit isSyncingChanged();
+            emit syncActionFinished(action, !*failed, *failed ? *lastError : QString());
+        };
+
+        for (const QString &uuid : uuids) {
+            QNetworkRequest delReq(QUrl(m_serverUrl + QStringLiteral("/api/files/") + uuid));
+            delReq.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
+
+            auto *delReply = m_nam->deleteResource(delReq);
+            connect(delReply, &QNetworkReply::finished, this, [this, delReply, failed, lastError, checkDone]() {
+                delReply->deleteLater();
+                const int delStatus = delReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+                if (delStatus == 401) {
+                    handleTokenExpired();
+                    *failed = true;
+                    *lastError = QStringLiteral("token_expired");
+                } else if (delStatus != 200 && delStatus != 204 && delReply->error() != QNetworkReply::NoError) {
+                    *failed = true;
+                    *lastError = delReply->errorString();
+                }
+
+                checkDone();
+            });
+        }
+    });
+}
+
+QStringList SyncClient::listLocalNoteIds() const
+{
+    QStringList noteIds;
+    if (m_notesPath.isEmpty()) {
+        return noteIds;
+    }
+
+    QDirIterator it(m_notesPath, QStringList() << QStringLiteral("*.json"),
+                    QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        it.next();
+        const QString noteId = QFileInfo(it.filePath()).baseName();
+        if (!noteId.isEmpty()) {
+            noteIds.append(noteId);
+        }
+    }
+
+    return noteIds;
+}
+
 void SyncClient::downloadNoteByUuid(const QString &uuid, const QString &noteId)
 {
     QNetworkRequest req(QUrl(m_serverUrl + QStringLiteral("/api/files/") + uuid));
@@ -477,21 +647,30 @@ QString SyncClient::noteFilePath(const QString &noteId) const
 // Private helpers
 // --------------------------------------------------------------------------
 
-void SyncClient::uploadNote(const QString &noteId, const QString &filePath, bool notifyWhenDone)
+void SyncClient::uploadNote(const QString &noteId,
+                            const QString &filePath,
+                            bool notifyWhenDone,
+                            UploadCompleteFn onComplete)
 {
-    if (m_uploadingNotes.contains(noteId)) {
+    const auto finish = [noteId, notifyWhenDone, onComplete, this](bool success, const QString &error) {
         if (notifyWhenDone) {
-            emit noteActionFinished(noteId, QStringLiteral("upload"), false, QStringLiteral("upload_in_progress"));
+            emit noteActionFinished(noteId, QStringLiteral("upload"), success, error);
         }
+        if (onComplete) {
+            onComplete(success, error);
+        }
+    };
+
+    if (m_uploadingNotes.contains(noteId)) {
+        finish(false, QStringLiteral("upload_in_progress"));
         return;
     }
 
     QFile *file = new QFile(filePath, this);
     if (!file->open(QIODevice::ReadOnly)) {
-        if (notifyWhenDone) {
-            emit noteActionFinished(noteId, QStringLiteral("upload"), false, file->errorString());
-        }
+        const QString error = file->errorString();
         file->deleteLater();
+        finish(false, error);
         return;
     }
 
@@ -508,19 +687,22 @@ void SyncClient::uploadNote(const QString &noteId, const QString &filePath, bool
         delReq.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
 
         auto *delReply = m_nam->deleteResource(delReq);
-        connect(delReply, &QNetworkReply::finished, this, [this, delReply, noteId, content, notifyWhenDone]() {
+        connect(delReply, &QNetworkReply::finished, this, [this, delReply, noteId, content, notifyWhenDone, onComplete]() {
             delReply->deleteLater();
             // Remove old mapping regardless of delete result
             const QString oldUuid = m_noteToUuid.take(noteId);
             m_uuidToNote.remove(oldUuid);
-            doUploadContent(noteId, content, notifyWhenDone);
+            doUploadContent(noteId, content, notifyWhenDone, onComplete);
         });
     } else {
-        doUploadContent(noteId, content, notifyWhenDone);
+        doUploadContent(noteId, content, notifyWhenDone, onComplete);
     }
 }
 
-void SyncClient::doUploadContent(const QString &noteId, const QByteArray &content, bool notifyWhenDone)
+void SyncClient::doUploadContent(const QString &noteId,
+                                 const QByteArray &content,
+                                 bool notifyWhenDone,
+                                 UploadCompleteFn onComplete)
 {
     QNetworkRequest req(QUrl(m_serverUrl + QStringLiteral("/api/files")));
     req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
@@ -537,9 +719,18 @@ void SyncClient::doUploadContent(const QString &noteId, const QByteArray &conten
     auto *reply = m_nam->post(req, multiPart);
     multiPart->setParent(reply);
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, noteId, notifyWhenDone]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply, noteId, notifyWhenDone, onComplete]() {
         reply->deleteLater();
         m_uploadingNotes.remove(noteId);
+
+        const auto finish = [noteId, notifyWhenDone, onComplete, this](bool success, const QString &error) {
+            if (notifyWhenDone) {
+                emit noteActionFinished(noteId, QStringLiteral("upload"), success, error);
+            }
+            if (onComplete) {
+                onComplete(success, error);
+            }
+        };
 
         const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         if (status == 201) {
@@ -550,19 +741,14 @@ void SyncClient::doUploadContent(const QString &noteId, const QByteArray &conten
                 m_uuidToNote.insert(uuid, noteId);
                 saveNoteMapping();
             }
-            if (notifyWhenDone) {
-                emit noteActionFinished(noteId, QStringLiteral("upload"), true, QString());
-            }
+            finish(true, QString());
         } else if (status == 401) {
             handleTokenExpired();
-            if (notifyWhenDone) {
-                emit noteActionFinished(noteId, QStringLiteral("upload"), false, QStringLiteral("token_expired"));
-            }
-        } else if (notifyWhenDone) {
+            finish(false, QStringLiteral("token_expired"));
+        } else {
             const QJsonObject json = QJsonDocument::fromJson(reply->readAll()).object();
             const QString error = json[QStringLiteral("error")].toString();
-            emit noteActionFinished(noteId, QStringLiteral("upload"), false,
-                                    error.isEmpty() ? reply->errorString() : error);
+            finish(false, error.isEmpty() ? reply->errorString() : error);
         }
     });
 }

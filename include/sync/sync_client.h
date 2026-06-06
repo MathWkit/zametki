@@ -41,9 +41,9 @@ public:
     Q_INVOKABLE void syncNow();
     Q_INVOKABLE void uploadNoteNow(const QString &noteId);
     Q_INVOKABLE void downloadNoteNow(const QString &noteId);
-
-    // Called from C++ when DocumentManager successfully saves a note
-    void onDocumentSaved(const QString &noteId, const QString &filePath);
+    Q_INVOKABLE void uploadAllNotesNow();
+    Q_INVOKABLE void softUnloadAllNotesNow();
+    Q_INVOKABLE void hardUnloadAllNotesNow();
 
 signals:
     void loginFinished(bool success, const QString &error);
@@ -56,15 +56,25 @@ signals:
     // Emitted when new notes were downloaded - tells bridge to refresh sidebar
     void notesDirectoryChanged();
     void noteActionFinished(const QString &noteId, const QString &action, bool success, const QString &error);
+    void syncActionFinished(const QString &action, bool success, const QString &error);
 
 private:
-    void uploadNote(const QString &noteId, const QString &filePath, bool notifyWhenDone = false);
-    void doUploadContent(const QString &noteId, const QByteArray &content, bool notifyWhenDone = false);
-    void uploadAllLocalNotes(std::function<void()> onDone);
+    using UploadCompleteFn = std::function<void(bool success, const QString &error)>;
+    void uploadNote(const QString &noteId,
+                    const QString &filePath,
+                    bool notifyWhenDone = false,
+                    UploadCompleteFn onComplete = nullptr);
+    void doUploadContent(const QString &noteId,
+                         const QByteArray &content,
+                         bool notifyWhenDone,
+                         UploadCompleteFn onComplete = nullptr);
+    QStringList listLocalNoteIds() const;
+    void deleteAllNotesFromServer(const QString &action);
     void downloadMissingNotes(const QMap<QString, QString> &serverNotes, std::function<void()> onDone);
     bool noteExistsLocally(const QString &noteId) const;
     QString noteFilePath(const QString &noteId) const;
     void downloadNoteByUuid(const QString &uuid, const QString &noteId);
+    void resolveServerUuid(const QString &noteId, std::function<void(const QString &uuid)> onResolved);
     void handleTokenExpired();
     void loadSettings();
     void saveSettings();

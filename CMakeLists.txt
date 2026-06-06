@@ -28,6 +28,7 @@ qt_add_executable(appzametki
     src/core/document_factory.cpp
     src/core/block_text_accessor.cpp
     src/bridge/document_bridge.cpp
+    src/bridge/app_menu.cpp
     src/editor/block_widget.cpp
     src/editor/paragraph_widget.cpp
     src/editor/heading_widget.cpp
@@ -75,6 +76,7 @@ qt_add_executable(appzametki
     src/core/document_manager.cpp
     include/core/autosave_manager.h
     src/core/autosave_manager.cpp
+    include/bridge/app_menu.h
     include/bridge/document_bridge.h
     include/editor/block_widget.h
     include/editor/paragraph_widget.h

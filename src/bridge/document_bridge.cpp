@@ -743,6 +743,45 @@ bool DocumentBridge::deleteDocumentByItemKey(const QString &itemKey)
     return true;
 }
 
+bool DocumentBridge::deleteAllDocuments()
+{
+    if (!m_manager)
+    {
+        m_lastError = QStringLiteral("manager_missing");
+        return false;
+    }
+
+    const QVector<zametki::core::Document> docs = m_manager->listAllDocuments();
+    QStringList ids;
+    ids.reserve(docs.size());
+    for (const auto &doc : docs)
+    {
+        if (!doc.id.isEmpty())
+        {
+            ids.append(doc.id);
+        }
+    }
+
+    for (const QString &id : ids)
+    {
+        if (!m_manager->deleteDocument(id))
+        {
+            m_lastError = m_manager->lastError();
+            return false;
+        }
+    }
+
+    m_blocks.clear();
+    m_lastTextById.clear();
+    emit blocksChanged();
+    emit snapshotChanged();
+    rebuildNoteTitles();
+    refreshFolderTitles();
+    emit directoryContentChanged();
+    m_lastError.clear();
+    return true;
+}
+
 QString DocumentBridge::duplicateDocumentByItemKey(const QString &itemKey)
 {
     if (!m_manager)

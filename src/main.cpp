@@ -9,6 +9,7 @@
 
 #include "core/document_manager.h"
 #include "core/autosave_manager.h"
+#include "bridge/app_menu.h"
 #include "bridge/document_bridge.h"
 #include "sync/sync_client.h"
 
@@ -41,13 +42,6 @@ int main(int argc, char *argv[])
             syncClient.setNotesPath(dir.isEmpty() ? notesPath : dir);
         });
 
-    // After a note is saved locally, upload it to the server
-    QObject::connect(
-        &documentManager,
-        &zametki::core::DocumentManager::documentSaved,
-        &syncClient,
-        &zametki::sync::SyncClient::onDocumentSaved);
-
     // When new notes are downloaded from server, refresh the sidebar
     QObject::connect(
         &syncClient,
@@ -70,6 +64,7 @@ int main(int argc, char *argv[])
         { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.loadFromModule("zametki", "Main");
+    zametki::bridge::setupNativeMenuBar(&engine);
 
     return app.exec();
 }

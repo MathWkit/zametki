@@ -201,6 +201,46 @@ Window {
         noteActionsPopup.open();
     }
 
+    function menuNewNote() {
+        Handlers.onNewNoteClicked(AppState);
+    }
+
+    function menuSyncNow() {
+        window.flushAllDelegates();
+        SyncState.syncNow();
+    }
+
+    function menuSyncAction(actionKey) {
+        Handlers.onProfileSyncAction(SyncState, actionKey, window);
+    }
+
+    function menuOpenSettings() {
+        Handlers.onSettingsClicked();
+        window.searchViewVisible = false;
+        window.shareViewVisible = false;
+        window.settingsViewVisible = true;
+    }
+
+    function menuToggleSidebar() {
+        window.sidebarVisible = !window.sidebarVisible;
+        Handlers.onHideSidebarClicked();
+    }
+
+    function menuOpenSearch() {
+        Handlers.onSearchClicked();
+        window.settingsViewVisible = false;
+        window.shareViewVisible = false;
+        window.searchViewVisible = true;
+    }
+
+    function menuShowHelp() {
+        console.log("Нажатие на Помощь и справку");
+    }
+
+    function menuShowHotkeys() {
+        console.log("Нажатие на Горячие клавиши");
+    }
+
     width: 750
     height: 480
     minimumWidth: 500
@@ -706,6 +746,19 @@ Window {
                 window.flushAllDelegates();
                 AppState.openDocument(noteId);
                 window.syncEditorBlocks(true);
+            }
+        }
+        function onSyncActionFinished(action, success, error) {
+            if (!success) {
+                console.log("Синхронизация не удалась:", action, error);
+                return;
+            }
+            if (action === "unload_hard_all") {
+                if (AppState.deleteAllDocuments()) {
+                    window.selectedItemKey = "";
+                } else {
+                    console.log("Не удалось удалить локальные заметки:", AppState.lastError());
+                }
             }
         }
         function onNotesDirectoryChanged() {

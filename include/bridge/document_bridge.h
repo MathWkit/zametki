@@ -40,6 +40,7 @@ public:
     Q_INVOKABLE QString resolveDocumentIdFromItemKey(const QString &itemKey) const;
     Q_INVOKABLE QString currentItemKey() const;
     Q_INVOKABLE bool deleteDocumentByItemKey(const QString &itemKey);
+    Q_INVOKABLE bool deleteAllDocuments();
     Q_INVOKABLE QString duplicateDocumentByItemKey(const QString &itemKey);
     Q_INVOKABLE bool renameCurrentDocument(const QString &title);
     Q_INVOKABLE QString exportCurrentToMarkdown();
