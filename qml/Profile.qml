@@ -25,37 +25,22 @@ Item {
 
     readonly property Item dialogItem: mainRectangle
 
-    // ===== SAMPLE DATA =====
     property var currentAccount: ({
-            firstName: "John",
-            lastName: "Doe",
-            email: "john.doe@example.com",
-            avatar: ""
+            username: SyncState.isLoggedIn ? SyncState.username : qsTr("Не вошли"),
+            serverUrl: SyncState.isLoggedIn ? SyncState.serverUrl : ""
         })
 
-    property var accounts: [
+    property var accounts: SyncState.isLoggedIn ? [
         {
-            id: "account1",
-            firstName: "John",
-            lastName: "Doe",
-            email: "john.doe@example.com",
-            avatar: "",
+            id: "current",
+            username: SyncState.username,
+            serverUrl: SyncState.serverUrl,
             isCurrent: true
-        },
-        {
-            id: "account2",
-            firstName: "Jane",
-            lastName: "Smith",
-            email: "jane.smith@work.com",
-            avatar: "",
-            isCurrent: false
         }
-    ]
+    ] : []
 
-    function getInitials(firstName, lastName) {
-        const first = firstName ? firstName.charAt(0).toUpperCase() : "";
-        const last = lastName ? lastName.charAt(0).toUpperCase() : "";
-        return first + last;
+    function getInitials(username) {
+        return username ? username.charAt(0).toUpperCase() : "?";
     }
 
     Rectangle {
@@ -118,7 +103,7 @@ Item {
 
                         // Avatar or Initials
                         AppInitialsAvatar {
-                            initials: getInitials(root.currentAccount.firstName, root.currentAccount.lastName)
+                            initials: getInitials(root.currentAccount.username)
                             avatarSize: Palette.avatarBase
                             Layout.preferredWidth: Palette.avatarBase
                             Layout.preferredHeight: Palette.avatarBase
@@ -130,16 +115,17 @@ Item {
                             spacing: Palette.spacingSm
 
                             AppPageTitleText {
-                                text: root.currentAccount.firstName + " " + root.currentAccount.lastName
+                                text: root.currentAccount.username
                                 textPixelSize: Palette.fontSizeMd
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                             }
 
                             AppDescriptionText {
-                                text: root.currentAccount.email
+                                text: root.currentAccount.serverUrl
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
+                                visible: root.currentAccount.serverUrl.length > 0
                             }
                         }
                     }
@@ -257,7 +243,7 @@ Item {
 
                                     // Account Avatar
                                     AppInitialsAvatar {
-                                        initials: getInitials(modelData.firstName, modelData.lastName)
+                                        initials: getInitials(modelData.username)
                                         avatarSize: Palette.avatarSmall
                                         initialsPixelSize: Palette.fontSizeSm
                                         Layout.preferredWidth: Palette.avatarSmall
@@ -269,11 +255,12 @@ Item {
                                         spacing: Palette.spacingSm
 
                                         AppBodyText {
-                                            text: modelData.firstName + " " + modelData.lastName
+                                            text: modelData.username
                                         }
 
                                         AppDescriptionText {
-                                            text: modelData.email
+                                            text: modelData.serverUrl
+                                            visible: modelData.serverUrl && modelData.serverUrl.length > 0
                                         }
                                     }
                                     Item {
@@ -304,25 +291,56 @@ Item {
             // ==================== 6. Divider ====================
             AppDivider {}
 
-            // ==================== 7. Footer ====================
+            // ==================== 7. Sync row ====================
             RowLayout {
                 Layout.fillWidth: true
                 spacing: Palette.spacingXl
+                visible: SyncState.isLoggedIn
 
                 AppDescriptionText {
-                    text: qsTr("Вы можете оставаться в системе в нескольких аккаунтах и мгновенно переключаться между ними.")
+                    text: SyncState.isSyncing ? qsTr("Синхронизация…") : qsTr("Синхронизировать заметки с сервером")
                     wrapMode: Text.WordWrap
                     Layout.fillWidth: true
                     Layout.minimumWidth: 0
                 }
 
                 AppActionButton {
-                    text: qsTr("Выйти")
-                    textColor: Palette.errorColor
+                    text: qsTr("Синхронизировать")
+                    enabled: !SyncState.isSyncing
                     backgroundColor: Palette.backgroundWhite
+                    borderColor: Palette.borderSoft
+                    borderWidth: 1
+                    onClicked: SyncState.syncNow()
+                }
+            }
+
+            // ==================== 8. Footer ====================
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: Palette.spacingXl
+
+                AppDescriptionText {
+                    text: SyncState.isLoggedIn
+                          ? qsTr("Заметки автоматически сохраняются на сервере при редактировании.")
+                          : qsTr("Войдите в аккаунт, чтобы синхронизировать заметки между устройствами.")
+                    wrapMode: Text.WordWrap
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 0
+                }
+
+                AppActionButton {
+                    text: SyncState.isLoggedIn ? qsTr("Выйти") : qsTr("Войти")
+                    textColor: SyncState.isLoggedIn ? Palette.errorColor : Palette.textPrimary
+                    backgroundColor: Palette.backgroundWhite
+                    borderColor: SyncState.isLoggedIn ? "transparent" : Palette.borderSoft
+                    borderWidth: SyncState.isLoggedIn ? 0 : 1
                     onClicked: {
-                        console.log("Кнопка: Выйти");
-                        root.logoutClicked();
+                        if (SyncState.isLoggedIn) {
+                            root.logoutClicked();
+                        } else {
+                            root.closeClicked();
+                            root.addAccountClicked();
+                        }
                     }
                 }
             }

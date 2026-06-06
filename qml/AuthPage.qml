@@ -25,6 +25,10 @@ Item {
     signal appleAuthRequested
     signal closeRequested
 
+    // Error messages from server — set by parent (Main.qml) via Connections
+    property string loginError: ""
+    property string registerError: ""
+
     Rectangle {
         anchors.fill: parent
         color: Palette.backgroundLight
@@ -118,10 +122,14 @@ Item {
                     currentIndex: root.mode
 
                     LoginForm {
+                        id: loginForm
                         Layout.fillWidth: true
                         showGoogleAuth: root.googleAuthAvailable
                         showAppleAuth: root.appleAuthAvailable
+                        loading: SyncState.isSyncing
+                        serverError: root.loginError
                         onLoginRequested: function (email, password) {
+                            root.loginError = "";
                             root.loginRequested(email, password);
                         }
                         onGoogleAuthRequested: {
@@ -136,10 +144,14 @@ Item {
                     }
 
                     RegisterForm {
+                        id: registerForm
                         Layout.fillWidth: true
                         showGoogleAuth: root.googleAuthAvailable
                         showAppleAuth: root.appleAuthAvailable
+                        loading: SyncState.isSyncing
+                        serverError: root.registerError
                         onRegisterRequested: function (name, email, password) {
+                            root.registerError = "";
                             root.registerRequested(name, email, password);
                         }
                         onGoogleAuthRequested: {

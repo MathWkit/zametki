@@ -18,8 +18,10 @@ Item {
     signal appleAuthRequested
     signal switchToRegisterRequested
 
+    property bool loading: false
     property string emailError: ""
     property string passwordError: ""
+    property string serverError: ""
 
     function validateAndSubmit() {
         const email = emailField.text.trim();
@@ -144,11 +146,21 @@ Item {
             }
         }
 
+        AppDescriptionText {
+            text: root.serverError
+            visible: root.serverError.length > 0
+            textColor: Palette.errorColor
+            textPixelSize: Palette.fontSizeSm
+            wrapMode: Text.WordWrap
+            Layout.fillWidth: true
+        }
+
         AuthPrimaryButton {
             id: loginButton
             Layout.fillWidth: true
             Layout.topMargin: Palette.spacingSm
-            text: qsTr("Войти")
+            text: root.loading ? qsTr("Вход…") : qsTr("Войти")
+            enabled: !root.loading
             onClicked: root.validateAndSubmit()
         }
 

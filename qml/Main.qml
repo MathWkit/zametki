@@ -193,7 +193,7 @@ Window {
                     window.profileViewVisible = true;
                     break;
                 case "sync-status":
-                    console.log("Нажатие на Статус синхронизации");
+                    SyncState.syncNow();
                     break;
                 case "help":
                     console.log("Нажатие на Помощь и справку");
@@ -439,8 +439,8 @@ Window {
                 }
 
                 function onLogoutClicked() {
+                    SyncState.logout();
                     window.profileViewVisible = false;
-                    console.log("Нажатие на Выход");
                 }
 
                 function onAddAccountClicked() {
@@ -480,25 +480,42 @@ Window {
             visible: window.authViewVisible
             z: 9999
             fontFamily: interFont.name
-            closeOnOutsideClick: true
+            closeOnOutsideClick: !SyncState.isSyncing
             onCloseRequested: {
                 window.authViewVisible = false;
             }
             onLoginRequested: function (email, password) {
-                console.log("Запрос входа:", email, "длина пароля:", password.length);
-                window.authViewVisible = false;
+                SyncState.login(email, password);
             }
             onRegisterRequested: function (name, email, password) {
-                console.log("Запрос регистрации:", name, email, "длина пароля:", password.length);
-                window.authViewVisible = false;
+                // Server uses username+password; we use the email field as username
+                SyncState.registerUser(email, password);
             }
             onGoogleAuthRequested: {
                 console.log("Запрос входа через Google");
-                window.authViewVisible = false;
             }
             onAppleAuthRequested: {
                 console.log("Запрос входа через Apple");
-                window.authViewVisible = false;
+            }
+
+            Connections {
+                target: SyncState
+                function onLoginFinished(success, error) {
+                    if (success) {
+                        window.authViewVisible = false;
+                        authOverlay.loginError = "";
+                    } else {
+                        authOverlay.loginError = error;
+                    }
+                }
+                function onRegisterFinished(success, error) {
+                    if (success) {
+                        window.authViewVisible = false;
+                        authOverlay.registerError = "";
+                    } else {
+                        authOverlay.registerError = error;
+                    }
+                }
             }
         }
 

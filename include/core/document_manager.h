@@ -52,6 +52,7 @@ public:
 
 signals:
     void snapshotChanged();
+    void documentSaved(const QString &noteId, const QString &filePath);
 
 private:
     bool parseBlockId(const QString &text, crdt::CRDTId &outId) const;

@@ -18,6 +18,8 @@ Item {
     signal appleAuthRequested
     signal switchToLoginRequested
 
+    property bool loading: false
+    property string serverError: ""
     property string nameError: ""
     property string emailError: ""
     property string passwordError: ""
@@ -166,11 +168,21 @@ Item {
             Layout.fillWidth: true
         }
 
+        AppDescriptionText {
+            text: root.serverError
+            visible: root.serverError.length > 0
+            textColor: Palette.errorColor
+            textPixelSize: Palette.fontSizeSm
+            wrapMode: Text.WordWrap
+            Layout.fillWidth: true
+        }
+
         AuthPrimaryButton {
             id: createButton
             Layout.fillWidth: true
             Layout.topMargin: Palette.spacingSm
-            text: qsTr("Создать аккаунт")
+            text: root.loading ? qsTr("Создание…") : qsTr("Создать аккаунт")
+            enabled: !root.loading
             onClicked: root.validateAndSubmit()
         }
 

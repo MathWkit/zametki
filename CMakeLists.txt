@@ -15,7 +15,7 @@ project(zametki VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 QuickLayouts Sql Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 QuickLayouts Sql Widgets Network)
 
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0004 NEW)
@@ -99,12 +99,15 @@ qt_add_executable(appzametki
     src/storage/json/document_json_serializer.cpp
     include/storage/json/document_file_repository.h
     src/storage/json/document_file_repository.cpp
+    include/sync/sync_client.h
+    src/sync/sync_client.cpp
 )
 
 target_include_directories(appzametki
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/include/crdt
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/sync
 )
 
 qt_add_qml_module(appzametki
@@ -216,6 +219,7 @@ target_link_libraries(appzametki
         Qt6::QuickLayouts
         Qt6::Sql
         Qt6::Widgets
+        Qt6::Network
 )
 
 include(GNUInstallDirs)

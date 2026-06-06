@@ -269,6 +269,7 @@ bool DocumentManager::save()
         }
     }
 
+    emit documentSaved(m_snapshot.id, m_repository.documentPath(m_snapshot.id));
     return true;
 }
 
