@@ -86,8 +86,6 @@ Window {
             }
         }
     }
-    property string folderActionMode: ""
-    property string folderActionTargetPath: ""
     readonly property bool blockEditorEnabled: AppState.blockEditorEnabled
     readonly property real asideWidth: Math.max(width * Palette.sidebarWidthRatio, Palette.sidebarMinWidth)
     readonly property var selectedNotePathSegments: buildSelectedNotePathSegments(selectedItemKey)
@@ -151,31 +149,9 @@ Window {
     }
 
     function openFolderActionPopup(mode, targetPath) {
-        window.folderActionMode = mode;
-        window.folderActionTargetPath = targetPath || "";
-        folderPathField.text = "";
-        folderActionPopup.open();
-        Qt.callLater(function () {
-            folderPathField.forceActiveFocus();
-        });
-    }
-
-    function submitFolderAction() {
-        const value = folderPathField.text.trim();
-        if (window.folderActionMode === "create" && !value) {
-            return;
-        }
-
-        if (window.folderActionMode === "create") {
-            AppState.createFolder(value, window.folderActionTargetPath);
-        } else if (window.folderActionMode === "move" && window.selectedItemKey) {
-            window.flushAllDelegates();
-            if (AppState.moveItem(window.selectedItemKey, value)) {
-                window.selectedItemKey = AppState.currentItemKey();
-            }
-        }
-
-        folderActionPopup.close();
+        folderActionDialog.mode = mode;
+        folderActionDialog.targetFolderPath = targetPath || "";
+        folderActionDialog.open();
     }
 
     function positionNoteActionsPopup(globalX, globalY) {
@@ -644,42 +620,16 @@ Window {
             }
         }
 
-        Popup {
-            id: folderActionPopup
-            modal: true
-            anchors.centerIn: parent
-
-            contentItem: Column {
-                spacing: 10
-                width: 300
-
-                Text {
-                    text: window.folderActionMode === "create"
-                          ? "Введите имя папки:"
-                          : "Введите папку назначения (пусто — корень):"
-                    color: Palette.textPrimary
-                    wrapMode: Text.WordWrap
-                    width: parent.width
-                }
-
-                TextField {
-                    width: parent.width
-                    id: folderPathField
-                    placeholderText: window.folderActionMode === "create" ? "Имя папки" : "Папка/подпапка"
-                }
-
-                Row {
-                    spacing: 10
-                    anchors.right: parent.right
-
-                    Button {
-                        text: "OK"
-                        onClicked: window.submitFolderAction()
-                    }
-
-                    Button {
-                        text: "Отмена"
-                        onClicked: folderActionPopup.close()
+        FolderActionDialog {
+            id: folderActionDialog
+            uiFontFamily: interFont.name
+            onSubmitted: function (value) {
+                if (folderActionDialog.mode === "create") {
+                    AppState.createFolder(value, folderActionDialog.targetFolderPath);
+                } else if (window.selectedItemKey) {
+                    window.flushAllDelegates();
+                    if (AppState.moveItem(window.selectedItemKey, value)) {
+                        window.selectedItemKey = AppState.currentItemKey();
                     }
                 }
             }

@@ -124,7 +124,11 @@ qt_add_qml_module(appzametki
         qml/scripts/EditorShortcuts.mjs
         qml/scripts/Theme.js
         qml/components/FolderNoteList.qml
+        qml/components/AppMenuItem.qml
+        qml/components/AppMenuDivider.qml
+        qml/components/AppContextMenu.qml
         qml/components/NoteActionsPopup.qml
+        qml/components/FolderActionDialog.qml
         qml/components/SidebarPanel.qml
         qml/components/MainHeaderBar.qml
         qml/components/editor/NoteBlockEditor.qml
