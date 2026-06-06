@@ -7,7 +7,10 @@
 #include <QSet>
 #include <QVariantMap>
 
+#include "core/blocks/heading_block.h"
+#include "core/blocks/paragraph_block.h"
 #include "core/blocks/text_block.h"
+#include "core/blocks/todo_block.h"
 #include "storage/json/block_type_codec.h"
 
 namespace zametki::storage::json
@@ -158,10 +161,13 @@ QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) con
     if (block.type == core::BlockType::Paragraph)
     {
         core::ParagraphBlock paragraphBlock;
-        if (block.data.canConvert<QVariantMap>())
+        if (block.data.canConvert<core::ParagraphBlock>())
         {
-            const QVariantMap map = block.data.toMap();
-            paragraphBlock.text = map.value(QStringLiteral("text")).toString();
+            paragraphBlock = block.data.value<core::ParagraphBlock>();
+        }
+        else if (block.data.canConvert<QVariantMap>())
+        {
+            paragraphBlock.text = block.data.toMap().value(QStringLiteral("text")).toString();
         }
         else
         {
@@ -172,7 +178,11 @@ QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) con
     else if (block.type == core::BlockType::Heading)
     {
         core::HeadingBlock headingBlock;
-        if (block.data.canConvert<QVariantMap>())
+        if (block.data.canConvert<core::HeadingBlock>())
+        {
+            headingBlock = block.data.value<core::HeadingBlock>();
+        }
+        else if (block.data.canConvert<QVariantMap>())
         {
             const QVariantMap map = block.data.toMap();
             headingBlock.text = map.value(QStringLiteral("text")).toString();
@@ -187,7 +197,11 @@ QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) con
     else if (block.type == core::BlockType::Todo)
     {
         core::TodoBlock todoBlock;
-        if (block.data.canConvert<QVariantMap>())
+        if (block.data.canConvert<core::TodoBlock>())
+        {
+            todoBlock = block.data.value<core::TodoBlock>();
+        }
+        else if (block.data.canConvert<QVariantMap>())
         {
             const QVariantMap map = block.data.toMap();
             todoBlock.text = map.value(QStringLiteral("text")).toString();
@@ -209,6 +223,10 @@ QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) con
         if (block.data.canConvert<core::TextBlock>())
         {
             text = block.data.value<core::TextBlock>().text;
+        }
+        else if (block.data.canConvert<core::ParagraphBlock>())
+        {
+            text = block.data.value<core::ParagraphBlock>().text;
         }
         else if (block.data.canConvert<QVariantMap>())
         {
@@ -256,37 +274,28 @@ core::Block DocumentJsonSerializer::deserializeBlock(const QJsonObject &object) 
         if (block.type == core::BlockType::Paragraph)
         {
             const core::ParagraphBlock paragraphBlock = deserializeParagraphBlock(object.value(QStringLiteral("data")).toObject());
-            block.data = paragraphBlock.text;
+            block.data = QVariant::fromValue(paragraphBlock);
         }
         else if (block.type == core::BlockType::Heading)
         {
             const core::HeadingBlock headingBlock = deserializeHeadingBlock(object.value(QStringLiteral("data")).toObject());
-            QVariantMap headingData;
-            headingData.insert(QStringLiteral("text"), headingBlock.text);
-            headingData.insert(QStringLiteral("level"), headingBlock.level);
-            block.data = headingData;
+            block.data = QVariant::fromValue(headingBlock);
         }
         else if (block.type == core::BlockType::Todo)
         {
             const core::TodoBlock todoBlock = deserializeTodoBlock(object.value(QStringLiteral("data")).toObject());
-            QVariantMap todoData;
-            todoData.insert(QStringLiteral("text"), todoBlock.text);
-            todoData.insert(QStringLiteral("done"), todoBlock.done);
-            todoData.insert(QStringLiteral("priority"), todoBlock.priority);
-            todoData.insert(QStringLiteral("deadline"), todoBlock.deadline.toString(Qt::ISODate));
-            todoData.insert(QStringLiteral("color"), todoBlock.color);
-            block.data = todoData;
+            block.data = QVariant::fromValue(todoBlock);
         }
         else if (block.type == core::BlockType::Quote || block.type == core::BlockType::Bulleted
                  || block.type == core::BlockType::Numbered || block.type == core::BlockType::Code)
         {
-            QVariantMap textData;
-            textData.insert(QStringLiteral("text"), object.value(QStringLiteral("data")).toObject().value(QStringLiteral("text")).toString());
-            block.data = textData;
+            core::TextBlock textBlock;
+            textBlock.text = object.value(QStringLiteral("data")).toObject().value(QStringLiteral("text")).toString();
+            block.data = QVariant::fromValue(textBlock);
         }
         else if (block.type == core::BlockType::Divider)
         {
-            block.data = QVariantMap{};
+            block.data = QVariant::fromValue(core::TextBlock{});
         }
         else
         {

@@ -21,6 +21,42 @@ Window {
     property bool profileViewVisible: false
     property bool focusFirstBlockOnNextSnapshot: false
     property string pendingFocusBlockId: ""
+    property int _focusRetries: 0
+
+    // Robustly focus a block that may not yet exist as a delegate (the Repeater
+    // recreates delegates asynchronously after a structural model change). We
+    // poll a few frames until the delegate appears, then focus it.
+    Timer {
+        id: focusRetryTimer
+        interval: 16
+        repeat: true
+        onTriggered: {
+            if (!window.pendingFocusBlockId) { stop(); return; }
+            if (window.requestFocusForBlock(window.pendingFocusBlockId)) {
+                window.pendingFocusBlockId = "";
+                window._focusRetries = 0;
+                stop();
+                return;
+            }
+            window._focusRetries += 1;
+            if (window._focusRetries > 30) {
+                window.pendingFocusBlockId = "";
+                window._focusRetries = 0;
+                stop();
+            }
+        }
+    }
+
+    function scheduleFocus(blockId) {
+        window.pendingFocusBlockId = blockId;
+        window._focusRetries = 0;
+        // Try immediately (often the delegate already exists), then poll.
+        if (window.requestFocusForBlock(blockId)) {
+            window.pendingFocusBlockId = "";
+            return;
+        }
+        focusRetryTimer.restart();
+    }
     // Editor Repeater model. We deliberately do NOT bind directly to
     // AppState.blocks: a plain text edit emits blocksChanged (debounced save),
     // which would rebuild every delegate and drop the caret. Instead we refresh
@@ -385,28 +421,7 @@ Window {
                             editorWidth: editorColumn.width
                             uiFontFamily: interFont.name
                             onRequestFocusNext: function (blockId) {
-                                // Set pending ID so onSnapshotChanged can pick it up
-                                // if a structural rebuild fires later.
-                                window.pendingFocusBlockId = blockId;
-                                // Also schedule focus immediately: onSnapshotChanged
-                                // from insertBlockAfter fires BEFORE this handler runs
-                                // (it fires during the C++ call), so we must schedule
-                                // focus ourselves here too.
-                                Qt.callLater(function() {
-                                    if (window.pendingFocusBlockId) {
-                                        if (window.requestFocusForBlock(window.pendingFocusBlockId)) {
-                                            window.pendingFocusBlockId = "";
-                                        } else {
-                                            // One more retry after the next render frame
-                                            Qt.callLater(function() {
-                                                if (window.pendingFocusBlockId) {
-                                                    window.requestFocusForBlock(window.pendingFocusBlockId);
-                                                    window.pendingFocusBlockId = "";
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
+                                window.scheduleFocus(blockId);
                             }
                         }
                     }
@@ -636,11 +651,7 @@ Window {
             // delegate and reset cursor position.
             window.syncEditorBlocks(false);
             if (window.pendingFocusBlockId) {
-                Qt.callLater(() => {
-                    if (window.requestFocusForBlock(window.pendingFocusBlockId)) {
-                        window.pendingFocusBlockId = "";
-                    }
-                });
+                focusRetryTimer.restart();
             } else if (window.focusFirstBlockOnNextSnapshot) {
                 Qt.callLater(() => {
                     if (editorColumn.children.length > 0) {

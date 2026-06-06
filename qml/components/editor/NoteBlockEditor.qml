@@ -163,19 +163,6 @@ Item {
 
     function scheduleFlush() { saveTimer.restart() }
 
-    // Safety net: flush on delegate destruction (e.g. Repeater rebuild).
-    Component.onDestruction: {
-        if (!root._skipBlurFlush) {
-            saveTimer.stop()
-            // Call synchronously. AppState is still valid here.
-            if (root.blockType === "todo") {
-                AppState.updateTodoBlock(block.id, root.contentDraft, root.doneDraft)
-            } else {
-                AppState.replaceBlockText(block.id, root.contentDraft)
-            }
-        }
-    }
-
     // ─────────────────────────────────────────────────────────────────────
     // FOCUS API
     // ─────────────────────────────────────────────────────────────────────
