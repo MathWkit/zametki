@@ -171,39 +171,6 @@ QVariantList toFolderEntries(const QString &notesRoot, zametki::core::DocumentMa
     return entries;
 }
 
-void computeTextDiff(const QString &before, const QString &after, int &start, int &removed, QString &inserted)
-{
-    start = 0;
-    removed = 0;
-    inserted.clear();
-
-    const int beforeLen = before.size();
-    const int afterLen = after.size();
-
-    while (start < beforeLen && start < afterLen && before.at(start) == after.at(start))
-    {
-        ++start;
-    }
-
-    int beforeEnd = beforeLen - 1;
-    int afterEnd = afterLen - 1;
-    while (beforeEnd >= start && afterEnd >= start && before.at(beforeEnd) == after.at(afterEnd))
-    {
-        --beforeEnd;
-        --afterEnd;
-    }
-
-    removed = beforeEnd - start + 1;
-    if (removed < 0)
-    {
-        removed = 0;
-    }
-
-    if (afterEnd >= start)
-    {
-        inserted = after.mid(start, afterEnd - start + 1);
-    }
-}
 
 zametki::core::BlockType blockTypeFromString(const QString &type, bool &ok)
 {
@@ -328,6 +295,15 @@ bool DocumentBridge::openDocument(const QString &id)
     {
         m_lastError = QStringLiteral("manager_missing");
         return false;
+    }
+
+    // Persist current note before switching to prevent content loss.
+    // QML may have unsaved text in the editor timer; we save whatever
+    // the CRDT already knows about (the QML side flushes first via
+    // flushAllDelegates before calling this method).
+    if (!m_manager->getSnapshot().id.isEmpty())
+    {
+        m_manager->save();
     }
 
     const bool ok = m_manager->load(id);
@@ -883,31 +859,16 @@ void DocumentBridge::replaceBlockText(const QString &blockId, const QString &tex
         return;
     }
 
-    const QString previous = m_lastTextById.value(blockId);
-    if (previous == text)
+    if (m_lastTextById.value(blockId) == text)
     {
         return;
     }
 
-    int start = 0;
-    int removed = 0;
-    QString inserted;
-    computeTextDiff(previous, text, start, removed, inserted);
-
-    const int pendingSnapshots = (removed > 0 ? 1 : 0) + (!inserted.isEmpty() ? 1 : 0);
-    if (pendingSnapshots > 0)
-    {
-        m_ignoreSnapshotCount += pendingSnapshots;
-    }
-
-    if (removed > 0)
-    {
-        m_manager->applyTextDelete(blockId, start, removed);
-    }
-    if (!inserted.isEmpty())
-    {
-        m_manager->applyTextInsert(blockId, start, inserted);
-    }
+    // Replace the whole block text directly — no diff, no CRDT incremental ops.
+    // The manager emits snapshotChanged; we suppress the echo so the QML editor
+    // does not lose focus (we do an in-place m_blocks update instead).
+    m_ignoreSnapshotCount += 1;
+    m_manager->setBlockTextDirect(blockId, text);
 
     for (int i = 0; i < m_blocks.size(); ++i)
     {
@@ -1011,10 +972,36 @@ void DocumentBridge::convertBlockType(const QString &blockId, const QString &typ
 
     m_ignoreSnapshotCount += 1;
     m_manager->convertBlockType(blockId, blockType, headingLevel, todoDone);
+
+    // Update m_blocks in-place so QML delegates immediately see the new type
+    // without waiting for a snapshot rebuild (which would destroy the focused editor).
+    for (int i = 0; i < m_blocks.size(); ++i)
+    {
+        QVariantMap map = m_blocks.at(i).toMap();
+        if (map.value(QStringLiteral("id")).toString() == blockId)
+        {
+            map.insert(QStringLiteral("type"), type);
+            if (blockType == zametki::core::BlockType::Heading)
+            {
+                map.insert(QStringLiteral("level"), headingLevel);
+            }
+            if (blockType == zametki::core::BlockType::Todo)
+            {
+                map.insert(QStringLiteral("done"), todoDone);
+            }
+            m_blocks[i] = map;
+            break;
+        }
+    }
+    emit blocksChanged();
 }
 
 void DocumentBridge::rebuildBlocks(const zametki::core::Document &snapshot)
 {
+    // Reset suppression counter on every authoritative rebuild to prevent
+    // accumulation that would cause future snapshots to be silently dropped.
+    m_ignoreSnapshotCount = 0;
+
     QVariantList blocks;
     blocks.reserve(snapshot.blocks.size());
     m_lastTextById.clear();

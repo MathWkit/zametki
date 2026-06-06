@@ -455,6 +455,26 @@ void DocumentManager::applyTextDelete(const QString &blockId, int position, int 
     }
 }
 
+void DocumentManager::setBlockTextDirect(const QString &blockId, const QString &text)
+{
+    crdt::CRDTId id;
+    if (!parseBlockId(blockId, id))
+    {
+        return;
+    }
+
+    crdt::CRDTText crdtText(m_siteId);
+    crdtText.fromQString(text, m_siteId);
+
+    const QString opId = m_idGenerator.createOperationId();
+    if (m_document.applyUpdateBlockField(opId, id, QStringLiteral("text"), crdtText.serialize(),
+                                         ++m_blockVersionCounter))
+    {
+        updateSnapshot();
+        emit snapshotChanged();
+    }
+}
+
 QString DocumentManager::insertBlock(const QString &afterBlockId, BlockType type)
 {
     if (m_document.id.isEmpty())

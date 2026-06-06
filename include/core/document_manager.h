@@ -43,6 +43,7 @@ public:
 
     void applyTextInsert(const QString &blockId, int position, const QString &text);
     void applyTextDelete(const QString &blockId, int position, int length);
+    void setBlockTextDirect(const QString &blockId, const QString &text);
 
     QString insertBlock(const QString &afterBlockId, BlockType type);
     void deleteBlock(const QString &blockId);

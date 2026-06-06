@@ -9,67 +9,66 @@ import ".."
 Item {
     id: root
 
-    required property var block
-    required property int blockIndex
-    required property real editorWidth
-    property string uiFontFamily: Palette.fontFamily
+    required property var    block
+    required property int    blockIndex
+    required property real   editorWidth
+    property  string         uiFontFamily: Palette.fontFamily
 
     signal requestFocusNext(string blockId)
 
-    // ── State ────────────────────────────────────────────────────────────
-    property string contentDraft: ""    // text without prefix
-    property bool   doneDraft:    false // todo done state
-    property string syncedBlockId: ""
-    // editActive is DERIVED from the editor's real focus. The editField is always
-    // present (never toggled by visibility), so focus is never dropped by a model
-    // refresh — exactly how the original multi-editor version stayed focused.
-    readonly property bool editActive: editField.activeFocus
-    property bool   anyEditorFocused: editActive  // for gutter compat
-    property bool   _suppressTextChange: false     // guard recursive onTextChanged
-    property int    _savedContentCursor: 0         // cursor offset within content (after prefix)
-    property bool   _skipBlurFlush: false          // structural op already saved text
+    // ── Local state (NOT directly bound to block props) ───────────────────
+    // These are the source of truth for the current editing session.
+    // They are synced from `block` only when: (a) a different block is
+    // assigned to this delegate, or (b) we are not focused.
+    property string blockType:  "paragraph"
+    property int    blockLevel: 1
+    property string contentDraft: ""
+    property bool   doneDraft:    false
+
+    // Internal
+    property string _syncedId:           ""
+    property bool   _suppressTextChange: false
+    property bool   _skipBlurFlush:      false
 
     width:  editorWidth
     height: blockRow.implicitHeight
 
-    // ── Prefix helpers ───────────────────────────────────────────────────
-    // Ordinal of this block among a contiguous run of "numbered" blocks.
+    // ─────────────────────────────────────────────────────────────────────
+    // HELPERS
+    // ─────────────────────────────────────────────────────────────────────
+    function headingPx(level) {
+        if (level === 1) return Math.round(Palette.fontSizeBase * 1.875)
+        if (level === 2) return Math.round(Palette.fontSizeBase * 1.5)
+        if (level === 3) return Math.round(Palette.fontSizeBase * 1.25)
+        return Palette.fontSizeBase
+    }
+
     function numberedOrdinal() {
-        let n = 1;
+        let n = 1
         for (let i = blockIndex - 1; i >= 0; i--) {
-            const b = AppState.blocks[i];
-            if (b && b.type === "numbered") n++;
-            else break;
+            const b = AppState.blocks[i]
+            if (b && b.type === "numbered") n++
+            else break
         }
-        return n;
+        return n
     }
 
-    function blockPrefix() {
-        if (block.type === "heading")  return "#".repeat(block.level || 1) + " ";
-        if (block.type === "bulleted") return "- ";
-        if (block.type === "numbered") return root.numberedOrdinal() + ". ";
-        if (block.type === "quote")    return "> ";
-        if (block.type === "code")     return "``` ";
-        if (block.type === "divider")  return "---";
-        if (block.type === "todo")     return doneDraft ? "- [x] " : "- [ ] ";
-        return "";
+    function blockTypeLabel() {
+        if (root.blockType === "heading")  return "H" + root.blockLevel
+        if (root.blockType === "todo")     return "☐"
+        if (root.blockType === "bulleted") return "•"
+        if (root.blockType === "numbered") return "1."
+        if (root.blockType === "quote")    return "❝"
+        if (root.blockType === "code")     return "</>"
+        if (root.blockType === "divider")  return "—"
+        return "T"
     }
 
-    function toEditText() {
-        return blockPrefix() + (contentDraft || "");
-    }
-
-    function parseEditText(text) {
-        // Whole-line divider
-        if (text === "---" || text === "***" || text === "___") {
-            return { type: "divider", level: 1, done: false, content: "" };
-        }
-        // Numbered list: "1. ", "42. " …
-        const numMatch = /^(\d+)\.\s/.exec(text);
-        if (numMatch) {
-            return { type: "numbered", level: 1, done: false,
-                     content: text.slice(numMatch[0].length) };
-        }
+    // Detect a markdown-style prefix at the start of `text` and, if the
+    // resulting block type differs from the current one, strip the prefix,
+    // flush the new content, and trigger a type conversion.
+    // Returns true when a conversion was initiated.
+    function checkAndApplyPrefix(text) {
         const rules = [
             { prefix: "### ", type: "heading",  level: 3, done: false },
             { prefix: "## ",  type: "heading",  level: 2, done: false },
@@ -78,142 +77,209 @@ Item {
             { prefix: "- [X] ", type: "todo",   level: 1, done: true  },
             { prefix: "- [ ] ", type: "todo",   level: 1, done: false },
             { prefix: "* [x] ", type: "todo",   level: 1, done: true  },
-            { prefix: "* [X] ", type: "todo",   level: 1, done: true  },
             { prefix: "* [ ] ", type: "todo",   level: 1, done: false },
-            { prefix: "[x] ",   type: "todo",   level: 1, done: true  },
-            { prefix: "[X] ",   type: "todo",   level: 1, done: true  },
             { prefix: "[ ] ",   type: "todo",   level: 1, done: false },
-            { prefix: "[] ",    type: "todo",   level: 1, done: false },
             { prefix: "``` ",   type: "code",   level: 1, done: false },
             { prefix: "> ",     type: "quote",  level: 1, done: false },
             { prefix: "- ",     type: "bulleted", level: 1, done: false },
             { prefix: "* ",     type: "bulleted", level: 1, done: false },
             { prefix: "+ ",     type: "bulleted", level: 1, done: false },
-        ];
+        ]
+
+        // Divider: whole line is --- / *** / ___
+        if (text === "---" || text === "***" || text === "___") {
+            if (root.blockType !== "divider") {
+                root.contentDraft = ""
+                root._skipBlurFlush = true
+                AppState.replaceBlockText(block.id, "")
+                AppState.convertBlockType(block.id, "divider", 1, false)
+                root.requestFocusNext(block.id)
+            }
+            return true
+        }
+
+        // Numbered list: "1. " … "99. "
+        const numMatch = /^(\d+)\.\s/.exec(text)
+        if (numMatch) {
+            const content = text.slice(numMatch[0].length)
+            if (root.blockType !== "numbered") {
+                root.contentDraft = content
+                root._suppressTextChange = true
+                editField.text = content
+                editField.cursorPosition = content.length
+                root._suppressTextChange = false
+                AppState.replaceBlockText(block.id, content)
+                AppState.convertBlockType(block.id, "numbered", 1, false)
+            }
+            return true
+        }
+
         for (const rule of rules) {
             if (text.startsWith(rule.prefix)) {
-                return { type: rule.type, level: rule.level, done: rule.done,
-                         content: text.slice(rule.prefix.length) };
+                const content = text.slice(rule.prefix.length)
+                const needsConvert = (root.blockType !== rule.type) ||
+                                     (rule.type === "heading" && root.blockLevel !== rule.level) ||
+                                     (rule.type === "todo"    && root.doneDraft   !== rule.done)
+                if (needsConvert) {
+                    root.contentDraft = content
+                    if (rule.type === "todo") root.doneDraft = rule.done
+                    root._suppressTextChange = true
+                    editField.text = content
+                    editField.cursorPosition = content.length
+                    root._suppressTextChange = false
+                    AppState.replaceBlockText(block.id, content)
+                    AppState.convertBlockType(block.id, rule.type, rule.level, rule.done)
+                }
+                return true
             }
         }
-        return { type: "paragraph", level: 1, done: false, content: text };
+        return false
     }
 
-    function headingPx(level) {
-        if (level === 1) return Math.round(Palette.fontSizeBase * 1.875);
-        if (level === 2) return Math.round(Palette.fontSizeBase * 1.5);
-        if (level === 3) return Math.round(Palette.fontSizeBase * 1.25);
-        return Math.round(Palette.fontSizeBase * 1.1);
-    }
-
-    function blockTypeLabel() {
-        if (block.type === "heading")  return "H" + (block.level || 1);
-        if (block.type === "todo")     return "☐";
-        if (block.type === "bulleted") return "•";
-        if (block.type === "numbered") return "1.";
-        if (block.type === "quote")    return "❝";
-        if (block.type === "code")     return "</>";
-        if (block.type === "divider")  return "—";
-        return "T";
-    }
-
-    // ── Save timer ───────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────
+    // SAVE LOGIC
+    // ─────────────────────────────────────────────────────────────────────
     Timer {
         id: saveTimer
-        interval: 400
+        interval: 500
         repeat: false
         onTriggered: root.flushToState()
     }
 
     function flushToState() {
-        if (block.type === "todo") {
-            AppState.updateTodoBlock(block.id, root.contentDraft, root.doneDraft);
+        saveTimer.stop()
+        if (root.blockType === "todo") {
+            AppState.updateTodoBlock(block.id, root.contentDraft, root.doneDraft)
         } else {
-            AppState.replaceBlockText(block.id, root.contentDraft);
+            AppState.replaceBlockText(block.id, root.contentDraft)
         }
     }
 
-    function scheduleFlush() { saveTimer.restart(); }
-
-    // ── Focus API ────────────────────────────────────────────────────────
-    // Called externally (from Main.qml) to focus this block
-    function requestFocus(cursorAtEnd) {
-        activateEditor(cursorAtEnd !== false);
-        return true;
+    // Public method called from Main.qml before switching notes.
+    function flushImmediate() {
+        if (!root._skipBlurFlush) {
+            flushToState()
+        }
     }
 
-    function activateEditor(atEnd) {
-        editField.forceActiveFocus();
-        // onActiveFocusChanged populates prefix+content and positions the cursor
-    }
+    function scheduleFlush() { saveTimer.restart() }
 
-    // ── Block operations ─────────────────────────────────────────────────
-    function mergeWithPrevious() {
-        if (blockIndex <= 0) return false;
-        const prev = AppState.blocks[blockIndex - 1];
-        if (!prev) return false;
-        saveTimer.stop();
-        AppState.replaceBlockText(prev.id, (prev.text || "") + contentDraft);
-        AppState.deleteBlock(block.id);
-        root.requestFocusNext(prev.id);
-        return true;
-    }
-
-    function deleteEmptyBlock() {
-        if (blockIndex <= 0) return false;
-        const prev = AppState.blocks[blockIndex - 1];
-        if (!prev) return false;
-        saveTimer.stop();
-        AppState.deleteBlock(block.id);
-        root.requestFocusNext(prev.id);
-        return true;
-    }
-
-    // ── Sync from AppState ───────────────────────────────────────────────
-    onBlockChanged: {
-        const isNewBlock = block.id !== syncedBlockId;
-        syncedBlockId = block.id;
-
-        // While the user is actively typing here we NEVER reassign the editor's
-        // text — that is what keeps focus and the cursor stable across the
-        // optimistic blocksChanged echo. Only the draft is kept in sync.
-        if (editActive && !isNewBlock) {
-            // type/level may have changed via popup/shortcut: keep prefix correct
-            const expectedText = root.toEditText();
-            if (editField.text !== expectedText) {
-                const curOff = Math.max(0, editField.cursorPosition - (editField.text.length - root.contentDraft.length));
-                const newPfx = root.blockPrefix();
-                root._suppressTextChange = true;
-                editField.text = expectedText;
-                editField.cursorPosition = Math.min(newPfx.length + curOff, expectedText.length);
-                root._suppressTextChange = false;
+    // Safety net: flush on delegate destruction (e.g. Repeater rebuild).
+    Component.onDestruction: {
+        if (!root._skipBlurFlush) {
+            saveTimer.stop()
+            // Call synchronously. AppState is still valid here.
+            if (root.blockType === "todo") {
+                AppState.updateTodoBlock(block.id, root.contentDraft, root.doneDraft)
+            } else {
+                AppState.replaceBlockText(block.id, root.contentDraft)
             }
-            return;
         }
+    }
 
-        // Not editing (or a brand-new block rebound to this delegate): adopt the
-        // authoritative block values.
-        saveTimer.stop();
-        root.contentDraft = block.text || "";
-        root.doneDraft = block.done === true;
+    // ─────────────────────────────────────────────────────────────────────
+    // FOCUS API
+    // ─────────────────────────────────────────────────────────────────────
+    function requestFocus(atEnd) {
+        editField.forceActiveFocus()
+        if (atEnd !== false) {
+            Qt.callLater(function() {
+                editField.cursorPosition = editField.length
+            })
+        }
+        return true
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    // BLOCK SYNCHRONISATION
+    // ─────────────────────────────────────────────────────────────────────
+
+    // Keep local type/level in sync with in-place updates from C++.
+    // This fires after convertBlockType emits blocksChanged (with fixed bridge).
+    Connections {
+        target: AppState
+        function onBlocksChanged() {
+            if (!editField.activeFocus) return
+            const blocks = AppState.blocks
+            for (const b of blocks) {
+                if (b.id === root.block.id) {
+                    if (root.blockType !== (b.type || "paragraph")) {
+                        root.blockType = b.type || "paragraph"
+                    }
+                    if (root.blockLevel !== (b.level || 1)) {
+                        root.blockLevel = b.level || 1
+                    }
+                    break
+                }
+            }
+        }
+    }
+
+    onBlockChanged: {
+        const isNew = block.id !== root._syncedId
+        root._syncedId = block.id
+
+        if (isNew) {
+            // Completely different block – full sync
+            saveTimer.stop()
+            root.blockType    = block.type  || "paragraph"
+            root.blockLevel   = block.level || 1
+            root.doneDraft    = block.done  === true
+            root.contentDraft = block.text  || ""
+            root._suppressTextChange = true
+            editField.text = root.contentDraft
+            root._suppressTextChange = false
+        } else if (!editField.activeFocus) {
+            // Same block, not being edited – adopt authoritative values
+            root.blockType    = block.type  || "paragraph"
+            root.blockLevel   = block.level || 1
+            root.doneDraft    = block.done  === true
+            const fresh = block.text || ""
+            if (root.contentDraft !== fresh) {
+                root.contentDraft = fresh
+                root._suppressTextChange = true
+                editField.text = fresh
+                root._suppressTextChange = false
+            }
+        } else {
+            // Same block, currently focused – only update metadata
+            root.blockType  = block.type  || "paragraph"
+            root.blockLevel = block.level || 1
+        }
     }
 
     Component.onCompleted: {
-        syncedBlockId = block.id;
-        contentDraft = block.text || "";
-        doneDraft = block.done === true;
+        root._syncedId    = block.id
+        root.blockType    = block.type  || "paragraph"
+        root.blockLevel   = block.level || 1
+        root.contentDraft = block.text  || ""
+        root.doneDraft    = block.done  === true
+        root._suppressTextChange = true
+        editField.text = root.contentDraft
+        root._suppressTextChange = false
     }
 
     // ─────────────────────────────────────────────────────────────────────
     // POPUPS
     // ─────────────────────────────────────────────────────────────────────
+    readonly property list<var> _blockMenuItems: [
+        { label: "Текст",                   icon: "T",   type: "paragraph", level: 0 },
+        { label: "Заголовок 1",             icon: "H1",  type: "heading",   level: 1 },
+        { label: "Заголовок 2",             icon: "H2",  type: "heading",   level: 2 },
+        { label: "Заголовок 3",             icon: "H3",  type: "heading",   level: 3 },
+        { label: "Задача",                  icon: "☐",   type: "todo",      level: 0 },
+        { label: "Маркированный список",    icon: "•",   type: "bulleted",  level: 0 },
+        { label: "Нумерованный список",     icon: "1.",  type: "numbered",  level: 0 },
+        { label: "Цитата",                  icon: "❝",   type: "quote",     level: 0 },
+        { label: "Код",                     icon: "</>", type: "code",      level: 0 },
+        { label: "Разделитель",             icon: "—",   type: "divider",   level: 0 },
+    ]
 
-    // ── Add block popup ───────────────────────────────────────────────────
     Popup {
         id: blockTypeMenu
-        parent: addBlockButton
-        x: addBlockButton.width + 6
-        y: -(blockTypeMenuColumn.implicitHeight / 2) + addBlockButton.height / 2
+        parent: addBlockBtn
+        x: addBlockBtn.width + 6
+        y: -(blockMenuCol.implicitHeight / 2) + addBlockBtn.height / 2
         padding: 6
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
         background: Rectangle {
@@ -221,7 +287,7 @@ Item {
             border.color: Palette.border; border.width: 1
         }
         Column {
-            id: blockTypeMenuColumn
+            id: blockMenuCol
             spacing: 2; width: 210
             Text {
                 text: "Тип блока"; color: Palette.textSecondary
@@ -229,22 +295,11 @@ Item {
                 leftPadding: 8; topPadding: 4; bottomPadding: 2
             }
             Repeater {
-                model: [
-                    { label: "Текст",            icon: "T",   type: "paragraph", level: 0 },
-                    { label: "Заголовок 1",      icon: "H1",  type: "heading",   level: 1 },
-                    { label: "Заголовок 2",      icon: "H2",  type: "heading",   level: 2 },
-                    { label: "Заголовок 3",      icon: "H3",  type: "heading",   level: 3 },
-                    { label: "Задача",           icon: "☐",   type: "todo",      level: 0 },
-                    { label: "Маркированный список", icon: "•",  type: "bulleted",  level: 0 },
-                    { label: "Нумерованный список",  icon: "1.", type: "numbered",  level: 0 },
-                    { label: "Цитата",           icon: "❝",   type: "quote",     level: 0 },
-                    { label: "Код",              icon: "</>", type: "code",      level: 0 },
-                    { label: "Разделитель",      icon: "—",   type: "divider",   level: 0 },
-                ]
+                model: root._blockMenuItems
                 delegate: Rectangle {
                     required property var modelData
                     width: 210; height: 32; radius: 6
-                    color: addMenuMouse.containsMouse ? Palette.hover : "transparent"
+                    color: bm.containsMouse ? Palette.hover : "transparent"
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left; anchors.leftMargin: 8; spacing: 10
@@ -252,13 +307,14 @@ Item {
                         Text { text: modelData.label; color: Palette.textPrimary; font.pixelSize: Palette.fontSizeBase; font.family: root.uiFontFamily }
                     }
                     MouseArea {
-                        id: addMenuMouse; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor
+                        id: bm; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            blockTypeMenu.close();
-                            const newId = AppState.insertBlockAfter(root.block.id, modelData.type);
+                            blockTypeMenu.close()
+                            const lvl = modelData.level > 0 ? modelData.level : 1
+                            const newId = AppState.insertBlockAfter(root.block.id, modelData.type)
                             if (newId && modelData.type === "heading" && modelData.level > 0)
-                                AppState.convertBlockType(newId, "heading", modelData.level, false);
-                            if (newId) root.requestFocusNext(newId);
+                                AppState.convertBlockType(newId, "heading", modelData.level, false)
+                            if (newId) root.requestFocusNext(newId)
                         }
                     }
                 }
@@ -266,12 +322,11 @@ Item {
         }
     }
 
-    // ── Change type popup ─────────────────────────────────────────────────
     Popup {
         id: changeTypeMenu
-        parent: blockTypeBadgeBtn
-        x: blockTypeBadgeBtn.width + 4
-        y: -(changeTypeMenuColumn.implicitHeight / 2) + blockTypeBadgeBtn.height / 2
+        parent: typeBadgeBtn
+        x: typeBadgeBtn.width + 4
+        y: -(changeMenuCol.implicitHeight / 2) + typeBadgeBtn.height / 2
         padding: 6
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
         background: Rectangle {
@@ -279,7 +334,7 @@ Item {
             border.color: Palette.border; border.width: 1
         }
         Column {
-            id: changeTypeMenuColumn
+            id: changeMenuCol
             spacing: 2; width: 210
             Text {
                 text: "Изменить тип"; color: Palette.textSecondary
@@ -287,24 +342,13 @@ Item {
                 leftPadding: 8; topPadding: 4; bottomPadding: 2
             }
             Repeater {
-                model: [
-                    { label: "Текст",            icon: "T",   type: "paragraph", level: 0 },
-                    { label: "Заголовок 1",      icon: "H1",  type: "heading",   level: 1 },
-                    { label: "Заголовок 2",      icon: "H2",  type: "heading",   level: 2 },
-                    { label: "Заголовок 3",      icon: "H3",  type: "heading",   level: 3 },
-                    { label: "Задача",           icon: "☐",   type: "todo",      level: 0 },
-                    { label: "Маркированный список", icon: "•",  type: "bulleted",  level: 0 },
-                    { label: "Нумерованный список",  icon: "1.", type: "numbered",  level: 0 },
-                    { label: "Цитата",           icon: "❝",   type: "quote",     level: 0 },
-                    { label: "Код",              icon: "</>", type: "code",      level: 0 },
-                    { label: "Разделитель",      icon: "—",   type: "divider",   level: 0 },
-                ]
+                model: root._blockMenuItems
                 delegate: Rectangle {
                     required property var modelData
                     width: 210; height: 32; radius: 6
-                    property bool isCurrent: (modelData.type === root.block.type) &&
-                                             (modelData.type !== "heading" || modelData.level === (root.block.level || 1))
-                    color: isCurrent ? Palette.selected : (chgMenuMouse.containsMouse ? Palette.hover : "transparent")
+                    property bool isCurrent: (modelData.type === root.blockType) &&
+                                             (modelData.type !== "heading" || modelData.level === root.blockLevel)
+                    color: isCurrent ? Palette.selected : (cm.containsMouse ? Palette.hover : "transparent")
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left; anchors.leftMargin: 8; spacing: 10
@@ -312,11 +356,11 @@ Item {
                         Text { text: modelData.label; color: parent.parent.isCurrent ? Palette.textPrimary : Palette.textSecondary; font.pixelSize: Palette.fontSizeBase; font.family: root.uiFontFamily; font.bold: parent.parent.isCurrent }
                     }
                     MouseArea {
-                        id: chgMenuMouse; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor
+                        id: cm; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            changeTypeMenu.close();
-                            const lvl = modelData.level > 0 ? modelData.level : 1;
-                            AppState.convertBlockType(root.block.id, modelData.type, lvl, root.block.done === true);
+                            changeTypeMenu.close()
+                            const lvl = modelData.level > 0 ? modelData.level : 1
+                            AppState.convertBlockType(root.block.id, modelData.type, lvl, root.doneDraft)
                         }
                     }
                 }
@@ -330,34 +374,40 @@ Item {
     Row {
         id: blockRow
         width: parent.width
-        spacing: 2
+        spacing: 0
 
         HoverHandler { id: blockHover }
 
-        // ── Gutter ────────────────────────────────────────────────────────
+        // ── Gutter (hover controls) ───────────────────────────────────────
         Item {
-            id: addBlockGutter
-            property bool showControls: false
-            width: 0
+            id: gutter
+            width: 52
             height: Math.max(28, contentArea.implicitHeight)
-            Behavior on width { NumberAnimation { duration: 100 } }
 
             Row {
+                anchors.right: parent.right
+                anchors.rightMargin: 4
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
                 spacing: 2
-                opacity: addBlockGutter.showControls ? 1 : 0
+                opacity: blockHover.hovered ? 1 : 0
                 Behavior on opacity { NumberAnimation { duration: 120 } }
 
                 Rectangle {
-                    id: blockTypeBadgeBtn
-                    width: 26; height: 22; radius: 4
-                    color: badgeMouse.containsMouse ? Palette.hover : "transparent"
-                    Text { anchors.centerIn: parent; text: root.blockTypeLabel(); font.pixelSize: 10; font.weight: Font.Bold; font.family: root.uiFontFamily; color: Palette.textSecondary }
-                    MouseArea { id: badgeMouse; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: changeTypeMenu.open() }
+                    id: typeBadgeBtn
+                    width: 24; height: 22; radius: 4
+                    color: tbMouse.containsMouse ? Palette.hover : "transparent"
+                    Text {
+                        anchors.centerIn: parent
+                        text: root.blockTypeLabel()
+                        font.pixelSize: 10; font.weight: Font.Bold
+                        font.family: root.uiFontFamily
+                        color: Palette.textSecondary
+                    }
+                    MouseArea { id: tbMouse; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: changeTypeMenu.open() }
                 }
+
                 Rectangle {
-                    id: addBlockButton
+                    id: addBlockBtn
                     width: 22; height: 22; radius: 4
                     color: addMouse.containsMouse ? Palette.hover : "transparent"
                     Text { anchors.centerIn: parent; text: "+"; font.pixelSize: Palette.fontSizeLg; font.weight: Font.Medium; color: Palette.textSecondary }
@@ -369,317 +419,261 @@ Item {
         // ── Content area ──────────────────────────────────────────────────
         Item {
             id: contentArea
-            width: blockRow.width - addBlockGutter.width
-            implicitHeight: editField.activeFocus ? editField.implicitHeight : displayLayer.implicitHeight
+            width: blockRow.width - gutter.width
+            implicitHeight: innerRow.implicitHeight
 
-            // ── Edit field (ALWAYS present — declared first so it sits BELOW the
-            //    display overlay). Never visibility-toggled, so a model refresh
-            //    can never strip its focus. Shows raw prefix + content when focused,
-            //    empty otherwise (hidden behind the overlay). ──────────────────
-            TextEdit {
-                id: editField
-                width: parent.width
-                leftPadding: 2; rightPadding: 2; topPadding: 4; bottomPadding: 4
-                wrapMode: TextEdit.Wrap
-                textFormat: TextEdit.PlainText
-                font.family: root.uiFontFamily
-                font.pixelSize: Palette.fontSizeBase
-                color: Palette.textPrimary
-                selectByMouse: true
-                selectionColor: Palette.selected
-                selectedTextColor: Palette.textPrimary
-
-                onActiveFocusChanged: {
-                    if (activeFocus) {
-                        root._skipBlurFlush = false;
-                        // Populate with prefix + content
-                        root._suppressTextChange = true;
-                        text = root.toEditText();
-                        root._suppressTextChange = false;
-                        // Restore cursor at saved content offset (or end if new focus)
-                        const pLen = root.blockPrefix().length;
-                        cursorPosition = pLen + Math.min(root._savedContentCursor, root.contentDraft.length);
-                        root._savedContentCursor = 0;
-                    } else {
-                        // Structural ops (Enter / merge / delete) already wrote the
-                        // authoritative text, so don't let the blur overwrite it.
-                        if (root._skipBlurFlush) {
-                            root._skipBlurFlush = false;
-                        } else {
-                            const parsed = root.parseEditText(text);
-                            root.contentDraft = parsed.content;
-                            root.doneDraft    = parsed.done;
-                            saveTimer.stop();
-                            root.flushToState();
-                        }
-                        root._suppressTextChange = true;
-                        text = "";   // hide behind the styled overlay
-                        root._suppressTextChange = false;
-                    }
-                }
-
-                onTextChanged: {
-                    if (!activeFocus || root._suppressTextChange) return;
-
-                    const parsed = root.parseEditText(text);
-
-                    const prevType  = root.block.type;
-                    const prevLevel = root.block.level || 1;
-                    const prevDone  = root.doneDraft;
-
-                    root.contentDraft = parsed.content;
-                    if (parsed.type === "todo") root.doneDraft = parsed.done;
-
-                    const typeChanged  = parsed.type  !== prevType;
-                    const levelChanged = prevType === "heading" && parsed.level !== prevLevel;
-                    const doneChanged  = prevType === "todo"    && parsed.done  !== prevDone;
-
-                    if (typeChanged || levelChanged || doneChanged) {
-                        saveTimer.stop();
-                        // Save cursor position in content space before focus is lost
-                        root._savedContentCursor = Math.max(0, editField.cursorPosition - root.blockPrefix().length);
-                        AppState.convertBlockType(root.block.id, parsed.type, parsed.level, parsed.done);
-                        // Re-request focus: convertBlockType causes Repeater to update the
-                        // delegate which may lose activeFocus. The async path via
-                        // requestFocusNext / snapshotChanged restores it correctly.
-                        root.requestFocusNext(root.block.id);
-                        return;
-                    }
-
-                    root.scheduleFlush();
-                }
-
-                Keys.onPressed: function(event) {
-                    const prefixLen = root.blockPrefix().length;
-
-                    // ── Enter ──────────────────────────────────────────────
-                    if (event.key === Qt.Key_Return) {
-                        if (event.modifiers & Qt.ShiftModifier) return;
-                        event.accepted = true;
-                        saveTimer.stop();
-
-                        const contentPos = Math.max(0, editField.cursorPosition - prefixLen);
-                        const before = root.contentDraft.slice(0, contentPos);
-                        const after  = root.contentDraft.slice(contentPos);
-
-                        // We've computed the split — don't let the upcoming blur
-                        // re-flush the stale full editor text over `before`.
-                        root.contentDraft = before;
-                        root._skipBlurFlush = true;
-
-                        // Empty heading → convert to paragraph first
-                        if (root.contentDraft.length === 0 && root.block.type === "heading") {
-                            AppState.convertBlockType(root.block.id, "paragraph", 1, false);
-                        }
-
-                        AppState.replaceBlockText(root.block.id, before);
-                        const contType = (root.block.type === "heading" || root.block.type === "divider") ? "paragraph" : root.block.type;
-                        const newId = AppState.insertBlockAfter(root.block.id, contType);
-                        if (newId && after.length > 0) AppState.replaceBlockText(newId, after);
-                        if (newId) root.requestFocusNext(newId);
-                        return;
-                    }
-
-                    // ── Backspace at position 0 (before any prefix) ───────────
-                    if (event.key === Qt.Key_Backspace &&
-                        editField.selectionStart === editField.selectionEnd &&
-                        editField.cursorPosition === 0) {
-                        event.accepted = true;
-                        root._skipBlurFlush = true;
-                        if (root.contentDraft.length === 0 && root.block.type === "paragraph") {
-                            root.deleteEmptyBlock();
-                        } else {
-                            root.mergeWithPrevious();
-                        }
-                        return;
-                    }
-
-                    // ── Ctrl+Shift type shortcuts ──────────────────────────
-                    if ((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier)) {
-                        if      (event.key === Qt.Key_1) { event.accepted = true; AppState.convertBlockType(root.block.id, "heading",   1, false); }
-                        else if (event.key === Qt.Key_2) { event.accepted = true; AppState.convertBlockType(root.block.id, "heading",   2, false); }
-                        else if (event.key === Qt.Key_3) { event.accepted = true; AppState.convertBlockType(root.block.id, "heading",   3, false); }
-                        else if (event.key === Qt.Key_0) { event.accepted = true; AppState.convertBlockType(root.block.id, "paragraph", 1, false); }
-                    }
+            // Full-width click target so empty blocks are focusable
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    editField.forceActiveFocus()
+                    editField.cursorPosition = editField.positionAt(mouseX - innerRow.x, mouseY)
                 }
             }
 
-            // ── Display overlay (styled, shown when not focused; on TOP of
-            //    editField so its empty text stays hidden). Clicking focuses
-            //    the editField. ──────────────────────────────────────────────
-            Item {
-                id: displayLayer
-                visible: !editField.activeFocus
+            Row {
+                id: innerRow
                 width: parent.width
-                height: displayContent.implicitHeight
-                implicitHeight: displayContent.implicitHeight
+                spacing: Palette.spacingSm
 
-                // Full-width click target (declared first → sits beneath the text
-                // MouseAreas) so empty blocks can still be clicked to focus.
-                MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
+                // ── Left indicator ────────────────────────────────────────
+                Item {
+                    id: leftIndicator
+                    width:   root.blockType === "quote"    ? 10
+                           : root.blockType === "bulleted" ? 20
+                           : root.blockType === "numbered" ? 28
+                           : 0
+                    height: Math.max(editField.implicitHeight, 20)
+                    visible: width > 0
 
-                // Paragraph
-                Text {
-                    id: paraDisplay
-                    visible: block.type === "paragraph"
-                    width: parent.width
-                    text: root.contentDraft
-                    wrapMode: Text.Wrap
-                    font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
-                    color: Palette.textPrimary
-                    leftPadding: 2; rightPadding: 2; topPadding: 4; bottomPadding: 4
-                    MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
-                }
-
-                // Heading
-                Text {
-                    id: headDisplay
-                    visible: block.type === "heading"
-                    width: parent.width
-                    text: root.contentDraft
-                    wrapMode: Text.Wrap
-                    font.family: root.uiFontFamily; font.bold: true
-                    font.pixelSize: root.headingPx(block.level || 1)
-                    color: Palette.textPrimary
-                    leftPadding: 2; rightPadding: 2; topPadding: 6; bottomPadding: 6
-                    MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
-                }
-
-                // Todo
-                RowLayout {
-                    id: todoDisplay
-                    visible: block.type === "todo"
-                    width: parent.width; spacing: Palette.spacingSm
-                    AppSwitch {
-                        id: todoSwitch
-                        checked: root.doneDraft
-                        onToggled: {
-                            root.doneDraft = checked;
-                            saveTimer.stop();
-                            root.flushToState();
-                        }
-                    }
-                    Text {
-                        Layout.fillWidth: true
-                        text: root.contentDraft; wrapMode: Text.Wrap
-                        font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
-                        color: root.doneDraft ? Palette.textSecondary : Palette.textPrimary
-                        font.strikeout: root.doneDraft
-                        leftPadding: 2; rightPadding: 2; topPadding: 4; bottomPadding: 4
-                        MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
-                    }
-                }
-
-                // Quote
-                Row {
-                    id: quoteDisplay
-                    visible: block.type === "quote"
-                    width: parent.width; spacing: Palette.spacingMd
+                    // Quote bar
                     Rectangle {
-                        width: 3; radius: 2; color: Palette.border
-                        height: quoteText.implicitHeight - 4
+                        visible: root.blockType === "quote"
+                        width: 3; height: parent.height - 6; radius: 2
+                        color: Palette.border
                         anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left; anchors.leftMargin: 3
                     }
+                    // Bullet
                     Text {
-                        id: quoteText
-                        width: parent.width - 3 - Palette.spacingMd
-                        text: root.contentDraft; wrapMode: Text.Wrap
-                        font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
-                        font.italic: true
-                        color: Palette.textSecondary
-                        leftPadding: 2; rightPadding: 2; topPadding: 4; bottomPadding: 4
-                        MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
-                    }
-                }
-
-                // Bulleted list item
-                Row {
-                    id: bulletedDisplay
-                    visible: block.type === "bulleted"
-                    width: parent.width; spacing: Palette.spacingSm
-                    Text {
+                        visible: root.blockType === "bulleted"
                         text: "•"; color: Palette.textPrimary
                         font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
-                        leftPadding: 4; topPadding: 4; bottomPadding: 4
+                        anchors.centerIn: parent
+                        topPadding: 4
                     }
+                    // Number
                     Text {
-                        width: parent.width - 18
-                        text: root.contentDraft; wrapMode: Text.Wrap
-                        font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
-                        color: Palette.textPrimary
-                        rightPadding: 2; topPadding: 4; bottomPadding: 4
-                        MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
-                    }
-                }
-
-                // Numbered list item
-                Row {
-                    id: numberedDisplay
-                    visible: block.type === "numbered"
-                    width: parent.width; spacing: Palette.spacingSm
-                    Text {
+                        visible: root.blockType === "numbered"
                         text: root.numberedOrdinal() + "."
                         color: Palette.textSecondary
                         font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
-                        leftPadding: 4; topPadding: 4; bottomPadding: 4
-                    }
-                    Text {
-                        width: parent.width - 26
-                        text: root.contentDraft; wrapMode: Text.Wrap
-                        font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
-                        color: Palette.textPrimary
-                        rightPadding: 2; topPadding: 4; bottomPadding: 4
-                        MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
+                        anchors.right: parent.right
+                        topPadding: 4
                     }
                 }
 
-                // Code block
+                // ── Todo checkbox ─────────────────────────────────────────
+                AppSwitch {
+                    id: todoSwitch
+                    visible: root.blockType === "todo"
+                    checked: root.doneDraft
+                    anchors.verticalCenter: editField.verticalCenter
+                    onToggled: {
+                        root.doneDraft = checked
+                        saveTimer.stop()
+                        AppState.updateTodoBlock(block.id, root.contentDraft, root.doneDraft)
+                    }
+                }
+
+                // ── Main editor ───────────────────────────────────────────
+                // For code blocks: wrapped in a styled Rectangle
                 Rectangle {
-                    id: codeDisplay
-                    visible: block.type === "code"
+                    id: codeWrap
+                    visible: root.blockType === "code"
                     width: parent.width
-                    height: codeText.implicitHeight + 12
+                           - leftIndicator.width
+                           - (leftIndicator.visible ? Palette.spacingSm : 0)
+                    height: editField.implicitHeight + 12
                     radius: 6
                     color: Palette.surfaceColor
                     border.color: Palette.border; border.width: 1
-                    Text {
-                        id: codeText
-                        anchors.fill: parent
-                        anchors.margins: 6
-                        text: root.contentDraft; wrapMode: Text.Wrap
-                        font.family: "monospace"; font.pixelSize: Palette.fontSizeBase
-                        color: Palette.textPrimary
-                    }
-                    MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
                 }
 
-                // Divider
+                // Divider (no TextEdit)
                 Item {
-                    id: dividerDisplay
-                    visible: block.type === "divider"
+                    visible: root.blockType === "divider"
                     width: parent.width
-                    height: 20
+                           - leftIndicator.width
+                           - (leftIndicator.visible ? Palette.spacingSm : 0)
+                    height: 24
                     Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         width: parent.width; height: 1
                         color: Palette.border
                     }
-                    MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: editField.forceActiveFocus()
+                    }
                 }
 
-                // Invisible item used for implicitHeight calculation
-                Item {
-                    id: displayContent
-                    width: parent.width
-                    implicitHeight: paraDisplay.visible      ? paraDisplay.implicitHeight
-                                  : headDisplay.visible      ? headDisplay.implicitHeight
-                                  : todoDisplay.visible      ? todoDisplay.implicitHeight
-                                  : quoteDisplay.visible     ? quoteDisplay.implicitHeight
-                                  : bulletedDisplay.visible  ? bulletedDisplay.implicitHeight
-                                  : numberedDisplay.visible  ? numberedDisplay.implicitHeight
-                                  : codeDisplay.visible      ? codeDisplay.height
-                                  : dividerDisplay.visible   ? dividerDisplay.height
-                                  : 28
+                TextEdit {
+                    id: editField
+
+                    // Width depends on block type
+                    width: {
+                        let w = innerRow.width
+                        if (leftIndicator.visible)      w -= leftIndicator.width + Palette.spacingSm
+                        if (root.blockType === "todo")  w -= todoSwitch.width + Palette.spacingSm
+                        if (root.blockType === "divider") w = 0
+                        return Math.max(0, w)
+                    }
+                    visible: root.blockType !== "divider"
+
+                    leftPadding:   root.blockType === "code" ? 8 : 2
+                    rightPadding:  root.blockType === "code" ? 8 : 2
+                    topPadding:    root.blockType === "heading" ? 6
+                                 : root.blockType === "code" ? 8 : 4
+                    bottomPadding: root.blockType === "heading" ? 6
+                                 : root.blockType === "code" ? 8 : 4
+
+                    wrapMode:       TextEdit.Wrap
+                    textFormat:     TextEdit.PlainText
+                    selectByMouse:  true
+                    selectionColor: Palette.selected
+                    selectedTextColor: Palette.textPrimary
+
+                    // Dynamic font / colour based on block type
+                    font.family:    root.blockType === "code" ? "monospace" : root.uiFontFamily
+                    font.pixelSize: root.blockType === "heading"
+                                    ? root.headingPx(root.blockLevel)
+                                    : Palette.fontSizeBase
+                    font.bold:      root.blockType === "heading"
+                    font.italic:    root.blockType === "quote"
+                    font.strikeout: root.blockType === "todo" && root.doneDraft
+                    color:          (root.blockType === "quote")                     ? Palette.textSecondary
+                                  : (root.blockType === "todo" && root.doneDraft)    ? Palette.textSecondary
+                                  : Palette.textPrimary
+
+                    // Placeholder
+                    Text {
+                        anchors.fill: parent
+                        anchors.leftMargin: editField.leftPadding
+                        anchors.topMargin:  editField.topPadding
+                        visible: editField.text.length === 0 && !editField.activeFocus
+                        text: root.blockType === "heading"  ? "Заголовок"
+                            : root.blockType === "quote"    ? "Цитата"
+                            : root.blockType === "code"     ? "Код"
+                            : root.blockType === "todo"     ? "Задача"
+                            : root.blockType === "divider"  ? ""
+                            : "Текст"
+                        color: Palette.textSecondary
+                        opacity: 0.5
+                        font:    editField.font
+                        wrapMode: Text.Wrap
+                    }
+
+                    // ── Text change ───────────────────────────────────────
+                    onTextChanged: {
+                        if (root._suppressTextChange) return
+                        if (!activeFocus) return
+
+                        // Check for markdown prefix trigger (only when text
+                        // begins with a recognised prefix character)
+                        const firstChar = text.length > 0 ? text[0] : ""
+                        if ("#->*+[`".includes(firstChar) || /^\d/.test(text)) {
+                            if (root.checkAndApplyPrefix(text)) return
+                        }
+
+                        root.contentDraft = text
+                        root.scheduleFlush()
+                    }
+
+                    // ── Focus ─────────────────────────────────────────────
+                    onActiveFocusChanged: {
+                        if (!activeFocus) {
+                            if (!root._skipBlurFlush) {
+                                root.contentDraft = text
+                                root.flushToState()
+                            }
+                            root._skipBlurFlush = false
+                        }
+                    }
+
+                    // ── Keys ──────────────────────────────────────────────
+                    Keys.onPressed: function(event) {
+                        // Enter → split block
+                        if (event.key === Qt.Key_Return && !(event.modifiers & Qt.ShiftModifier)) {
+                            event.accepted = true
+                            saveTimer.stop()
+
+                            const pos    = cursorPosition
+                            const before = root.contentDraft.slice(0, pos)
+                            const after  = root.contentDraft.slice(pos)
+
+                            root.contentDraft   = before
+                            root._skipBlurFlush = true
+
+                            // Empty heading → collapse to paragraph
+                            if (before.length === 0 && root.blockType === "heading") {
+                                AppState.convertBlockType(block.id, "paragraph", 1, false)
+                            }
+
+                            AppState.replaceBlockText(block.id, before)
+
+                            const contType = (root.blockType === "heading" || root.blockType === "divider")
+                                             ? "paragraph" : root.blockType
+                            const newId = AppState.insertBlockAfter(block.id, contType)
+                            if (newId && after.length > 0)
+                                AppState.replaceBlockText(newId, after)
+                            if (newId)
+                                root.requestFocusNext(newId)
+                            return
+                        }
+
+                        // Backspace at position 0
+                        if (event.key === Qt.Key_Backspace &&
+                            selectionStart === selectionEnd &&
+                            cursorPosition === 0) {
+                            event.accepted = true
+                            root._skipBlurFlush = true
+
+                            if (root.contentDraft.length === 0 && root.blockType === "paragraph") {
+                                // Delete empty paragraph
+                                if (blockIndex <= 0) return
+                                const prev = AppState.blocks[blockIndex - 1]
+                                if (!prev) return
+                                saveTimer.stop()
+                                AppState.deleteBlock(block.id)
+                                root.requestFocusNext(prev.id)
+                            } else if (root.blockType !== "paragraph") {
+                                // Convert non-paragraph to paragraph (remove type)
+                                saveTimer.stop()
+                                AppState.convertBlockType(block.id, "paragraph", 1, false)
+                                root.requestFocusNext(block.id)
+                            } else {
+                                // Merge with previous block
+                                if (blockIndex <= 0) return
+                                const prevBlock = AppState.blocks[blockIndex - 1]
+                                if (!prevBlock) return
+                                saveTimer.stop()
+                                const mergedText = (prevBlock.text || "") + root.contentDraft
+                                AppState.replaceBlockText(prevBlock.id, mergedText)
+                                AppState.deleteBlock(block.id)
+                                root.requestFocusNext(prevBlock.id)
+                            }
+                            return
+                        }
+
+                        // Ctrl+Shift+0/1/2/3 — type shortcuts
+                        if ((event.modifiers & Qt.ControlModifier) && (event.modifiers & Qt.ShiftModifier)) {
+                            if      (event.key === Qt.Key_1) { event.accepted = true; AppState.convertBlockType(block.id, "heading",   1, false) }
+                            else if (event.key === Qt.Key_2) { event.accepted = true; AppState.convertBlockType(block.id, "heading",   2, false) }
+                            else if (event.key === Qt.Key_3) { event.accepted = true; AppState.convertBlockType(block.id, "heading",   3, false) }
+                            else if (event.key === Qt.Key_0) { event.accepted = true; AppState.convertBlockType(block.id, "paragraph", 1, false) }
+                        }
+                    }
                 }
             }
         }

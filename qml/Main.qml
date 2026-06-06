@@ -35,6 +35,24 @@ Window {
         if (force || b.length !== window.editorBlockCount) {
             window.editorBlocks = b;
             window.editorBlockCount = b.length;
+            return;
+        }
+        // Even on non-structural changes (e.g. type conversion) we must update
+        // editorBlocks so that delegates receive the new block data via onBlockChanged.
+        // We only do this when the block IDs are all identical (no structural change)
+        // to avoid accidentally triggering a full Repeater rebuild when a block is
+        // focused and the user is typing.
+        let needsUpdate = false;
+        for (let i = 0; i < b.length; i++) {
+            const cur = window.editorBlocks[i];
+            if (!cur || cur.type !== b[i].type || cur.level !== b[i].level || cur.done !== b[i].done) {
+                needsUpdate = true;
+                break;
+            }
+        }
+        if (needsUpdate) {
+            window.editorBlocks = b;
+            window.editorBlockCount = b.length;
         }
     }
     property string folderActionMode: ""
@@ -86,6 +104,19 @@ Window {
             }
         }
         return false;
+    }
+
+    // Flush any pending (unsaved) text in all editor delegates, then persist
+    // the current note to disk. Must be called before switching notes so that
+    // the user's latest keystrokes are not lost.
+    function flushAllDelegates() {
+        for (let i = 0; i < editorColumn.children.length; i++) {
+            const item = editorColumn.children[i];
+            if (item && typeof item.flushImmediate === "function") {
+                item.flushImmediate();
+            }
+        }
+        AppState.saveDocument();
     }
 
     function openFolderActionPopup(mode, targetPath) {
@@ -171,6 +202,7 @@ Window {
                 window.shareViewVisible = false;
             }
             onNewNoteClicked: {
+                window.flushAllDelegates();
                 window.focusFirstBlockOnNextSnapshot = true;
                 Handlers.onNewNoteClicked(AppState);
             }
@@ -213,6 +245,7 @@ Window {
                 Handlers.onFolderClicked(folderTitle);
             }
             onNoteClicked: function (noteTitle) {
+                window.flushAllDelegates();
                 Handlers.onNoteClicked(AppState, noteTitle);
             }
             onItemSelected: function (itemKey) {
