@@ -21,6 +21,22 @@ Window {
     property bool profileViewVisible: false
     property bool focusFirstBlockOnNextSnapshot: false
     property string pendingFocusBlockId: ""
+    // Editor Repeater model. We deliberately do NOT bind directly to
+    // AppState.blocks: a plain text edit emits blocksChanged (debounced save),
+    // which would rebuild every delegate and drop the caret. Instead we refresh
+    // this list only on STRUCTURAL changes (block added/removed, or a full
+    // snapshot rebuild). Per-block text/state is mirrored locally in the editor
+    // delegate, so skipping text-only refreshes keeps focus stable.
+    property var editorBlocks: []
+    property int editorBlockCount: 0
+
+    function syncEditorBlocks(force) {
+        const b = AppState.blocks;
+        if (force || b.length !== window.editorBlockCount) {
+            window.editorBlocks = b;
+            window.editorBlockCount = b.length;
+        }
+    }
     property string folderActionMode: ""
     property string folderActionTargetPath: ""
     readonly property bool blockEditorEnabled: AppState.blockEditorEnabled
@@ -331,7 +347,7 @@ Window {
                     spacing: 2
 
                     Repeater {
-                        model: AppState.blocks
+                        model: window.editorBlocks
 
                         delegate: NoteBlockEditor {
                             required property var modelData
@@ -525,6 +541,7 @@ Window {
     }
 
     Component.onCompleted: {
+        window.syncEditorBlocks(true);
         if (window.focusFirstBlockOnNextSnapshot) {
             Qt.callLater(() => {
                 if (editorColumn.children.length > 0) {
@@ -540,7 +557,14 @@ Window {
 
     Connections {
         target: AppState
+        // Text-only edits emit blocksChanged with an unchanged block count — we
+        // only refresh the model (rebuilding delegates) when the structure
+        // actually changes, so the focused editor keeps its caret.
+        function onBlocksChanged() {
+            window.syncEditorBlocks(false);
+        }
         function onSnapshotChanged() {
+            window.syncEditorBlocks(true);
             if (window.pendingFocusBlockId) {
                 Qt.callLater(() => {
                     if (window.requestFocusForBlock(window.pendingFocusBlockId)) {
