@@ -178,6 +178,41 @@ Window {
         folderActionPopup.close();
     }
 
+    function positionNoteActionsPopup(globalX, globalY) {
+        const overlay = Overlay.overlay;
+        const margin = 6;
+        const pw = noteActionsPopup.width;
+        const ph = noteActionsPopup.height;
+
+        let localX;
+        let localY;
+
+        if (globalX >= 0 && globalY >= 0) {
+            const p = overlay.mapFromGlobal(globalX, globalY);
+            localX = p.x;
+            localY = p.y;
+        } else {
+            const anchor = header.mapToGlobal(header.width - pw - 8, header.height + 2);
+            const p = overlay.mapFromGlobal(anchor.x, anchor.y);
+            localX = p.x;
+            localY = p.y;
+        }
+
+        // Flip above / left of anchor when overflowing
+        if (localX + pw > overlay.width - margin) {
+            localX = localX - pw;
+        }
+        if (localY + ph > overlay.height - margin) {
+            localY = localY - ph;
+        }
+
+        localX = Math.max(margin, Math.min(localX, overlay.width - pw - margin));
+        localY = Math.max(margin, Math.min(localY, overlay.height - ph - margin));
+
+        noteActionsPopup.x = localX;
+        noteActionsPopup.y = localY;
+    }
+
     function openNoteActionsMenu(itemKey, globalX, globalY) {
         const key = Handlers.resolveActiveItemKey(AppState, itemKey, window.selectedItemKey);
         if (!key) {
@@ -186,16 +221,7 @@ Window {
 
         noteActionsPopup.targetItemKey = key;
         noteActionsPopup.parent = Overlay.overlay;
-
-        if (globalX >= 0 && globalY >= 0) {
-            noteActionsPopup.x = globalX;
-            noteActionsPopup.y = globalY;
-        } else {
-            const anchor = header.mapToGlobal(header.width - noteActionsPopup.width - 8, header.height + 4);
-            noteActionsPopup.x = anchor.x;
-            noteActionsPopup.y = anchor.y;
-        }
-
+        window.positionNoteActionsPopup(globalX, globalY);
         noteActionsPopup.open();
     }
 
