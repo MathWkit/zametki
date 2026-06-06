@@ -64,10 +64,12 @@ Item {
         return "T"
     }
 
-    // Detect a markdown-style prefix at the start of `text` and, if the
-    // resulting block type differs from the current one, strip the prefix,
-    // flush the new content, and trigger a type conversion.
-    // Returns true when a conversion was initiated.
+    // Detect a markdown-style prefix at the start of `text`.
+    // If a prefix is found: strip it from the editor, update local blockType,
+    // save the content, and convert block type in C++.
+    // The Repeater is NOT rebuilt for type changes (syncEditorBlocks ignores
+    // non-structural blocksChanged), so focus stays on this block.
+    // Returns true when a prefix was matched (caller should stop processing).
     function checkAndApplyPrefix(text) {
         const rules = [
             { prefix: "### ", type: "heading",  level: 3, done: false },
@@ -86,50 +88,47 @@ Item {
             { prefix: "+ ",     type: "bulleted", level: 1, done: false },
         ]
 
-        // Divider: whole line is --- / *** / ___
-        if (text === "---" || text === "***" || text === "___") {
-            if (root.blockType !== "divider") {
-                root.contentDraft = ""
-                root._skipBlurFlush = true
-                AppState.replaceBlockText(block.id, "")
-                AppState.convertBlockType(block.id, "divider", 1, false)
-                root.requestFocusNext(block.id)
+        // Helper: strip the prefix and apply conversion without losing focus
+        function applyConversion(content, newType, newLevel, newDone) {
+            // Strip prefix from the visual editor field
+            root._suppressTextChange = true
+            editField.text = content
+            root._suppressTextChange = false
+            editField.cursorPosition = content.length
+
+            // Update local draft state
+            root.contentDraft = content
+            if (newType === "todo") root.doneDraft = newDone
+
+            // Persist content and type to C++ (no Repeater rebuild will happen
+            // because bridge emits blocksChanged → syncEditorBlocks ignores
+            // type-only changes → focus stays here)
+            AppState.replaceBlockText(block.id, content)
+
+            const needsConvert = (root.blockType !== newType) ||
+                                 (newType === "heading" && root.blockLevel !== newLevel) ||
+                                 (newType === "todo"    && root.doneDraft   !== newDone)
+            if (needsConvert) {
+                AppState.convertBlockType(block.id, newType, newLevel, newDone)
             }
+        }
+
+        // Divider: the whole line must be "---" / "***" / "___"
+        if (text === "---" || text === "***" || text === "___") {
+            applyConversion("", "divider", 1, false)
             return true
         }
 
         // Numbered list: "1. " … "99. "
         const numMatch = /^(\d+)\.\s/.exec(text)
         if (numMatch) {
-            const content = text.slice(numMatch[0].length)
-            if (root.blockType !== "numbered") {
-                root.contentDraft = content
-                root._suppressTextChange = true
-                editField.text = content
-                editField.cursorPosition = content.length
-                root._suppressTextChange = false
-                AppState.replaceBlockText(block.id, content)
-                AppState.convertBlockType(block.id, "numbered", 1, false)
-            }
+            applyConversion(text.slice(numMatch[0].length), "numbered", 1, false)
             return true
         }
 
         for (const rule of rules) {
             if (text.startsWith(rule.prefix)) {
-                const content = text.slice(rule.prefix.length)
-                const needsConvert = (root.blockType !== rule.type) ||
-                                     (rule.type === "heading" && root.blockLevel !== rule.level) ||
-                                     (rule.type === "todo"    && root.doneDraft   !== rule.done)
-                if (needsConvert) {
-                    root.contentDraft = content
-                    if (rule.type === "todo") root.doneDraft = rule.done
-                    root._suppressTextChange = true
-                    editField.text = content
-                    editField.cursorPosition = content.length
-                    root._suppressTextChange = false
-                    AppState.replaceBlockText(block.id, content)
-                    AppState.convertBlockType(block.id, rule.type, rule.level, rule.done)
-                }
+                applyConversion(text.slice(rule.prefix.length), rule.type, rule.level, rule.done)
                 return true
             }
         }
@@ -195,11 +194,12 @@ Item {
     // ─────────────────────────────────────────────────────────────────────
 
     // Keep local type/level in sync with in-place updates from C++.
-    // This fires after convertBlockType emits blocksChanged (with fixed bridge).
+    // Fires after convertBlockType emits blocksChanged (bridge fix).
+    // We update for ALL delegates (focused or not) because syncEditorBlocks
+    // no longer rebuilds the Repeater on type-only changes.
     Connections {
         target: AppState
         function onBlocksChanged() {
-            if (!editField.activeFocus) return
             const blocks = AppState.blocks
             for (const b of blocks) {
                 if (b.id === root.block.id) {
@@ -208,6 +208,11 @@ Item {
                     }
                     if (root.blockLevel !== (b.level || 1)) {
                         root.blockLevel = b.level || 1
+                    }
+                    // Update done state only when not focused (avoid overwriting
+                    // a toggle the user is about to commit)
+                    if (!editField.activeFocus && root.doneDraft !== (b.done === true)) {
+                        root.doneDraft = b.done === true
                     }
                     break
                 }

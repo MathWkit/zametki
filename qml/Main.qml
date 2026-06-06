@@ -37,22 +37,17 @@ Window {
             window.editorBlockCount = b.length;
             return;
         }
-        // Even on non-structural changes (e.g. type conversion) we must update
-        // editorBlocks so that delegates receive the new block data via onBlockChanged.
-        // We only do this when the block IDs are all identical (no structural change)
-        // to avoid accidentally triggering a full Repeater rebuild when a block is
-        // focused and the user is typing.
-        let needsUpdate = false;
+        // For non-structural changes (type/level/text updates) we do NOT rebuild
+        // the Repeater — that would destroy the focused delegate and lose the cursor.
+        // Per-delegate Connections.onBlocksChanged() keeps type/level in sync instead.
+        // We only rebuild when block IDs change (shouldn't happen without a count
+        // change, but guard just in case).
         for (let i = 0; i < b.length; i++) {
-            const cur = window.editorBlocks[i];
-            if (!cur || cur.type !== b[i].type || cur.level !== b[i].level || cur.done !== b[i].done) {
-                needsUpdate = true;
-                break;
+            if (!window.editorBlocks[i] || window.editorBlocks[i].id !== b[i].id) {
+                window.editorBlocks = b;
+                window.editorBlockCount = b.length;
+                return;
             }
-        }
-        if (needsUpdate) {
-            window.editorBlocks = b;
-            window.editorBlockCount = b.length;
         }
     }
     property string folderActionMode: ""
@@ -390,7 +385,28 @@ Window {
                             editorWidth: editorColumn.width
                             uiFontFamily: interFont.name
                             onRequestFocusNext: function (blockId) {
+                                // Set pending ID so onSnapshotChanged can pick it up
+                                // if a structural rebuild fires later.
                                 window.pendingFocusBlockId = blockId;
+                                // Also schedule focus immediately: onSnapshotChanged
+                                // from insertBlockAfter fires BEFORE this handler runs
+                                // (it fires during the C++ call), so we must schedule
+                                // focus ourselves here too.
+                                Qt.callLater(function() {
+                                    if (window.pendingFocusBlockId) {
+                                        if (window.requestFocusForBlock(window.pendingFocusBlockId)) {
+                                            window.pendingFocusBlockId = "";
+                                        } else {
+                                            // One more retry after the next render frame
+                                            Qt.callLater(function() {
+                                                if (window.pendingFocusBlockId) {
+                                                    window.requestFocusForBlock(window.pendingFocusBlockId);
+                                                    window.pendingFocusBlockId = "";
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
                             }
                         }
                     }
@@ -614,7 +630,11 @@ Window {
             window.syncEditorBlocks(false);
         }
         function onSnapshotChanged() {
-            window.syncEditorBlocks(true);
+            // onBlocksChanged already handled structural rebuilds when the count
+            // or ids changed; calling syncEditorBlocks(false) here avoids a
+            // second redundant Repeater rebuild that would destroy the focused
+            // delegate and reset cursor position.
+            window.syncEditorBlocks(false);
             if (window.pendingFocusBlockId) {
                 Qt.callLater(() => {
                     if (window.requestFocusForBlock(window.pendingFocusBlockId)) {
