@@ -301,7 +301,8 @@ bool DocumentBridge::openDocument(const QString &id)
     // QML may have unsaved text in the editor timer; we save whatever
     // the CRDT already knows about (the QML side flushes first via
     // flushAllDelegates before calling this method).
-    if (!m_manager->getSnapshot().id.isEmpty())
+    const QString currentId = m_manager->getSnapshot().id;
+    if (!currentId.isEmpty() && currentId != id)
     {
         m_manager->save();
     }
@@ -312,6 +313,40 @@ bool DocumentBridge::openDocument(const QString &id)
         m_lastError = m_manager->lastError();
     }
     return ok;
+}
+
+bool DocumentBridge::reloadDocumentFromDisk(const QString &id)
+{
+    if (!m_manager)
+    {
+        m_lastError = QStringLiteral("manager_missing");
+        return false;
+    }
+
+    if (id.isEmpty())
+    {
+        m_lastError = QStringLiteral("invalid_note");
+        return false;
+    }
+
+    const bool ok = m_manager->load(id);
+    if (!ok)
+    {
+        m_lastError = m_manager->lastError();
+    }
+    return ok;
+}
+
+void DocumentBridge::refreshDocumentsFromDisk()
+{
+    if (m_manager)
+    {
+        m_manager->clearDocumentCache();
+    }
+
+    rebuildNoteTitles();
+    refreshFolderTitles();
+    emit directoryContentChanged();
 }
 
 bool DocumentBridge::openDocumentByTitle(const QString &title)

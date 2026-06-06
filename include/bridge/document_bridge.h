@@ -33,6 +33,8 @@ public:
     Q_INVOKABLE QVariantList searchDocuments(const QString &query) const;
     Q_INVOKABLE QVariantList getBacklinks(const QString &noteId) const;
     Q_INVOKABLE bool openDocument(const QString &id);
+    Q_INVOKABLE bool reloadDocumentFromDisk(const QString &id);
+    Q_INVOKABLE void refreshDocumentsFromDisk();
     Q_INVOKABLE bool openDocumentByTitle(const QString &title);
     Q_INVOKABLE bool saveDocument();
     Q_INVOKABLE bool createEmptyDocument();

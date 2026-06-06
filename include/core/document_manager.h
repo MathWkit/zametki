@@ -36,6 +36,7 @@ public:
     QVector<Document> getBacklinks(const QString &noteId);
 
     bool load(const QString &id);
+    void clearDocumentCache();
     bool save();
     bool createEmptyDocument();
     bool renameDocument(const QString &title);

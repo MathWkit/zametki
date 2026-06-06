@@ -210,6 +210,11 @@ bool DocumentManager::load(const QString &id)
     return true;
 }
 
+void DocumentManager::clearDocumentCache()
+{
+    m_converter.clearCache();
+}
+
 bool DocumentManager::save()
 {
     setError(QString());

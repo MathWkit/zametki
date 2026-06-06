@@ -742,10 +742,12 @@ Window {
                 console.log("Синхронизация заметки не удалась:", action, error);
                 return;
             }
-            if (action === "download" && AppState.currentDocumentId === noteId) {
-                window.flushAllDelegates();
-                AppState.openDocument(noteId);
-                window.syncEditorBlocks(true);
+            if (action === "download") {
+                AppState.refreshDocumentsFromDisk();
+                if (AppState.currentDocumentId === noteId) {
+                    AppState.reloadDocumentFromDisk(noteId);
+                    window.syncEditorBlocks(true);
+                }
             }
         }
         function onSyncActionFinished(action, success, error) {
@@ -764,13 +766,13 @@ Window {
             }
 
             if (action === "pull_soft_all" || action === "pull_hard_all") {
-                AppState.refreshNoteTitles();
-                AppState.refreshFolderTitles();
+                AppState.refreshDocumentsFromDisk();
                 const currentId = AppState.currentDocumentId;
                 if (currentId && currentId.length > 0) {
-                    window.flushAllDelegates();
-                    AppState.openDocument(currentId);
-                    window.syncEditorBlocks(true);
+                    if (action === "pull_hard_all" || (error.indexOf("downloaded_") === 0 && error !== "downloaded_0")) {
+                        AppState.reloadDocumentFromDisk(currentId);
+                        window.syncEditorBlocks(true);
+                    }
                 }
             }
         }
