@@ -7,6 +7,7 @@
 #include <QSet>
 #include <QVariantMap>
 
+#include "core/blocks/text_block.h"
 #include "storage/json/block_type_codec.h"
 
 namespace zametki::storage::json
@@ -201,6 +202,26 @@ QJsonObject DocumentJsonSerializer::serializeBlock(const core::Block &block) con
         }
         blockObject.insert(QStringLiteral("data"), serializeTodoBlock(todoBlock));
     }
+    else if (block.type == core::BlockType::Quote || block.type == core::BlockType::Bulleted
+             || block.type == core::BlockType::Numbered || block.type == core::BlockType::Code)
+    {
+        QString text;
+        if (block.data.canConvert<core::TextBlock>())
+        {
+            text = block.data.value<core::TextBlock>().text;
+        }
+        else if (block.data.canConvert<QVariantMap>())
+        {
+            text = block.data.toMap().value(QStringLiteral("text")).toString();
+        }
+        else
+        {
+            text = block.data.toString();
+        }
+        QJsonObject data;
+        data.insert(QStringLiteral("text"), text);
+        blockObject.insert(QStringLiteral("data"), data);
+    }
     else
     {
         blockObject.insert(QStringLiteral("data"), QJsonObject{});
@@ -255,6 +276,17 @@ core::Block DocumentJsonSerializer::deserializeBlock(const QJsonObject &object) 
             todoData.insert(QStringLiteral("deadline"), todoBlock.deadline.toString(Qt::ISODate));
             todoData.insert(QStringLiteral("color"), todoBlock.color);
             block.data = todoData;
+        }
+        else if (block.type == core::BlockType::Quote || block.type == core::BlockType::Bulleted
+                 || block.type == core::BlockType::Numbered || block.type == core::BlockType::Code)
+        {
+            QVariantMap textData;
+            textData.insert(QStringLiteral("text"), object.value(QStringLiteral("data")).toObject().value(QStringLiteral("text")).toString());
+            block.data = textData;
+        }
+        else if (block.type == core::BlockType::Divider)
+        {
+            block.data = QVariantMap{};
         }
         else
         {

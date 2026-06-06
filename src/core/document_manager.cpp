@@ -496,6 +496,17 @@ QString DocumentManager::insertBlock(const QString &afterBlockId, BlockType type
         block.data.set(QStringLiteral("deadline"), QDate(), 0);
         block.data.set(QStringLiteral("color"), QString(), 0);
     }
+    else if (type == BlockType::Quote || type == BlockType::Bulleted
+             || type == BlockType::Numbered || type == BlockType::Code)
+    {
+        crdt::CRDTText text(m_siteId);
+        text.fromQString(QString(), m_siteId);
+        block.data.set(QStringLiteral("text"), text.serialize(), 0);
+    }
+    else if (type == BlockType::Divider)
+    {
+        // Divider carries no editable text.
+    }
     else if (type == BlockType::Unsupported)
     {
         block.data.set(QStringLiteral("source_type"), QStringLiteral("unsupported"), 0);

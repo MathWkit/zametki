@@ -205,6 +205,47 @@ void computeTextDiff(const QString &before, const QString &after, int &start, in
     }
 }
 
+zametki::core::BlockType blockTypeFromString(const QString &type, bool &ok)
+{
+    ok = true;
+    const QString normalized = type.trimmed().toLower();
+    if (normalized == QStringLiteral("paragraph"))
+    {
+        return zametki::core::BlockType::Paragraph;
+    }
+    if (normalized == QStringLiteral("heading"))
+    {
+        return zametki::core::BlockType::Heading;
+    }
+    if (normalized == QStringLiteral("todo"))
+    {
+        return zametki::core::BlockType::Todo;
+    }
+    if (normalized == QStringLiteral("quote"))
+    {
+        return zametki::core::BlockType::Quote;
+    }
+    if (normalized == QStringLiteral("bulleted"))
+    {
+        return zametki::core::BlockType::Bulleted;
+    }
+    if (normalized == QStringLiteral("numbered"))
+    {
+        return zametki::core::BlockType::Numbered;
+    }
+    if (normalized == QStringLiteral("code"))
+    {
+        return zametki::core::BlockType::Code;
+    }
+    if (normalized == QStringLiteral("divider"))
+    {
+        return zametki::core::BlockType::Divider;
+    }
+
+    ok = false;
+    return zametki::core::BlockType::Paragraph;
+}
+
 QVariantMap toVariantMap(const zametki::core::Document &doc)
 {
     QVariantMap map;
@@ -921,17 +962,9 @@ QString DocumentBridge::insertBlockAfter(const QString &afterBlockId, const QStr
         return {};
     }
 
-    zametki::core::BlockType blockType = zametki::core::BlockType::Paragraph;
-    const QString normalized = type.trimmed().toLower();
-    if (normalized == QStringLiteral("heading"))
-    {
-        blockType = zametki::core::BlockType::Heading;
-    }
-    else if (normalized == QStringLiteral("todo"))
-    {
-        blockType = zametki::core::BlockType::Todo;
-    }
-    else if (normalized != QStringLiteral("paragraph"))
+    bool ok = false;
+    const zametki::core::BlockType blockType = blockTypeFromString(type, ok);
+    if (!ok)
     {
         m_lastError = QStringLiteral("unknown_block_type");
         return {};
@@ -968,17 +1001,9 @@ void DocumentBridge::convertBlockType(const QString &blockId, const QString &typ
         return;
     }
 
-    zametki::core::BlockType blockType = zametki::core::BlockType::Paragraph;
-    const QString normalized = type.trimmed().toLower();
-    if (normalized == QStringLiteral("heading"))
-    {
-        blockType = zametki::core::BlockType::Heading;
-    }
-    else if (normalized == QStringLiteral("todo"))
-    {
-        blockType = zametki::core::BlockType::Todo;
-    }
-    else if (normalized != QStringLiteral("paragraph"))
+    bool ok = false;
+    const zametki::core::BlockType blockType = blockTypeFromString(type, ok);
+    if (!ok)
     {
         m_lastError = QStringLiteral("unknown_block_type");
         return;
@@ -1022,6 +1047,36 @@ void DocumentBridge::rebuildBlocks(const zametki::core::Document &snapshot)
             map.insert(QStringLiteral("text"), text);
             map.insert(QStringLiteral("done"), data.done);
             m_lastTextById.insert(block.id, text);
+        }
+        else if (block.type == zametki::core::BlockType::Quote)
+        {
+            map.insert(QStringLiteral("type"), QStringLiteral("quote"));
+            map.insert(QStringLiteral("text"), text);
+            m_lastTextById.insert(block.id, text);
+        }
+        else if (block.type == zametki::core::BlockType::Bulleted)
+        {
+            map.insert(QStringLiteral("type"), QStringLiteral("bulleted"));
+            map.insert(QStringLiteral("text"), text);
+            m_lastTextById.insert(block.id, text);
+        }
+        else if (block.type == zametki::core::BlockType::Numbered)
+        {
+            map.insert(QStringLiteral("type"), QStringLiteral("numbered"));
+            map.insert(QStringLiteral("text"), text);
+            m_lastTextById.insert(block.id, text);
+        }
+        else if (block.type == zametki::core::BlockType::Code)
+        {
+            map.insert(QStringLiteral("type"), QStringLiteral("code"));
+            map.insert(QStringLiteral("text"), text);
+            m_lastTextById.insert(block.id, text);
+        }
+        else if (block.type == zametki::core::BlockType::Divider)
+        {
+            map.insert(QStringLiteral("type"), QStringLiteral("divider"));
+            map.insert(QStringLiteral("text"), QString());
+            m_lastTextById.insert(block.id, QString());
         }
         else
         {

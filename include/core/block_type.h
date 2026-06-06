@@ -8,6 +8,11 @@ enum class BlockType
     Paragraph,
     Heading,
     Todo,
+    Quote,
+    Bulleted,
+    Numbered,
+    Code,
+    Divider,
     Unsupported
 };
 }

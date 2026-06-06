@@ -2,6 +2,7 @@
 
 #include "core/blocks/heading_block.h"
 #include "core/blocks/paragraph_block.h"
+#include "core/blocks/text_block.h"
 #include "core/blocks/todo_block.h"
 
 namespace zametki::core
@@ -19,6 +20,10 @@ QString BlockTextAccessor::getText(const Block &block)
     if (block.data.canConvert<TodoBlock>())
     {
         return block.data.value<TodoBlock>().text;
+    }
+    if (block.data.canConvert<TextBlock>())
+    {
+        return block.data.value<TextBlock>().text;
     }
 
     return QString();
@@ -43,6 +48,13 @@ bool BlockTextAccessor::setText(Block &block, const QString &text)
     if (block.data.canConvert<TodoBlock>())
     {
         TodoBlock data = block.data.value<TodoBlock>();
+        data.text = text;
+        block.data = QVariant::fromValue(data);
+        return true;
+    }
+    if (block.data.canConvert<TextBlock>())
+    {
+        TextBlock data = block.data.value<TextBlock>();
         data.text = text;
         block.data = QVariant::fromValue(data);
         return true;

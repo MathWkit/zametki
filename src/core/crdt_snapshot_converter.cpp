@@ -3,6 +3,7 @@
 #include <QJsonObject>
 
 #include "core/block_text_accessor.h"
+#include "core/blocks/text_block.h"
 #include "core/unsupported_block.h"
 #include "crdt/crdt_id.h"
 #include "storage/json/document_file_repository.h"
@@ -178,6 +179,19 @@ Document CRDTSnapshotConverter::toSnapshot(const crdt::CRDTDocument &document) c
             data.sourceType = entry.block.data.value(QStringLiteral("source_type")).toString();
             data.sourceData = entry.block.data.value(QStringLiteral("source_data")).toMap();
             block.data = QVariant::fromValue(data);
+        }
+        else if (entry.block.type == BlockType::Quote || entry.block.type == BlockType::Bulleted
+                 || entry.block.type == BlockType::Numbered || entry.block.type == BlockType::Code)
+        {
+            core::TextBlock data;
+            QJsonObject textObj = entry.block.data.value(QStringLiteral("text")).toJsonObject();
+            crdt::CRDTText text = crdt::CRDTText::deserialize(textObj);
+            data.text = text.toQString();
+            block.data = QVariant::fromValue(data);
+        }
+        else if (entry.block.type == BlockType::Divider)
+        {
+            block.data = QVariant::fromValue(core::TextBlock{});
         }
         else
         {

@@ -12,6 +12,16 @@ QString BlockTypeCodec::toString(const core::BlockType type)
         return QStringLiteral("heading");
     case core::BlockType::Todo:
         return QStringLiteral("todo");
+    case core::BlockType::Quote:
+        return QStringLiteral("quote");
+    case core::BlockType::Bulleted:
+        return QStringLiteral("bulleted");
+    case core::BlockType::Numbered:
+        return QStringLiteral("numbered");
+    case core::BlockType::Code:
+        return QStringLiteral("code");
+    case core::BlockType::Divider:
+        return QStringLiteral("divider");
     case core::BlockType::Unsupported:
         return QStringLiteral("unsupported");
     }
@@ -34,6 +44,31 @@ core::BlockType BlockTypeCodec::fromString(const QString &value)
     if (value == QStringLiteral("todo"))
     {
         return core::BlockType::Todo;
+    }
+
+    if (value == QStringLiteral("quote"))
+    {
+        return core::BlockType::Quote;
+    }
+
+    if (value == QStringLiteral("bulleted"))
+    {
+        return core::BlockType::Bulleted;
+    }
+
+    if (value == QStringLiteral("numbered"))
+    {
+        return core::BlockType::Numbered;
+    }
+
+    if (value == QStringLiteral("code"))
+    {
+        return core::BlockType::Code;
+    }
+
+    if (value == QStringLiteral("divider"))
+    {
+        return core::BlockType::Divider;
     }
 
     // unknown type

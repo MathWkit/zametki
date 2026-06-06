@@ -33,9 +33,24 @@ Item {
     height: blockRow.implicitHeight
 
     // ── Prefix helpers ───────────────────────────────────────────────────
+    // Ordinal of this block among a contiguous run of "numbered" blocks.
+    function numberedOrdinal() {
+        let n = 1;
+        for (let i = blockIndex - 1; i >= 0; i--) {
+            const b = AppState.blocks[i];
+            if (b && b.type === "numbered") n++;
+            else break;
+        }
+        return n;
+    }
+
     function blockPrefix() {
         if (block.type === "heading")  return "#".repeat(block.level || 1) + " ";
         if (block.type === "bulleted") return "- ";
+        if (block.type === "numbered") return root.numberedOrdinal() + ". ";
+        if (block.type === "quote")    return "> ";
+        if (block.type === "code")     return "``` ";
+        if (block.type === "divider")  return "---";
         if (block.type === "todo")     return doneDraft ? "- [x] " : "- [ ] ";
         return "";
     }
@@ -45,6 +60,16 @@ Item {
     }
 
     function parseEditText(text) {
+        // Whole-line divider
+        if (text === "---" || text === "***" || text === "___") {
+            return { type: "divider", level: 1, done: false, content: "" };
+        }
+        // Numbered list: "1. ", "42. " …
+        const numMatch = /^(\d+)\.\s/.exec(text);
+        if (numMatch) {
+            return { type: "numbered", level: 1, done: false,
+                     content: text.slice(numMatch[0].length) };
+        }
         const rules = [
             { prefix: "### ", type: "heading",  level: 3, done: false },
             { prefix: "## ",  type: "heading",  level: 2, done: false },
@@ -52,7 +77,18 @@ Item {
             { prefix: "- [x] ", type: "todo",   level: 1, done: true  },
             { prefix: "- [X] ", type: "todo",   level: 1, done: true  },
             { prefix: "- [ ] ", type: "todo",   level: 1, done: false },
+            { prefix: "* [x] ", type: "todo",   level: 1, done: true  },
+            { prefix: "* [X] ", type: "todo",   level: 1, done: true  },
+            { prefix: "* [ ] ", type: "todo",   level: 1, done: false },
+            { prefix: "[x] ",   type: "todo",   level: 1, done: true  },
+            { prefix: "[X] ",   type: "todo",   level: 1, done: true  },
+            { prefix: "[ ] ",   type: "todo",   level: 1, done: false },
             { prefix: "[] ",    type: "todo",   level: 1, done: false },
+            { prefix: "``` ",   type: "code",   level: 1, done: false },
+            { prefix: "> ",     type: "quote",  level: 1, done: false },
+            { prefix: "- ",     type: "bulleted", level: 1, done: false },
+            { prefix: "* ",     type: "bulleted", level: 1, done: false },
+            { prefix: "+ ",     type: "bulleted", level: 1, done: false },
         ];
         for (const rule of rules) {
             if (text.startsWith(rule.prefix)) {
@@ -74,6 +110,10 @@ Item {
         if (block.type === "heading")  return "H" + (block.level || 1);
         if (block.type === "todo")     return "☐";
         if (block.type === "bulleted") return "•";
+        if (block.type === "numbered") return "1.";
+        if (block.type === "quote")    return "❝";
+        if (block.type === "code")     return "</>";
+        if (block.type === "divider")  return "—";
         return "T";
     }
 
@@ -190,12 +230,16 @@ Item {
             }
             Repeater {
                 model: [
-                    { label: "Текст",       icon: "T",  type: "paragraph", level: 0 },
-                    { label: "Заголовок 1", icon: "H1", type: "heading",   level: 1 },
-                    { label: "Заголовок 2", icon: "H2", type: "heading",   level: 2 },
-                    { label: "Заголовок 3", icon: "H3", type: "heading",   level: 3 },
-                    { label: "Задача",      icon: "☐",  type: "todo",      level: 0 },
-                    { label: "Список",      icon: "•",  type: "bulleted",  level: 0 },
+                    { label: "Текст",            icon: "T",   type: "paragraph", level: 0 },
+                    { label: "Заголовок 1",      icon: "H1",  type: "heading",   level: 1 },
+                    { label: "Заголовок 2",      icon: "H2",  type: "heading",   level: 2 },
+                    { label: "Заголовок 3",      icon: "H3",  type: "heading",   level: 3 },
+                    { label: "Задача",           icon: "☐",   type: "todo",      level: 0 },
+                    { label: "Маркированный список", icon: "•",  type: "bulleted",  level: 0 },
+                    { label: "Нумерованный список",  icon: "1.", type: "numbered",  level: 0 },
+                    { label: "Цитата",           icon: "❝",   type: "quote",     level: 0 },
+                    { label: "Код",              icon: "</>", type: "code",      level: 0 },
+                    { label: "Разделитель",      icon: "—",   type: "divider",   level: 0 },
                 ]
                 delegate: Rectangle {
                     required property var modelData
@@ -244,11 +288,16 @@ Item {
             }
             Repeater {
                 model: [
-                    { label: "Текст",       icon: "T",  type: "paragraph", level: 0 },
-                    { label: "Заголовок 1", icon: "H1", type: "heading",   level: 1 },
-                    { label: "Заголовок 2", icon: "H2", type: "heading",   level: 2 },
-                    { label: "Заголовок 3", icon: "H3", type: "heading",   level: 3 },
-                    { label: "Задача",      icon: "☐",  type: "todo",      level: 0 },
+                    { label: "Текст",            icon: "T",   type: "paragraph", level: 0 },
+                    { label: "Заголовок 1",      icon: "H1",  type: "heading",   level: 1 },
+                    { label: "Заголовок 2",      icon: "H2",  type: "heading",   level: 2 },
+                    { label: "Заголовок 3",      icon: "H3",  type: "heading",   level: 3 },
+                    { label: "Задача",           icon: "☐",   type: "todo",      level: 0 },
+                    { label: "Маркированный список", icon: "•",  type: "bulleted",  level: 0 },
+                    { label: "Нумерованный список",  icon: "1.", type: "numbered",  level: 0 },
+                    { label: "Цитата",           icon: "❝",   type: "quote",     level: 0 },
+                    { label: "Код",              icon: "</>", type: "code",      level: 0 },
+                    { label: "Разделитель",      icon: "—",   type: "divider",   level: 0 },
                 ]
                 delegate: Rectangle {
                     required property var modelData
@@ -424,7 +473,7 @@ Item {
                         }
 
                         AppState.replaceBlockText(root.block.id, before);
-                        const contType = (root.block.type === "heading") ? "paragraph" : root.block.type;
+                        const contType = (root.block.type === "heading" || root.block.type === "divider") ? "paragraph" : root.block.type;
                         const newId = AppState.insertBlockAfter(root.block.id, contType);
                         if (newId && after.length > 0) AppState.replaceBlockText(newId, after);
                         if (newId) root.requestFocusNext(newId);
@@ -521,13 +570,115 @@ Item {
                     }
                 }
 
+                // Quote
+                Row {
+                    id: quoteDisplay
+                    visible: block.type === "quote"
+                    width: parent.width; spacing: Palette.spacingMd
+                    Rectangle {
+                        width: 3; radius: 2; color: Palette.border
+                        height: quoteText.implicitHeight - 4
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        id: quoteText
+                        width: parent.width - 3 - Palette.spacingMd
+                        text: root.contentDraft; wrapMode: Text.Wrap
+                        font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
+                        font.italic: true
+                        color: Palette.textSecondary
+                        leftPadding: 2; rightPadding: 2; topPadding: 4; bottomPadding: 4
+                        MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
+                    }
+                }
+
+                // Bulleted list item
+                Row {
+                    id: bulletedDisplay
+                    visible: block.type === "bulleted"
+                    width: parent.width; spacing: Palette.spacingSm
+                    Text {
+                        text: "•"; color: Palette.textPrimary
+                        font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
+                        leftPadding: 4; topPadding: 4; bottomPadding: 4
+                    }
+                    Text {
+                        width: parent.width - 18
+                        text: root.contentDraft; wrapMode: Text.Wrap
+                        font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
+                        color: Palette.textPrimary
+                        rightPadding: 2; topPadding: 4; bottomPadding: 4
+                        MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
+                    }
+                }
+
+                // Numbered list item
+                Row {
+                    id: numberedDisplay
+                    visible: block.type === "numbered"
+                    width: parent.width; spacing: Palette.spacingSm
+                    Text {
+                        text: root.numberedOrdinal() + "."
+                        color: Palette.textSecondary
+                        font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
+                        leftPadding: 4; topPadding: 4; bottomPadding: 4
+                    }
+                    Text {
+                        width: parent.width - 26
+                        text: root.contentDraft; wrapMode: Text.Wrap
+                        font.family: root.uiFontFamily; font.pixelSize: Palette.fontSizeBase
+                        color: Palette.textPrimary
+                        rightPadding: 2; topPadding: 4; bottomPadding: 4
+                        MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
+                    }
+                }
+
+                // Code block
+                Rectangle {
+                    id: codeDisplay
+                    visible: block.type === "code"
+                    width: parent.width
+                    height: codeText.implicitHeight + 12
+                    radius: 6
+                    color: Palette.surfaceColor
+                    border.color: Palette.border; border.width: 1
+                    Text {
+                        id: codeText
+                        anchors.fill: parent
+                        anchors.margins: 6
+                        text: root.contentDraft; wrapMode: Text.Wrap
+                        font.family: "monospace"; font.pixelSize: Palette.fontSizeBase
+                        color: Palette.textPrimary
+                    }
+                    MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
+                }
+
+                // Divider
+                Item {
+                    id: dividerDisplay
+                    visible: block.type === "divider"
+                    width: parent.width
+                    height: 20
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width; height: 1
+                        color: Palette.border
+                    }
+                    MouseArea { anchors.fill: parent; onClicked: root.activateEditor(true) }
+                }
+
                 // Invisible item used for implicitHeight calculation
                 Item {
                     id: displayContent
                     width: parent.width
-                    implicitHeight: paraDisplay.visible ? paraDisplay.implicitHeight
-                                  : headDisplay.visible ? headDisplay.implicitHeight
-                                  : todoDisplay.visible ? todoDisplay.implicitHeight
+                    implicitHeight: paraDisplay.visible      ? paraDisplay.implicitHeight
+                                  : headDisplay.visible      ? headDisplay.implicitHeight
+                                  : todoDisplay.visible      ? todoDisplay.implicitHeight
+                                  : quoteDisplay.visible     ? quoteDisplay.implicitHeight
+                                  : bulletedDisplay.visible  ? bulletedDisplay.implicitHeight
+                                  : numberedDisplay.visible  ? numberedDisplay.implicitHeight
+                                  : codeDisplay.visible      ? codeDisplay.height
+                                  : dividerDisplay.visible   ? dividerDisplay.height
                                   : 28
                 }
             }

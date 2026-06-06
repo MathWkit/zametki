@@ -112,8 +112,14 @@ QString MarkdownExporter::toMarkdown(const core::Document &document) const
         lines.append(QString());
     }
 
+    int numberedCounter = 0;
     for (const auto &block : document.blocks)
     {
+        if (block.type != core::BlockType::Numbered)
+        {
+            numberedCounter = 0;
+        }
+
         if (block.type == core::BlockType::Paragraph)
         {
             lines.append(paragraphText(block));
@@ -132,6 +138,34 @@ QString MarkdownExporter::toMarkdown(const core::Document &document) const
             const core::TodoBlock todo = todoBlockFromVariant(block.data);
             const QString doneMark = todo.done ? QStringLiteral("x") : QStringLiteral(" ");
             lines.append(QStringLiteral("- [%1] ").arg(doneMark) + todo.text + formatTodoMetadata(todo));
+            lines.append(QString());
+        }
+        else if (block.type == core::BlockType::Quote)
+        {
+            lines.append(QStringLiteral("> ") + core::BlockTextAccessor::getText(block));
+            lines.append(QString());
+        }
+        else if (block.type == core::BlockType::Bulleted)
+        {
+            lines.append(QStringLiteral("- ") + core::BlockTextAccessor::getText(block));
+            lines.append(QString());
+        }
+        else if (block.type == core::BlockType::Numbered)
+        {
+            ++numberedCounter;
+            lines.append(QStringLiteral("%1. ").arg(numberedCounter) + core::BlockTextAccessor::getText(block));
+            lines.append(QString());
+        }
+        else if (block.type == core::BlockType::Code)
+        {
+            lines.append(QStringLiteral("```"));
+            lines.append(core::BlockTextAccessor::getText(block));
+            lines.append(QStringLiteral("```"));
+            lines.append(QString());
+        }
+        else if (block.type == core::BlockType::Divider)
+        {
+            lines.append(QStringLiteral("---"));
             lines.append(QString());
         }
         else
