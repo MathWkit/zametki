@@ -369,6 +369,67 @@ bool DocumentManager::deleteDocument(const QString &id)
     return true;
 }
 
+QString DocumentManager::duplicateDocument(const QString &id)
+{
+    setError(QString());
+    Document source = m_repository.read(id);
+    if (source.id.isEmpty())
+    {
+        setError(m_repository.lastError().isEmpty() ? QStringLiteral("load_failed") : m_repository.lastError());
+        return {};
+    }
+
+    const QString newId = m_idGenerator.create();
+    source.id = newId;
+
+    const QString baseTitle = source.title.trimmed().isEmpty() ? QStringLiteral("Заметка") : source.title.trimmed();
+    QString newTitle = baseTitle + QStringLiteral(" (копия)");
+
+    QSet<QString> existingTitles;
+    const QVector<Document> existingDocuments = listAllDocuments();
+    for (const auto &document : existingDocuments)
+    {
+        if (!document.title.trimmed().isEmpty())
+        {
+            existingTitles.insert(document.title.trimmed());
+        }
+    }
+
+    int suffix = 2;
+    while (existingTitles.contains(newTitle))
+    {
+        newTitle = baseTitle + QStringLiteral(" (копия %1)").arg(suffix++);
+    }
+    source.title = newTitle;
+
+    if (!m_repository.write(newId, source))
+    {
+        setError(m_repository.lastError().isEmpty() ? QStringLiteral("save_failed") : m_repository.lastError());
+        return {};
+    }
+
+    const QString path = m_repository.documentPath(newId);
+    if (!m_noteIndexRepository.upsertNote(newId, source.title, path))
+    {
+        setError(m_noteIndexRepository.lastError());
+        return {};
+    }
+
+    if (!m_noteIndexRepository.upsertTags(newId, source.tags))
+    {
+        setError(m_noteIndexRepository.lastError());
+        return {};
+    }
+
+    if (!m_searchIndexer.upsert(source))
+    {
+        setError(m_searchIndexer.lastError());
+        return {};
+    }
+
+    return newId;
+}
+
 void DocumentManager::applyTextInsert(const QString &blockId, int position, const QString &text)
 {
     crdt::CRDTId id;

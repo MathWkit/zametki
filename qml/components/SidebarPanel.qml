@@ -21,6 +21,7 @@ Rectangle {
     signal folderClicked(string folderTitle)
     signal noteClicked(string noteTitle)
     signal itemSelected(string itemKey)
+    signal noteContextMenuRequested(string itemKey, real x, real y)
 
     color: "transparent"
     border.width: 1
@@ -262,6 +263,9 @@ Rectangle {
                 }
                 onItemSelected: function (itemKey) {
                     root.itemSelected(itemKey);
+                }
+                onNoteContextMenuRequested: function (itemKey, x, y) {
+                    root.noteContextMenuRequested(itemKey, x, y);
                 }
             }
         }

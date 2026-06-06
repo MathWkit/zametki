@@ -32,8 +32,102 @@ export function onFavoriteClicked() {
     console.log("Нажатие на Избранное");
 }
 
-export function onMoreClicked() {
-    console.log("Нажатие на Дополнительно");
+export function resolveActiveItemKey(appState, explicitKey, selectedItemKey) {
+    if (explicitKey && explicitKey.length > 0) {
+        return explicitKey;
+    }
+    if (selectedItemKey && selectedItemKey.length > 0) {
+        return selectedItemKey;
+    }
+    if (appState && appState.currentItemKey) {
+        return appState.currentItemKey() || "";
+    }
+    return "";
+}
+
+export function onNoteAction(appState, syncState, action, itemKey, window) {
+    const key = resolveActiveItemKey(appState, itemKey, window ? window.selectedItemKey : "");
+    if (!key) {
+        console.log("Действие с заметкой: нет выбранной заметки");
+        return false;
+    }
+
+    const noteId = appState.resolveDocumentIdFromItemKey(key);
+    if (!noteId) {
+        console.log("Действие с заметкой: не удалось определить id", appState.lastError());
+        return false;
+    }
+
+    if (action === "delete") {
+        if (window) {
+            window.flushAllDelegates();
+        }
+        if (appState.deleteDocumentByItemKey(key)) {
+            if (window && window.selectedItemKey === key) {
+                window.selectedItemKey = "";
+            }
+            console.log("Заметка удалена");
+            return true;
+        }
+        console.log("Не удалось удалить заметку:", appState.lastError());
+        return false;
+    }
+
+    if (action === "duplicate") {
+        if (window) {
+            window.flushAllDelegates();
+        }
+        const newId = appState.duplicateDocumentByItemKey(key);
+        if (newId && newId.length > 0) {
+            if (window) {
+                window.selectedItemKey = appState.currentItemKey();
+            }
+            console.log("Заметка продублирована:", newId);
+            return true;
+        }
+        console.log("Не удалось дублировать заметку:", appState.lastError());
+        return false;
+    }
+
+    if (action === "move") {
+        if (window && window.openFolderActionPopup) {
+            window.selectedItemKey = key;
+            window.openFolderActionPopup("move");
+            return true;
+        }
+        return false;
+    }
+
+    if (action === "upload") {
+        if (!syncState || !syncState.isLoggedIn) {
+            console.log("Выгрузка: требуется вход в аккаунт");
+            return false;
+        }
+        if (window) {
+            window.flushAllDelegates();
+        }
+        syncState.uploadNoteNow(noteId);
+        return true;
+    }
+
+    if (action === "download") {
+        if (!syncState || !syncState.isLoggedIn) {
+            console.log("Загрузка: требуется вход в аккаунт");
+            return false;
+        }
+        syncState.downloadNoteNow(noteId);
+        return true;
+    }
+
+    return false;
+}
+
+export function onMoreClicked(appState, window) {
+    if (!window || !window.openNoteActionsMenu) {
+        console.log("Нажатие на Дополнительно");
+        return;
+    }
+    window.openNoteActionsMenu("", -1, -1);
 }
 
 export function onNoteClicked(appState, noteTitle) {

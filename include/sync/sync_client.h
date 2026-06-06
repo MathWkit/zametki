@@ -39,6 +39,8 @@ public:
     Q_INVOKABLE void registerUser(const QString &username, const QString &password);
     Q_INVOKABLE void logout();
     Q_INVOKABLE void syncNow();
+    Q_INVOKABLE void uploadNoteNow(const QString &noteId);
+    Q_INVOKABLE void downloadNoteNow(const QString &noteId);
 
     // Called from C++ when DocumentManager successfully saves a note
     void onDocumentSaved(const QString &noteId, const QString &filePath);
@@ -53,13 +55,16 @@ signals:
     void serverUrlChanged();
     // Emitted when new notes were downloaded - tells bridge to refresh sidebar
     void notesDirectoryChanged();
+    void noteActionFinished(const QString &noteId, const QString &action, bool success, const QString &error);
 
 private:
-    void uploadNote(const QString &noteId, const QString &filePath);
-    void doUploadContent(const QString &noteId, const QByteArray &content);
+    void uploadNote(const QString &noteId, const QString &filePath, bool notifyWhenDone = false);
+    void doUploadContent(const QString &noteId, const QByteArray &content, bool notifyWhenDone = false);
     void uploadAllLocalNotes(std::function<void()> onDone);
     void downloadMissingNotes(const QMap<QString, QString> &serverNotes, std::function<void()> onDone);
     bool noteExistsLocally(const QString &noteId) const;
+    QString noteFilePath(const QString &noteId) const;
+    void downloadNoteByUuid(const QString &uuid, const QString &noteId);
     void handleTokenExpired();
     void loadSettings();
     void saveSettings();

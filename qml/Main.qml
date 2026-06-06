@@ -162,17 +162,41 @@ Window {
 
     function submitFolderAction() {
         const value = folderPathField.text.trim();
-        if (!value) {
+        if (window.folderActionMode === "create" && !value) {
             return;
         }
 
         if (window.folderActionMode === "create") {
             AppState.createFolder(value, window.folderActionTargetPath);
         } else if (window.folderActionMode === "move" && window.selectedItemKey) {
-            AppState.moveItem(window.selectedItemKey, value);
+            window.flushAllDelegates();
+            if (AppState.moveItem(window.selectedItemKey, value)) {
+                window.selectedItemKey = AppState.currentItemKey();
+            }
         }
 
         folderActionPopup.close();
+    }
+
+    function openNoteActionsMenu(itemKey, globalX, globalY) {
+        const key = Handlers.resolveActiveItemKey(AppState, itemKey, window.selectedItemKey);
+        if (!key) {
+            return;
+        }
+
+        noteActionsPopup.targetItemKey = key;
+        noteActionsPopup.parent = Overlay.overlay;
+
+        if (globalX >= 0 && globalY >= 0) {
+            noteActionsPopup.x = globalX;
+            noteActionsPopup.y = globalY;
+        } else {
+            const anchor = header.mapToGlobal(header.width - noteActionsPopup.width - 8, header.height + 4);
+            noteActionsPopup.x = anchor.x;
+            noteActionsPopup.y = anchor.y;
+        }
+
+        noteActionsPopup.open();
     }
 
     width: 750
@@ -282,6 +306,9 @@ Window {
             onItemSelected: function (itemKey) {
                 window.selectedItemKey = itemKey;
             }
+            onNoteContextMenuRequested: function (itemKey, x, y) {
+                window.openNoteActionsMenu(itemKey, x, y);
+            }
         }
 
         Item {
@@ -313,7 +340,7 @@ Window {
                     Handlers.onFavoriteClicked();
                 }
                 onMoreClicked: {
-                    Handlers.onMoreClicked();
+                    Handlers.onMoreClicked(AppState, window);
                 }
             }
 
@@ -583,6 +610,14 @@ Window {
             }
         }
 
+        NoteActionsPopup {
+            id: noteActionsPopup
+            uiFontFamily: interFont.name
+            onActionTriggered: function (actionKey) {
+                Handlers.onNoteAction(AppState, SyncState, actionKey, noteActionsPopup.targetItemKey, window);
+            }
+        }
+
         Popup {
             id: folderActionPopup
             modal: true
@@ -593,14 +628,18 @@ Window {
                 width: 300
 
                 Text {
-                    text: window.folderActionMode === "create" ? "Введите имя папки:" : "Введите новый путь:"
+                    text: window.folderActionMode === "create"
+                          ? "Введите имя папки:"
+                          : "Введите папку назначения (пусто — корень):"
                     color: Palette.textPrimary
+                    wrapMode: Text.WordWrap
+                    width: parent.width
                 }
 
                 TextField {
                     width: parent.width
                     id: folderPathField
-                    placeholderText: window.folderActionMode === "create" ? "Имя папки" : "Путь"
+                    placeholderText: window.folderActionMode === "create" ? "Имя папки" : "Папка/подпапка"
                 }
 
                 Row {
@@ -633,6 +672,25 @@ Window {
                 }
                 window.focusFirstBlockOnNextSnapshot = false;
             });
+        }
+    }
+
+    Connections {
+        target: SyncState
+        function onNoteActionFinished(noteId, action, success, error) {
+            if (!success) {
+                console.log("Синхронизация заметки не удалась:", action, error);
+                return;
+            }
+            if (action === "download" && AppState.currentDocumentId === noteId) {
+                window.flushAllDelegates();
+                AppState.openDocument(noteId);
+                window.syncEditorBlocks(true);
+            }
+        }
+        function onNotesDirectoryChanged() {
+            AppState.refreshNoteTitles();
+            AppState.refreshFolderTitles();
         }
     }
 

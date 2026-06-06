@@ -17,6 +17,7 @@ Column {
     signal folderClicked(string folderTitle)
     signal noteClicked(string noteTitle)
     signal itemSelected(string itemKey)
+    signal noteContextMenuRequested(string itemKey, real x, real y)
 
     spacing: Palette.spacingSm + 1
 
@@ -184,14 +185,26 @@ Column {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
-                onClicked: {
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: function(mouse) {
                     if (treeItem.isFolder) {
+                        if (mouse.button === Qt.RightButton) {
+                            return;
+                        }
                         root.toggleFolder(treeItem.modelData.path);
                         root.folderClicked(treeItem.modelData.path);
                         return;
                     }
 
-                    root.itemSelected("folder-note:" + treeItem.modelData.path);
+                    const itemKey = "folder-note:" + treeItem.modelData.path;
+                    if (mouse.button === Qt.RightButton) {
+                        root.itemSelected(itemKey);
+                        const gp = treeItem.mapToGlobal(mouse.x, mouse.y);
+                        root.noteContextMenuRequested(itemKey, gp.x, gp.y);
+                        return;
+                    }
+
+                    root.itemSelected(itemKey);
                     root.noteClicked(treeItem.modelData.path);
                 }
             }
@@ -246,8 +259,17 @@ Column {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
-                onClicked: {
-                    root.itemSelected("note:" + noteItem.modelData);
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onClicked: function(mouse) {
+                    const itemKey = "note:" + noteItem.modelData;
+                    if (mouse.button === Qt.RightButton) {
+                        root.itemSelected(itemKey);
+                        const gp = noteItem.mapToGlobal(mouse.x, mouse.y);
+                        root.noteContextMenuRequested(itemKey, gp.x, gp.y);
+                        return;
+                    }
+
+                    root.itemSelected(itemKey);
                     root.noteClicked(noteItem.modelData);
                 }
             }

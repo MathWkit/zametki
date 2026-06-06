@@ -592,6 +592,140 @@ QString DocumentBridge::currentDocumentTitle() const
     return m_manager->getSnapshot().title;
 }
 
+QString DocumentBridge::currentDocumentId() const
+{
+    if (!m_manager)
+    {
+        return {};
+    }
+
+    return m_manager->getSnapshot().id;
+}
+
+QString DocumentBridge::resolveDocumentIdFromItemKey(const QString &itemKey) const
+{
+    if (!m_manager)
+    {
+        return {};
+    }
+
+    const QString trimmedKey = itemKey.trimmed();
+    if (trimmedKey.isEmpty())
+    {
+        return {};
+    }
+
+    if (trimmedKey.startsWith(QStringLiteral("note:")))
+    {
+        return documentIdForTitle(m_manager, trimmedKey.mid(QStringLiteral("note:").size()));
+    }
+
+    if (trimmedKey.startsWith(QStringLiteral("folder-note:")))
+    {
+        return trimmedKey.mid(QStringLiteral("folder-note:").size());
+    }
+
+    const QString resolvedId = documentIdForTitle(m_manager, trimmedKey);
+    if (!resolvedId.isEmpty())
+    {
+        return resolvedId;
+    }
+
+    return trimmedKey;
+}
+
+QString DocumentBridge::currentItemKey() const
+{
+    if (!m_manager || m_saveDirectory.isEmpty())
+    {
+        return {};
+    }
+
+    const QString id = m_manager->getSnapshot().id;
+    if (id.isEmpty())
+    {
+        return {};
+    }
+
+    const QString filePath = documentFilePathForId(m_saveDirectory, id);
+    const QDir rootDir(m_saveDirectory);
+    if (QFileInfo(filePath).absolutePath() == rootDir.absolutePath())
+    {
+        const QString title = m_manager->getSnapshot().title;
+        return QStringLiteral("note:") + (title.isEmpty() ? id : title);
+    }
+
+    return QStringLiteral("folder-note:") + id;
+}
+
+bool DocumentBridge::deleteDocumentByItemKey(const QString &itemKey)
+{
+    if (!m_manager)
+    {
+        m_lastError = QStringLiteral("manager_missing");
+        return false;
+    }
+
+    const QString documentId = resolveDocumentIdFromItemKey(itemKey);
+    if (documentId.isEmpty())
+    {
+        m_lastError = QStringLiteral("note_not_found");
+        return false;
+    }
+
+    const bool wasCurrent = m_manager->getSnapshot().id == documentId;
+    if (!m_manager->deleteDocument(documentId))
+    {
+        m_lastError = m_manager->lastError();
+        return false;
+    }
+
+    rebuildNoteTitles();
+    refreshFolderTitles();
+    emit directoryContentChanged();
+
+    if (wasCurrent)
+    {
+        m_blocks.clear();
+        m_lastTextById.clear();
+        emit blocksChanged();
+        emit snapshotChanged();
+    }
+
+    m_lastError.clear();
+    return true;
+}
+
+QString DocumentBridge::duplicateDocumentByItemKey(const QString &itemKey)
+{
+    if (!m_manager)
+    {
+        m_lastError = QStringLiteral("manager_missing");
+        return {};
+    }
+
+    const QString documentId = resolveDocumentIdFromItemKey(itemKey);
+    if (documentId.isEmpty())
+    {
+        m_lastError = QStringLiteral("note_not_found");
+        return {};
+    }
+
+    const QString newId = m_manager->duplicateDocument(documentId);
+    if (newId.isEmpty())
+    {
+        m_lastError = m_manager->lastError();
+        return {};
+    }
+
+    rebuildNoteTitles();
+    refreshFolderTitles();
+    emit directoryContentChanged();
+    openDocument(newId);
+    m_lastError.clear();
+    return newId;
+}
+
 QStringList DocumentBridge::noteTitles() const
 {
     return m_noteTitles;

@@ -319,20 +319,178 @@ void SyncClient::onDocumentSaved(const QString &noteId, const QString &filePath)
     if (!isLoggedIn() || noteId.isEmpty() || filePath.isEmpty())
         return;
 
-    uploadNote(noteId, filePath);
+    uploadNote(noteId, filePath, false);
+}
+
+void SyncClient::uploadNoteNow(const QString &noteId)
+{
+    if (!isLoggedIn()) {
+        emit noteActionFinished(noteId, QStringLiteral("upload"), false, QStringLiteral("not_logged_in"));
+        return;
+    }
+
+    if (noteId.isEmpty()) {
+        emit noteActionFinished(noteId, QStringLiteral("upload"), false, QStringLiteral("invalid_note"));
+        return;
+    }
+
+    const QString filePath = noteFilePath(noteId);
+    if (filePath.isEmpty()) {
+        emit noteActionFinished(noteId, QStringLiteral("upload"), false, QStringLiteral("note_not_found"));
+        return;
+    }
+
+    uploadNote(noteId, filePath, true);
+}
+
+void SyncClient::downloadNoteNow(const QString &noteId)
+{
+    if (!isLoggedIn()) {
+        emit noteActionFinished(noteId, QStringLiteral("download"), false, QStringLiteral("not_logged_in"));
+        return;
+    }
+
+    if (noteId.isEmpty()) {
+        emit noteActionFinished(noteId, QStringLiteral("download"), false, QStringLiteral("invalid_note"));
+        return;
+    }
+
+    const auto startDownload = [this, noteId](const QString &uuid) {
+        if (uuid.isEmpty()) {
+            emit noteActionFinished(noteId, QStringLiteral("download"), false, QStringLiteral("not_on_server"));
+            return;
+        }
+        downloadNoteByUuid(uuid, noteId);
+    };
+
+    if (m_noteToUuid.contains(noteId)) {
+        startDownload(m_noteToUuid.value(noteId));
+        return;
+    }
+
+    QNetworkRequest req(QUrl(m_serverUrl + QStringLiteral("/api/files")));
+    req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
+
+    auto *reply = m_nam->get(req);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, noteId, startDownload]() {
+        reply->deleteLater();
+        const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+        if (status == 401) {
+            handleTokenExpired();
+            emit noteActionFinished(noteId, QStringLiteral("download"), false, QStringLiteral("token_expired"));
+            return;
+        }
+        if (reply->error() != QNetworkReply::NoError) {
+            emit noteActionFinished(noteId, QStringLiteral("download"), false, reply->errorString());
+            return;
+        }
+
+        const QJsonArray files = QJsonDocument::fromJson(reply->readAll()).array();
+        QString foundUuid;
+        for (const QJsonValue &val : files) {
+            const QJsonObject obj = val.toObject();
+            const QString name = obj[QStringLiteral("name")].toString();
+            if (name == noteId + QStringLiteral(".json")) {
+                foundUuid = obj[QStringLiteral("uuid")].toString();
+                if (!foundUuid.isEmpty()) {
+                    m_noteToUuid.insert(noteId, foundUuid);
+                    m_uuidToNote.insert(foundUuid, noteId);
+                }
+                break;
+            }
+        }
+        saveNoteMapping();
+        startDownload(foundUuid);
+    });
+}
+
+void SyncClient::downloadNoteByUuid(const QString &uuid, const QString &noteId)
+{
+    QNetworkRequest req(QUrl(m_serverUrl + QStringLiteral("/api/files/") + uuid));
+    req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
+
+    auto *reply = m_nam->get(req);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, noteId]() {
+        reply->deleteLater();
+        const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+        if (status == 401) {
+            handleTokenExpired();
+            emit noteActionFinished(noteId, QStringLiteral("download"), false, QStringLiteral("token_expired"));
+            return;
+        }
+        if (status != 200 || reply->error() != QNetworkReply::NoError) {
+            emit noteActionFinished(noteId, QStringLiteral("download"), false, reply->errorString());
+            return;
+        }
+
+        if (m_notesPath.isEmpty()) {
+            emit noteActionFinished(noteId, QStringLiteral("download"), false, QStringLiteral("notes_path_missing"));
+            return;
+        }
+
+        const QByteArray content = reply->readAll();
+        QString filePath = noteFilePath(noteId);
+        if (filePath.isEmpty()) {
+            filePath = QDir(m_notesPath).absoluteFilePath(noteId + QStringLiteral(".json"));
+        }
+
+        QFile file(filePath);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            emit noteActionFinished(noteId, QStringLiteral("download"), false, file.errorString());
+            return;
+        }
+
+        if (file.write(content) != content.size()) {
+            emit noteActionFinished(noteId, QStringLiteral("download"), false, QStringLiteral("write_failed"));
+            return;
+        }
+
+        file.close();
+        emit notesDirectoryChanged();
+        emit noteActionFinished(noteId, QStringLiteral("download"), true, QString());
+    });
+}
+
+QString SyncClient::noteFilePath(const QString &noteId) const
+{
+    if (m_notesPath.isEmpty() || noteId.isEmpty()) {
+        return {};
+    }
+
+    const QString directPath = QDir(m_notesPath).absoluteFilePath(noteId + QStringLiteral(".json"));
+    if (QFileInfo::exists(directPath)) {
+        return directPath;
+    }
+
+    QDirIterator it(m_notesPath, QStringList() << (noteId + QStringLiteral(".json")),
+                    QDir::Files, QDirIterator::Subdirectories);
+    if (it.hasNext()) {
+        return it.next();
+    }
+
+    return {};
 }
 
 // --------------------------------------------------------------------------
 // Private helpers
 // --------------------------------------------------------------------------
 
-void SyncClient::uploadNote(const QString &noteId, const QString &filePath)
+void SyncClient::uploadNote(const QString &noteId, const QString &filePath, bool notifyWhenDone)
 {
-    if (m_uploadingNotes.contains(noteId))
+    if (m_uploadingNotes.contains(noteId)) {
+        if (notifyWhenDone) {
+            emit noteActionFinished(noteId, QStringLiteral("upload"), false, QStringLiteral("upload_in_progress"));
+        }
         return;
+    }
 
     QFile *file = new QFile(filePath, this);
     if (!file->open(QIODevice::ReadOnly)) {
+        if (notifyWhenDone) {
+            emit noteActionFinished(noteId, QStringLiteral("upload"), false, file->errorString());
+        }
         file->deleteLater();
         return;
     }
@@ -350,19 +508,19 @@ void SyncClient::uploadNote(const QString &noteId, const QString &filePath)
         delReq.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
 
         auto *delReply = m_nam->deleteResource(delReq);
-        connect(delReply, &QNetworkReply::finished, this, [this, delReply, noteId, content]() {
+        connect(delReply, &QNetworkReply::finished, this, [this, delReply, noteId, content, notifyWhenDone]() {
             delReply->deleteLater();
             // Remove old mapping regardless of delete result
             const QString oldUuid = m_noteToUuid.take(noteId);
             m_uuidToNote.remove(oldUuid);
-            doUploadContent(noteId, content);
+            doUploadContent(noteId, content, notifyWhenDone);
         });
     } else {
-        doUploadContent(noteId, content);
+        doUploadContent(noteId, content, notifyWhenDone);
     }
 }
 
-void SyncClient::doUploadContent(const QString &noteId, const QByteArray &content)
+void SyncClient::doUploadContent(const QString &noteId, const QByteArray &content, bool notifyWhenDone)
 {
     QNetworkRequest req(QUrl(m_serverUrl + QStringLiteral("/api/files")));
     req.setRawHeader("Authorization", ("Bearer " + m_token).toUtf8());
@@ -379,7 +537,7 @@ void SyncClient::doUploadContent(const QString &noteId, const QByteArray &conten
     auto *reply = m_nam->post(req, multiPart);
     multiPart->setParent(reply);
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, noteId]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply, noteId, notifyWhenDone]() {
         reply->deleteLater();
         m_uploadingNotes.remove(noteId);
 
@@ -392,8 +550,19 @@ void SyncClient::doUploadContent(const QString &noteId, const QByteArray &conten
                 m_uuidToNote.insert(uuid, noteId);
                 saveNoteMapping();
             }
+            if (notifyWhenDone) {
+                emit noteActionFinished(noteId, QStringLiteral("upload"), true, QString());
+            }
         } else if (status == 401) {
             handleTokenExpired();
+            if (notifyWhenDone) {
+                emit noteActionFinished(noteId, QStringLiteral("upload"), false, QStringLiteral("token_expired"));
+            }
+        } else if (notifyWhenDone) {
+            const QJsonObject json = QJsonDocument::fromJson(reply->readAll()).object();
+            const QString error = json[QStringLiteral("error")].toString();
+            emit noteActionFinished(noteId, QStringLiteral("upload"), false,
+                                    error.isEmpty() ? reply->errorString() : error);
         }
     });
 }

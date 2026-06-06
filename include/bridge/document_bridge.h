@@ -22,6 +22,7 @@ class DocumentBridge : public QObject
     Q_PROPERTY(QString saveDirectory READ saveDirectory WRITE setSaveDirectory NOTIFY saveDirectoryChanged)
     Q_PROPERTY(bool databaseConfigured READ databaseConfigured NOTIFY databaseConfiguredChanged)
     Q_PROPERTY(QString currentDocumentTitle READ currentDocumentTitle NOTIFY snapshotChanged)
+    Q_PROPERTY(QString currentDocumentId READ currentDocumentId NOTIFY snapshotChanged)
     Q_PROPERTY(QStringList noteTitles READ noteTitles NOTIFY noteTitlesChanged)
     Q_PROPERTY(QStringList folderTitles READ folderTitles NOTIFY folderTitlesChanged)
     Q_PROPERTY(QVariantList blocks READ blocks NOTIFY blocksChanged)
@@ -35,6 +36,11 @@ public:
     Q_INVOKABLE bool openDocumentByTitle(const QString &title);
     Q_INVOKABLE bool saveDocument();
     Q_INVOKABLE bool createEmptyDocument();
+    Q_INVOKABLE QString currentDocumentId() const;
+    Q_INVOKABLE QString resolveDocumentIdFromItemKey(const QString &itemKey) const;
+    Q_INVOKABLE QString currentItemKey() const;
+    Q_INVOKABLE bool deleteDocumentByItemKey(const QString &itemKey);
+    Q_INVOKABLE QString duplicateDocumentByItemKey(const QString &itemKey);
     Q_INVOKABLE bool renameCurrentDocument(const QString &title);
     Q_INVOKABLE QString exportCurrentToMarkdown();
     Q_INVOKABLE QString lastError() const;

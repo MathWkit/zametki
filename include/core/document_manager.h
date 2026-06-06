@@ -40,6 +40,7 @@ public:
     bool createEmptyDocument();
     bool renameDocument(const QString &title);
     bool deleteDocument(const QString &id);
+    QString duplicateDocument(const QString &id);
 
     void applyTextInsert(const QString &blockId, int position, const QString &text);
     void applyTextDelete(const QString &blockId, int position, int length);
