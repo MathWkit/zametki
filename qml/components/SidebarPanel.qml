@@ -307,7 +307,9 @@ Rectangle {
                     Layout.fillWidth: true
                     AppInitialsAvatar {
                         uiFontFamily: root.uiFontFamily
-                        initials: "GL"
+                        initials: SyncState.isLoggedIn && SyncState.username.length > 0
+                                  ? SyncState.username.charAt(0).toUpperCase()
+                                  : "?"
                         avatarSize: Palette.avatarSmall
                         initialsPixelSize: Palette.fontSizeXs
                         initialsWeight: Font.Medium
@@ -324,12 +326,13 @@ Rectangle {
                         AppSidebarLabelText {
                             uiFontFamily: root.uiFontFamily
                             textColor: Palette.textPrimary
-                            text: "Lox chvetochiy"
+                            text: SyncState.isLoggedIn ? SyncState.username : qsTr("Войти в аккаунт")
                         }
                         AppDescriptionText {
                             uiFontFamily: root.uiFontFamily
                             textPixelSize: Palette.fontSizeSm
-                            text: "loxcvetochiy@titam.com"
+                            text: SyncState.isSyncing ? qsTr("Синхронизация…") : SyncState.serverUrl
+                            visible: SyncState.isLoggedIn
                         }
                     }
                     Item {
