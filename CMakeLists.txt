@@ -121,6 +121,7 @@ qt_add_qml_module(appzametki
         qml/Share.qml
         qml/Profile.qml
         qml/scripts/Handlers.mjs
+        qml/scripts/SearchLogic.mjs
         qml/scripts/EditorShortcuts.mjs
         qml/scripts/Theme.js
         qml/components/FolderNoteList.qml

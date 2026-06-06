@@ -49,6 +49,8 @@ public:
     Q_INVOKABLE void refreshFolderTitles();
     Q_INVOKABLE QStringList noteTitlesForFolder(const QString &folderTitle) const;
     Q_INVOKABLE QVariantList entriesForFolder(const QString &folderPath) const;
+    Q_INVOKABLE QString folderPathForDocumentId(const QString &documentId) const;
+    Q_INVOKABLE QString itemKeyForDocumentId(const QString &documentId) const;
     Q_INVOKABLE QVariantList blocks() const;
     Q_INVOKABLE bool createFolder(const QString &folderName, const QString &parentFolderPath = QString());
     Q_INVOKABLE bool moveItem(const QString &itemKey, const QString &targetFolderPath);

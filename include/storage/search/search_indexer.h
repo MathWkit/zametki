@@ -24,6 +24,7 @@ public:
     QString lastError() const;
 
 private:
+    static QString prepareFtsQuery(const QString &queryText);
     bool ensureReady();
 
     sqlite::SQLiteConnectionProvider *m_provider = nullptr;

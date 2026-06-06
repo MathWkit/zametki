@@ -15,12 +15,16 @@ Rectangle {
     property color titleColor: Palette.textPrimary
     property color subtitleColor: Palette.textSecondary
     property bool showHover: true
+    property bool highlighted: false
 
     signal clicked
 
     Layout.fillWidth: true
     implicitHeight: subtitleText.length > 0 ? Palette.searchResultRowHeightWithSubtitle : Palette.searchResultRowHeight
     color: {
+        if (control.highlighted) {
+            return Palette.selected;
+        }
         if (!showHover) {
             return rowColor;
         }

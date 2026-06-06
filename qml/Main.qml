@@ -479,6 +479,17 @@ Window {
             z: 200
             source: Qt.resolvedUrl("Search.qml")
 
+            onVisibleChanged: {
+                if (!searchOverlay.visible || !searchOverlay.loadedItem) {
+                    return;
+                }
+                Qt.callLater(function() {
+                    if (searchOverlay.loadedItem && searchOverlay.loadedItem.focusQueryField) {
+                        searchOverlay.loadedItem.focusQueryField();
+                    }
+                });
+            }
+
             onOutsideCloseRequested: {
                 window.searchViewVisible = false;
             }
@@ -489,6 +500,39 @@ Window {
 
                 function onCloseClicked() {
                     window.searchViewVisible = false;
+                }
+
+                function onNoteSelected(documentId) {
+                    window.flushAllDelegates();
+                    if (AppState.openDocument(documentId)) {
+                        window.selectedItemKey = AppState.itemKeyForDocumentId(documentId);
+                        window.searchViewVisible = false;
+                    } else {
+                        console.warn("Не удалось открыть заметку:", AppState.lastError());
+                    }
+                }
+
+                function onFolderSelected(folderPath) {
+                    window.selectedItemKey = "folder:" + folderPath;
+                    window.searchViewVisible = false;
+                }
+
+                function onCommandSelected(commandKey) {
+                    switch (commandKey) {
+                    case "create-note":
+                        window.flushAllDelegates();
+                        window.focusFirstBlockOnNextSnapshot = true;
+                        Handlers.onNewNoteClicked(AppState);
+                        window.searchViewVisible = false;
+                        break;
+                    case "open-graph":
+                        Handlers.onGraphClicked();
+                        window.searchViewVisible = false;
+                        break;
+                    default:
+                        console.warn("Неизвестная команда поиска:", commandKey);
+                        break;
+                    }
                 }
             }
         }

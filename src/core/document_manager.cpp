@@ -103,34 +103,55 @@ QVector<Document> DocumentManager::searchDocuments(const QString &query)
     }
 
     QVector<Document> documents;
-    const QStringList ids = m_searchIndexer.search(trimmed);
-    documents.reserve(ids.size());
-
     QSet<QString> seen;
-    for (const auto &id : ids)
-    {
-        if (seen.contains(id))
-        {
-            continue;
-        }
-        seen.insert(id);
 
-        Document snapshot;
+    const auto appendDocument = [&](const Document &snapshot)
+    {
+        if (snapshot.id.isEmpty() || seen.contains(snapshot.id))
+        {
+            return;
+        }
+
+        seen.insert(snapshot.id);
+        documents.push_back(snapshot);
+    };
+
+    const auto loadDocument = [&](const QString &id) -> Document
+    {
         if (m_converter.hasSnapshot(id))
         {
-            snapshot = m_converter.cachedSnapshot(id);
-        }
-        else
-        {
-            snapshot = m_repository.read(id);
-            if (snapshot.id.isEmpty())
-            {
-                continue;
-            }
-            m_converter.storeSnapshot(snapshot);
+            return m_converter.cachedSnapshot(id);
         }
 
-        documents.push_back(snapshot);
+        Document snapshot = m_repository.read(id);
+        if (!snapshot.id.isEmpty())
+        {
+            m_converter.storeSnapshot(snapshot);
+        }
+        return snapshot;
+    };
+
+    for (const auto &id : m_searchIndexer.search(trimmed))
+    {
+        appendDocument(loadDocument(id));
+    }
+
+    for (const auto &doc : listAllDocuments())
+    {
+        if (doc.title.contains(trimmed, Qt::CaseInsensitive))
+        {
+            appendDocument(doc);
+            continue;
+        }
+
+        for (const auto &tag : doc.tags)
+        {
+            if (tag.contains(trimmed, Qt::CaseInsensitive))
+            {
+                appendDocument(doc);
+                break;
+            }
+        }
     }
 
     return documents;

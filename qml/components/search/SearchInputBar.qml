@@ -14,6 +14,10 @@ AppSectionCard {
     signal accepted(string query)
     signal queryChanged(string query)
 
+    function focusField() {
+        searchField.forceActiveFocus();
+    }
+
     Layout.fillWidth: true
     implicitHeight: Math.max(Palette.controlHeightBase, searchField.implicitHeight)
     cardColor: Palette.backgroundLight

@@ -1,5 +1,6 @@
 #include "storage/search/search_indexer.h"
 
+#include <QRegularExpression>
 #include <QSqlError>
 #include <QSqlQuery>
 
@@ -114,7 +115,7 @@ QStringList SearchIndexer::search(const QString &queryText, int limit)
     QSqlDatabase db = m_provider->database();
     QSqlQuery query(db);
     query.prepare(QStringLiteral("SELECT note_id FROM notes_fts WHERE notes_fts MATCH ? LIMIT ?"));
-    query.addBindValue(queryText);
+    query.addBindValue(prepareFtsQuery(queryText));
     query.addBindValue(limit);
 
     if (!query.exec())
@@ -134,6 +135,26 @@ QStringList SearchIndexer::search(const QString &queryText, int limit)
 QString SearchIndexer::lastError() const
 {
     return m_lastError;
+}
+
+QString SearchIndexer::prepareFtsQuery(const QString &queryText)
+{
+    const QStringList tokens = queryText.trimmed().split(QRegularExpression(QStringLiteral("\\s+")), Qt::SkipEmptyParts);
+    if (tokens.isEmpty())
+    {
+        return {};
+    }
+
+    QStringList parts;
+    parts.reserve(tokens.size());
+    for (const QString &token : tokens)
+    {
+        QString escaped = token;
+        escaped.replace(QLatin1Char('"'), QStringLiteral("\"\""));
+        parts.append(QStringLiteral("\"%1\"*").arg(escaped));
+    }
+
+    return parts.join(QLatin1Char(' '));
 }
 
 bool SearchIndexer::ensureReady()

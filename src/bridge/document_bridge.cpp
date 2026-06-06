@@ -528,6 +528,53 @@ QVariantList DocumentBridge::entriesForFolder(const QString &folderPath) const
     return toFolderEntries(m_saveDirectory, m_manager, folderPath);
 }
 
+QString DocumentBridge::folderPathForDocumentId(const QString &documentId) const
+{
+    const QString trimmedId = documentId.trimmed();
+    if (trimmedId.isEmpty() || m_saveDirectory.isEmpty())
+    {
+        return {};
+    }
+
+    const QString filePath = documentFilePathForId(m_saveDirectory, trimmedId);
+    const QDir rootDir(m_saveDirectory);
+    const QString relativeDir = rootDir.relativeFilePath(QFileInfo(filePath).absolutePath());
+    if (relativeDir.isEmpty() || relativeDir == QStringLiteral("."))
+    {
+        return {};
+    }
+
+    QString displayPath = relativeDir;
+    displayPath.replace(QLatin1Char('/'), QStringLiteral(" / "));
+    return displayPath;
+}
+
+QString DocumentBridge::itemKeyForDocumentId(const QString &documentId) const
+{
+    const QString trimmedId = documentId.trimmed();
+    if (trimmedId.isEmpty() || !m_manager || m_saveDirectory.isEmpty())
+    {
+        return {};
+    }
+
+    const QString filePath = documentFilePathForId(m_saveDirectory, trimmedId);
+    const QDir rootDir(m_saveDirectory);
+    if (QFileInfo(filePath).absolutePath() == rootDir.absolutePath())
+    {
+        const auto docs = m_manager->listAllDocuments();
+        for (const auto &doc : docs)
+        {
+            if (doc.id == trimmedId)
+            {
+                return QStringLiteral("note:") + (doc.title.isEmpty() ? doc.id : doc.title);
+            }
+        }
+        return QStringLiteral("note:") + trimmedId;
+    }
+
+    return QStringLiteral("folder-note:") + trimmedId;
+}
+
 bool DocumentBridge::blockEditorEnabled() const
 {
     return m_blockEditorEnabled;
