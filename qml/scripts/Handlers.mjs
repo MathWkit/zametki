@@ -137,13 +137,13 @@ export function onProfileSyncAction(syncState, actionKey, window) {
         return true;
     }
 
-    if (actionKey === "unload-soft-all") {
-        syncState.softUnloadAllNotesNow();
+    if (actionKey === "pull-soft-all") {
+        syncState.softPullAllNotesNow();
         return true;
     }
 
-    if (actionKey === "unload-hard-all") {
-        syncState.hardUnloadAllNotesNow();
+    if (actionKey === "pull-hard-all") {
+        syncState.hardPullAllNotesNow();
         return true;
     }
 

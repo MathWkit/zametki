@@ -42,8 +42,10 @@ public:
     Q_INVOKABLE void uploadNoteNow(const QString &noteId);
     Q_INVOKABLE void downloadNoteNow(const QString &noteId);
     Q_INVOKABLE void uploadAllNotesNow();
-    Q_INVOKABLE void softUnloadAllNotesNow();
-    Q_INVOKABLE void hardUnloadAllNotesNow();
+    // Soft pull: download notes from server that are missing locally.
+    // Hard pull: download all notes from server, overwriting local copies.
+    Q_INVOKABLE void softPullAllNotesNow();
+    Q_INVOKABLE void hardPullAllNotesNow();
 
 signals:
     void loginFinished(bool success, const QString &error);
@@ -69,7 +71,11 @@ private:
                          bool notifyWhenDone,
                          UploadCompleteFn onComplete = nullptr);
     QStringList listLocalNoteIds() const;
-    void deleteAllNotesFromServer(const QString &action);
+    void pullAllNotesFromServer(bool overwriteLocal, const QString &action);
+    void downloadServerNotes(const QMap<QString, QString> &serverNotes,
+                             bool overwriteLocal,
+                             const QString &action,
+                             std::function<void(bool success, const QString &message)> onFinished);
     void downloadMissingNotes(const QMap<QString, QString> &serverNotes, std::function<void()> onDone);
     bool noteExistsLocally(const QString &noteId) const;
     QString noteFilePath(const QString &noteId) const;

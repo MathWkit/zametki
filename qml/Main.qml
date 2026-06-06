@@ -753,11 +753,24 @@ Window {
                 console.log("Синхронизация не удалась:", action, error);
                 return;
             }
-            if (action === "unload_hard_all") {
-                if (AppState.deleteAllDocuments()) {
-                    window.selectedItemKey = "";
-                } else {
-                    console.log("Не удалось удалить локальные заметки:", AppState.lastError());
+
+            if (error === "nothing_on_server") {
+                console.log("Синхронизация завершена:", action, "— на сервере нет заметок");
+            } else if (error.indexOf("downloaded_") === 0) {
+                const count = error.slice("downloaded_".length);
+                console.log("Синхронизация завершена:", action, "— загружено с сервера:", count);
+            } else {
+                console.log("Синхронизация завершена:", action, error);
+            }
+
+            if (action === "pull_soft_all" || action === "pull_hard_all") {
+                AppState.refreshNoteTitles();
+                AppState.refreshFolderTitles();
+                const currentId = AppState.currentDocumentId;
+                if (currentId && currentId.length > 0) {
+                    window.flushAllDelegates();
+                    AppState.openDocument(currentId);
+                    window.syncEditorBlocks(true);
                 }
             }
         }

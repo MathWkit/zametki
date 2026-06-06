@@ -3,10 +3,15 @@
 
 class QQmlApplicationEngine;
 
+namespace zametki::sync
+{
+class SyncClient;
+}
+
 namespace zametki::bridge
 {
 
-void setupNativeMenuBar(QQmlApplicationEngine *engine);
+void setupNativeMenuBar(QQmlApplicationEngine *engine, zametki::sync::SyncClient *syncClient);
 
 } // namespace zametki::bridge
 

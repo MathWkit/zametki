@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.loadFromModule("zametki", "Main");
-    zametki::bridge::setupNativeMenuBar(&engine);
+    zametki::bridge::setupNativeMenuBar(&engine, &syncClient);
 
     return app.exec();
 }

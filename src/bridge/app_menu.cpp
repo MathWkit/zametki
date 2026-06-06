@@ -1,30 +1,35 @@
 #include "bridge/app_menu.h"
 
+#include "sync/sync_client.h"
+
 #include <QAction>
 #include <QMenu>
 #include <QMenuBar>
 #include <QQmlApplicationEngine>
 #include <QObject>
-#include <QVariant>
 
 namespace zametki::bridge
 {
 
-static void invokeRoot(QQmlApplicationEngine *engine, const char *method, const QVariant &arg = {})
+static void flushEditor(QQmlApplicationEngine *engine)
 {
     if (!engine || engine->rootObjects().isEmpty()) {
         return;
     }
 
-    QObject *root = engine->rootObjects().first();
-    if (arg.isValid()) {
-        QMetaObject::invokeMethod(root, method, Q_ARG(QVariant, arg));
-    } else {
-        QMetaObject::invokeMethod(root, method);
-    }
+    QMetaObject::invokeMethod(engine->rootObjects().first(), "flushAllDelegates", Qt::DirectConnection);
 }
 
-void setupNativeMenuBar(QQmlApplicationEngine *engine)
+static void invokeRoot(QQmlApplicationEngine *engine, const char *method)
+{
+    if (!engine || engine->rootObjects().isEmpty()) {
+        return;
+    }
+
+    QMetaObject::invokeMethod(engine->rootObjects().first(), method);
+}
+
+void setupNativeMenuBar(QQmlApplicationEngine *engine, zametki::sync::SyncClient *syncClient)
 {
     auto *menuBar = new QMenuBar();
 
@@ -33,17 +38,21 @@ void setupNativeMenuBar(QQmlApplicationEngine *engine)
         invokeRoot(engine, "menuNewNote");
     });
     fileMenu->addSeparator();
-    QObject::connect(fileMenu->addAction(QStringLiteral("Синхронизация")), &QAction::triggered, engine, [engine]() {
-        invokeRoot(engine, "menuSyncNow");
+    QObject::connect(fileMenu->addAction(QStringLiteral("Синхронизация")), &QAction::triggered, engine, [engine, syncClient]() {
+        flushEditor(engine);
+        syncClient->syncNow();
     });
-    QObject::connect(fileMenu->addAction(QStringLiteral("Выгрузить заметки на сервер")), &QAction::triggered, engine, [engine]() {
-        invokeRoot(engine, "menuSyncAction", QStringLiteral("upload-all"));
+    QObject::connect(fileMenu->addAction(QStringLiteral("Выгрузить заметки на сервер")), &QAction::triggered, engine, [engine, syncClient]() {
+        flushEditor(engine);
+        syncClient->uploadAllNotesNow();
     });
-    QObject::connect(fileMenu->addAction(QStringLiteral("Мягкая выгрузка с сервера")), &QAction::triggered, engine, [engine]() {
-        invokeRoot(engine, "menuSyncAction", QStringLiteral("unload-soft-all"));
+    QObject::connect(fileMenu->addAction(QStringLiteral("Мягкая выгрузка с сервера")), &QAction::triggered, engine, [engine, syncClient]() {
+        flushEditor(engine);
+        syncClient->softPullAllNotesNow();
     });
-    QObject::connect(fileMenu->addAction(QStringLiteral("Жёсткая выгрузка с сервера")), &QAction::triggered, engine, [engine]() {
-        invokeRoot(engine, "menuSyncAction", QStringLiteral("unload-hard-all"));
+    QObject::connect(fileMenu->addAction(QStringLiteral("Жёсткая выгрузка с сервера")), &QAction::triggered, engine, [engine, syncClient]() {
+        flushEditor(engine);
+        syncClient->hardPullAllNotesNow();
     });
 
     auto *editMenu = menuBar->addMenu(QStringLiteral("Правка"));
